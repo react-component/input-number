@@ -1,5 +1,5 @@
 {
-  "name": "rc-input-number",
+  "name": "rc-inputNumber",
   "version": "",
   "description": "inputNumber ui component for react",
   "keywords": [
@@ -45,6 +45,7 @@
     "precommit-hook": "^1.0.7",
     "rc-server": "~2.1.2",
     "rc-tools": "2.x",
+    "rc-util": "^2.0.0",
     "react": "~0.13.0",
     "node-dev":"2.x"
   },
