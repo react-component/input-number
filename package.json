@@ -1,5 +1,5 @@
 {
-  "name": "rc-inputNumber",
+  "name": "rc-input-number",
   "version": "",
   "description": "inputNumber ui component for react",
   "keywords": [
@@ -8,14 +8,14 @@
     "react-inputNumber",
     "inputNumber"
   ],
-  "homepage": "http://github.com/react-component/inputNumber",
+  "homepage": "https://github.com/react-component/input-number",
   "author": "shuaiji.tsj",
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/inputNumber.git"
+    "url": "git@github.com:react-component/input-number.git"
   },
   "bugs": {
-    "url": "http://github.com/react-component/inputNumber/issues"
+    "url": "http://github.com/react-component/input-number/issues"
   },
   "licenses": "MIT",
   "spm": {
