@@ -50,6 +50,7 @@ inputNumber ui component for react
 var RcinputNumber = require('rc-inputNumber');
 var React = require('react');
 React.render(<InputNum />, container);
+```
 
 ## API
 
