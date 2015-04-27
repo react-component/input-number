@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 // use jsx to render html, do not modify simple.html
-require('rc-inputNumber/assets/index.css');
-var InputNum = require('rc-inputNumber');
+require('rc-input-number/assets/index.css');
+var InputNum = require('rc-input-number');
 var React = require('react');
 var Component = React.createClass({
   getInitialState: function(){

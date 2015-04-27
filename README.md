@@ -1,21 +1,21 @@
-# rc-inputNumber
+# rc-input-number
 ---
 
-inputNumber ui component for react
+input number ui component for react
 
 [![NPM version][npm-image]][npm-url]
-[![SPM version](http://spmjs.io/badge/rc-inputNumber)](http://spmjs.io/package/rc-inputNumber)
+[![SPM version](http://spmjs.io/badge/rc-input-number)](http://spmjs.io/package/rc-input-number)
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
-[![Sauce Test Status](https://saucelabs.com/buildstatus/rc-input-number)](https://saucelabs.com/u/rc-input-number)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/rc_input_number)](https://saucelabs.com/u/rc_input_number)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/rc-input-number.svg)](https://saucelabs.com/u/rc-input-number)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/rc_input_number.svg)](https://saucelabs.com/u/rc_input_number)
 
-[npm-image]: http://img.shields.io/npm/v/rc-inputNumber.svg?style=flat-square
-[npm-url]: http://npmjs.org/package/rc-inputNumber
+[npm-image]: http://img.shields.io/npm/v/rc-input-number.svg?style=flat-square
+[npm-url]: http://npmjs.org/package/rc-input-number
 [travis-image]: https://img.shields.io/travis/react-component/input-number.svg?style=flat-square
 [travis-url]: https://travis-ci.org/react-component/input-number
 [coveralls-image]: https://img.shields.io/coveralls/react-component/input-number.svg?style=flat-square
@@ -24,8 +24,8 @@ inputNumber ui component for react
 [gemnasium-url]: https://gemnasium.com/react-component/input-number
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
-[download-image]: https://img.shields.io/npm/dm/rc-inputNumber.svg?style=flat-square
-[download-url]: https://npmjs.org/package/rc-inputNumber
+[download-image]: https://img.shields.io/npm/dm/rc-input-number.svg?style=flat-square
+[download-url]: https://npmjs.org/package/rc-input-number
 
 ## Screenshots
 
@@ -42,12 +42,12 @@ inputNumber ui component for react
 
 ## install
 
-[![rc-inputNumber](https://nodei.co/npm/rc-inputNumber.png)](https://npmjs.org/package/rc-inputNumber)
+[![rc-input-number](https://nodei.co/npm/rc-input-number.png)](https://npmjs.org/package/rc-input-number)
 
 ## Usage
 
 ```js
-var RcinputNumber = require('rc-inputNumber');
+var RcInputNumber = require('rc-input-number');
 var React = require('react');
 React.render(<InputNum />, container);
 ```
@@ -134,7 +134,7 @@ npm start
 
 http://127.0.0.1:8000/examples/
 
-online example: http://react-component.github.io/inputNumber/build/examples/
+online example: http://react-component.github.io/input-number/build/examples/
 
 ## Test Case
 
@@ -146,4 +146,4 @@ http://127.0.0.1:8000/node_modules/rc-server/node_modules/node-jscover/lib/front
 
 ## License
 
-rc-inputNumber is released under the MIT license.
+rc-input-number is released under the MIT license.
