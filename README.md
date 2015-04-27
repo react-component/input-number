@@ -70,55 +70,55 @@ React.render(<InputNum />, container);
           <td>min</td>
           <td>Number</td>
           <td></td>
-          <td>限制最小值</td>
+          <td>Specifies the minimum value</td>
         </tr>
         <tr>
           <td>max</td>
           <td>Number</td>
           <td></td>
-          <td>限制最大值</td>
+          <td>Specifies the maximum value</td>
         </tr>
         <tr>
           <td>step</td>
           <td>Number</td>
           <td>1</td>
-          <td>设置增加减少时的间隔，例如：step=0.5，则合法值1，1.5，2，2.5</td>
+          <td>Specifies the legal number intervals</td>
         </tr>
         <tr>
           <td>disabled</td>
           <td>Boolen</td>
           <td>false</td>
-          <td>设置是否可用</td>
+          <td>Specifies that an InputNum should be disabled</td>
         </tr>
         <tr>
           <td>autofocus</td>
           <td>Boolen</td>
           <td>false</td>
-          <td>设置页面加载时是否获得焦点</td>
+          <td>Specifies that an InputNum should automatically get focus when the page loads</td>
         </tr>
         <tr>
           <td>required</td>
           <td>Boolen</td>
           <td>false</td>
-          <td>设置是否必填</td>
+          <td>Specifies that an InputNum is required(must be filled out)</td>
         </tr>
         <tr>
           <td>readonly</td>
           <td>Boolen</td>
           <td>false</td>
-          <td>设置是否只读</td>
+          <td>Specifies that an InputNum is read only </td>
         </tr>
         <tr>
           <td>name</td>
           <td>String</td>
           <td></td>
-          <td>设置字段名</td>
+          <td>Specifies the name of an InputNum</td>
         </tr>
         <tr>
           <td>value</td>
           <td>String</td>
           <td></td>
-          <td>设置值</td>
+          <td>Specifies the value of an InputNum</td>
         </tr>
     </tbody>
 </table>
