@@ -86,25 +86,25 @@ React.render(<InputNum />, container);
         </tr>
         <tr>
           <td>disabled</td>
-          <td>Boolen</td>
+          <td>Boolean</td>
           <td>false</td>
           <td>Specifies that an InputNum should be disabled</td>
         </tr>
         <tr>
           <td>autofocus</td>
-          <td>Boolen</td>
+          <td>Boolean</td>
           <td>false</td>
           <td>Specifies that an InputNum should automatically get focus when the page loads</td>
         </tr>
         <tr>
           <td>required</td>
-          <td>Boolen</td>
+          <td>Boolean</td>
           <td>false</td>
           <td>Specifies that an InputNum is required(must be filled out)</td>
         </tr>
         <tr>
           <td>readonly</td>
-          <td>Boolen</td>
+          <td>Boolean</td>
           <td>false</td>
           <td>Specifies that an InputNum is read only </td>
         </tr>
