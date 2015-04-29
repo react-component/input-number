@@ -15,7 +15,7 @@ var Component = React.createClass({
   render: function(){
     return (
       <div>
-        <InputNum min="1" max="100" value="99" step="0.8" disabled={this.state.disabled} />
+        <InputNum min="1" max="10" value="8" disabled={this.state.disabled} />
         <p>
           <button onClick={this.triggerDisabled}>Trigger Disabled</button>
         </p>
