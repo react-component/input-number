@@ -1,6 +1,6 @@
 {
   "name": "rc-input-number",
-  "version": "",
+  "version": "1.0.0",
   "description": "input-number ui component for react",
   "keywords": [
     "react",
@@ -9,7 +9,7 @@
     "input-number"
   ],
   "homepage": "https://github.com/react-component/input-number",
-  "author": "shuaiji.tsj",
+  "author": "tsjxyz@gmail.com",
   "repository": {
     "type": "git",
     "url": "git@github.com:react-component/input-number.git"
