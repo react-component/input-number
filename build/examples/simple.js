@@ -26,7 +26,7 @@ webpackJsonp([0,1],[
 	  render: function(){
 	    return (
 	      React.createElement("div", null, 
-	        React.createElement(InputNum, {min: "1", max: "100", value: "99", step: "0.8", disabled: this.state.disabled}), 
+	        React.createElement(InputNum, {min: "1", max: "10", value: "8", disabled: this.state.disabled}), 
 	        React.createElement("p", null, 
 	          React.createElement("button", {onClick: this.triggerDisabled}, "Trigger Disabled")
 	        )
@@ -64,8 +64,8 @@ webpackJsonp([0,1],[
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
-		module.hot.accept("!!/Users/yiminghe/code/react-components/input-number/node_modules/css-loader/index.js!/Users/yiminghe/code/react-components/input-number/assets/index.css", function() {
-			var newContent = require("!!/Users/yiminghe/code/react-components/input-number/node_modules/css-loader/index.js!/Users/yiminghe/code/react-components/input-number/assets/index.css");
+		module.hot.accept("!!/Users/shuaijitsj/Documents/lab/react-component/inputNumber/node_modules/css-loader/index.js!/Users/shuaijitsj/Documents/lab/react-component/inputNumber/assets/index.css", function() {
+			var newContent = require("!!/Users/shuaijitsj/Documents/lab/react-component/inputNumber/node_modules/css-loader/index.js!/Users/shuaijitsj/Documents/lab/react-component/inputNumber/assets/index.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
