@@ -1,1 +1,3 @@
-module.exports = require('./lib/InputNumber');
+'use strict';
+
+module.exports = require('./src/');

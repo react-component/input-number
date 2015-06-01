@@ -1,3 +1,5 @@
+'use strict';
+
 var keyCode = require('rc-util').KeyCode;
 var expect = require('expect.js');
 var InputNum = require('../index');
@@ -5,12 +7,12 @@ var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Simulate = TestUtils.Simulate;
 
-describe('inputNumber', function(){
+describe('inputNumber', function () {
   var container = document.createElement('div');
   document.body.appendChild(container);
 
   var Component = React.createClass({
-    getInitialState: function(){
+    getInitialState() {
       return {
         min: 1,
         max: 100,
@@ -23,12 +25,12 @@ describe('inputNumber', function(){
         name: 'inputNumber'
       }
     },
-    triggerBoolen: function(propName){
+    triggerBoolen(propName) {
       var prop = {}
       prop[propName] = !this.state[propName]
       this.setState(prop);
     },
-    render: function(){
+    render() {
       return (
         <div>
           <InputNum
@@ -42,7 +44,7 @@ describe('inputNumber', function(){
             required={this.state.required}
             readonly={this.state.readonly}
             name={this.state.name}
-            />
+          />
         </div>
       );
     }
@@ -60,8 +62,8 @@ describe('inputNumber', function(){
     React.unmountComponentAtNode(container);
   });
 
-  describe('keyboard works', function(){
-    it('up works', function(done){
+  describe('keyboard works', function () {
+    it('up works', function (done) {
       var inputNumber = example.refs.inputNum
       Simulate.keyDown(React.findDOMNode(inputNumber.refs.input), {
         keyCode: keyCode.UP
@@ -70,7 +72,7 @@ describe('inputNumber', function(){
       done();
     })
 
-    it('down works', function(done){
+    it('down works', function (done) {
       var inputNumber = example.refs.inputNum
       Simulate.keyDown(React.findDOMNode(inputNumber.refs.input), {
         keyCode: keyCode.DOWN
@@ -80,15 +82,15 @@ describe('inputNumber', function(){
     })
   })
 
-  describe('up/down button works', function(){
-    it('up button works', function(done){
+  describe('up/down button works', function () {
+    it('up button works', function (done) {
       var inputNumber = example.refs.inputNum
       Simulate.click(React.findDOMNode(inputNumber.refs.up));
       expect(inputNumber.state.value).to.be(99);
       done();
     })
 
-    it('down button works', function(done){
+    it('down button works', function (done) {
       var inputNumber = example.refs.inputNum
       Simulate.click(React.findDOMNode(inputNumber.refs.down));
       expect(inputNumber.state.value).to.be(97);
@@ -96,57 +98,57 @@ describe('inputNumber', function(){
     })
   })
 
-  describe('check props works', function(){
-    it('max', function(done){
+  describe('check props works', function () {
+    it('max', function (done) {
       var inputNumber = example.refs.inputNum
-      for(var i=0; i<3; i++){
+      for (var i = 0; i < 3; i++) {
         Simulate.click(React.findDOMNode(inputNumber.refs.up));
       }
       expect(inputNumber.state.value).to.be(100);
       done()
     })
 
-    it('min', function(done){
+    it('min', function (done) {
       var inputNumber = example.refs.inputNum
-      for(var i=0; i<100; i++){
+      for (var i = 0; i < 100; i++) {
         Simulate.click(React.findDOMNode(inputNumber.refs.down));
       }
       expect(inputNumber.state.value).to.be(1);
       done()
     })
 
-    it('disabled', function(done){
+    it('disabled', function (done) {
       var inputNumber = example.refs.inputNum
       example.triggerBoolen('disabled')
       expect(inputNumber.props.disabled).to.be(true);
       done()
     })
 
-    it('readonly', function(done){
+    it('readonly', function (done) {
       var inputNumber = example.refs.inputNum
       example.triggerBoolen('readonly')
       expect(inputNumber.props.readonly).to.be(true);
       done()
     })
 
-    it('autofocus', function(done){
+    it('autofocus', function (done) {
       var inputNumber = example.refs.inputNum
       example.triggerBoolen('autofocus')
       expect(inputNumber.props.autofocus).to.be(true);
       done()
     })
 
-    it('required', function(done){
+    it('required', function (done) {
       var inputNumber = example.refs.inputNum
       example.triggerBoolen('required')
       expect(inputNumber.props.required).to.be(true);
       done()
     })
 
-    it('step', function(done){
+    it('step', function (done) {
       var inputNumber = example.refs.inputNum
       example.setState({step: 0.5})
-      for(var i=0; i<3; i++){
+      for (var i = 0; i < 3; i++) {
         Simulate.click(React.findDOMNode(inputNumber.refs.down));
       }
       expect(inputNumber.state.value).to.be(96.5);

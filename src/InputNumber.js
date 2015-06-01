@@ -1,22 +1,23 @@
-/** @jsx React.DOM */
+'use strict';
+
 var React = require('react');
 var rcUtil = require('rc-util');
 var InputNumber = React.createClass({
-  getInitialState: function () {
+  getInitialState() {
     return {
       value: 0
     };
   },
-  componentDidMount: function () {
+  componentDidMount() {
     if (this.props.value) {
       this.setState({value: this.props.value || 0});
     }
 
   },
-  componentWillUnmount: function () {
+  componentWillUnmount() {
 
   },
-  step: function (type, e) {
+  step(type, e) {
     e.preventDefault();
     if (this.props.disabled) {
       return;
@@ -34,21 +35,21 @@ var InputNumber = React.createClass({
     this.props.value = val;
     this.setState({value: val});
   },
-  onChange: function (event) {
+  onChange(event) {
     var val = event.target.value;
     if (!isNaN(parseFloat(val)) && isFinite(val)) {
       this.setState({value: event.target.value});
     }
   },
-  handleKeyDown: function (e) {
+  handleKeyDown(e) {
     if (e.keyCode === 38) {
-      this.step('up',e);
+      this.step('up', e);
     }
     if (e.keyCode === 40) {
-      this.step('down',e);
+      this.step('down', e);
     }
   },
-  render: function () {
+  render() {
     var classes = rcUtil.classSet({
       'rc-input-num': true,
       'rc-input-num-disabled': this.props.disabled
