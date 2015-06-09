@@ -7,8 +7,15 @@ var React = require('react');
 var Component = React.createClass({
   getInitialState() {
     return {
-      disabled: false
+      disabled: false,
+      value: 8
     }
+  },
+  onChange(v) {
+    console.log('onChange: ' + v);
+    this.setState({
+      value: v
+    });
   },
   triggerDisabled() {
     this.setState({disabled: !this.state.disabled});
@@ -16,7 +23,7 @@ var Component = React.createClass({
   render() {
     return (
       <div>
-        <InputNum min="1" max="10" value="8" disabled={this.state.disabled} />
+        <InputNum min="1" max="10" value={this.state.value} onChange={this.onChange} disabled={this.state.disabled} />
         <p>
           <button onClick={this.triggerDisabled}>Trigger Disabled</button>
         </p>

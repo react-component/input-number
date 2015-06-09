@@ -91,7 +91,7 @@ React.render(<InputNum />, container);
           <td>Specifies that an InputNum should be disabled</td>
         </tr>
         <tr>
-          <td>autofocus</td>
+          <td>autoFocus</td>
           <td>Boolean</td>
           <td>false</td>
           <td>Specifies that an InputNum should automatically get focus when the page loads</td>
@@ -119,6 +119,12 @@ React.render(<InputNum />, container);
           <td>String</td>
           <td></td>
           <td>Specifies the value of an InputNum</td>
+        </tr>
+        <tr>
+          <td>onChange</td>
+          <td>Function</td>
+          <td></td>
+          <td>Called when value of an InputNum changed</td>
         </tr>
     </tbody>
 </table>
