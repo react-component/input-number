@@ -133,6 +133,12 @@ online example: http://react-component.github.io/input-number/examples/
           <td>Specifies the defaultValue of an InputNumber</td>
         </tr>
         <tr>
+          <td>style</td>
+          <td>Object</td>
+          <td></td>
+          <td>root style. such as {width:100}</td>
+        </tr>
+        <tr>
           <td>onChange</td>
           <td>Function</td>
           <td></td>
