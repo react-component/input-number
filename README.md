@@ -4,7 +4,6 @@
 input number ui component for react
 
 [![NPM version][npm-image]][npm-url]
-[![SPM version](http://spmjs.io/badge/rc-input-number)](http://spmjs.io/package/rc-input-number)
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
@@ -29,7 +28,7 @@ input number ui component for react
 
 ## Screenshots
 
-<img src="https://t.alipayobjects.com/images/T177xfXlplXXXXXXXX.png" width="288"/>
+<img src="http://gtms01.alicdn.com/tps/i1/TB18CIlIpXXXXaxXFXXDa5hRXXX-268-124.png" width="288"/>
 
 
 ## Feature
@@ -47,10 +46,23 @@ input number ui component for react
 ## Usage
 
 ```js
-var RcInputNumber = require('rc-input-number');
+var InputNumber = require('rc-input-number');
 var React = require('react');
-React.render(<InputNum />, container);
+React.render(<InputNumber defaultValue={19}/>, container);
 ```
+
+## Development
+
+```
+npm install
+npm start
+```
+
+## Example
+
+http://127.0.0.1:8000/examples/
+
+online example: http://react-component.github.io/input-number/examples/
 
 ## API
 
@@ -88,59 +100,48 @@ React.render(<InputNum />, container);
           <td>disabled</td>
           <td>Boolean</td>
           <td>false</td>
-          <td>Specifies that an InputNum should be disabled</td>
+          <td>Specifies that an InputNumber should be disabled</td>
         </tr>
         <tr>
           <td>autoFocus</td>
           <td>Boolean</td>
           <td>false</td>
-          <td>Specifies that an InputNum should automatically get focus when the page loads</td>
+          <td>Specifies that an InputNumber should automatically get focus when the page loads</td>
         </tr>
         <tr>
-          <td>required</td>
+          <td>readOnly</td>
           <td>Boolean</td>
           <td>false</td>
-          <td>Specifies that an InputNum is required(must be filled out)</td>
-        </tr>
-        <tr>
-          <td>readonly</td>
-          <td>Boolean</td>
-          <td>false</td>
-          <td>Specifies that an InputNum is read only </td>
+          <td>Specifies that an InputNumber is read only </td>
         </tr>
         <tr>
           <td>name</td>
           <td>String</td>
           <td></td>
-          <td>Specifies the name of an InputNum</td>
+          <td>Specifies the name of an InputNumber</td>
         </tr>
         <tr>
           <td>value</td>
-          <td>String</td>
+          <td>Number</td>
           <td></td>
-          <td>Specifies the value of an InputNum</td>
+          <td>Specifies the value of an InputNumber</td>
+        </tr>
+        <tr>
+          <td>defaultValue</td>
+          <td>Number</td>
+          <td></td>
+          <td>Specifies the defaultValue of an InputNumber</td>
         </tr>
         <tr>
           <td>onChange</td>
           <td>Function</td>
           <td></td>
-          <td>Called when value of an InputNum changed</td>
+          <td>Called when value of an InputNumber changed</td>
         </tr>
     </tbody>
 </table>
 
-## Development
 
-```
-npm install
-npm start
-```
-
-## Example
-
-http://127.0.0.1:8000/examples/
-
-online example: http://react-component.github.io/input-number/build/examples/
 
 ## Test Case
 

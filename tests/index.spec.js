@@ -6,6 +6,9 @@ var InputNum = require('../index');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Simulate = TestUtils.Simulate;
+require('../assets/index.css');
+
+var defaultValue = 98;
 
 describe('inputNumber', function () {
   var container = document.createElement('div');
@@ -16,16 +19,15 @@ describe('inputNumber', function () {
       return {
         min: 1,
         max: 100,
-        value: 98,
+        value: defaultValue,
         step: 1,
         disabled: false,
-        autofocus: false,
-        required: false,
-        readonly: false,
+        autoFocus: false,
+        readOnly: false,
         name: 'inputNumber'
       }
     },
-    triggerBoolen(propName) {
+    triggerBoolean(propName) {
       var prop = {}
       prop[propName] = !this.state[propName]
       this.setState(prop);
@@ -40,9 +42,8 @@ describe('inputNumber', function () {
             value={this.state.value}
             step={this.state.step}
             disabled={this.state.disabled}
-            autofocus={this.state.autofocus}
-            required={this.state.required}
-            readonly={this.state.readonly}
+            autoFocus={this.state.autoFocus}
+            readOnly={this.state.readOnly}
             name={this.state.name}
           />
         </div>
@@ -119,39 +120,32 @@ describe('inputNumber', function () {
 
     it('disabled', function (done) {
       var inputNumber = example.refs.inputNum
-      example.triggerBoolen('disabled')
+      example.triggerBoolean('disabled')
       expect(inputNumber.props.disabled).to.be(true);
       done()
     })
 
     it('readonly', function (done) {
       var inputNumber = example.refs.inputNum
-      example.triggerBoolen('readonly')
-      expect(inputNumber.props.readonly).to.be(true);
+      example.triggerBoolean('readOnly')
+      expect(inputNumber.props.readOnly).to.be(true);
       done()
     })
 
     it('autofocus', function (done) {
       var inputNumber = example.refs.inputNum
-      example.triggerBoolen('autofocus')
-      expect(inputNumber.props.autofocus).to.be(true);
-      done()
-    })
-
-    it('required', function (done) {
-      var inputNumber = example.refs.inputNum
-      example.triggerBoolen('required')
-      expect(inputNumber.props.required).to.be(true);
+      example.triggerBoolean('autoFocus')
+      expect(inputNumber.props.autoFocus).to.be(true);
       done()
     })
 
     it('step', function (done) {
       var inputNumber = example.refs.inputNum
-      example.setState({step: 0.5})
+      example.setState({step: 5})
       for (var i = 0; i < 3; i++) {
         Simulate.click(React.findDOMNode(inputNumber.refs.down));
       }
-      expect(inputNumber.state.value).to.be(96.5);
+      expect(inputNumber.state.value).to.be(defaultValue - 3 * 5);
       done()
     })
   })

@@ -1,107 +1,108 @@
-.rc-input-num {
-  margin: 0 0;
-  padding: 0 0;
-  line-height: 30px;
+@inputNumberPrefixCls: rc-input-number;
+
+.@{inputNumberPrefixCls} {
+  margin: 0;
+  padding: 0;
+  line-height: 26px;
   font-size: 12px;
+  height: 26px;
   display: inline-block;
   vertical-align: middle;
-}
-.rc-input-num-handler,
-.rc-input-num-input {
-  float: left;
-  line-height: 30px;
-  height: 30px;
-  position: relative;
   border: 1px solid #D9D9D9;
-  display: inline-block;
-  z-index: 1;
-  transition: all 0.3s ease;
-  color: #666666;
-}
-.rc-input-num-handler {
-  width: 32px;
-  text-align: center;
-  background: #F3F3F3;
-  color: #999;
-  text-decoration: none;
-  margin-left: -1px;
-  overflow: hidden;
+  border-radius: 5px;
 
-  &:before {
-    font-size: 12px;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    display: block;
-    font-family: iconfont;
+  &-handler {
+    text-align: center;
+    line-height: 12px;
+    height: 12px;
+    overflow: hidden;
+  }
+
+  &-handler-up-inner, &-handler-down-inner {
+    color: #666666;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   &:hover {
-    text-decoration: none;
-    color: #666;
-    z-index: 10;
-    cursor: pointer;
-  }
-
-  &:active {
-    border-color: #23C0FA;
-  }
-
-
-}
-
-.rc-input-num-handler-down {
-  border-radius: 6px 0 0 6px;
-  &:before {
-    content: "-";
-    display: block;
-    text-align: center;
-  }
-}
-
-.rc-input-num-handler-up {
-  border-radius: 0 6px 6px 0;
-  margin-left: -1px;
-
-  &:before {
-    content: "+";
-    display: block;
-    text-align: center;
-  }
-}
-.rc-input-num-input {
-  margin-left: -1px;
-  width: 88px;
-  padding: 0 10px;
-  text-align: center;
-  outline: 0;
-  -moz-appearance: textfield;
-
-  &:hover {
-    z-index: 10;
     border-color: #23c0fa;
+
+    .@{inputNumberPrefixCls}-handler-up, .@{inputNumberPrefixCls}-handler-wrap {
+      border-color: #23c0fa;
+    }
   }
 
-  &:focus {
-    background: #fff;
-    z-index: 10;
-    border: 1px solid #23C0FA;
-    box-shadow: 0px 0px 3px #23C0FA;
-  }
-}
+  &-disabled:hover {
+    border-color: #d9d9d9;
 
-.rc-input-num-disabled  {
-  .rc-input-num-input {
-    opacity: 0.72;
-    cursor: not-allowed;
-    border-color: #d9d9d9;
-    background-color: #f3f3f3;
+    .@{inputNumberPrefixCls}-handler-up, .@{inputNumberPrefixCls}-handler-wrap {
+      border-color: #d9d9d9;
+    }
   }
-  .rc-input-num-handler {
-    opacity: 0.72;
+
+  &-input-wrap {
+    overflow: hidden;
+    height: 26px;
   }
-  .rc-input-num-handler:hover {
-    color: #999;
-    cursor: not-allowed;
-    border-color: #d9d9d9;
+
+  &-input {
+    width: 100%;
+    text-align: center;
+    outline: 0;
+    -moz-appearance: textfield;
+    line-height: 26px;
+    height: 26px;
+    transition: all 0.3s ease;
+    color: #666666;
+    border: 0;
+    border-radius: 5px;
+    padding: 0;
+  }
+
+  &-handler-wrap {
+    float: right;
+    border-left: 1px solid #D9D9D9;
+    width: 20px;
+    height: 26px;
+  }
+
+  &-handler-up {
+    border-bottom: 1px solid #D9D9D9;
+    &-inner {
+      &:after {
+        content: '+';
+      }
+    }
+  }
+
+  &-handler-down {
+    &-inner {
+      &:after {
+        content: '-';
+      }
+    }
+  }
+
+  .handler-disabled() {
+    opacity: 0.72;
+    &:hover {
+      color: #999;
+      border-color: #d9d9d9;
+    }
+  }
+
+  &-handler-down-disabled, &-handler-up-disabled {
+    .handler-disabled();
+  }
+
+  &-disabled {
+    .@{inputNumberPrefixCls}-input {
+      opacity: 0.72;
+      cursor: not-allowed;
+      background-color: #f3f3f3;
+    }
+    .@{inputNumberPrefixCls}-handler {
+      .handler-disabled();
+    }
   }
 }
