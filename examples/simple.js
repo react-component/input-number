@@ -9,63 +9,84 @@ webpackJsonp([0,1],[
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
+	'use strict';
+	
 	// use jsx to render html, do not modify simple.html
-	__webpack_require__(4);
-	var InputNum = __webpack_require__(3);
-	var React = __webpack_require__(2);
-	var Component = React.createClass({displayName: "Component",
-	  getInitialState: function(){
+	__webpack_require__(2);
+	var InputNum = __webpack_require__(6);
+	var React = __webpack_require__(8);
+	var Component = React.createClass({
+	  displayName: 'Component',
+	
+	  getInitialState: function getInitialState() {
 	    return {
-	      disabled: false
-	    }
+	      disabled: false,
+	      readOnly: false,
+	      value: 8
+	    };
 	  },
-	  triggerDisabled: function(){
-	    this.setState({disabled: !this.state.disabled});
+	  onChange: function onChange(v) {
+	    console.log('onChange: ' + v);
+	    this.setState({
+	      value: v
+	    });
 	  },
-	  render: function(){
-	    return (
-	      React.createElement("div", null, 
-	        React.createElement(InputNum, {min: "1", max: "10", value: "8", disabled: this.state.disabled}), 
-	        React.createElement("p", null, 
-	          React.createElement("button", {onClick: this.triggerDisabled}, "Trigger Disabled")
+	  toggleDisabled: function toggleDisabled() {
+	    this.setState({
+	      disabled: !this.state.disabled
+	    });
+	  },
+	  toggleReadOnly: function toggleReadOnly() {
+	    this.setState({
+	      readOnly: !this.state.readOnly
+	    });
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { style: { margin: 10 } },
+	      React.createElement(InputNum, { min: 1,
+	        max: 10,
+	        style: { width: 100 },
+	        readOnly: this.state.readOnly,
+	        value: this.state.value,
+	        onChange: this.onChange,
+	        disabled: this.state.disabled }),
+	      React.createElement(
+	        'p',
+	        null,
+	        React.createElement(
+	          'button',
+	          { onClick: this.toggleDisabled },
+	          'toggle Disabled'
+	        ),
+	        React.createElement(
+	          'button',
+	          { onClick: this.toggleReadOnly },
+	          'toggle readOnly'
 	        )
 	      )
-	      );
+	    );
 	  }
-	})
+	});
 	React.render(React.createElement(Component, null), document.getElementById('__react-content'));
-
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = React;
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(6);
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// style-loader: Adds some css to the DOM by adding a <style> tag
-
+	
 	// load the styles
-	var content = __webpack_require__(5);
+	var content = __webpack_require__(3);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
+	var update = __webpack_require__(5)(content, {});
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
-		module.hot.accept("!!/Users/shuaijitsj/Documents/lab/react-component/inputNumber/node_modules/css-loader/index.js!/Users/shuaijitsj/Documents/lab/react-component/inputNumber/assets/index.css", function() {
-			var newContent = require("!!/Users/shuaijitsj/Documents/lab/react-component/inputNumber/node_modules/css-loader/index.js!/Users/shuaijitsj/Documents/lab/react-component/inputNumber/assets/index.css");
+		module.hot.accept("!!/Users/yiminghe/code/react-components/input-number/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/yiminghe/code/react-components/input-number/assets/index.css", function() {
+			var newContent = require("!!/Users/yiminghe/code/react-components/input-number/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/yiminghe/code/react-components/input-number/assets/index.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -74,100 +95,35 @@ webpackJsonp([0,1],[
 	}
 
 /***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(4)();
+	exports.push([module.id, ".rc-input-number {\n  margin: 0;\n  padding: 0;\n  line-height: 26px;\n  font-size: 12px;\n  height: 26px;\n  display: inline-block;\n  vertical-align: middle;\n  border: 1px solid #D9D9D9;\n  border-radius: 5px;\n}\n.rc-input-number-handler {\n  text-align: center;\n  line-height: 12px;\n  height: 12px;\n  overflow: hidden;\n}\n.rc-input-number-handler-up-inner,\n.rc-input-number-handler-down-inner {\n  color: #666666;\n  -moz-user-select: none;\n   -ms-user-select: none;\n       user-select: none;\n  -webkit-user-select: none;\n}\n.rc-input-number:hover {\n  border-color: #23c0fa;\n}\n.rc-input-number:hover .rc-input-number-handler-up,\n.rc-input-number:hover .rc-input-number-handler-wrap {\n  border-color: #23c0fa;\n}\n.rc-input-number-disabled:hover {\n  border-color: #d9d9d9;\n}\n.rc-input-number-disabled:hover .rc-input-number-handler-up,\n.rc-input-number-disabled:hover .rc-input-number-handler-wrap {\n  border-color: #d9d9d9;\n}\n.rc-input-number-input-wrap {\n  overflow: hidden;\n  height: 26px;\n}\n.rc-input-number-input {\n  width: 100%;\n  text-align: center;\n  outline: 0;\n  -moz-appearance: textfield;\n  line-height: 26px;\n  height: 26px;\n  transition: all 0.3s ease;\n  color: #666666;\n  border: 0;\n  border-radius: 5px;\n  padding: 0;\n}\n.rc-input-number-handler-wrap {\n  float: right;\n  border-left: 1px solid #D9D9D9;\n  width: 20px;\n  height: 26px;\n}\n.rc-input-number-handler-up {\n  border-bottom: 1px solid #D9D9D9;\n}\n.rc-input-number-handler-up-inner:after {\n  content: '+';\n}\n.rc-input-number-handler-down-inner:after {\n  content: '-';\n}\n.rc-input-number-handler-down-disabled,\n.rc-input-number-handler-up-disabled {\n  opacity: 0.72;\n}\n.rc-input-number-handler-down-disabled:hover,\n.rc-input-number-handler-up-disabled:hover {\n  color: #999;\n  border-color: #d9d9d9;\n}\n.rc-input-number-disabled .rc-input-number-input {\n  opacity: 0.72;\n  cursor: not-allowed;\n  background-color: #f3f3f3;\n}\n.rc-input-number-disabled .rc-input-number-handler {\n  opacity: 0.72;\n}\n.rc-input-number-disabled .rc-input-number-handler:hover {\n  color: #999;\n  border-color: #d9d9d9;\n}\n", ""]);
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = function() {
+		var list = [];
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+		return list;
+	}
+
+/***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(8)();
-	exports.push([module.id, ".rc-input-num {\n  margin: 0 0;\n  padding: 0 0;\n  line-height: 30px;\n  font-size: 12px;\n  display: inline-block;\n  vertical-align: middle;\n}\n.rc-input-num-handler,\n.rc-input-num-input {\n  float: left;\n  line-height: 30px;\n  height: 30px;\n  position: relative;\n  border: 1px solid #D9D9D9;\n  display: inline-block;\n  z-index: 1;\n  transition: all 0.3s ease;\n  color: #666666;\n}\n.rc-input-num-handler {\n  width: 32px;\n  text-align: center;\n  background: #F3F3F3;\n  color: #999;\n  text-decoration: none;\n  margin-left: -1px;\n  overflow: hidden;\n}\n.rc-input-num-handler:before {\n  font-size: 12px;\n  -webkit-transform: scale(1);\n  -ms-transform: scale(1);\n      transform: scale(1);\n  display: block;\n  font-family: iconfont;\n}\n.rc-input-num-handler:hover {\n  text-decoration: none;\n  color: #666;\n  z-index: 10;\n  cursor: pointer;\n}\n.rc-input-num-handler:active {\n  border-color: #23C0FA;\n}\n.rc-input-num-handler-down {\n  border-radius: 6px 0 0 6px;\n}\n.rc-input-num-handler-down:before {\n  content: \"-\";\n  display: block;\n  text-align: center;\n}\n.rc-input-num-handler-up {\n  border-radius: 0 6px 6px 0;\n  margin-left: -1px;\n}\n.rc-input-num-handler-up:before {\n  content: \"+\";\n  display: block;\n  text-align: center;\n}\n.rc-input-num-input {\n  margin-left: -1px;\n  width: 88px;\n  padding: 0 10px;\n  text-align: center;\n  outline: 0;\n  -moz-appearance: textfield;\n}\n.rc-input-num-input:hover {\n  z-index: 10;\n  border-color: #23c0fa;\n}\n.rc-input-num-input:focus {\n  background: #fff;\n  z-index: 10;\n  border: 1px solid #23C0FA;\n  box-shadow: 0px 0px 3px #23C0FA;\n}\n.rc-input-num-disabled .rc-input-num-input {\n  opacity: 0.72;\n  cursor: not-allowed;\n  border-color: #d9d9d9;\n  background-color: #f3f3f3;\n}\n.rc-input-num-disabled .rc-input-num-handler {\n  opacity: 0.72;\n}\n.rc-input-num-disabled .rc-input-num-handler:hover {\n  color: #999;\n  cursor: not-allowed;\n  border-color: #d9d9d9;\n}\n", ""]);
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-	var React = __webpack_require__(2);
-	var rcUtil = __webpack_require__(9);
-	var InputNumber = React.createClass({displayName: "InputNumber",
-	  getInitialState: function () {
-	    return {
-	      value: 0
-	    };
-	  },
-	  componentDidMount: function () {
-	    if (this.props.value) {
-	      this.setState({value: this.props.value || 0});
-	    }
-
-	  },
-	  componentWillUnmount: function () {
-
-	  },
-	  step: function (type, e) {
-	    e.preventDefault();
-	    if (this.props.disabled) {
-	      return;
-	    }
-	    var stepNum = this.props.step || 1, val;
-	    if (type === 'down') {
-	      val = Number(this.state.value) - Number(stepNum);
-	    }
-	    if (type === 'up') {
-	      val = Number(this.state.value) + Number(stepNum);
-	    }
-	    if (val > Number(this.props.max) || val < Number(this.props.min)) {
-	      return;
-	    }
-	    this.props.value = val;
-	    this.setState({value: val});
-	  },
-	  onChange: function (event) {
-	    var val = event.target.value;
-	    if (!isNaN(parseFloat(val)) && isFinite(val)) {
-	      this.setState({value: event.target.value});
-	    }
-	  },
-	  handleKeyDown: function (e) {
-	    if (e.keyCode === 38) {
-	      this.step('up',e);
-	    }
-	    if (e.keyCode === 40) {
-	      this.step('down',e);
-	    }
-	  },
-	  render: function () {
-	    var classes = rcUtil.classSet({
-	      'rc-input-num': true,
-	      'rc-input-num-disabled': this.props.disabled
-	    });
-	    return (
-	      React.createElement("div", {className: classes}, 
-	        React.createElement("a", {href: "#", 
-	          ref: "down", 
-	          onClick: this.step.bind(this, 'down'), 
-	          className: "rc-input-num-handler rc-input-num-handler-down"}), 
-	        React.createElement("input", {className: "rc-input-num-input", type: "text", autocomplete: "off", ref: "input", onKeyDown: this.handleKeyDown, 
-	          autofocus: this.props.autofocus, 
-	          required: this.props.required, 
-	          readonly: this.props.readonly, 
-	          disabled: this.props.disabled, 
-	          max: this.props.max, 
-	          min: this.props.min, 
-	          name: this.props.name, 
-	          onChange: this.onChange, 
-	          value: this.state.value}), 
-	        React.createElement("a", {href: "#", 
-	          ref: "up", 
-	          onClick: this.step.bind(this, 'up'), 
-	          className: "rc-input-num-handler rc-input-num-handler-up"})
-	      )
-	    );
-	  }
-	});
-	module.exports = InputNumber;
-
-
-/***/ },
-/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -190,20 +146,20 @@ webpackJsonp([0,1],[
 		}),
 		singletonElement = null,
 		singletonCounter = 0;
-
+	
 	module.exports = function(list, options) {
 		if(false) {
 			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
 		}
-
+	
 		options = options || {};
 		// Force single-tag solution on IE9, which has a hard limit on the # of <style>
 		// tags it will allow on a page
 		if (typeof options.singleton === "undefined") options.singleton = isIE9();
-
+	
 		var styles = listToStyles(list);
 		addStylesToDom(styles, options);
-
+	
 		return function update(newList) {
 			var mayRemove = [];
 			for(var i = 0; i < styles.length; i++) {
@@ -226,7 +182,7 @@ webpackJsonp([0,1],[
 			}
 		};
 	}
-
+	
 	function addStylesToDom(styles, options) {
 		for(var i = 0; i < styles.length; i++) {
 			var item = styles[i];
@@ -248,7 +204,7 @@ webpackJsonp([0,1],[
 			}
 		}
 	}
-
+	
 	function listToStyles(list) {
 		var styles = [];
 		var newStyles = {};
@@ -266,7 +222,7 @@ webpackJsonp([0,1],[
 		}
 		return styles;
 	}
-
+	
 	function createStyleElement() {
 		var styleElement = document.createElement("style");
 		var head = getHeadElement();
@@ -274,10 +230,10 @@ webpackJsonp([0,1],[
 		head.appendChild(styleElement);
 		return styleElement;
 	}
-
+	
 	function addStyle(obj, options) {
 		var styleElement, update, remove;
-
+	
 		if (options.singleton) {
 			var styleIndex = singletonCounter++;
 			styleElement = singletonElement || (singletonElement = createStyleElement());
@@ -290,9 +246,9 @@ webpackJsonp([0,1],[
 				styleElement.parentNode.removeChild(styleElement);
 			};
 		}
-
+	
 		update(obj);
-
+	
 		return function updateStyle(newObj) {
 			if(newObj) {
 				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
@@ -303,7 +259,7 @@ webpackJsonp([0,1],[
 			}
 		};
 	}
-
+	
 	function replaceText(source, id, replacement) {
 		var boundaries = ["/** >>" + id + " **/", "/** " + id + "<< **/"];
 		var start = source.lastIndexOf(boundaries[0]);
@@ -317,10 +273,10 @@ webpackJsonp([0,1],[
 			return source + wrappedReplacement;
 		}
 	}
-
+	
 	function applyToSingletonTag(styleElement, index, remove, obj) {
 		var css = remove ? "" : obj.css;
-
+	
 		if(styleElement.styleSheet) {
 			styleElement.styleSheet.cssText = replaceText(styleElement.styleSheet.cssText, index, css);
 		} else {
@@ -334,23 +290,23 @@ webpackJsonp([0,1],[
 			}
 		}
 	}
-
+	
 	function applyToTag(styleElement, obj) {
 		var css = obj.css;
 		var media = obj.media;
 		var sourceMap = obj.sourceMap;
-
+	
 		if(sourceMap && typeof btoa === "function") {
 			try {
 				css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(JSON.stringify(sourceMap)) + " */";
 				css = "@import url(\"data:text/css;base64," + btoa(css) + "\")";
 			} catch(e) {}
 		}
-
+	
 		if(media) {
 			styleElement.setAttribute("media", media)
 		}
-
+	
 		if(styleElement.styleSheet) {
 			styleElement.styleSheet.cssText = css;
 		} else {
@@ -363,25 +319,183 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 8 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function() {
-		var list = [];
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-		return list;
+	'use strict';
+	
+	module.exports = __webpack_require__(7);
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _defineProperty(obj, key, value) {
+	  if (key in obj) {
+	    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+	  } else {
+	    obj[key] = value;
+	  }return obj;
 	}
+	
+	var React = __webpack_require__(8);
+	var rcUtil = __webpack_require__(9);
+	
+	function noop() {}
+	
+	function isValueNumber(value) {
+	  return /^-?\d+?$/.test(value + '');
+	}
+	
+	var InputNumber = React.createClass({
+	  displayName: 'InputNumber',
+	
+	  getInitialState: function getInitialState() {
+	    var value;
+	    var props = this.props;
+	    if ('value' in props) {
+	      value = props.value;
+	    } else {
+	      value = props.defaultValue;
+	    }
+	    return {
+	      value: value
+	    };
+	  },
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      prefixCls: 'rc-input-number',
+	      max: Infinity,
+	      min: -Infinity,
+	      style: {},
+	      onChange: noop
+	    };
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if ('value' in nextProps) {
+	      this.setState({
+	        value: nextProps.value
+	      });
+	    }
+	  },
+	  setValue: function setValue(v) {
+	    this.setState({
+	      value: v
+	    });
+	    this.props.onChange(v);
+	  },
+	  step: function step(type, e) {
+	    if (e) {
+	      e.preventDefault();
+	    }
+	    var props = this.props;
+	    if (props.disabled) {
+	      return;
+	    }
+	    var value = this.state.value;
+	    if (isNaN(value)) {
+	      return;
+	    }
+	    var stepNum = props.step || 1;
+	    var val = value;
+	    if (type === 'down') {
+	      val -= stepNum;
+	    } else if (type === 'up') {
+	      val += stepNum;
+	    }
+	    if (val > props.max || val < props.min) {
+	      return;
+	    }
+	    this.setValue(val);
+	  },
+	  onChange: function onChange(event) {
+	    var props = this.props;
+	    var val = event.target.value.trim();
+	    if (!val) {
+	      this.setValue(val);
+	    } else if (isValueNumber(val)) {
+	      val = Number(val);
+	      if ('min' in props) {
+	        if (val < props.min) {
+	          return;
+	        }
+	      }
+	      if ('max' in props) {
+	        if (val > props.max) {
+	          return;
+	        }
+	      }
+	      this.setValue(val);
+	    }
+	  },
+	
+	  down: function down(e) {
+	    this.step('down', e);
+	  },
+	
+	  up: function up(e) {
+	    this.step('up', e);
+	  },
+	
+	  handleKeyDown: function handleKeyDown(e) {
+	    if (e.keyCode === 38) {
+	      this.up(e);
+	    } else if (e.keyCode === 40) {
+	      this.down(e);
+	    }
+	  },
+	  render: function render() {
+	    var _rcUtil$classSet;
+	
+	    var props = this.props;
+	    var prefixCls = props.prefixCls;
+	    var classes = rcUtil.classSet((_rcUtil$classSet = {}, _defineProperty(_rcUtil$classSet, prefixCls, true), _defineProperty(_rcUtil$classSet, prefixCls + '-disabled', props.disabled), _rcUtil$classSet));
+	    var upDisabledClass = '';
+	    var downDisabledClass = '';
+	    var value = this.state.value;
+	    if (isValueNumber(value)) {
+	      var val = Number(value);
+	      if (val >= props.max) {
+	        upDisabledClass = prefixCls + '-handler-up-disabled';
+	      }
+	      if (val <= props.min) {
+	        downDisabledClass = prefixCls + '-handler-up-disabled';
+	      }
+	    } else {
+	      upDisabledClass = prefixCls + '-handler-up-disabled';
+	      downDisabledClass = prefixCls + '-handler-up-disabled';
+	    }
+	    // ref for test
+	    return React.createElement('div', { className: classes, style: props.style }, React.createElement('div', { className: prefixCls + '-handler-wrap' }, React.createElement('div', { unselectable: true,
+	      ref: 'up',
+	      onClick: upDisabledClass ? noop : this.up,
+	      className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass }, React.createElement('div', { className: prefixCls + '-handler-up-inner' })), React.createElement('div', { unselectable: true,
+	      ref: 'down',
+	      onClick: downDisabledClass ? noop : this.down,
+	      className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass }, React.createElement('div', { className: prefixCls + '-handler-down-inner' }))), React.createElement('div', { className: prefixCls + '-input-wrap' }, React.createElement('input', { className: prefixCls + '-input',
+	      autoComplete: 'off',
+	      onKeyDown: this.handleKeyDown,
+	      autoFocus: props.autoFocus,
+	      readOnly: props.readOnly,
+	      disabled: props.disabled,
+	      max: props.max,
+	      min: props.min,
+	      name: props.name,
+	      onChange: this.onChange,
+	      ref: 'input',
+	      value: this.state.value })));
+	  }
+	});
+	
+	module.exports = InputNumber;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = React;
 
 /***/ },
 /* 9 */
@@ -400,14 +514,15 @@ webpackJsonp([0,1],[
 	    contains: __webpack_require__(18)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(19)
+	    toArray: __webpack_require__(19),
+	    mapSelf: __webpack_require__(20)
 	  }
 	};
 
 
 /***/ },
 /* 10 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	var seed = 0;
 	module.exports = function () {
@@ -417,7 +532,7 @@ webpackJsonp([0,1],[
 
 /***/ },
 /* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Copyright 2013-2014, Facebook, Inc.
@@ -431,7 +546,7 @@ webpackJsonp([0,1],[
 	 * An additional grant of patent rights can be found here:
 	 * https://github.com/facebook/react/blob/v0.12.0/PATENTS
 	 */
-
+	
 	/**
 	 * This function is used to mark string literals representing CSS class names
 	 * so that they can be transformed statically. This allows for modularization
@@ -456,13 +571,13 @@ webpackJsonp([0,1],[
 	    return Array.prototype.join.call(arguments, ' ');
 	  }
 	}
-
+	
 	module.exports = cx;
 
 
 /***/ },
 /* 12 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Copyright 2013-2014, Facebook, Inc.
@@ -476,9 +591,9 @@ webpackJsonp([0,1],[
 	 * An additional grant of patent rights can be found here:
 	 * https://github.com/facebook/react/blob/v0.12.0/PATENTS
 	 */
-
+	
 	"use strict";
-
+	
 	/**
 	 * Combines multiple className strings into one.
 	 * http://jsperf.com/joinclasses-args-vs-array
@@ -486,7 +601,7 @@ webpackJsonp([0,1],[
 	 * @param {...?string} classes
 	 * @return {string}
 	 */
-
+	
 	function joinClasses(className /*, ... */ ) {
 	  if (!className) {
 	    className = '';
@@ -503,20 +618,20 @@ webpackJsonp([0,1],[
 	  }
 	  return className;
 	}
-
+	
 	module.exports = joinClasses;
 
 
 /***/ },
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * @ignore
 	 * some key-codes definition and utils from closure-library
 	 * @author yiminghe@gmail.com
 	 */
-
+	
 	var KeyCode = {
 	  /**
 	   * MAC_ENTER
@@ -939,7 +1054,7 @@ webpackJsonp([0,1],[
 	   */
 	  WIN_IME: 229
 	};
-
+	
 	/*
 	 whether text and modified key is entered at the same time.
 	 */
@@ -950,7 +1065,7 @@ webpackJsonp([0,1],[
 	    keyCode >= KeyCode.F1 && keyCode <= KeyCode.F12) {
 	    return false;
 	  }
-
+	
 	  // The following keys are quite harmless, even in combination with
 	  // CTRL, ALT or SHIFT.
 	  switch (keyCode) {
@@ -982,7 +1097,7 @@ webpackJsonp([0,1],[
 	      return true;
 	  }
 	};
-
+	
 	/*
 	 whether character is entered.
 	 */
@@ -991,22 +1106,22 @@ webpackJsonp([0,1],[
 	    keyCode <= KeyCode.NINE) {
 	    return true;
 	  }
-
+	
 	  if (keyCode >= KeyCode.NUM_ZERO &&
 	    keyCode <= KeyCode.NUM_MULTIPLY) {
 	    return true;
 	  }
-
+	
 	  if (keyCode >= KeyCode.A &&
 	    keyCode <= KeyCode.Z) {
 	    return true;
 	  }
-
+	
 	  // Safari sends zero key code for non-latin characters.
 	  if (window.navigation.userAgent.indexOf('WebKit') !== -1 && keyCode === 0) {
 	    return true;
 	  }
-
+	
 	  switch (keyCode) {
 	    case KeyCode.SPACE:
 	    case KeyCode.QUESTION_MARK:
@@ -1030,7 +1145,7 @@ webpackJsonp([0,1],[
 	      return false;
 	  }
 	};
-
+	
 	module.exports = KeyCode;
 
 
@@ -1048,11 +1163,11 @@ webpackJsonp([0,1],[
 	 *
 	* @providesModule ReactComponentWithPureRenderMixin
 	*/
-
+	
 	"use strict";
-
+	
 	var shallowEqual = __webpack_require__(15);
-
+	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
 	 * same result given the same props and state, provide this Mixin for a
@@ -1083,13 +1198,13 @@ webpackJsonp([0,1],[
 	           !shallowEqual(this.state, nextState);
 	  }
 	};
-
+	
 	module.exports = ReactComponentWithPureRenderMixin;
 
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Copyright 2013-2014, Facebook, Inc.
@@ -1101,9 +1216,9 @@ webpackJsonp([0,1],[
 	 *
 	 * @providesModule shallowEqual
 	 */
-
+	
 	"use strict";
-
+	
 	/**
 	 * Performs equality by iterating through keys on an object and returning
 	 * false when any key has values which are not strictly equal between
@@ -1131,13 +1246,13 @@ webpackJsonp([0,1],[
 	  }
 	  return true;
 	}
-
+	
 	module.exports = shallowEqual;
 
 
 /***/ },
 /* 16 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Safe chained function
@@ -1149,7 +1264,7 @@ webpackJsonp([0,1],[
 	 */
 	function createChainedFunction() {
 	  var args = arguments;
-
+	
 	  return function chainedFunction() {
 	    for (var i = 0; i < args.length; i++) {
 	      if (args[i] && args[i].apply) {
@@ -1158,13 +1273,13 @@ webpackJsonp([0,1],[
 	    }
 	  };
 	}
-
+	
 	module.exports = createChainedFunction;
 
 
 /***/ },
 /* 17 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	module.exports = function (target, eventType, callback) {
 	  if (target.addEventListener) {
@@ -1187,7 +1302,7 @@ webpackJsonp([0,1],[
 
 /***/ },
 /* 18 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	module.exports = function (root, node) {
 	  while (node) {
@@ -1196,7 +1311,7 @@ webpackJsonp([0,1],[
 	    }
 	    node = node.parentNode;
 	  }
-
+	
 	  return false;
 	};
 
@@ -1205,8 +1320,8 @@ webpackJsonp([0,1],[
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(2);
-
+	var React = __webpack_require__(8);
+	
 	module.exports = function (children) {
 	  var ret = [];
 	  React.Children.forEach(children, function (c) {
@@ -1216,5 +1331,22 @@ webpackJsonp([0,1],[
 	};
 
 
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(8);
+	
+	function mirror(o) {
+	  return o;
+	}
+	
+	module.exports = function (children) {
+	  // return ReactFragment
+	  return React.Children.map(children, mirror);
+	};
+
+
 /***/ }
 ]);
+//# sourceMappingURL=simple.js.map
