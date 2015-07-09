@@ -10,6 +10,10 @@ function isValueNumber(value) {
   return (/^-?\d+?$/).test(value + '');
 }
 
+function preventDefault(e) {
+  e.preventDefault();
+}
+
 var InputNumber = React.createClass({
   getInitialState() {
     var value;
@@ -20,18 +24,21 @@ var InputNumber = React.createClass({
       value = props.defaultValue;
     }
     return {
-      value: value
+      value: value,
+      focused: props.autoFocus
     };
   },
+
   getDefaultProps() {
     return {
       prefixCls: 'rc-input-number',
       max: Infinity,
       min: -Infinity,
-      style:{},
+      style: {},
       onChange: noop
     };
   },
+
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       this.setState({
@@ -39,13 +46,15 @@ var InputNumber = React.createClass({
       });
     }
   },
-  setValue(v) {
+
+  setValue(v, callback) {
     this.setState({
       value: v
-    });
+    }, callback);
     this.props.onChange(v);
   },
-  step(type, e) {
+
+  step(type, e, callback) {
     if (e) {
       e.preventDefault();
     }
@@ -67,8 +76,11 @@ var InputNumber = React.createClass({
     if (val > props.max || val < props.min) {
       return;
     }
-    this.setValue(val);
+    this.setValue(val, ()=> {
+      React.findDOMNode(this.refs.input).focus();
+    });
   },
+
   onChange(event) {
     var props = this.props;
     var val = event.target.value.trim();
@@ -105,12 +117,27 @@ var InputNumber = React.createClass({
       this.down(e);
     }
   },
+
+  handleFocus() {
+    this.setState({
+      focused: true
+    });
+
+  },
+
+  handleBlur() {
+    this.setState({
+      focused: false
+    });
+  },
+
   render() {
     var props = this.props;
     var prefixCls = props.prefixCls;
     var classes = rcUtil.classSet({
       [prefixCls]: true,
-      [`${prefixCls}-disabled`]: props.disabled
+      [`${prefixCls}-disabled`]: props.disabled,
+      [`${prefixCls}-focused`]: this.state.focused
     });
     var upDisabledClass = '';
     var downDisabledClass = '';
@@ -131,22 +158,26 @@ var InputNumber = React.createClass({
     return (
       <div className={classes} style={props.style}>
         <div className={`${prefixCls}-handler-wrap`}>
-          <div unselectable={true}
+          <div unselectable="unselectable"
             ref="up"
             onClick={upDisabledClass ? noop : this.up}
+            onMouseDown={preventDefault}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
-            <div className={`${prefixCls}-handler-up-inner`}></div>
+            <div unselectable="unselectable" className={`${prefixCls}-handler-up-inner`}></div>
           </div>
-          <div unselectable={true}
+          <div unselectable="unselectable"
             ref="down"
+            onMouseDown={preventDefault}
             onClick={downDisabledClass ? noop : this.down}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
-            <div className={`${prefixCls}-handler-down-inner`}></div>
+            <div unselectable="unselectable" className={`${prefixCls}-handler-down-inner`}></div>
           </div>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
           <input className={`${prefixCls}-input`}
             autoComplete="off"
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
             onKeyDown={this.handleKeyDown}
             autoFocus={props.autoFocus}
             readOnly={props.readOnly}
