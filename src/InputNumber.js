@@ -163,14 +163,14 @@ var InputNumber = React.createClass({
             onClick={upDisabledClass ? noop : this.up}
             onMouseDown={preventDefault}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
-            <div unselectable="unselectable" className={`${prefixCls}-handler-up-inner`}></div>
+            <a unselectable="unselectable" className={`${prefixCls}-handler-up-inner`} href="#" onClick={preventDefault}/>
           </div>
           <div unselectable="unselectable"
             ref="down"
             onMouseDown={preventDefault}
             onClick={downDisabledClass ? noop : this.down}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
-            <div unselectable="unselectable" className={`${prefixCls}-handler-down-inner`}></div>
+            <a unselectable="unselectable" className={`${prefixCls}-handler-down-inner`} href="#" onClick={preventDefault}/>
           </div>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
