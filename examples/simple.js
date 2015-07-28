@@ -14,7 +14,7 @@ webpackJsonp([0,1],[
 	// use jsx to render html, do not modify simple.html
 	__webpack_require__(2);
 	var InputNum = __webpack_require__(6);
-	var React = __webpack_require__(8);
+	var React = __webpack_require__(9);
 	var Component = React.createClass({
 	  displayName: 'Component',
 	
@@ -99,7 +99,7 @@ webpackJsonp([0,1],[
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
-	exports.push([module.id, ".rc-input-number {\n  margin: 0;\n  padding: 0;\n  line-height: 26px;\n  font-size: 12px;\n  height: 26px;\n  display: inline-block;\n  vertical-align: middle;\n  border: 1px solid #D9D9D9;\n  border-radius: 5px;\n}\n.rc-input-number-handler {\n  text-align: center;\n  line-height: 12px;\n  height: 12px;\n  overflow: hidden;\n}\n.rc-input-number-handler-up-inner,\n.rc-input-number-handler-down-inner {\n  color: #666666;\n  -moz-user-select: none;\n   -ms-user-select: none;\n       user-select: none;\n  -webkit-user-select: none;\n}\n.rc-input-number:hover {\n  border-color: #23c0fa;\n}\n.rc-input-number:hover .rc-input-number-handler-up,\n.rc-input-number:hover .rc-input-number-handler-wrap {\n  border-color: #23c0fa;\n}\n.rc-input-number-disabled:hover {\n  border-color: #d9d9d9;\n}\n.rc-input-number-disabled:hover .rc-input-number-handler-up,\n.rc-input-number-disabled:hover .rc-input-number-handler-wrap {\n  border-color: #d9d9d9;\n}\n.rc-input-number-input-wrap {\n  overflow: hidden;\n  height: 26px;\n}\n.rc-input-number-input {\n  width: 100%;\n  text-align: center;\n  outline: 0;\n  -moz-appearance: textfield;\n  line-height: 26px;\n  height: 26px;\n  transition: all 0.3s ease;\n  color: #666666;\n  border: 0;\n  border-radius: 5px;\n  padding: 0;\n}\n.rc-input-number-handler-wrap {\n  float: right;\n  border-left: 1px solid #D9D9D9;\n  width: 20px;\n  height: 26px;\n}\n.rc-input-number-handler-up {\n  border-bottom: 1px solid #D9D9D9;\n}\n.rc-input-number-handler-up-inner:after {\n  content: '+';\n}\n.rc-input-number-handler-down-inner:after {\n  content: '-';\n}\n.rc-input-number-handler-down-disabled,\n.rc-input-number-handler-up-disabled {\n  opacity: 0.72;\n}\n.rc-input-number-handler-down-disabled:hover,\n.rc-input-number-handler-up-disabled:hover {\n  color: #999;\n  border-color: #d9d9d9;\n}\n.rc-input-number-disabled .rc-input-number-input {\n  opacity: 0.72;\n  cursor: not-allowed;\n  background-color: #f3f3f3;\n}\n.rc-input-number-disabled .rc-input-number-handler {\n  opacity: 0.72;\n}\n.rc-input-number-disabled .rc-input-number-handler:hover {\n  color: #999;\n  border-color: #d9d9d9;\n}\n", ""]);
+	exports.push([module.id, ".rc-input-number {\n  margin: 0;\n  padding: 0;\n  line-height: 26px;\n  font-size: 12px;\n  height: 26px;\n  display: inline-block;\n  vertical-align: middle;\n  border: 1px solid #D9D9D9;\n  border-radius: 5px;\n}\n.rc-input-number-handler {\n  text-align: center;\n  line-height: 12px;\n  height: 12px;\n  overflow: hidden;\n}\n.rc-input-number-handler-up-inner,\n.rc-input-number-handler-down-inner {\n  color: #666666;\n  -moz-user-select: none;\n   -ms-user-select: none;\n       user-select: none;\n  -webkit-user-select: none;\n}\n.rc-input-number:hover {\n  border-color: #23c0fa;\n}\n.rc-input-number:hover .rc-input-number-handler-up,\n.rc-input-number:hover .rc-input-number-handler-wrap {\n  border-color: #23c0fa;\n}\n.rc-input-number-disabled:hover {\n  border-color: #d9d9d9;\n}\n.rc-input-number-disabled:hover .rc-input-number-handler-up,\n.rc-input-number-disabled:hover .rc-input-number-handler-wrap {\n  border-color: #d9d9d9;\n}\n.rc-input-number-input-wrap {\n  overflow: hidden;\n  height: 26px;\n}\n.rc-input-number-input {\n  width: 100%;\n  text-align: center;\n  outline: 0;\n  -moz-appearance: textfield;\n  line-height: 26px;\n  height: 26px;\n  transition: all 0.3s ease;\n  color: #666666;\n  border: 0;\n  border-radius: 5px;\n  padding: 0;\n}\n.rc-input-number-handler-wrap {\n  float: right;\n  border-left: 1px solid #D9D9D9;\n  width: 20px;\n  height: 26px;\n}\n.rc-input-number-handler-up {\n  border-bottom: 1px solid #D9D9D9;\n  padding-top: 1px;\n}\n.rc-input-number-handler-up-inner:after {\n  content: '+';\n}\n.rc-input-number-handler-down-inner:after {\n  content: '-';\n}\n.rc-input-number-handler-down-disabled,\n.rc-input-number-handler-up-disabled {\n  opacity: 0.72;\n}\n.rc-input-number-handler-down-disabled:hover,\n.rc-input-number-handler-up-disabled:hover {\n  color: #999;\n  border-color: #d9d9d9;\n}\n.rc-input-number-disabled .rc-input-number-input {\n  opacity: 0.72;\n  cursor: not-allowed;\n  background-color: #f3f3f3;\n}\n.rc-input-number-disabled .rc-input-number-handler {\n  opacity: 0.72;\n}\n.rc-input-number-disabled .rc-input-number-handler:hover {\n  color: #999;\n  border-color: #d9d9d9;\n}\n", ""]);
 
 /***/ },
 /* 4 */
@@ -332,21 +332,27 @@ webpackJsonp([0,1],[
 
 	'use strict';
 	
-	function _defineProperty(obj, key, value) {
-	  if (key in obj) {
-	    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-	  } else {
-	    obj[key] = value;
-	  }return obj;
-	}
+	module.exports = __webpack_require__(8);
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 	
-	var React = __webpack_require__(8);
-	var rcUtil = __webpack_require__(9);
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var React = __webpack_require__(9);
+	var rcUtil = __webpack_require__(10);
 	
 	function noop() {}
 	
 	function isValueNumber(value) {
 	  return /^-?\d+?$/.test(value + '');
+	}
+	
+	function preventDefault(e) {
+	  e.preventDefault();
 	}
 	
 	var InputNumber = React.createClass({
@@ -361,9 +367,11 @@ webpackJsonp([0,1],[
 	      value = props.defaultValue;
 	    }
 	    return {
-	      value: value
+	      value: value,
+	      focused: props.autoFocus
 	    };
 	  },
+	
 	  getDefaultProps: function getDefaultProps() {
 	    return {
 	      prefixCls: 'rc-input-number',
@@ -373,6 +381,7 @@ webpackJsonp([0,1],[
 	      onChange: noop
 	    };
 	  },
+	
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    if ('value' in nextProps) {
 	      this.setState({
@@ -380,13 +389,17 @@ webpackJsonp([0,1],[
 	      });
 	    }
 	  },
-	  setValue: function setValue(v) {
+	
+	  setValue: function setValue(v, callback) {
 	    this.setState({
 	      value: v
-	    });
+	    }, callback);
 	    this.props.onChange(v);
 	  },
-	  step: function step(type, e) {
+	
+	  step: function step(type, e, callback) {
+	    var _this = this;
+	
 	    if (e) {
 	      e.preventDefault();
 	    }
@@ -408,8 +421,11 @@ webpackJsonp([0,1],[
 	    if (val > props.max || val < props.min) {
 	      return;
 	    }
-	    this.setValue(val);
+	    this.setValue(val, function () {
+	      React.findDOMNode(_this.refs.input).focus();
+	    });
 	  },
+	
 	  onChange: function onChange(event) {
 	    var props = this.props;
 	    var val = event.target.value.trim();
@@ -446,12 +462,25 @@ webpackJsonp([0,1],[
 	      this.down(e);
 	    }
 	  },
+	
+	  handleFocus: function handleFocus() {
+	    this.setState({
+	      focused: true
+	    });
+	  },
+	
+	  handleBlur: function handleBlur() {
+	    this.setState({
+	      focused: false
+	    });
+	  },
+	
 	  render: function render() {
 	    var _rcUtil$classSet;
 	
 	    var props = this.props;
 	    var prefixCls = props.prefixCls;
-	    var classes = rcUtil.classSet((_rcUtil$classSet = {}, _defineProperty(_rcUtil$classSet, prefixCls, true), _defineProperty(_rcUtil$classSet, prefixCls + '-disabled', props.disabled), _rcUtil$classSet));
+	    var classes = rcUtil.classSet((_rcUtil$classSet = {}, _defineProperty(_rcUtil$classSet, prefixCls, true), _defineProperty(_rcUtil$classSet, prefixCls + '-disabled', props.disabled), _defineProperty(_rcUtil$classSet, prefixCls + '-focused', this.state.focused), _rcUtil$classSet));
 	    var upDisabledClass = '';
 	    var downDisabledClass = '';
 	    var value = this.state.value;
@@ -468,60 +497,86 @@ webpackJsonp([0,1],[
 	      downDisabledClass = prefixCls + '-handler-up-disabled';
 	    }
 	    // ref for test
-	    return React.createElement('div', { className: classes, style: props.style }, React.createElement('div', { className: prefixCls + '-handler-wrap' }, React.createElement('div', { unselectable: true,
-	      ref: 'up',
-	      onClick: upDisabledClass ? noop : this.up,
-	      className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass }, React.createElement('div', { className: prefixCls + '-handler-up-inner' })), React.createElement('div', { unselectable: true,
-	      ref: 'down',
-	      onClick: downDisabledClass ? noop : this.down,
-	      className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass }, React.createElement('div', { className: prefixCls + '-handler-down-inner' }))), React.createElement('div', { className: prefixCls + '-input-wrap' }, React.createElement('input', { className: prefixCls + '-input',
-	      autoComplete: 'off',
-	      onKeyDown: this.handleKeyDown,
-	      autoFocus: props.autoFocus,
-	      readOnly: props.readOnly,
-	      disabled: props.disabled,
-	      max: props.max,
-	      min: props.min,
-	      name: props.name,
-	      onChange: this.onChange,
-	      ref: 'input',
-	      value: this.state.value })));
+	    return React.createElement(
+	      'div',
+	      { className: classes, style: props.style },
+	      React.createElement(
+	        'div',
+	        { className: prefixCls + '-handler-wrap' },
+	        React.createElement(
+	          'div',
+	          { unselectable: "unselectable",
+	            ref: "up",
+	            onClick: upDisabledClass ? noop : this.up,
+	            onMouseDown: preventDefault,
+	            className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass },
+	          React.createElement('a', { unselectable: "unselectable", className: prefixCls + '-handler-up-inner', href: "#", onClick: preventDefault })
+	        ),
+	        React.createElement(
+	          'div',
+	          { unselectable: "unselectable",
+	            ref: "down",
+	            onMouseDown: preventDefault,
+	            onClick: downDisabledClass ? noop : this.down,
+	            className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass },
+	          React.createElement('a', { unselectable: "unselectable", className: prefixCls + '-handler-down-inner', href: "#", onClick: preventDefault })
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: prefixCls + '-input-wrap' },
+	        React.createElement('input', { className: prefixCls + '-input',
+	          autoComplete: "off",
+	          onFocus: this.handleFocus,
+	          onBlur: this.handleBlur,
+	          onKeyDown: this.handleKeyDown,
+	          autoFocus: props.autoFocus,
+	          readOnly: props.readOnly,
+	          disabled: props.disabled,
+	          max: props.max,
+	          min: props.min,
+	          name: props.name,
+	          onChange: this.onChange,
+	          ref: "input",
+	          value: this.state.value })
+	      )
+	    );
 	  }
 	});
 	
 	module.exports = InputNumber;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = React;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  guid: __webpack_require__(10),
-	  classSet: __webpack_require__(11),
-	  joinClasses: __webpack_require__(12),
-	  KeyCode: __webpack_require__(13),
-	  PureRenderMixin: __webpack_require__(14),
-	  shallowEqual: __webpack_require__(15),
-	  createChainedFunction: __webpack_require__(16),
+	  guid: __webpack_require__(11),
+	  classSet: __webpack_require__(12),
+	  joinClasses: __webpack_require__(13),
+	  KeyCode: __webpack_require__(14),
+	  PureRenderMixin: __webpack_require__(15),
+	  shallowEqual: __webpack_require__(16),
+	  createChainedFunction: __webpack_require__(17),
 	  Dom: {
-	    addEventListener: __webpack_require__(17),
-	    contains: __webpack_require__(18)
+	    addEventListener: __webpack_require__(18),
+	    contains: __webpack_require__(19)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(19),
-	    mapSelf: __webpack_require__(20)
+	    toArray: __webpack_require__(20),
+	    mapSelf: __webpack_require__(21)
 	  }
 	};
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	var seed = 0;
@@ -531,7 +586,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	/**
@@ -576,7 +631,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	/**
@@ -623,7 +678,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	/**
@@ -1150,7 +1205,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1166,7 +1221,7 @@ webpackJsonp([0,1],[
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(15);
+	var shallowEqual = __webpack_require__(16);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -1203,7 +1258,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/**
@@ -1251,7 +1306,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	/**
@@ -1278,7 +1333,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	module.exports = function (target, eventType, callback) {
@@ -1301,7 +1356,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	module.exports = function (root, node) {
@@ -1317,10 +1372,10 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(8);
+	var React = __webpack_require__(9);
 	
 	module.exports = function (children) {
 	  var ret = [];
@@ -1332,10 +1387,10 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(8);
+	var React = __webpack_require__(9);
 	
 	function mirror(o) {
 	  return o;
