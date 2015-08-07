@@ -136,6 +136,7 @@ var InputNumber = React.createClass({
     var prefixCls = props.prefixCls;
     var classes = rcUtil.classSet({
       [prefixCls]: true,
+      [props.className]: !!props.className,
       [`${prefixCls}-disabled`]: props.disabled,
       [`${prefixCls}-focused`]: this.state.focused
     });
@@ -159,35 +160,37 @@ var InputNumber = React.createClass({
       <div className={classes} style={props.style}>
         <div className={`${prefixCls}-handler-wrap`}>
           <div unselectable="unselectable"
-            ref="up"
-            onClick={upDisabledClass ? noop : this.up}
-            onMouseDown={preventDefault}
-            className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
-            <a unselectable="unselectable" className={`${prefixCls}-handler-up-inner`} href="#" onClick={preventDefault}/>
+               ref="up"
+               onClick={upDisabledClass ? noop : this.up}
+               onMouseDown={preventDefault}
+               className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
+            <a unselectable="unselectable" className={`${prefixCls}-handler-up-inner`} href="#"
+               onClick={preventDefault}/>
           </div>
           <div unselectable="unselectable"
-            ref="down"
-            onMouseDown={preventDefault}
-            onClick={downDisabledClass ? noop : this.down}
-            className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
-            <a unselectable="unselectable" className={`${prefixCls}-handler-down-inner`} href="#" onClick={preventDefault}/>
+               ref="down"
+               onMouseDown={preventDefault}
+               onClick={downDisabledClass ? noop : this.down}
+               className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
+            <a unselectable="unselectable" className={`${prefixCls}-handler-down-inner`} href="#"
+               onClick={preventDefault}/>
           </div>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
           <input className={`${prefixCls}-input`}
-            autoComplete="off"
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-            onKeyDown={this.handleKeyDown}
-            autoFocus={props.autoFocus}
-            readOnly={props.readOnly}
-            disabled={props.disabled}
-            max={props.max}
-            min={props.min}
-            name={props.name}
-            onChange={this.onChange}
-            ref="input"
-            value={this.state.value} />
+                 autoComplete="off"
+                 onFocus={this.handleFocus}
+                 onBlur={this.handleBlur}
+                 onKeyDown={this.handleKeyDown}
+                 autoFocus={props.autoFocus}
+                 readOnly={props.readOnly}
+                 disabled={props.disabled}
+                 max={props.max}
+                 min={props.min}
+                 name={props.name}
+                 onChange={this.onChange}
+                 ref="input"
+                 value={this.state.value}/>
         </div>
       </div>
     );
