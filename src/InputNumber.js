@@ -99,6 +99,8 @@ var InputNumber = React.createClass({
         }
       }
       this.setValue(val);
+    } else {
+      this.setValue('');
     }
   },
 
