@@ -35,7 +35,6 @@ var Component = React.createClass({
           max={10}
           style={{width:100}}
           readOnly={this.state.readOnly}
-          value={this.state.value}
           onChange={this.onChange}
           disabled={this.state.disabled} />
         <p>

@@ -1,12 +1,16 @@
 {
   "name": "rc-input-number",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "input-number ui component for react",
   "keywords": [
     "react",
     "react-component",
     "react-input-number",
     "input-number"
+  ],
+  "files": [
+    "lib",
+    "assets"
   ],
   "main": "lib/index",
   "homepage": "https://github.com/react-component/input-number",
@@ -24,29 +28,26 @@
   },
   "scripts": {
     "build": "rc-tools run build",
-    "precommit": "rc-tools run precommit",
-    "less": "rc-tools run less",
     "gh-pages": "rc-tools run gh-pages",
-    "history": "rc-tools run history",
-    "start": "node --harmony node_modules/.bin/rc-server",
-    "publish": "rc-tools run tag",
+    "start": "rc-server",
+    "pub": "rc-tools run pub",
     "lint": "rc-tools run lint",
-    "saucelabs": "node --harmony node_modules/.bin/rc-tools run saucelabs",
-    "browser-test": "node --harmony node_modules/.bin/rc-tools run browser-test",
-    "browser-test-cover": "node --harmony node_modules/.bin/rc-tools run browser-test-cover"
+    "karma": "rc-tools run karma",
+    "saucelabs": "rc-tools run saucelabs",
+    "browser-test": "rc-tools run browser-test",
+    "browser-test-cover": "rc-tools run browser-test-cover"
   },
-
   "devDependencies": {
     "expect.js": "~0.3.1",
     "precommit-hook": "^1.0.7",
     "rc-server": "3.x",
-    "rc-tools": "3.x",
+    "rc-tools": "4.x",
     "react": "~0.13.0"
   },
   "dependencies": {
     "rc-util": "^2.0.0"
   },
   "precommit": [
-    "precommit"
+    "lint"
   ]
 }

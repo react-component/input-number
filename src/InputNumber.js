@@ -1,7 +1,5 @@
-'use strict';
-
-var React = require('react');
-var rcUtil = require('rc-util');
+const React = require('react');
+const rcUtil = require('rc-util');
 
 function noop() {
 }
@@ -14,10 +12,14 @@ function preventDefault(e) {
   e.preventDefault();
 }
 
-var InputNumber = React.createClass({
+const InputNumber = React.createClass({
+  propTypes: {
+    onChange: React.PropTypes.func,
+  },
+
   getInitialState() {
-    var value;
-    var props = this.props;
+    let value;
+    const props = this.props;
     if ('value' in props) {
       value = props.value;
     } else {
@@ -25,7 +27,7 @@ var InputNumber = React.createClass({
     }
     return {
       value: value,
-      focused: props.autoFocus
+      focused: props.autoFocus,
     };
   },
 
@@ -35,55 +37,22 @@ var InputNumber = React.createClass({
       max: Infinity,
       min: -Infinity,
       style: {},
-      onChange: noop
+      defaultValue: '',
+      onChange: noop,
     };
   },
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       this.setState({
-        value: nextProps.value
+        value: nextProps.value,
       });
     }
   },
 
-  setValue(v, callback) {
-    this.setState({
-      value: v
-    }, callback);
-    this.props.onChange(v);
-  },
-
-  step(type, e, callback) {
-    if (e) {
-      e.preventDefault();
-    }
-    var props = this.props;
-    if (props.disabled) {
-      return;
-    }
-    var value = this.state.value;
-    if (isNaN(value)) {
-      return;
-    }
-    var stepNum = props.step || 1;
-    var val = value;
-    if (type === 'down') {
-      val -= stepNum;
-    } else if (type === 'up') {
-      val += stepNum;
-    }
-    if (val > props.max || val < props.min) {
-      return;
-    }
-    this.setValue(val, ()=> {
-      React.findDOMNode(this.refs.input).focus();
-    });
-  },
-
   onChange(event) {
-    var props = this.props;
-    var val = event.target.value.trim();
+    const props = this.props;
+    let val = event.target.value.trim();
     if (!val) {
       this.setValue(val);
     } else if (isValueNumber(val)) {
@@ -99,20 +68,10 @@ var InputNumber = React.createClass({
         }
       }
       this.setValue(val);
-    } else {
-      this.setValue('');
     }
   },
 
-  down(e) {
-    this.step('down', e);
-  },
-
-  up(e) {
-    this.step('up', e);
-  },
-
-  handleKeyDown(e) {
+  onKeyDown(e) {
     if (e.keyCode === 38) {
       this.up(e);
     } else if (e.keyCode === 40) {
@@ -120,33 +79,32 @@ var InputNumber = React.createClass({
     }
   },
 
-  handleFocus() {
+  onFocus() {
     this.setState({
-      focused: true
+      focused: true,
     });
-
   },
 
-  handleBlur() {
+  onBlur() {
     this.setState({
-      focused: false
+      focused: false,
     });
   },
 
   render() {
-    var props = this.props;
-    var prefixCls = props.prefixCls;
-    var classes = rcUtil.classSet({
+    const props = this.props;
+    const prefixCls = props.prefixCls;
+    const classes = rcUtil.classSet({
       [prefixCls]: true,
       [props.className]: !!props.className,
       [`${prefixCls}-disabled`]: props.disabled,
-      [`${prefixCls}-focused`]: this.state.focused
+      [`${prefixCls}-focused`]: this.state.focused,
     });
-    var upDisabledClass = '';
-    var downDisabledClass = '';
-    var value = this.state.value;
+    let upDisabledClass = '';
+    let downDisabledClass = '';
+    const value = this.state.value;
     if (isValueNumber(value)) {
-      var val = Number(value);
+      const val = Number(value);
       if (val >= props.max) {
         upDisabledClass = `${prefixCls}-handler-up-disabled`;
       }
@@ -181,9 +139,9 @@ var InputNumber = React.createClass({
         <div className={`${prefixCls}-input-wrap`}>
           <input className={`${prefixCls}-input`}
                  autoComplete="off"
-                 onFocus={this.handleFocus}
-                 onBlur={this.handleBlur}
-                 onKeyDown={this.handleKeyDown}
+                 onFocus={this.onFocus}
+                 onBlur={this.onBlur}
+                 onKeyDown={this.onKeyDown}
                  autoFocus={props.autoFocus}
                  readOnly={props.readOnly}
                  disabled={props.disabled}
@@ -196,7 +154,49 @@ var InputNumber = React.createClass({
         </div>
       </div>
     );
-  }
+  },
+
+  setValue(v, callback) {
+    this.setState({
+      value: v,
+    }, callback);
+    this.props.onChange(v);
+  },
+
+  step(type, e) {
+    if (e) {
+      e.preventDefault();
+    }
+    const props = this.props;
+    if (props.disabled) {
+      return;
+    }
+    const value = this.state.value;
+    if (isNaN(value)) {
+      return;
+    }
+    const stepNum = props.step || 1;
+    let val = value;
+    if (type === 'down') {
+      val -= stepNum;
+    } else if (type === 'up') {
+      val += stepNum;
+    }
+    if (val > props.max || val < props.min) {
+      return;
+    }
+    this.setValue(val, ()=> {
+      React.findDOMNode(this.refs.input).focus();
+    });
+  },
+
+  down(e) {
+    this.step('down', e);
+  },
+
+  up(e) {
+    this.step('up', e);
+  },
 });
 
 module.exports = InputNumber;
