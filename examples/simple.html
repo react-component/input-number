@@ -224,72 +224,69 @@
 // targeted script loaders such as Browserify or Webpack where the only way to
 // get to the global object is via `window`.
 </script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-shim.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-sham.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js,es5-shim/4.0.5/es5-sham.js,html5shiv/3.7.2/src/html5shiv.js"></script>
 <![endif]-->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+  <link rel="stylesheet" href="simple.css" />
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <h1>rc-input-number@2.0.2</h1>
+            <h1>rc-input-number@2.0.4</h1>
             <p>input-number ui component for react</p>
         </div>
         <div class="example" id="__react-content"></div>
         <script src="common.js?nowrap"></script>
         <script src="simple.js?nowrap"></script>
-        <div class="highlight"><pre><code><span class="hljs-string">'use strict'</span>;
+        <div class="highlight"><pre><code><span class="hljs-pi">'use strict'</span>;
 
-<span class="hljs-regexp">//</span> use jsx to render html, <span class="hljs-keyword">do</span> <span class="hljs-keyword">not</span> modify simple.html
+<span class="hljs-comment">// use jsx to render html, do not modify simple.html</span>
 <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number/assets/index.css'</span>);
-<span class="hljs-reserved">var</span> InputNum = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number'</span>);
-<span class="hljs-reserved">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
-<span class="hljs-reserved">var</span> Component = React.createClass({
+<span class="hljs-keyword">var</span> InputNum = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number'</span>);
+<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> Component = React.createClass({
   getInitialState() {
     <span class="hljs-keyword">return</span> {
-      <span class="hljs-attribute">disabled</span>: <span class="hljs-literal">false</span>,
-      <span class="hljs-attribute">readOnly</span>:<span class="hljs-literal">false</span>,
-      <span class="hljs-attribute">value</span>: <span class="hljs-number">8</span>
+      disabled: <span class="hljs-literal">false</span>,
+      readOnly:<span class="hljs-literal">false</span>,
+      value: <span class="hljs-number">8</span>
     }
   },
   onChange(v) {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onChange: '</span> + v);
     <span class="hljs-keyword">this</span>.setState({
-      <span class="hljs-attribute">value</span>: v
+      value: v
     });
   },
   toggleDisabled() {
     <span class="hljs-keyword">this</span>.setState({
-      <span class="hljs-attribute">disabled</span>: !<span class="hljs-keyword">this</span>.state.disabled
+      disabled: !<span class="hljs-keyword">this</span>.state.disabled
     });
   },
   toggleReadOnly(){
     <span class="hljs-keyword">this</span>.setState({
-      <span class="hljs-attribute">readOnly</span>: !<span class="hljs-keyword">this</span>.state.readOnly
+      readOnly: !<span class="hljs-keyword">this</span>.state.readOnly
     });
   },
   render() {
     <span class="hljs-keyword">return</span> (
-      &lt;div style={{<span class="hljs-attribute">margin</span>:<span class="hljs-number">10</span>}}&gt;
-        &lt;InputNum min={<span class="hljs-number">1</span>}
-          max={<span class="hljs-number">10</span>}
-          style={{<span class="hljs-attribute">width</span>:<span class="hljs-number">100</span>}}
-          readOnly={<span class="hljs-keyword">this</span>.state.readOnly}
-          value={<span class="hljs-keyword">this</span>.state.value}
-          onChange={<span class="hljs-keyword">this</span>.onChange}
-          disabled={<span class="hljs-keyword">this</span>.state.disabled} /&gt;
-        &lt;p&gt;
-          &lt;button onClick={<span class="hljs-keyword">this</span>.toggleDisabled}&gt;toggle Disabled&lt;/button&gt;
-          &lt;button onClick={<span class="hljs-keyword">this</span>.toggleReadOnly}&gt;toggle readOnly&lt;/button&gt;
-        &lt;/p&gt;
-      &lt;/div&gt;
-    );
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{margin:10}}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">InputNum</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{1}</span>
+          <span class="hljs-attribute">max</span>=<span class="hljs-value">{10}</span>
+          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{width:100}}</span>
+          <span class="hljs-attribute">readOnly</span>=<span class="hljs-value">{this.state.readOnly}</span>
+          <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onChange}</span>
+          <span class="hljs-attribute">disabled</span>=<span class="hljs-value">{this.state.disabled}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.toggleDisabled}</span>&gt;</span>toggle Disabled<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.toggleReadOnly}</span>&gt;</span>toggle readOnly<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    )</span>;
   }
 });
-React.render(&lt;Component/&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
-</code></pre></div>
+React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Component</span>/&gt;</span>, document.getElementById('__react-content'));
+</span></code></pre></div>
     </div>
     <a href="https://github.com/react-component/input-number"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
 </body>
