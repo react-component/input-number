@@ -224,23 +224,23 @@ webpackJsonp([0,1],[
 	        'div',
 	        { className: prefixCls + '-handler-wrap' },
 	        React.createElement(
-	          'div',
+	          'a',
 	          { unselectable: 'unselectable',
 	            ref: 'up',
 	            onClick: upDisabledClass ? noop : this.up,
 	            onMouseDown: preventDefault,
 	            className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass },
-	          React.createElement('a', { unselectable: 'unselectable', className: prefixCls + '-handler-up-inner', href: '#',
+	          React.createElement('span', { unselectable: 'unselectable', className: prefixCls + '-handler-up-inner',
 	            onClick: preventDefault })
 	        ),
 	        React.createElement(
-	          'div',
+	          'a',
 	          { unselectable: 'unselectable',
 	            ref: 'down',
 	            onMouseDown: preventDefault,
 	            onClick: downDisabledClass ? noop : this.down,
 	            className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass },
-	          React.createElement('a', { unselectable: 'unselectable', className: prefixCls + '-handler-down-inner', href: '#',
+	          React.createElement('span', { unselectable: 'unselectable', className: prefixCls + '-handler-down-inner',
 	            onClick: preventDefault })
 	        )
 	      ),

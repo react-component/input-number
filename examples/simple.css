@@ -14,6 +14,7 @@
   line-height: 12px;
   height: 12px;
   overflow: hidden;
+  display: block;
 }
 .rc-input-number-handler-up-inner,
 .rc-input-number-handler-down-inner {
