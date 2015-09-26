@@ -119,22 +119,22 @@ const InputNumber = React.createClass({
     return (
       <div className={classes} style={props.style}>
         <div className={`${prefixCls}-handler-wrap`}>
-          <div unselectable="unselectable"
+          <a unselectable="unselectable"
                ref="up"
                onClick={upDisabledClass ? noop : this.up}
                onMouseDown={preventDefault}
                className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
-            <a unselectable="unselectable" className={`${prefixCls}-handler-up-inner`} href="#"
+            <span unselectable="unselectable" className={`${prefixCls}-handler-up-inner`}
                onClick={preventDefault}/>
-          </div>
-          <div unselectable="unselectable"
+          </a>
+          <a unselectable="unselectable"
                ref="down"
                onMouseDown={preventDefault}
                onClick={downDisabledClass ? noop : this.down}
                className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
-            <a unselectable="unselectable" className={`${prefixCls}-handler-down-inner`} href="#"
+            <span unselectable="unselectable" className={`${prefixCls}-handler-down-inner`}
                onClick={preventDefault}/>
-          </div>
+          </a>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
           <input className={`${prefixCls}-input`}
