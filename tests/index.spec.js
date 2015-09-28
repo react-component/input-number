@@ -6,7 +6,7 @@ var InputNum = require('../index');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Simulate = TestUtils.Simulate;
-require('../assets/index.css');
+require('../assets/index.less');
 
 var defaultValue = 98;
 
