@@ -57,18 +57,17 @@ const InputNumber = React.createClass({
       this.setValue(val);
     } else if (isValueNumber(val)) {
       val = Number(val);
-      if ('min' in props) {
-        if (val < props.min) {
-          return;
-        }
+      if (val < props.min) {
+        return;
       }
-      if ('max' in props) {
-        if (val > props.max) {
-          return;
-        }
+      if (val > props.max) {
+        return;
       }
       this.setValue(val);
     } else if (val === '-') {
+      if (props.min >= 0) {
+        return;
+      }
       this.setState({
         value: val,
       });
@@ -125,20 +124,20 @@ const InputNumber = React.createClass({
       <div className={classes} style={props.style}>
         <div className={`${prefixCls}-handler-wrap`}>
           <a unselectable="unselectable"
-               ref="up"
-               onClick={upDisabledClass ? noop : this.up}
-               onMouseDown={preventDefault}
-               className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
+             ref="up"
+             onClick={upDisabledClass ? noop : this.up}
+             onMouseDown={preventDefault}
+             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
             <span unselectable="unselectable" className={`${prefixCls}-handler-up-inner`}
-               onClick={preventDefault}/>
+                  onClick={preventDefault}/>
           </a>
           <a unselectable="unselectable"
-               ref="down"
-               onMouseDown={preventDefault}
-               onClick={downDisabledClass ? noop : this.down}
-               className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
+             ref="down"
+             onMouseDown={preventDefault}
+             onClick={downDisabledClass ? noop : this.down}
+             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
             <span unselectable="unselectable" className={`${prefixCls}-handler-down-inner`}
-               onClick={preventDefault}/>
+                  onClick={preventDefault}/>
           </a>
         </div>
         <div className={`${prefixCls}-input-wrap`}>

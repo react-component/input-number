@@ -31,7 +31,7 @@ var Component = React.createClass({
   render() {
     return (
       <div style={{margin:10}}>
-        <InputNum min={1}
+        <InputNum min={-8}
           max={10}
           style={{width:100}}
           readOnly={this.state.readOnly}
