@@ -68,6 +68,10 @@ const InputNumber = React.createClass({
         }
       }
       this.setValue(val);
+    } else if (val === '-') {
+      this.setState({
+        value: val,
+      });
     }
   },
 
@@ -88,6 +92,7 @@ const InputNumber = React.createClass({
   onBlur() {
     this.setState({
       focused: false,
+      value: this.state.value === '-' ? '' : this.state.value,
     });
   },
 

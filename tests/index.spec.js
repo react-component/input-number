@@ -150,4 +150,28 @@ describe('inputNumber', function () {
     })
   })
 
+  describe('input directly', function () {
+    it('input valid number', function (done) {
+      var inputNumber = example.refs.inputNum
+      Simulate.change(React.findDOMNode(inputNumber.refs.input), { target: { value: '6' } })
+      expect(inputNumber.state.value).to.be(6)
+      done()
+    })
+
+    it('input invalid number', function (done) {
+      var inputNumber = example.refs.inputNum
+      Simulate.change(React.findDOMNode(inputNumber.refs.input), { target: { value: 'xx' } })
+      expect(inputNumber.state.value).to.be(98)
+      done()
+    })
+
+    it('input negative symbol', function (done) {
+      example.setState({min: -100})
+      var inputNumber = example.refs.inputNum
+      Simulate.change(React.findDOMNode(inputNumber.refs.input), { target: { value: '-' } })
+      expect(inputNumber.state.value).to.be('-')
+      done()
+    })
+  })
+
 })
