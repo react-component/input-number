@@ -45,7 +45,7 @@ webpackJsonp([0,1],[
 	    return React.createElement(
 	      'div',
 	      { style: { margin: 10 } },
-	      React.createElement(InputNum, { min: 1,
+	      React.createElement(InputNum, { min: -8,
 	        max: 10,
 	        style: { width: 100 },
 	        readOnly: this.state.readOnly,
@@ -161,17 +161,20 @@ webpackJsonp([0,1],[
 	      this.setValue(val);
 	    } else if (isValueNumber(val)) {
 	      val = Number(val);
-	      if ('min' in props) {
-	        if (val < props.min) {
-	          return;
-	        }
+	      if (val < props.min) {
+	        return;
 	      }
-	      if ('max' in props) {
-	        if (val > props.max) {
-	          return;
-	        }
+	      if (val > props.max) {
+	        return;
 	      }
 	      this.setValue(val);
+	    } else if (val === '-') {
+	      if (props.min >= 0) {
+	        return;
+	      }
+	      this.setState({
+	        value: val
+	      });
 	    }
 	  },
 	
@@ -191,7 +194,8 @@ webpackJsonp([0,1],[
 	
 	  onBlur: function onBlur() {
 	    this.setState({
-	      focused: false
+	      focused: false,
+	      value: this.state.value === '-' ? '' : this.state.value
 	    });
 	  },
 	
