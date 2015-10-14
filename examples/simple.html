@@ -239,7 +239,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-input-number@2.1.2</h1>
+    <h1>rc-input-number@2.2.0</h1>
 
     <p>input-number ui component for react</p>
   </div>
@@ -247,55 +247,57 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <script src="common.js?nowrap"></script>
   <script src="simple.js?nowrap"></script>
   <div class="highlight">
-    <pre><code><span class="hljs-pi">'use strict'</span>;
+    <pre><code><span class="hljs-string">'use strict'</span>;
 
-<span class="hljs-comment">// use jsx to render html, do not modify simple.html</span>
+<span class="hljs-regexp">//</span> use jsx to render html, <span class="hljs-keyword">do</span> <span class="hljs-keyword">not</span> modify simple.html
 <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number/assets/index.css'</span>);
-<span class="hljs-keyword">var</span> InputNum = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number'</span>);
-<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
-<span class="hljs-keyword">var</span> Component = React.createClass({
+<span class="hljs-reserved">var</span> InputNum = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number'</span>);
+<span class="hljs-reserved">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-reserved">var</span> Component = React.createClass({
   getInitialState() {
     <span class="hljs-keyword">return</span> {
-      disabled: <span class="hljs-literal">false</span>,
-      readOnly:<span class="hljs-literal">false</span>,
-      value: <span class="hljs-number">8</span>
+      <span class="hljs-attribute">disabled</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-attribute">readOnly</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-attribute">value</span>: <span class="hljs-number">8</span>
     }
   },
   onChange(v) {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onChange: '</span> + v);
     <span class="hljs-keyword">this</span>.setState({
-      value: v
+      <span class="hljs-attribute">value</span>: v
     });
   },
   toggleDisabled() {
     <span class="hljs-keyword">this</span>.setState({
-      disabled: !<span class="hljs-keyword">this</span>.state.disabled
+      <span class="hljs-attribute">disabled</span>: !<span class="hljs-keyword">this</span>.state.disabled
     });
   },
   toggleReadOnly(){
     <span class="hljs-keyword">this</span>.setState({
-      readOnly: !<span class="hljs-keyword">this</span>.state.readOnly
+      <span class="hljs-attribute">readOnly</span>: !<span class="hljs-keyword">this</span>.state.readOnly
     });
   },
   render() {
     <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{margin:10}}</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">InputNum</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-8}</span>
-          <span class="hljs-attribute">max</span>=<span class="hljs-value">{10}</span>
-          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{width:100}}</span>
-          <span class="hljs-attribute">readOnly</span>=<span class="hljs-value">{this.state.readOnly}</span>
-          <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onChange}</span>
-          <span class="hljs-attribute">disabled</span>=<span class="hljs-value">{this.state.disabled}</span> /&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.toggleDisabled}</span>&gt;</span>toggle Disabled<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.toggleReadOnly}</span>&gt;</span>toggle readOnly<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    )</span>;
+      &lt;div style={{<span class="hljs-attribute">margin</span>:<span class="hljs-number">10</span>}}&gt;
+        &lt;InputNum min={-<span class="hljs-number">8</span>}
+                  max={<span class="hljs-number">10</span>}
+                  value={<span class="hljs-keyword">this</span>.state.value}
+                  style={{<span class="hljs-attribute">width</span>:<span class="hljs-number">100</span>}}
+                  readOnly={<span class="hljs-keyword">this</span>.state.readOnly}
+                  onChange={<span class="hljs-keyword">this</span>.onChange}
+                  disabled={<span class="hljs-keyword">this</span>.state.disabled}/&gt;
+
+        &lt;p&gt;
+          &lt;button onClick={<span class="hljs-keyword">this</span>.toggleDisabled}&gt;toggle Disabled&lt;/button&gt;
+          &lt;button onClick={<span class="hljs-keyword">this</span>.toggleReadOnly}&gt;toggle readOnly&lt;/button&gt;
+        &lt;/p&gt;
+      &lt;/div&gt;
+    );
   }
 });
-React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Component</span>/&gt;</span>, document.getElementById('__react-content'));
-</span></code></pre>
+React.render(&lt;Component/&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
+</code></pre>
   </div>
 </div>
 <a href="https://github.com/react-component/input-number"><img style="position: absolute; top: 0; right: 0; border: 0;"

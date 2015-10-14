@@ -47,6 +47,7 @@ webpackJsonp([0,1],[
 	      { style: { margin: 10 } },
 	      React.createElement(InputNum, { min: -8,
 	        max: 10,
+	        value: this.state.value,
 	        style: { width: 100 },
 	        readOnly: this.state.readOnly,
 	        onChange: this.onChange,
@@ -271,16 +272,16 @@ webpackJsonp([0,1],[
 	    );
 	  },
 	
-	  setValue: function setValue(v, callback) {
-	    this.setState({
-	      value: v
-	    }, callback);
+	  setValue: function setValue(v) {
+	    if (!('value' in this.props)) {
+	      this.setState({
+	        value: v
+	      });
+	    }
 	    this.props.onChange(v);
 	  },
 	
 	  step: function step(type, e) {
-	    var _this = this;
-	
 	    if (e) {
 	      e.preventDefault();
 	    }
@@ -302,9 +303,8 @@ webpackJsonp([0,1],[
 	    if (val > props.max || val < props.min) {
 	      return;
 	    }
-	    this.setValue(val, function () {
-	      React.findDOMNode(_this.refs.input).focus();
-	    });
+	    this.setValue(val);
+	    React.findDOMNode(this.refs.input).focus();
 	  },
 	
 	  down: function down(e) {
