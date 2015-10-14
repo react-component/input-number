@@ -194,9 +194,11 @@ webpackJsonp([0,1],[
 	
 	  onBlur: function onBlur() {
 	    this.setState({
-	      focused: false,
-	      value: this.state.value === '-' ? '' : this.state.value
+	      focused: false
 	    });
+	    if (this.state.value === '-') {
+	      this.setValue('');
+	    }
 	  },
 	
 	  render: function render() {
