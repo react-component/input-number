@@ -91,8 +91,10 @@ const InputNumber = React.createClass({
   onBlur() {
     this.setState({
       focused: false,
-      value: this.state.value === '-' ? '' : this.state.value,
     });
+    if (this.state.value === '-') {
+      this.setValue('');
+    }
   },
 
   render() {
