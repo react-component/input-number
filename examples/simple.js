@@ -8,7 +8,7 @@ var Component = React.createClass({
   getInitialState() {
     return {
       disabled: false,
-      readOnly:false,
+      readOnly: false,
       value: 8
     }
   },
@@ -32,11 +32,13 @@ var Component = React.createClass({
     return (
       <div style={{margin:10}}>
         <InputNum min={-8}
-          max={10}
-          style={{width:100}}
-          readOnly={this.state.readOnly}
-          onChange={this.onChange}
-          disabled={this.state.disabled} />
+                  max={10}
+                  value={this.state.value}
+                  style={{width:100}}
+                  readOnly={this.state.readOnly}
+                  onChange={this.onChange}
+                  disabled={this.state.disabled}/>
+
         <p>
           <button onClick={this.toggleDisabled}>toggle Disabled</button>
           <button onClick={this.toggleReadOnly}>toggle readOnly</button>

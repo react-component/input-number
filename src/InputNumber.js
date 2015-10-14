@@ -162,10 +162,12 @@ const InputNumber = React.createClass({
     );
   },
 
-  setValue(v, callback) {
-    this.setState({
-      value: v,
-    }, callback);
+  setValue(v) {
+    if (!('value' in this.props)) {
+      this.setState({
+        value: v,
+      });
+    }
     this.props.onChange(v);
   },
 
@@ -191,9 +193,8 @@ const InputNumber = React.createClass({
     if (val > props.max || val < props.min) {
       return;
     }
-    this.setValue(val, ()=> {
-      React.findDOMNode(this.refs.input).focus();
-    });
+    this.setValue(val);
+    React.findDOMNode(this.refs.input).focus();
   },
 
   down(e) {
