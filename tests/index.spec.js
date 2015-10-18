@@ -3,8 +3,9 @@
 var keyCode = require('rc-util').KeyCode;
 var expect = require('expect.js');
 var InputNum = require('../index');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 var Simulate = TestUtils.Simulate;
 require('../assets/index.less');
 
@@ -28,9 +29,12 @@ describe('inputNumber', function () {
       }
     },
     triggerBoolean(propName) {
-      var prop = {}
-      prop[propName] = !this.state[propName]
+      var prop = {};
+      prop[propName] = !this.state[propName];
       this.setState(prop);
+    },
+    onChange(value) {
+      this.setState({value});
     },
     render() {
       return (
@@ -39,111 +43,111 @@ describe('inputNumber', function () {
             ref="inputNum"
             min={this.state.min}
             max={this.state.max}
+            onChange={this.onChange}
             value={this.state.value}
             step={this.state.step}
             disabled={this.state.disabled}
             autoFocus={this.state.autoFocus}
             readOnly={this.state.readOnly}
             name={this.state.name}
-          />
+            />
         </div>
       );
     }
-  })
+  });
 
+  var inputNumber;
   var example;
-  beforeEach(function (done) {
-    React.render(<Component />, container, function () {
-      example = this
-      done();
-    });
+  beforeEach(function () {
+    example = ReactDOM.render(<Component />, container);
+    inputNumber = example.refs.inputNum;
   });
 
   afterEach(function () {
-    React.unmountComponentAtNode(container);
+    ReactDOM.unmountComponentAtNode(container);
   });
 
   describe('keyboard works', function () {
     it('up works', function (done) {
-      var inputNumber = example.refs.inputNum
-      Simulate.keyDown(React.findDOMNode(inputNumber.refs.input), {
+
+      Simulate.keyDown(ReactDOM.findDOMNode(inputNumber.refs.input), {
         keyCode: keyCode.UP
       });
       expect(inputNumber.state.value).to.be(99);
       done();
-    })
+    });
 
     it('down works', function (done) {
-      var inputNumber = example.refs.inputNum
-      Simulate.keyDown(React.findDOMNode(inputNumber.refs.input), {
+
+      Simulate.keyDown(ReactDOM.findDOMNode(inputNumber.refs.input), {
         keyCode: keyCode.DOWN
       });
       expect(inputNumber.state.value).to.be(97);
       done();
     })
-  })
+  });
 
   describe('up/down button works', function () {
     it('up button works', function (done) {
-      var inputNumber = example.refs.inputNum
-      Simulate.click(React.findDOMNode(inputNumber.refs.up));
+
+      Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.up));
       expect(inputNumber.state.value).to.be(99);
       done();
     })
 
     it('down button works', function (done) {
-      var inputNumber = example.refs.inputNum
-      Simulate.click(React.findDOMNode(inputNumber.refs.down));
+
+      Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       expect(inputNumber.state.value).to.be(97);
       done();
     })
-  })
+  });
 
   describe('check props works', function () {
     it('max', function (done) {
-      var inputNumber = example.refs.inputNum
+
       for (var i = 0; i < 3; i++) {
-        Simulate.click(React.findDOMNode(inputNumber.refs.up));
+        Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.up));
       }
       expect(inputNumber.state.value).to.be(100);
       done()
-    })
+    });
 
     it('min', function (done) {
-      var inputNumber = example.refs.inputNum
+
       for (var i = 0; i < 100; i++) {
-        Simulate.click(React.findDOMNode(inputNumber.refs.down));
+        Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
       expect(inputNumber.state.value).to.be(1);
       done()
     })
 
     it('disabled', function (done) {
-      var inputNumber = example.refs.inputNum
+
       example.triggerBoolean('disabled')
       expect(inputNumber.props.disabled).to.be(true);
       done()
     })
 
     it('readonly', function (done) {
-      var inputNumber = example.refs.inputNum
+
       example.triggerBoolean('readOnly')
       expect(inputNumber.props.readOnly).to.be(true);
       done()
     })
 
     it('autofocus', function (done) {
-      var inputNumber = example.refs.inputNum
+
       example.triggerBoolean('autoFocus')
       expect(inputNumber.props.autoFocus).to.be(true);
       done()
     })
 
     it('step', function (done) {
-      var inputNumber = example.refs.inputNum
+
       example.setState({step: 5})
       for (var i = 0; i < 3; i++) {
-        Simulate.click(React.findDOMNode(inputNumber.refs.down));
+        Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
       expect(inputNumber.state.value).to.be(defaultValue - 3 * 5);
       done()
@@ -152,26 +156,26 @@ describe('inputNumber', function () {
 
   describe('input directly', function () {
     it('input valid number', function (done) {
-      var inputNumber = example.refs.inputNum
-      Simulate.change(React.findDOMNode(inputNumber.refs.input), { target: { value: '6' } })
+
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '6'}})
       expect(inputNumber.state.value).to.be(6)
       done()
     })
 
     it('input invalid number', function (done) {
-      var inputNumber = example.refs.inputNum
-      Simulate.change(React.findDOMNode(inputNumber.refs.input), { target: { value: 'xx' } })
+
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: 'xx'}})
       expect(inputNumber.state.value).to.be(98)
       done()
     })
 
     it('input negative symbol', function (done) {
       example.setState({min: -100})
-      var inputNumber = example.refs.inputNum
-      Simulate.change(React.findDOMNode(inputNumber.refs.input), { target: { value: '-' } })
+
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-'}})
       expect(inputNumber.state.value).to.be('-')
       done()
     })
   })
 
-})
+});
