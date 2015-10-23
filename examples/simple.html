@@ -233,13 +233,13 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <!--[if lt IE 9]>
   <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js,es5-shim/4.0.5/es5-sham.js,html5shiv/3.7.2/src/html5shiv.js"></script>
   <![endif]-->
-  <link rel="stylesheet" href="simple.css" />
+  
 </head>
 
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-input-number@2.2.0</h1>
+    <h1>rc-input-number@2.3.0</h1>
 
     <p>input-number ui component for react</p>
   </div>
@@ -253,6 +253,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number/assets/index.css'</span>);
 <span class="hljs-reserved">var</span> InputNum = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number'</span>);
 <span class="hljs-reserved">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-reserved">var</span> ReactDOM = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-dom'</span>);
 <span class="hljs-reserved">var</span> Component = React.createClass({
   getInitialState() {
     <span class="hljs-keyword">return</span> {
@@ -296,7 +297,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     );
   }
 });
-React.render(&lt;Component/&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
+ReactDOM.render(&lt;Component/&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
 </code></pre>
   </div>
 </div>
