@@ -1,5 +1,5 @@
-const React = require('react');
-const rcUtil = require('rc-util');
+import React from 'react';
+import rcUtil from 'rc-util';
 
 function noop() {
 }
@@ -17,6 +17,17 @@ const InputNumber = React.createClass({
     onChange: React.PropTypes.func,
   },
 
+  getDefaultProps() {
+    return {
+      prefixCls: 'rc-input-number',
+      max: Infinity,
+      min: -Infinity,
+      style: {},
+      defaultValue: '',
+      onChange: noop,
+    };
+  },
+
   getInitialState() {
     let value;
     const props = this.props;
@@ -28,17 +39,6 @@ const InputNumber = React.createClass({
     return {
       value: value,
       focused: props.autoFocus,
-    };
-  },
-
-  getDefaultProps() {
-    return {
-      prefixCls: 'rc-input-number',
-      max: Infinity,
-      min: -Infinity,
-      style: {},
-      defaultValue: '',
-      onChange: noop,
     };
   },
 
@@ -95,6 +95,49 @@ const InputNumber = React.createClass({
     if (this.state.value === '-') {
       this.setValue('');
     }
+  },
+
+  setValue(v) {
+    if (!('value' in this.props)) {
+      this.setState({
+        value: v,
+      });
+    }
+    this.props.onChange(v);
+  },
+
+  step(type, e) {
+    if (e) {
+      e.preventDefault();
+    }
+    const props = this.props;
+    if (props.disabled) {
+      return;
+    }
+    const value = this.state.value;
+    if (isNaN(value)) {
+      return;
+    }
+    const stepNum = props.step || 1;
+    let val = value;
+    if (type === 'down') {
+      val -= stepNum;
+    } else if (type === 'up') {
+      val += stepNum;
+    }
+    if (val > props.max || val < props.min) {
+      return;
+    }
+    this.setValue(val);
+    this.refs.input.focus();
+  },
+
+  down(e) {
+    this.step('down', e);
+  },
+
+  up(e) {
+    this.step('up', e);
   },
 
   render() {
@@ -160,49 +203,6 @@ const InputNumber = React.createClass({
         </div>
       </div>
     );
-  },
-
-  setValue(v) {
-    if (!('value' in this.props)) {
-      this.setState({
-        value: v,
-      });
-    }
-    this.props.onChange(v);
-  },
-
-  step(type, e) {
-    if (e) {
-      e.preventDefault();
-    }
-    const props = this.props;
-    if (props.disabled) {
-      return;
-    }
-    const value = this.state.value;
-    if (isNaN(value)) {
-      return;
-    }
-    const stepNum = props.step || 1;
-    let val = value;
-    if (type === 'down') {
-      val -= stepNum;
-    } else if (type === 'up') {
-      val += stepNum;
-    }
-    if (val > props.max || val < props.min) {
-      return;
-    }
-    this.setValue(val);
-    React.findDOMNode(this.refs.input).focus();
-  },
-
-  down(e) {
-    this.step('down', e);
-  },
-
-  up(e) {
-    this.step('up', e);
   },
 });
 

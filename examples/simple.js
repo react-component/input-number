@@ -4,6 +4,7 @@
 require('rc-input-number/assets/index.css');
 var InputNum = require('rc-input-number');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Component = React.createClass({
   getInitialState() {
     return {
@@ -47,4 +48,4 @@ var Component = React.createClass({
     );
   }
 });
-React.render(<Component/>, document.getElementById('__react-content'));
+ReactDOM.render(<Component/>, document.getElementById('__react-content'));
