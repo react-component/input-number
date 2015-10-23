@@ -48,7 +48,8 @@ input number ui component for react
 ```js
 var InputNumber = require('rc-input-number');
 var React = require('react');
-React.render(<InputNumber defaultValue={19}/>, container);
+var ReactDOM = require('react-dom');
+ReactDOM.render(<InputNumber defaultValue={19}/>, container);
 ```
 
 ## Development
