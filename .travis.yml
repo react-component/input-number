@@ -7,7 +7,7 @@ notifications:
   - yiminghe@gmail.com
 
 node_js:
-- 4.0.0
+- 5.0.0
 
 before_install:
 - |
@@ -18,7 +18,6 @@ before_install:
     fi
     npm install mocha-phantomjs -g
     phantomjs --version
-
 script:
 - |
     if [ "$TEST_TYPE" = test ]; then
@@ -26,7 +25,6 @@ script:
     else
       npm run $TEST_TYPE
     fi
-
 env:
   matrix:
   - TEST_TYPE=lint
@@ -34,8 +32,10 @@ env:
   - TEST_TYPE=browser-test-cover
   - TEST_TYPE=saucelabs
   global:
-  - secure: eblNkGJVL02OyfqIq5Kbxql19T5BG6zeX9JR6a0StAVJovQRjtsHWo1OY7vvMzbdoqRZ40eIYyiwZrjYIGg8f+5sIGQB2utMYyI5TVUCuNrpoCvqoV0dckEo6PMUqElECsQtiztgJjLdqwMCfQT0L3sI+i+tzhW5JH3oVw7cU3E=
-  - secure: K644sgrqAu0LDI+a/l8pYSwUSDbw2v/WDPenYzp5aLXaLYkozFscFp1CkpbgyJnUn2CA2dCcZHIF4Q5DsbqjRqd+PtI5i0e4jET2rhZUriTrRqjdvUoL7M8C2r0gz6iG9kYFuSvo3SBqLjsFMvL23hA1yDhLiTP1cbRO1Gw0ONY=
+  - secure: Uf3gHWC2QEnOtIeDTWnWwxyQCXUAZYegkx0GAD9PK9CBEBJfezQM3VphGoOlguBMK8n5u4BFiJfOAPOsadpQiYeG6Qu07U0/3BkNT9Q9f5uOIC0Di3YaoqS1uGHJZey/molbIEcbuAo5YNIBvKZmJiBHduJ5ni+StnETehYkTjU=
+  - secure: icXxTaCvXlzEQ/e/Ih2VhgPrw64okBagFad88mKuI+XpR8Sx/u5bNOaltBIB0rgPA439IFezda9i5DnlBacJIT6zLjHxDtdxElZ5fnBZPYwk9BU6JNtxHtfrLcQsFhUVwsJMuAtKYBAmdzGqhNzYvnBwgmZDTUTTEYtgn6huaxY=
+  - secure: OaBJynPhXVOGkuiHePxr/5LawnEjiCN+Ywl1h5wXjIc5PZiEzsSqCJkXtVjUftuzBACBne8h+pZkPrVBK5ACwVT+Z9T0cFSdT4PIzorrmO12aSUtwSo08eP6OgpkWzav79Z0DTlUTNZjEZVUMF6KBqlZySTJeCOq+LA418V3S4c=
+  - secure: TbGWieoxComExvFyZCTRybPs3OCQomVBjZzBdGorNEKNZb2IaKMPJKTIFkHco9zeRySpOE5Yw2GWFRQXNVsNUd45CYADaCERXECf4su8MQL8VRgRdYmK1s0xuIBdKSRUgDXcVxbA0TwF9owixMfO8CuA006ks1Z5ET4xcEYWDXs=
 
 
 matrix:
