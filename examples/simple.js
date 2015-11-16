@@ -1,7 +1,7 @@
 'use strict';
 
 // use jsx to render html, do not modify simple.html
-require('rc-input-number/assets/index.css');
+require('rc-input-number/assets/index.less');
 var InputNum = require('rc-input-number');
 var React = require('react');
 var ReactDOM = require('react-dom');

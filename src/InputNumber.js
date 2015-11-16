@@ -49,22 +49,8 @@ const InputNumber = React.createClass({
     }
   },
 
-  toPrecisionAs(num) {
-    if (isNaN(num)) {
-      return num;
-    }
-    let stepString = this.props.step.toString();
-    let precision = 0;
-    if (stepString.indexOf('.') >= 0) {
-      precision = stepString.length - stepString.indexOf('.') - 1;
-    }
-    return Number(Number(num).toFixed(precision));
-  },
-
   onChange(event) {
-    const props = this.props;
-    let val = event.target.value.trim();
-    this.setInputValue(val);
+    this.setInputValue(event.target.value.trim());
   },
 
   onKeyDown(e) {
@@ -116,6 +102,19 @@ const InputNumber = React.createClass({
     this.setState({
       inputValue: v,
     });
+  },
+
+  toPrecisionAs(num) {
+    const props = this.props;
+    if (isNaN(num)) {
+      return num;
+    }
+    const stepString = props.step.toString();
+    let precision = 0;
+    if (stepString.indexOf('.') >= 0) {
+      precision = stepString.length - stepString.indexOf('.') - 1;
+    }
+    return Number(Number(num).toFixed(precision));
   },
 
   step(type, e) {
