@@ -34,6 +34,7 @@ var Component = React.createClass({
       <div style={{margin:10}}>
         <InputNum min={-8}
                   max={10}
+                  step={0.1}
                   value={this.state.value}
                   style={{width:100}}
                   readOnly={this.state.readOnly}
@@ -49,3 +50,4 @@ var Component = React.createClass({
   }
 });
 ReactDOM.render(<Component/>, document.getElementById('__react-content'));
+

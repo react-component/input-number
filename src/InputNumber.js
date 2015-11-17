@@ -4,10 +4,6 @@ import rcUtil from 'rc-util';
 function noop() {
 }
 
-function isValueNumber(value) {
-  return (/^-?\d+?$/).test(value + '');
-}
-
 function preventDefault(e) {
   e.preventDefault();
 }
@@ -36,7 +32,9 @@ const InputNumber = React.createClass({
     } else {
       value = props.defaultValue;
     }
+    value = this.toPrecisionAsStep(value);
     return {
+      inputValue: value,
       value: value,
       focused: props.autoFocus,
     };
@@ -44,34 +42,16 @@ const InputNumber = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
+      const value = this.toPrecisionAsStep(nextProps.value);
       this.setState({
-        value: nextProps.value,
+        inputValue: value,
+        value: value,
       });
     }
   },
 
   onChange(event) {
-    const props = this.props;
-    let val = event.target.value.trim();
-    if (!val) {
-      this.setValue(val);
-    } else if (isValueNumber(val)) {
-      val = Number(val);
-      if (val < props.min) {
-        return;
-      }
-      if (val > props.max) {
-        return;
-      }
-      this.setValue(val);
-    } else if (val === '-') {
-      if (props.min >= 0) {
-        return;
-      }
-      this.setState({
-        value: val,
-      });
-    }
+    this.setInputValue(event.target.value.trim());
   },
 
   onKeyDown(e) {
@@ -88,22 +68,77 @@ const InputNumber = React.createClass({
     });
   },
 
-  onBlur() {
+  onBlur(event) {
+    const props = this.props;
+    let val = event.target.value.trim();
     this.setState({
       focused: false,
     });
-    if (this.state.value === '-') {
-      this.setValue('');
+    if (!isNaN(val)) {
+      val = Number(val);
+      if (val < props.min) {
+        val = props.min;
+      }
+      if (val > props.max) {
+        val = props.max;
+      }
+    } else {
+      val = this.state.value;
     }
+    this.setValue(val);
   },
 
   setValue(v) {
     if (!('value' in this.props)) {
       this.setState({
         value: v,
+        inputValue: v,
       });
     }
     this.props.onChange(v);
+  },
+
+  setInputValue(v) {
+    this.setState({
+      inputValue: v,
+    });
+  },
+
+  getPrecision() {
+    const props = this.props;
+    const stepString = props.step.toString();
+    let precision = 0;
+    if (stepString.indexOf('.') >= 0) {
+      precision = stepString.length - stepString.indexOf('.') - 1;
+    }
+    return precision;
+  },
+
+  getPrecisionFactor() {
+    const precision = this.getPrecision();
+    return Math.pow(10, precision);
+  },
+
+  toPrecisionAsStep(num) {
+    if (isNaN(num)) {
+      return num;
+    }
+    const precision = this.getPrecision();
+    return Number(Number(num).toFixed(precision));
+  },
+
+  upStep(val) {
+    const props = this.props;
+    const stepNum = props.step || 1;
+    const precisionFactor = this.getPrecisionFactor();
+    return (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
+  },
+
+  downStep(val) {
+    const props = this.props;
+    const stepNum = props.step || 1;
+    const precisionFactor = this.getPrecisionFactor();
+    return (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
   },
 
   step(type, e) {
@@ -118,13 +153,7 @@ const InputNumber = React.createClass({
     if (isNaN(value)) {
       return;
     }
-    const stepNum = props.step || 1;
-    let val = value;
-    if (type === 'down') {
-      val -= stepNum;
-    } else if (type === 'up') {
-      val += stepNum;
-    }
+    const val = this[type + 'Step'](value);
     if (val > props.max || val < props.min) {
       return;
     }
@@ -152,7 +181,7 @@ const InputNumber = React.createClass({
     let upDisabledClass = '';
     let downDisabledClass = '';
     const value = this.state.value;
-    if (isValueNumber(value)) {
+    if (!isNaN(value)) {
       const val = Number(value);
       if (val >= props.max) {
         upDisabledClass = `${prefixCls}-handler-up-disabled`;
@@ -164,6 +193,16 @@ const InputNumber = React.createClass({
       upDisabledClass = `${prefixCls}-handler-up-disabled`;
       downDisabledClass = `${prefixCls}-handler-up-disabled`;
     }
+
+    // focus state, show input value
+    // unfocus state, show valid value
+    let inputDisplayValue;
+    if (this.state.focused) {
+      inputDisplayValue = this.state.inputValue;
+    } else {
+      inputDisplayValue = this.state.value;
+    }
+
     // ref for test
     return (
       <div className={classes} style={props.style}>
@@ -199,7 +238,7 @@ const InputNumber = React.createClass({
                  name={props.name}
                  onChange={this.onChange}
                  ref="input"
-                 value={this.state.value}/>
+                 value={inputDisplayValue}/>
         </div>
       </div>
     );
