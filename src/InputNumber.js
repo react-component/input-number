@@ -32,16 +32,17 @@ const InputNumber = React.createClass({
     } else {
       value = props.defaultValue;
     }
+    value = this.toPrecisionAsStep(value);
     return {
       inputValue: value,
-      value: this.toPrecisionAs(value),
+      value: value,
       focused: props.autoFocus,
     };
   },
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
-      const value = this.toPrecisionAs(nextProps.value);
+      const value = this.toPrecisionAsStep(nextProps.value);
       this.setState({
         inputValue: value,
         value: value,
@@ -88,14 +89,13 @@ const InputNumber = React.createClass({
   },
 
   setValue(v) {
-    const value = this.toPrecisionAs(v);
     if (!('value' in this.props)) {
       this.setState({
-        value: value,
-        inputValue: value,
+        value: v,
+        inputValue: v,
       });
     }
-    this.props.onChange(value);
+    this.props.onChange(v);
   },
 
   setInputValue(v) {
@@ -104,17 +104,41 @@ const InputNumber = React.createClass({
     });
   },
 
-  toPrecisionAs(num) {
+  getPrecision() {
     const props = this.props;
-    if (isNaN(num)) {
-      return num;
-    }
     const stepString = props.step.toString();
     let precision = 0;
     if (stepString.indexOf('.') >= 0) {
       precision = stepString.length - stepString.indexOf('.') - 1;
     }
+    return precision;
+  },
+
+  getPrecisionFactor() {
+    const precision = this.getPrecision();
+    return Math.pow(10, precision);
+  },
+
+  toPrecisionAsStep(num) {
+    if (isNaN(num)) {
+      return num;
+    }
+    const precision = this.getPrecision();
     return Number(Number(num).toFixed(precision));
+  },
+
+  upStep(val) {
+    const props = this.props;
+    const stepNum = props.step || 1;
+    const precisionFactor = this.getPrecisionFactor();
+    return (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
+  },
+
+  downStep(val) {
+    const props = this.props;
+    const stepNum = props.step || 1;
+    const precisionFactor = this.getPrecisionFactor();
+    return (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
   },
 
   step(type, e) {
@@ -129,13 +153,7 @@ const InputNumber = React.createClass({
     if (isNaN(value)) {
       return;
     }
-    const stepNum = props.step || 1;
-    let val = value;
-    if (type === 'down') {
-      val -= stepNum;
-    } else if (type === 'up') {
-      val += stepNum;
-    }
+    const val = this[type + 'Step'](value);
     if (val > props.max || val < props.min) {
       return;
     }
