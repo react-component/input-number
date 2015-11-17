@@ -16,8 +16,6 @@ before_install:
       echo "Only docs were updated, stopping build process."
       exit
     fi
-    npm install mocha-phantomjs -g
-    phantomjs --version
 script:
 - |
     if [ "$TEST_TYPE" = test ]; then
@@ -30,3 +28,11 @@ env:
   - TEST_TYPE=lint
   - TEST_TYPE=browser-test
   - TEST_TYPE=browser-test-cover
+  global:
+  - secure: eblNkGJVL02OyfqIq5Kbxql19T5BG6zeX9JR6a0StAVJovQRjtsHWo1OY7vvMzbdoqRZ40eIYyiwZrjYIGg8f+5sIGQB2utMYyI5TVUCuNrpoCvqoV0dckEo6PMUqElECsQtiztgJjLdqwMCfQT0L3sI+i+tzhW5JH3oVw7cU3E=
+  - secure: K644sgrqAu0LDI+a/l8pYSwUSDbw2v/WDPenYzp5aLXaLYkozFscFp1CkpbgyJnUn2CA2dCcZHIF4Q5DsbqjRqd+PtI5i0e4jET2rhZUriTrRqjdvUoL7M8C2r0gz6iG9kYFuSvo3SBqLjsFMvL23hA1yDhLiTP1cbRO1Gw0ONY=
+
+
+matrix:
+  allow_failures:
+  - env: "TEST_TYPE=saucelabs"
