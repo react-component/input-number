@@ -1,14 +1,12 @@
-webpackJsonp([1],{
-
-/***/ 0:
+webpackJsonp([0],[
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(181);
+	module.exports = __webpack_require__(1);
 
 
 /***/ },
-
-/***/ 181:
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50,6 +48,7 @@ webpackJsonp([1],{
 	      { style: { margin: 10 } },
 	      React.createElement(InputNum, { min: -8,
 	        max: 10,
+	        step: 0.1,
 	        value: this.state.value,
 	        style: { width: 100 },
 	        readOnly: this.state.readOnly,
@@ -75,6 +74,5 @@ webpackJsonp([1],{
 	ReactDOM.render(React.createElement(Component, null), document.getElementById('__react-content'));
 
 /***/ }
-
-});
-//# sourceMappingURL=simple.js.map
+]);
+//# sourceMappingURL=decimal.js.map
