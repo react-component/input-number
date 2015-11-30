@@ -1,5 +1,5 @@
 import React from 'react';
-import rcUtil from 'rc-util';
+import classNames from 'classnames';
 
 function noop() {
 }
@@ -11,6 +11,7 @@ function preventDefault(e) {
 const InputNumber = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
+    step: React.PropTypes.number,
   },
 
   getDefaultProps() {
@@ -18,6 +19,7 @@ const InputNumber = React.createClass({
       prefixCls: 'rc-input-number',
       max: Infinity,
       min: -Infinity,
+      step: 1,
       style: {},
       defaultValue: '',
       onChange: noop,
@@ -128,15 +130,13 @@ const InputNumber = React.createClass({
   },
 
   upStep(val) {
-    const props = this.props;
-    const stepNum = props.step || 1;
+    const stepNum = this.props.step;
     const precisionFactor = this.getPrecisionFactor();
     return (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
   },
 
   downStep(val) {
-    const props = this.props;
-    const stepNum = props.step || 1;
+    const stepNum = this.props.step;
     const precisionFactor = this.getPrecisionFactor();
     return (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
   },
@@ -172,7 +172,7 @@ const InputNumber = React.createClass({
   render() {
     const props = this.props;
     const prefixCls = props.prefixCls;
-    const classes = rcUtil.classSet({
+    const classes = classNames({
       [prefixCls]: true,
       [props.className]: !!props.className,
       [`${prefixCls}-disabled`]: props.disabled,
