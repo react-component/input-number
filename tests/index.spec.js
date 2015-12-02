@@ -1,21 +1,19 @@
-'use strict';
-
-var keyCode = require('rc-util').KeyCode;
-var expect = require('expect.js');
-var InputNum = require('../index');
-var React = require('react');
-var TestUtils = require('react-addons-test-utils');
-var ReactDOM = require('react-dom');
-var Simulate = TestUtils.Simulate;
+const keyCode = require('rc-util').KeyCode;
+const expect = require('expect.js');
+const InputNum = require('../index');
+const React = require('react');
+const TestUtils = require('react-addons-test-utils');
+const ReactDOM = require('react-dom');
+const Simulate = TestUtils.Simulate;
 require('../assets/index.less');
 
-var defaultValue = 98;
+const defaultValue = 98;
 
-describe('inputNumber', function () {
-  var container = document.createElement('div');
+describe('inputNumber', () => {
+  const container = document.createElement('div');
   document.body.appendChild(container);
 
-  var Component = React.createClass({
+  const Component = React.createClass({
     getInitialState() {
       return {
         min: 1,
@@ -25,16 +23,16 @@ describe('inputNumber', function () {
         disabled: false,
         autoFocus: false,
         readOnly: false,
-        name: 'inputNumber'
-      }
-    },
-    triggerBoolean(propName) {
-      var prop = {};
-      prop[propName] = !this.state[propName];
-      this.setState(prop);
+        name: 'inputNumber',
+      };
     },
     onChange(value) {
       this.setState({value});
+    },
+    triggerBoolean(propName) {
+      const prop = {};
+      prop[propName] = !this.state[propName];
+      this.setState(prop);
     },
     render() {
       return (
@@ -53,175 +51,174 @@ describe('inputNumber', function () {
             />
         </div>
       );
-    }
+    },
   });
 
-  var inputNumber;
-  var example;
-  beforeEach(function () {
+  let inputNumber;
+  let example;
+  beforeEach(() => {
     example = ReactDOM.render(<Component />, container);
     inputNumber = example.refs.inputNum;
   });
 
-  afterEach(function () {
+  afterEach(() => {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  describe('keyboard works', function () {
-    it('up works', function (done) {
+  describe('keyboard works', () => {
+    it('up works', (done) => {
       Simulate.keyDown(ReactDOM.findDOMNode(inputNumber.refs.input), {
-        keyCode: keyCode.UP
+        keyCode: keyCode.UP,
       });
       expect(inputNumber.state.value).to.be(99);
       done();
     });
 
-    it('down works', function (done) {
+    it('down works', (done) => {
       Simulate.keyDown(ReactDOM.findDOMNode(inputNumber.refs.input), {
-        keyCode: keyCode.DOWN
+        keyCode: keyCode.DOWN,
       });
       expect(inputNumber.state.value).to.be(97);
       done();
-    })
+    });
   });
 
-  describe('up/down button works', function () {
-    it('up button works', function (done) {
+  describe('up/down button works', () => {
+    it('up button works', (done) => {
       Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.up));
       expect(inputNumber.state.value).to.be(99);
       done();
-    })
+    });
 
-    it('down button works', function (done) {
+    it('down button works', (done) => {
       Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       expect(inputNumber.state.value).to.be(97);
       done();
-    })
+    });
   });
 
-  describe('check props works', function () {
-    it('max', function (done) {
-      for (var i = 0; i < 3; i++) {
+  describe('check props works', () => {
+    it('max', (done) => {
+      for (let i = 0; i < 3; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.up));
       }
       expect(inputNumber.state.value).to.be(100);
-      done()
+      done();
     });
 
-    it('min', function (done) {
-      for (var i = 0; i < 100; i++) {
+    it('min', (done) => {
+      for (let i = 0; i < 100; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
       expect(inputNumber.state.value).to.be(1);
-      done()
-    })
+      done();
+    });
 
-    it('disabled', function (done) {
-      example.triggerBoolean('disabled')
+    it('disabled', (done) => {
+      example.triggerBoolean('disabled');
       expect(inputNumber.props.disabled).to.be(true);
-      done()
-    })
+      done();
+    });
 
-    it('readonly', function (done) {
-      example.triggerBoolean('readOnly')
+    it('readonly', (done) => {
+      example.triggerBoolean('readOnly');
       expect(inputNumber.props.readOnly).to.be(true);
-      done()
-    })
+      done();
+    });
 
-    it('autofocus', function (done) {
-      example.triggerBoolean('autoFocus')
+    it('autofocus', (done) => {
+      example.triggerBoolean('autoFocus');
       expect(inputNumber.props.autoFocus).to.be(true);
-      done()
-    })
+      done();
+    });
 
-    it('step', function (done) {
-      example.setState({step: 5})
-      for (var i = 0; i < 3; i++) {
+    it('step', (done) => {
+      example.setState({step: 5});
+      for (let i = 0; i < 3; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
       expect(inputNumber.state.value).to.be(defaultValue - 3 * 5);
-      done()
-    })
+      done();
+    });
 
-    it('decimal step', function (done) {
-      example.setState({step: 0.1})
-      for (var i = 0; i < 3; i++) {
+    it('decimal step', (done) => {
+      example.setState({step: 0.1});
+      for (let i = 0; i < 3; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
       expect(inputNumber.state.value).to.be(defaultValue - 3 * 0.1);
-      done()
-    })
-  })
+      done();
+    });
+  });
 
-  describe('input directly', function () {
-    it('input valid number', function (done) {
+  describe('input directly', () => {
+    it('input valid number', (done) => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '6'}})
-      expect(inputNumber.state.inputValue).to.be('6')
-      expect(inputNumber.state.value).to.be(98)
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '6'}});
+      expect(inputNumber.state.inputValue).to.be('6');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be(6)
-      expect(inputNumber.state.value).to.be(6)
-      done()
-    })
+      expect(inputNumber.state.inputValue).to.be(6);
+      expect(inputNumber.state.value).to.be(6);
+      done();
+    });
 
-    it('input invalid number', function (done) {
+    it('input invalid number', (done) => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: 'xx'}})
-      expect(inputNumber.state.inputValue).to.be('xx')
-      expect(inputNumber.state.value).to.be(98)
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: 'xx'}});
+      expect(inputNumber.state.inputValue).to.be('xx');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be(98)
-      expect(inputNumber.state.value).to.be(98)
-      done()
-    })
+      expect(inputNumber.state.inputValue).to.be(98);
+      expect(inputNumber.state.value).to.be(98);
+      done();
+    });
 
-    it('input negative symbol', function (done) {
-      example.setState({min: -100})
+    it('input negative symbol', (done) => {
+      example.setState({min: -100});
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-'}})
-      expect(inputNumber.state.inputValue).to.be('-')
-      expect(inputNumber.state.value).to.be(98)
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-'}});
+      expect(inputNumber.state.inputValue).to.be('-');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be(98)
-      expect(inputNumber.state.value).to.be(98)
-      done()
-    })
+      expect(inputNumber.state.inputValue).to.be(98);
+      expect(inputNumber.state.value).to.be(98);
+      done();
+    });
 
-    it('input negative number', function (done) {
-      example.setState({min: -100})
+    it('input negative number', (done) => {
+      example.setState({min: -100});
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-98'}})
-      expect(inputNumber.state.inputValue).to.be('-98')
-      expect(inputNumber.state.value).to.be(98)
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-98'}});
+      expect(inputNumber.state.inputValue).to.be('-98');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be(-98)
-      expect(inputNumber.state.value).to.be(-98)
-      done()
-    })
+      expect(inputNumber.state.inputValue).to.be(-98);
+      expect(inputNumber.state.value).to.be(-98);
+      done();
+    });
 
-    it('input decimal number with integer step', function (done) {
+    it('input decimal number with integer step', (done) => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '1.2'}})
-      expect(inputNumber.state.inputValue).to.be('1.2')
-      expect(inputNumber.state.value).to.be(98)
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '1.2'}});
+      expect(inputNumber.state.inputValue).to.be('1.2');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be(1)
-      expect(inputNumber.state.value).to.be(1)
-      done()
-    })
+      expect(inputNumber.state.inputValue).to.be(1);
+      expect(inputNumber.state.value).to.be(1);
+      done();
+    });
 
-    it('input decimal number with decimal step', function (done) {
-      example.setState({step: 0.1})
+    it('input decimal number with decimal step', (done) => {
+      example.setState({step: 0.1});
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '1.2'}})
-      expect(inputNumber.state.inputValue).to.be('1.2')
-      expect(inputNumber.state.value).to.be(98)
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '1.2'}});
+      expect(inputNumber.state.inputValue).to.be('1.2');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be(1.2)
-      expect(inputNumber.state.value).to.be(1.2)
-      done()
-    })
-  })
-
+      expect(inputNumber.state.inputValue).to.be(1.2);
+      expect(inputNumber.state.value).to.be(1.2);
+      done();
+    });
+  });
 });

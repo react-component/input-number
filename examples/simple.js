@@ -1,41 +1,39 @@
-'use strict';
-
 // use jsx to render html, do not modify simple.html
 require('rc-input-number/assets/index.less');
-var InputNum = require('rc-input-number');
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Component = React.createClass({
+const InputNum = require('rc-input-number');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Component = React.createClass({
   getInitialState() {
     return {
       disabled: false,
       readOnly: false,
-      value: 8
-    }
+      value: 8,
+    };
   },
   onChange(v) {
     console.log('onChange: ' + v);
     this.setState({
-      value: v
+      value: v,
     });
   },
   toggleDisabled() {
     this.setState({
-      disabled: !this.state.disabled
+      disabled: !this.state.disabled,
     });
   },
-  toggleReadOnly(){
+  toggleReadOnly() {
     this.setState({
-      readOnly: !this.state.readOnly
+      readOnly: !this.state.readOnly,
     });
   },
   render() {
     return (
-      <div style={{margin:10}}>
+      <div style={{margin: 10}}>
         <InputNum min={-8}
                   max={10}
                   value={this.state.value}
-                  style={{width:100}}
+                  style={{width: 100}}
                   readOnly={this.state.readOnly}
                   onChange={this.onChange}
                   disabled={this.state.disabled}/>
@@ -46,6 +44,6 @@ var Component = React.createClass({
         </p>
       </div>
     );
-  }
+  },
 });
 ReactDOM.render(<Component/>, document.getElementById('__react-content'));
