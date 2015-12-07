@@ -1,4 +1,5 @@
-// use jsx to render html, do not modify simple.html
+/* eslint no-console:0 */
+
 require('rc-input-number/assets/index.less');
 const InputNum = require('rc-input-number');
 const React = require('react');
