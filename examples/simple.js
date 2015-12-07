@@ -3,21 +3,22 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(181);
+	module.exports = __webpack_require__(165);
 
 
 /***/ },
 
-/***/ 181:
+/***/ 165:
 /***/ function(module, exports, __webpack_require__) {
 
+	/* eslint no-console:0 */
+	
 	'use strict';
 	
-	// use jsx to render html, do not modify simple.html
 	__webpack_require__(2);
 	var InputNum = __webpack_require__(3);
 	var React = __webpack_require__(6);
-	var ReactDOM = __webpack_require__(177);
+	var ReactDOM = __webpack_require__(164);
 	var Component = React.createClass({
 	  displayName: 'Component',
 	

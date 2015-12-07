@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-input-number@2.4.1</title>
+  <title>simple.js - example - rc-input-number@2.4.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,51 +257,50 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-input-number@2.4.1</h1>
+    <h1>rc-input-number@2.4.2</h1>
 
     <p>input-number ui component for react</p>
   </div>
   <div class="example" id="__react-content"></div>
   <script src="common.js?nowrap"></script>
   <script src="simple.js?nowrap"></script>
-  <div class="highlight"><pre><code language="js"><span class="hljs-pi">'use strict'</span>;
+  <div class="highlight"><pre><code language="js"><span class="hljs-comment">/* eslint no-console:0 */</span>
 
-<span class="hljs-comment">// use jsx to render html, do not modify simple.html</span>
 <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number/assets/index.css'</span>);
-<span class="hljs-keyword">var</span> InputNum = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number'</span>);
-<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
-<span class="hljs-keyword">var</span> ReactDOM = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-dom'</span>);
-<span class="hljs-keyword">var</span> Component = React.createClass({
+<span class="hljs-keyword">const</span> InputNum = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number'</span>);
+<span class="hljs-keyword">const</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">const</span> ReactDOM = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-dom'</span>);
+<span class="hljs-keyword">const</span> Component = React.createClass({
   getInitialState() {
     <span class="hljs-keyword">return</span> {
       disabled: <span class="hljs-literal">false</span>,
       readOnly: <span class="hljs-literal">false</span>,
-      value: <span class="hljs-number">8</span>
-    }
+      value: <span class="hljs-number">8</span>,
+    };
   },
   onChange(v) {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onChange: '</span> + v);
     <span class="hljs-keyword">this</span>.setState({
-      value: v
+      value: v,
     });
   },
   toggleDisabled() {
     <span class="hljs-keyword">this</span>.setState({
-      disabled: !<span class="hljs-keyword">this</span>.state.disabled
+      disabled: !<span class="hljs-keyword">this</span>.state.disabled,
     });
   },
-  toggleReadOnly(){
+  toggleReadOnly() {
     <span class="hljs-keyword">this</span>.setState({
-      readOnly: !<span class="hljs-keyword">this</span>.state.readOnly
+      readOnly: !<span class="hljs-keyword">this</span>.state.readOnly,
     });
   },
   render() {
     <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{margin:10}}</span>&gt;</span>
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{margin:</span> <span class="hljs-attribute">10</span>}}&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">InputNum</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-8}</span>
                   <span class="hljs-attribute">max</span>=<span class="hljs-value">{10}</span>
                   <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span>
-                  <span class="hljs-attribute">style</span>=<span class="hljs-value">{{width:100}}</span>
+                  <span class="hljs-attribute">style</span>=<span class="hljs-value">{{width:</span> <span class="hljs-attribute">100</span>}}
                   <span class="hljs-attribute">readOnly</span>=<span class="hljs-value">{this.state.readOnly}</span>
                   <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onChange}</span>
                   <span class="hljs-attribute">disabled</span>=<span class="hljs-value">{this.state.disabled}</span>/&gt;</span>
@@ -312,7 +311,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     );
-  }
+  },
 });
 ReactDOM.render(<span class="hljs-tag">&lt;<span class="hljs-title">Component</span>/&gt;</span>, document.getElementById('__react-content'));
 </span></code></pre></div>
