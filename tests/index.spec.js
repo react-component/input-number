@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 const keyCode = require('rc-util').KeyCode;
 const expect = require('expect.js');
 const InputNum = require('../index');
@@ -230,6 +231,18 @@ describe('inputNumber', () => {
       expect(inputNumber.state.inputValue).to.be('');
       expect(inputNumber.state.value).to.be('');
       done();
+    });
+
+    it('small step', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" value={1.0000001} step={0.0000001} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(inputNumber.state.inputValue).to.be(1.0000001);
+      expect(inputNumber.state.value).to.be(1.0000001);
     });
   });
 });

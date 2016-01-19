@@ -111,6 +111,9 @@ const InputNumber = React.createClass({
   getPrecision() {
     const props = this.props;
     const stepString = props.step.toString();
+    if (stepString.indexOf('e-') >= 0) {
+      return parseInt(stepString.slice(stepString.indexOf('-e')), 10);
+    }
     let precision = 0;
     if (stepString.indexOf('.') >= 0) {
       precision = stepString.length - stepString.indexOf('.') - 1;
