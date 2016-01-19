@@ -220,5 +220,16 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(1.2);
       done();
     });
+
+    it('input empty text and blur', (done) => {
+      Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: ''}});
+      expect(inputNumber.state.inputValue).to.be('');
+      expect(inputNumber.state.value).to.be(98);
+      Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
+      expect(inputNumber.state.inputValue).to.be('');
+      expect(inputNumber.state.value).to.be('');
+      done();
+    });
   });
 });

@@ -76,7 +76,9 @@ const InputNumber = React.createClass({
     this.setState({
       focused: false,
     });
-    if (!isNaN(val)) {
+    if (val === '') {
+      val = '';
+    } else if (!isNaN(val)) {
       val = Number(val);
       if (val < props.min) {
         val = props.min;
@@ -122,7 +124,7 @@ const InputNumber = React.createClass({
   },
 
   toPrecisionAsStep(num) {
-    if (isNaN(num)) {
+    if (isNaN(num) || num === '') {
       return num;
     }
     const precision = this.getPrecision();
