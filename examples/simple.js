@@ -16,9 +16,10 @@ webpackJsonp([1],{
 	'use strict';
 	
 	__webpack_require__(2);
-	var InputNum = __webpack_require__(3);
+	var InputNumber = __webpack_require__(3);
 	var React = __webpack_require__(6);
 	var ReactDOM = __webpack_require__(164);
+	
 	var Component = React.createClass({
 	  displayName: 'Component',
 	
@@ -49,7 +50,8 @@ webpackJsonp([1],{
 	    return React.createElement(
 	      'div',
 	      { style: { margin: 10 } },
-	      React.createElement(InputNum, { min: -8,
+	      React.createElement(InputNumber, {
+	        min: -8,
 	        max: 10,
 	        value: this.state.value,
 	        style: { width: 100 },
@@ -73,6 +75,7 @@ webpackJsonp([1],{
 	    );
 	  }
 	});
+	
 	ReactDOM.render(React.createElement(Component, null), document.getElementById('__react-content'));
 
 /***/ }

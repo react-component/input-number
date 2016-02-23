@@ -121,6 +121,8 @@
 
 	'use strict';
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -144,6 +146,9 @@
 	
 	  propTypes: {
 	    onChange: _react2['default'].PropTypes.func,
+	    onKeyDown: _react2['default'].PropTypes.func,
+	    onFocus: _react2['default'].PropTypes.func,
+	    onBlur: _react2['default'].PropTypes.func,
 	    step: _react2['default'].PropTypes.number
 	  },
 	
@@ -155,7 +160,10 @@
 	      step: 1,
 	      style: {},
 	      defaultValue: '',
-	      onChange: noop
+	      onChange: noop,
+	      onKeyDown: noop,
+	      onFocus: noop,
+	      onBlur: noop
 	    };
 	  },
 	
@@ -190,17 +198,28 @@
 	  },
 	
 	  onKeyDown: function onKeyDown(e) {
+	    var _props;
+	
 	    if (e.keyCode === 38) {
 	      this.up(e);
 	    } else if (e.keyCode === 40) {
 	      this.down(e);
 	    }
+	
+	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	      args[_key - 1] = arguments[_key];
+	    }
+	
+	    (_props = this.props).onKeyDown.apply(_props, [e].concat(args));
 	  },
 	
 	  onFocus: function onFocus() {
+	    var _props2;
+	
 	    this.setState({
 	      focused: true
 	    });
+	    (_props2 = this.props).onFocus.apply(_props2, arguments);
 	  },
 	
 	  onBlur: function onBlur(event) {
@@ -223,6 +242,12 @@
 	      val = this.state.value;
 	    }
 	    this.setValue(val);
+	
+	    for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	      args[_key2 - 1] = arguments[_key2];
+	    }
+	
+	    props.onBlur.apply(props, [event].concat(args));
 	  },
 	
 	  setValue: function setValue(v) {
@@ -369,7 +394,8 @@
 	      _react2['default'].createElement(
 	        'div',
 	        { className: prefixCls + '-input-wrap' },
-	        _react2['default'].createElement('input', { className: prefixCls + '-input',
+	        _react2['default'].createElement('input', _extends({}, props, {
+	          className: prefixCls + '-input ' + (props.className || ''),
 	          autoComplete: 'off',
 	          onFocus: this.onFocus,
 	          onBlur: this.onBlur,
@@ -382,7 +408,7 @@
 	          name: props.name,
 	          onChange: this.onChange,
 	          ref: 'input',
-	          value: inputDisplayValue })
+	          value: inputDisplayValue }))
 	      )
 	    );
 	  }
@@ -9647,6 +9673,7 @@
 	 */
 	var EventInterface = {
 	  type: null,
+	  target: null,
 	  // currentTarget is set when dispatching; no use in copying it here
 	  currentTarget: emptyFunction.thatReturnsNull,
 	  eventPhase: null,
@@ -9680,8 +9707,6 @@
 	  this.dispatchConfig = dispatchConfig;
 	  this.dispatchMarker = dispatchMarker;
 	  this.nativeEvent = nativeEvent;
-	  this.target = nativeEventTarget;
-	  this.currentTarget = nativeEventTarget;
 	
 	  var Interface = this.constructor.Interface;
 	  for (var propName in Interface) {
@@ -9692,7 +9717,11 @@
 	    if (normalize) {
 	      this[propName] = normalize(nativeEvent);
 	    } else {
-	      this[propName] = nativeEvent[propName];
+	      if (propName === 'target') {
+	        this.target = nativeEventTarget;
+	      } else {
+	        this[propName] = nativeEvent[propName];
+	      }
 	    }
 	  }
 	
@@ -13541,7 +13570,10 @@
 	      }
 	    });
 	
-	    nativeProps.children = content;
+	    if (content) {
+	      nativeProps.children = content;
+	    }
+	
 	    return nativeProps;
 	  }
 	
@@ -19014,7 +19046,7 @@
 	
 	'use strict';
 	
-	module.exports = '0.14.6';
+	module.exports = '0.14.7';
 
 /***/ },
 /* 152 */
