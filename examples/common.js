@@ -395,7 +395,7 @@
 	        'div',
 	        { className: prefixCls + '-input-wrap' },
 	        _react2['default'].createElement('input', _extends({}, props, {
-	          className: prefixCls + '-input ' + (props.className || ''),
+	          className: prefixCls + '-input',
 	          autoComplete: 'off',
 	          onFocus: this.onFocus,
 	          onBlur: this.onBlur,
