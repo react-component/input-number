@@ -11,6 +11,9 @@ function preventDefault(e) {
 const InputNumber = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
+    onKeyDown: React.PropTypes.func,
+    onFocus: React.PropTypes.func,
+    onBlur: React.PropTypes.func,
     step: React.PropTypes.number,
   },
 
@@ -23,6 +26,9 @@ const InputNumber = React.createClass({
       style: {},
       defaultValue: '',
       onChange: noop,
+      onKeyDown: noop,
+      onFocus: noop,
+      onBlur: noop,
     };
   },
 
@@ -56,21 +62,23 @@ const InputNumber = React.createClass({
     this.setInputValue(event.target.value.trim());
   },
 
-  onKeyDown(e) {
+  onKeyDown(e, ...args) {
     if (e.keyCode === 38) {
       this.up(e);
     } else if (e.keyCode === 40) {
       this.down(e);
     }
+    this.props.onKeyDown(e, ...args);
   },
 
-  onFocus() {
+  onFocus(...args) {
     this.setState({
       focused: true,
     });
+    this.props.onFocus(...args);
   },
 
-  onBlur(event) {
+  onBlur(event, ...args) {
     const props = this.props;
     let val = event.target.value.trim();
     this.setState({
@@ -90,6 +98,7 @@ const InputNumber = React.createClass({
       val = this.state.value;
     }
     this.setValue(val);
+    props.onBlur(event, ...args);
   },
 
   setValue(v) {
@@ -230,7 +239,8 @@ const InputNumber = React.createClass({
           </a>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
-          <input className={`${prefixCls}-input`}
+          <input {...props}
+                 className={`${prefixCls}-input ${props.className || ''}`}
                  autoComplete="off"
                  onFocus={this.onFocus}
                  onBlur={this.onBlur}
@@ -243,7 +253,7 @@ const InputNumber = React.createClass({
                  name={props.name}
                  onChange={this.onChange}
                  ref="input"
-                 value={inputDisplayValue}/>
+                 value={inputDisplayValue} />
         </div>
       </div>
     );
