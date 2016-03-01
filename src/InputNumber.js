@@ -108,7 +108,7 @@ const InputNumber = React.createClass({
         inputValue: v,
       });
     }
-    this.props.onChange(v);
+    this.props.onChange(typeof v === 'number' ? v : undefined);
   },
 
   setInputValue(v) {
