@@ -149,7 +149,7 @@
 	    onKeyDown: _react2['default'].PropTypes.func,
 	    onFocus: _react2['default'].PropTypes.func,
 	    onBlur: _react2['default'].PropTypes.func,
-	    step: _react2['default'].PropTypes.number
+	    step: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.string])
 	  },
 	
 	  getDefaultProps: function getDefaultProps() {
@@ -257,7 +257,7 @@
 	        inputValue: v
 	      });
 	    }
-	    this.props.onChange(typeof v === 'number' ? v : undefined);
+	    this.props.onChange(isNaN(v) ? undefined : v);
 	  },
 	
 	  setInputValue: function setInputValue(v) {
@@ -289,7 +289,7 @@
 	      return num;
 	    }
 	    var precision = this.getPrecision();
-	    return Number(Number(num).toFixed(precision));
+	    return Number(num).toFixed(precision);
 	  },
 	
 	  upStep: function upStep(val) {
