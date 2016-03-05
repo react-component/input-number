@@ -14,7 +14,10 @@ const InputNumber = React.createClass({
     onKeyDown: React.PropTypes.func,
     onFocus: React.PropTypes.func,
     onBlur: React.PropTypes.func,
-    step: React.PropTypes.number,
+    step: React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string,
+    ]),
   },
 
   getDefaultProps() {
@@ -108,7 +111,7 @@ const InputNumber = React.createClass({
         inputValue: v,
       });
     }
-    this.props.onChange(typeof v === 'number' ? v : undefined);
+    this.props.onChange(isNaN(v) ? undefined : v);
   },
 
   setInputValue(v) {
@@ -140,7 +143,7 @@ const InputNumber = React.createClass({
       return num;
     }
     const precision = this.getPrecision();
-    return Number(Number(num).toFixed(precision));
+    return Number(num).toFixed(precision);
   },
 
   upStep(val) {
