@@ -10,7 +10,7 @@ const Component = React.createClass({
     return {
       disabled: false,
       readOnly: false,
-      value: 8,
+      value: 1.2354,
     };
   },
   onChange(v) {
@@ -34,8 +34,9 @@ const Component = React.createClass({
       <div style={{margin: 10}}>
         <InputNumber
           min={-8}
-          max={10}
+          max={100}
           value={this.state.value}
+          step="1.000"
           style={{width: 100}}
           readOnly={this.state.readOnly}
           onChange={this.onChange}

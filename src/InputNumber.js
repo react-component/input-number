@@ -143,7 +143,7 @@ const InputNumber = React.createClass({
       return num;
     }
     const precision = this.getPrecision();
-    return Number(num).toFixed(precision);
+    return Number(Number(num).toFixed(precision));
   },
 
   upStep(val) {

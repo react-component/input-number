@@ -93,7 +93,7 @@ online example: http://react-component.github.io/input-number/examples/
         </tr>
         <tr>
           <td>step</td>
-          <td>Number</td>
+          <td>Number or String</td>
           <td>1</td>
           <td>Specifies the legal number intervals</td>
         </tr>

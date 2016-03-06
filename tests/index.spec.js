@@ -71,7 +71,7 @@ describe('inputNumber', () => {
       Simulate.keyDown(ReactDOM.findDOMNode(inputNumber.refs.input), {
         keyCode: keyCode.UP,
       });
-      expect(inputNumber.state.value).to.be('99');
+      expect(inputNumber.state.value).to.be(99);
       done();
     });
 
@@ -79,7 +79,7 @@ describe('inputNumber', () => {
       Simulate.keyDown(ReactDOM.findDOMNode(inputNumber.refs.input), {
         keyCode: keyCode.DOWN,
       });
-      expect(inputNumber.state.value).to.be('97');
+      expect(inputNumber.state.value).to.be(97);
       done();
     });
   });
@@ -87,13 +87,13 @@ describe('inputNumber', () => {
   describe('up/down button works', () => {
     it('up button works', (done) => {
       Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.up));
-      expect(inputNumber.state.value).to.be('99');
+      expect(inputNumber.state.value).to.be(99);
       done();
     });
 
     it('down button works', (done) => {
       Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
-      expect(inputNumber.state.value).to.be('97');
+      expect(inputNumber.state.value).to.be(97);
       done();
     });
   });
@@ -103,7 +103,7 @@ describe('inputNumber', () => {
       for (let i = 0; i < 3; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.up));
       }
-      expect(inputNumber.state.value).to.be('100');
+      expect(inputNumber.state.value).to.be(100);
       done();
     });
 
@@ -111,7 +111,7 @@ describe('inputNumber', () => {
       for (let i = 0; i < 100; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
-      expect(inputNumber.state.value).to.be('1');
+      expect(inputNumber.state.value).to.be(1);
       done();
     });
 
@@ -138,7 +138,7 @@ describe('inputNumber', () => {
       for (let i = 0; i < 3; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
-      expect(inputNumber.state.value).to.be((defaultValue - 3 * 5).toString());
+      expect(inputNumber.state.value).to.be(defaultValue - 3 * 5);
       done();
     });
 
@@ -147,7 +147,7 @@ describe('inputNumber', () => {
       for (let i = 0; i < 3; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
-      expect(inputNumber.state.value).to.be((defaultValue - 3 * 0.1).toString());
+      expect(inputNumber.state.value).to.be(defaultValue - 3 * 0.1);
       done();
     });
   });
@@ -157,10 +157,10 @@ describe('inputNumber', () => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
       Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '6'}});
       expect(inputNumber.state.inputValue).to.be('6');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be('6');
-      expect(inputNumber.state.value).to.be('6');
+      expect(inputNumber.state.inputValue).to.be(6);
+      expect(inputNumber.state.value).to.be(6);
       done();
     });
 
@@ -168,10 +168,10 @@ describe('inputNumber', () => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
       Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: 'xx'}});
       expect(inputNumber.state.inputValue).to.be('xx');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be('98');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.inputValue).to.be(98);
+      expect(inputNumber.state.value).to.be(98);
       done();
     });
 
@@ -180,10 +180,10 @@ describe('inputNumber', () => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
       Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-'}});
       expect(inputNumber.state.inputValue).to.be('-');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be('98');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.inputValue).to.be(98);
+      expect(inputNumber.state.value).to.be(98);
       done();
     });
 
@@ -192,10 +192,10 @@ describe('inputNumber', () => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
       Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-98'}});
       expect(inputNumber.state.inputValue).to.be('-98');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be('-98');
-      expect(inputNumber.state.value).to.be('-98');
+      expect(inputNumber.state.inputValue).to.be(-98);
+      expect(inputNumber.state.value).to.be(-98);
       done();
     });
 
@@ -203,10 +203,10 @@ describe('inputNumber', () => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
       Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '1.2'}});
       expect(inputNumber.state.inputValue).to.be('1.2');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be('1');
-      expect(inputNumber.state.value).to.be('1');
+      expect(inputNumber.state.inputValue).to.be(1);
+      expect(inputNumber.state.value).to.be(1);
       done();
     });
 
@@ -215,10 +215,10 @@ describe('inputNumber', () => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
       Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '1.2'}});
       expect(inputNumber.state.inputValue).to.be('1.2');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be('1.2');
-      expect(inputNumber.state.value).to.be('1.2');
+      expect(inputNumber.state.inputValue).to.be(1.2);
+      expect(inputNumber.state.value).to.be(1.2);
       done();
     });
 
@@ -226,7 +226,7 @@ describe('inputNumber', () => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
       Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: ''}});
       expect(inputNumber.state.inputValue).to.be('');
-      expect(inputNumber.state.value).to.be('98');
+      expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
       expect(inputNumber.state.inputValue).to.be('');
       expect(inputNumber.state.value).to.be('');
@@ -241,20 +241,20 @@ describe('inputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      expect(inputNumber.state.inputValue).to.be('1.0000001');
-      expect(inputNumber.state.value).to.be('1.0000001');
+      expect(inputNumber.state.inputValue).to.be(1.0000001);
+      expect(inputNumber.state.value).to.be(1.0000001);
     });
+  });
 
-    it('string step', () => {
-      const Demo = React.createClass({
-        render() {
-          return <InputNum ref="inputNum" step="1.000" value={2} />;
-        },
-      });
-      example = ReactDOM.render(<Demo />, container);
-      inputNumber = example.refs.inputNum;
-      expect(inputNumber.state.inputValue).to.be('2.000');
-      expect(inputNumber.state.value).to.be('2.000');
+  it('string step', () => {
+    const Demo = React.createClass({
+      render() {
+        return <InputNum ref="inputNum" step="1.000" value={2.123} />;
+      },
     });
+    example = ReactDOM.render(<Demo />, container);
+    inputNumber = example.refs.inputNum;
+    expect(inputNumber.state.inputValue).to.be(2.123);
+    expect(inputNumber.state.value).to.be(2.123);
   });
 });
