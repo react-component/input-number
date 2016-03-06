@@ -289,7 +289,7 @@
 	      return num;
 	    }
 	    var precision = this.getPrecision();
-	    return Number(num).toFixed(precision);
+	    return Number(Number(num).toFixed(precision));
 	  },
 	
 	  upStep: function upStep(val) {
