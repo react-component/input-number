@@ -149,13 +149,15 @@ const InputNumber = React.createClass({
   upStep(val) {
     const stepNum = this.props.step;
     const precisionFactor = this.getPrecisionFactor();
-    return (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
+    const result = (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
+    return this.toPrecisionAsStep(result);
   },
 
   downStep(val) {
     const stepNum = this.props.step;
     const precisionFactor = this.getPrecisionFactor();
-    return (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
+    const result = (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
+    return this.toPrecisionAsStep(result);
   },
 
   step(type, e) {

@@ -10,7 +10,7 @@ const Component = React.createClass({
     return {
       disabled: false,
       readOnly: false,
-      value: 1.2354,
+      value: 1,
     };
   },
   onChange(v) {
@@ -36,7 +36,6 @@ const Component = React.createClass({
           min={-8}
           max={100}
           value={this.state.value}
-          step="1.000"
           style={{width: 100}}
           readOnly={this.state.readOnly}
           onChange={this.onChange}
