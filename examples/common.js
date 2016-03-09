@@ -295,13 +295,15 @@
 	  upStep: function upStep(val) {
 	    var stepNum = this.props.step;
 	    var precisionFactor = this.getPrecisionFactor();
-	    return (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
+	    var result = (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
+	    return this.toPrecisionAsStep(result);
 	  },
 	
 	  downStep: function downStep(val) {
 	    var stepNum = this.props.step;
 	    var precisionFactor = this.getPrecisionFactor();
-	    return (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
+	    var result = (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
+	    return this.toPrecisionAsStep(result);
 	  },
 	
 	  step: function step(type, e) {
