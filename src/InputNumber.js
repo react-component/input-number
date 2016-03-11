@@ -51,6 +51,10 @@ const InputNumber = React.createClass({
     };
   },
 
+  componentDidMount() {
+    this.componentDidUpdate();
+  },
+
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       const value = this.toPrecisionAsStep(nextProps.value);
@@ -58,6 +62,12 @@ const InputNumber = React.createClass({
         inputValue: value,
         value: value,
       });
+    }
+  },
+
+  componentDidUpdate() {
+    if (this.state.focused && document.activeElement !== this.refs.input) {
+      this.refs.input.focus();
     }
   },
 
@@ -177,7 +187,9 @@ const InputNumber = React.createClass({
       return;
     }
     this.setValue(val);
-    this.refs.input.focus();
+    this.setState({
+      focused: true,
+    });
   },
 
   down(e) {
@@ -186,6 +198,10 @@ const InputNumber = React.createClass({
 
   up(e) {
     this.step('up', e);
+  },
+
+  focus() {
+    this.refs.input.focus();
   },
 
   render() {
@@ -245,21 +261,21 @@ const InputNumber = React.createClass({
         </div>
         <div className={`${prefixCls}-input-wrap`}>
           <input {...props}
-                 style={null}
-                 className={`${prefixCls}-input`}
-                 autoComplete="off"
-                 onFocus={this.onFocus}
-                 onBlur={this.onBlur}
-                 onKeyDown={this.onKeyDown}
-                 autoFocus={props.autoFocus}
-                 readOnly={props.readOnly}
-                 disabled={props.disabled}
-                 max={props.max}
-                 min={props.min}
-                 name={props.name}
-                 onChange={this.onChange}
-                 ref="input"
-                 value={inputDisplayValue} />
+            style={null}
+            className={`${prefixCls}-input`}
+            autoComplete="off"
+            onFocus={this.onFocus}
+            onBlur={this.onBlur}
+            onKeyDown={this.onKeyDown}
+            autoFocus={props.autoFocus}
+            readOnly={props.readOnly}
+            disabled={props.disabled}
+            max={props.max}
+            min={props.min}
+            name={props.name}
+            onChange={this.onChange}
+            ref="input"
+            value={inputDisplayValue}/>
         </div>
       </div>
     );
