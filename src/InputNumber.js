@@ -91,12 +91,24 @@ const InputNumber = React.createClass({
     this.props.onFocus(...args);
   },
 
-  onBlur(event, ...args) {
-    const props = this.props;
-    let val = event.target.value.trim();
+  onBlur(e, ...args) {
     this.setState({
       focused: false,
     });
+    const value = this.getCurrentValidValue(e.target.value.trim());
+    this.setValue(value);
+    this.props.onBlur(e, ...args);
+  },
+
+  onStepMouseDown(e) {
+    e.preventDefault();
+    const value = this.getCurrentValidValue(this.state.inputValue);
+    this.setState({ value });
+  },
+
+  getCurrentValidValue(value) {
+    let val = value;
+    const props = this.props;
     if (val === '') {
       val = '';
     } else if (!isNaN(val)) {
@@ -110,8 +122,7 @@ const InputNumber = React.createClass({
     } else {
       val = this.state.value;
     }
-    this.setValue(val);
-    props.onBlur(event, ...args);
+    return val;
   },
 
   setValue(v) {
@@ -245,14 +256,14 @@ const InputNumber = React.createClass({
           <a unselectable="unselectable"
              ref="up"
              onClick={upDisabledClass ? noop : this.up}
-             onMouseDown={preventDefault}
+             onMouseDown={this.onStepMouseDown}
              className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
             <span unselectable="unselectable" className={`${prefixCls}-handler-up-inner`}
                   onClick={preventDefault}/>
           </a>
           <a unselectable="unselectable"
              ref="down"
-             onMouseDown={preventDefault}
+             onMouseDown={this.onStepMouseDown}
              onClick={downDisabledClass ? noop : this.down}
              className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
             <span unselectable="unselectable" className={`${prefixCls}-handler-down-inner`}
