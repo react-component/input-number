@@ -121,7 +121,7 @@ const InputNumber = React.createClass({
         inputValue: v,
       });
     }
-    this.props.onChange(isNaN(v) ? undefined : v);
+    this.props.onChange(isNaN(v) || v === '' ? undefined : v);
   },
 
   setInputValue(v) {
