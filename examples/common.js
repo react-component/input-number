@@ -267,7 +267,7 @@
 	        inputValue: v
 	      });
 	    }
-	    this.props.onChange(isNaN(v) ? undefined : v);
+	    this.props.onChange(isNaN(v) || v === '' ? undefined : v);
 	  },
 	
 	  setInputValue: function setInputValue(v) {
