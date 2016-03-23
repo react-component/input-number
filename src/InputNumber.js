@@ -122,7 +122,7 @@ const InputNumber = React.createClass({
     } else {
       val = this.state.value;
     }
-    return val;
+    return this.toPrecisionAsStep(val);
   },
 
   setValue(v) {
@@ -286,7 +286,8 @@ const InputNumber = React.createClass({
             name={props.name}
             onChange={this.onChange}
             ref="input"
-            value={inputDisplayValue}/>
+            value={inputDisplayValue}
+          />
         </div>
       </div>
     );
