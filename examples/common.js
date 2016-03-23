@@ -270,7 +270,7 @@
 	    } else {
 	      val = this.state.value;
 	    }
-	    return val;
+	    return this.toPrecisionAsStep(val);
 	  },
 	
 	  setValue: function setValue(v) {
@@ -440,7 +440,8 @@
 	          name: props.name,
 	          onChange: this.onChange,
 	          ref: 'input',
-	          value: inputDisplayValue }))
+	          value: inputDisplayValue
+	        }))
 	      )
 	    );
 	  }
