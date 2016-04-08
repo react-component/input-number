@@ -366,7 +366,11 @@
 	  render: function render() {
 	    var _classNames;
 	
-	    var props = this.props;
+	    var props = _extends({}, this.props);
+	    // Remove React warning.
+	    // Warning: Input elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both).
+	    delete props.defaultValue;
+	
 	    var prefixCls = props.prefixCls;
 	    var classes = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, props.className, !!props.className), _defineProperty(_classNames, prefixCls + '-disabled', props.disabled), _defineProperty(_classNames, prefixCls + '-focused', this.state.focused), _classNames));
 	    var upDisabledClass = '';
