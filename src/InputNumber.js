@@ -216,7 +216,11 @@ const InputNumber = React.createClass({
   },
 
   render() {
-    const props = this.props;
+    const props = {...this.props};
+    // Remove React warning.
+    // Warning: Input elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both).
+    delete props.defaultValue;
+
     const prefixCls = props.prefixCls;
     const classes = classNames({
       [prefixCls]: true,
