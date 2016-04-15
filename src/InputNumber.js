@@ -14,6 +14,8 @@ const InputNumber = React.createClass({
     onKeyDown: React.PropTypes.func,
     onFocus: React.PropTypes.func,
     onBlur: React.PropTypes.func,
+    max: React.PropTypes.number,
+    min: React.PropTypes.number,
     step: React.PropTypes.oneOfType([
       React.PropTypes.number,
       React.PropTypes.string,
@@ -168,16 +170,26 @@ const InputNumber = React.createClass({
   },
 
   upStep(val) {
-    const stepNum = this.props.step;
+    const { step, min } = this.props;
     const precisionFactor = this.getPrecisionFactor();
-    const result = (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
+    let result;
+    if (typeof val === 'number') {
+      result = (precisionFactor * val + precisionFactor * step) / precisionFactor;
+    } else {
+      result = min === -Infinity ? step : min;
+    }
     return this.toPrecisionAsStep(result);
   },
 
   downStep(val) {
-    const stepNum = this.props.step;
+    const { step, min } = this.props;
     const precisionFactor = this.getPrecisionFactor();
-    const result = (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
+    let result;
+    if (typeof val === 'number') {
+      result = (precisionFactor * val - precisionFactor * step) / precisionFactor;
+    } else {
+      result = min === -Infinity ? -step : min;
+    }
     return this.toPrecisionAsStep(result);
   },
 
