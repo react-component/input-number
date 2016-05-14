@@ -400,11 +400,11 @@
 	        upDisabledClass = prefixCls + '-handler-up-disabled';
 	      }
 	      if (val <= props.min) {
-	        downDisabledClass = prefixCls + '-handler-up-disabled';
+	        downDisabledClass = prefixCls + '-handler-down-disabled';
 	      }
 	    } else {
 	      upDisabledClass = prefixCls + '-handler-up-disabled';
-	      downDisabledClass = prefixCls + '-handler-up-disabled';
+	      downDisabledClass = prefixCls + '-handler-down-disabled';
 	    }
 	
 	    // focus state, show input value

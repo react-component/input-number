@@ -27,7 +27,7 @@ webpackJsonp([1],{
 	    return {
 	      disabled: false,
 	      readOnly: false,
-	      value: 1
+	      value: 5
 	    };
 	  },
 	  onChange: function onChange(v) {
@@ -52,7 +52,7 @@ webpackJsonp([1],{
 	      { style: { margin: 10 } },
 	      React.createElement(InputNumber, {
 	        min: -8,
-	        max: 100,
+	        max: 10,
 	        value: this.state.value,
 	        style: { width: 100 },
 	        readOnly: this.state.readOnly,
