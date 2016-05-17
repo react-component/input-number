@@ -295,7 +295,7 @@
 	    var props = this.props;
 	    var stepString = props.step.toString();
 	    if (stepString.indexOf('e-') >= 0) {
-	      return parseInt(stepString.slice(stepString.indexOf('-e')), 10);
+	      return parseInt(stepString.slice(stepString.indexOf('e-')), 10);
 	    }
 	    var precision = 0;
 	    if (stepString.indexOf('.') >= 0) {
