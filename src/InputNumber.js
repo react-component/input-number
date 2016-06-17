@@ -147,7 +147,7 @@ const InputNumber = React.createClass({
     const props = this.props;
     const stepString = props.step.toString();
     if (stepString.indexOf('e-') >= 0) {
-      return parseInt(stepString.slice(stepString.indexOf('e-')), 10);
+      return parseInt(stepString.slice(stepString.indexOf('e-') + 1), 10);
     }
     let precision = 0;
     if (stepString.indexOf('.') >= 0) {
@@ -166,7 +166,7 @@ const InputNumber = React.createClass({
       return num;
     }
     const precision = this.getPrecision();
-    return Number(Number(num).toFixed(precision));
+    return Number(Number(num).toFixed(Math.abs(precision)));
   },
 
   upStep(val) {
