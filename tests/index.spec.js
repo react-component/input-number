@@ -228,8 +228,8 @@ describe('inputNumber', () => {
       expect(inputNumber.state.inputValue).to.be('');
       expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
-      expect(inputNumber.state.inputValue).to.be(undefined);
-      expect(inputNumber.state.value).to.be(undefined);
+      expect(inputNumber.state.inputValue).to.be('');
+      expect(inputNumber.state.value).to.be('');
       done();
     });
 
