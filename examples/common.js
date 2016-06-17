@@ -282,7 +282,7 @@
 	        inputValue: v
 	      });
 	    }
-	    this.props.onChange(isNaN(v) || v === '' ? undefined : v);
+	    this.props.onChange(isNaN(v) || v === '' ? '' : v);
 	  },
 	
 	  setInputValue: function setInputValue(v) {
@@ -295,7 +295,7 @@
 	    var props = this.props;
 	    var stepString = props.step.toString();
 	    if (stepString.indexOf('e-') >= 0) {
-	      return parseInt(stepString.slice(stepString.indexOf('e-')), 10);
+	      return parseInt(stepString.slice(stepString.indexOf('e-') + 1), 10);
 	    }
 	    var precision = 0;
 	    if (stepString.indexOf('.') >= 0) {
@@ -314,7 +314,7 @@
 	      return num;
 	    }
 	    var precision = this.getPrecision();
-	    return Number(Number(num).toFixed(precision));
+	    return Number(Number(num).toFixed(Math.abs(precision)));
 	  },
 	
 	  upStep: function upStep(val) {
