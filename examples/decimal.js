@@ -16,7 +16,7 @@ webpackJsonp([0],[
 	__webpack_require__(2);
 	var InputNum = __webpack_require__(3);
 	var React = __webpack_require__(6);
-	var ReactDOM = __webpack_require__(164);
+	var ReactDOM = __webpack_require__(39);
 	var Component = React.createClass({
 	  displayName: 'Component',
 	
