@@ -228,11 +228,7 @@ const InputNumber = React.createClass({
   },
 
   render() {
-    const props = {...this.props};
-    // Remove React warning.
-    // Warning: Input elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both).
-    delete props.defaultValue;
-
+    const props = { ...this.props };
     const prefixCls = props.prefixCls;
     const classes = classNames({
       [prefixCls]: true,
@@ -264,6 +260,12 @@ const InputNumber = React.createClass({
     } else {
       inputDisplayValue = this.state.value;
     }
+
+    // Remove React warning.
+    // Warning: Input elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both).
+    delete props.defaultValue;
+    // https://fb.me/react-unknown-prop
+    delete props.prefixCls;
 
     // ref for test
     return (
