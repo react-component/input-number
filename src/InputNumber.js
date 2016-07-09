@@ -134,7 +134,7 @@ const InputNumber = React.createClass({
         inputValue: v,
       });
     }
-    this.props.onChange(isNaN(v) || v === '' ? '' : v);
+    this.props.onChange(isNaN(v) || v === '' ? undefined : v);
   },
 
   setInputValue(v) {
@@ -256,9 +256,9 @@ const InputNumber = React.createClass({
     // unfocus state, show valid value
     let inputDisplayValue;
     if (this.state.focused) {
-      inputDisplayValue = this.state.inputValue;
+      inputDisplayValue = this.state.inputValue || '';
     } else {
-      inputDisplayValue = this.state.value;
+      inputDisplayValue = this.state.value || '';
     }
 
     // Remove React warning.
@@ -289,7 +289,8 @@ const InputNumber = React.createClass({
           </a>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
-          <input {...props}
+          <input
+            {...props}
             style={null}
             className={`${prefixCls}-input`}
             autoComplete="off"
