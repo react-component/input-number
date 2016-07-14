@@ -256,9 +256,13 @@ const InputNumber = React.createClass({
     // unfocus state, show valid value
     let inputDisplayValue;
     if (this.state.focused) {
-      inputDisplayValue = this.state.inputValue || '';
+      inputDisplayValue = this.state.inputValue;
     } else {
-      inputDisplayValue = this.state.value || '';
+      inputDisplayValue = this.state.value;
+    }
+
+    if (inputDisplayValue === undefined) {
+      inputDisplayValue = '';
     }
 
     // Remove React warning.
