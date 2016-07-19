@@ -49,7 +49,7 @@ describe('inputNumber', () => {
             autoFocus={this.state.autoFocus}
             readOnly={this.state.readOnly}
             name={this.state.name}
-            />
+          />
         </div>
       );
     },
@@ -134,7 +134,7 @@ describe('inputNumber', () => {
     });
 
     it('step', (done) => {
-      example.setState({step: 5});
+      example.setState({ step: 5 });
       for (let i = 0; i < 3; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
@@ -143,7 +143,7 @@ describe('inputNumber', () => {
     });
 
     it('decimal step', (done) => {
-      example.setState({step: 0.1});
+      example.setState({ step: 0.1 });
       for (let i = 0; i < 3; i++) {
         Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
@@ -155,7 +155,7 @@ describe('inputNumber', () => {
   describe('input directly', () => {
     it('input valid number', (done) => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '6'}});
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), { target: { value: '6' } });
       expect(inputNumber.state.inputValue).to.be('6');
       expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
@@ -166,7 +166,7 @@ describe('inputNumber', () => {
 
     it('input invalid number', (done) => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: 'xx'}});
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), { target: { value: 'xx' } });
       expect(inputNumber.state.inputValue).to.be('xx');
       expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
@@ -176,9 +176,9 @@ describe('inputNumber', () => {
     });
 
     it('input negative symbol', (done) => {
-      example.setState({min: -100});
+      example.setState({ min: -100 });
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-'}});
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), { target: { value: '-' } });
       expect(inputNumber.state.inputValue).to.be('-');
       expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
@@ -188,9 +188,9 @@ describe('inputNumber', () => {
     });
 
     it('input negative number', (done) => {
-      example.setState({min: -100});
+      example.setState({ min: -100 });
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '-98'}});
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), { target: { value: '-98' } });
       expect(inputNumber.state.inputValue).to.be('-98');
       expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
@@ -201,7 +201,7 @@ describe('inputNumber', () => {
 
     it('input decimal number with integer step', (done) => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '1.2'}});
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), { target: { value: '1.2' } });
       expect(inputNumber.state.inputValue).to.be('1.2');
       expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
@@ -211,9 +211,9 @@ describe('inputNumber', () => {
     });
 
     it('input decimal number with decimal step', (done) => {
-      example.setState({step: 0.1});
+      example.setState({ step: 0.1 });
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: '1.2'}});
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), { target: { value: '1.2' } });
       expect(inputNumber.state.inputValue).to.be('1.2');
       expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));
@@ -224,7 +224,7 @@ describe('inputNumber', () => {
 
     it('input empty text and blur', (done) => {
       Simulate.focus(ReactDOM.findDOMNode(inputNumber.refs.input));
-      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), {target: {value: ''}});
+      Simulate.change(ReactDOM.findDOMNode(inputNumber.refs.input), { target: { value: '' } });
       expect(inputNumber.state.inputValue).to.be('');
       expect(inputNumber.state.value).to.be(98);
       Simulate.blur(ReactDOM.findDOMNode(inputNumber.refs.input));

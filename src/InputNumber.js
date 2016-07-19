@@ -4,12 +4,26 @@ import styles from './styles';
 
 export default class InputNumber extends React.Component {
   static propTypes = {
+    style: PropTypes.object,
+    upStyle: PropTypes.object,
+    downStyle: PropTypes.object,
+    inputStyle: PropTypes.object,
     onChange: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     max: PropTypes.number,
     min: PropTypes.number,
+    autoFocus: PropTypes.bool,
+    disabled: PropTypes.bool,
     step: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
+    value: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
+    defaultValue: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.string,
     ]),
@@ -37,7 +51,7 @@ export default class InputNumber extends React.Component {
     value = this.toPrecisionAsStep(value);
     this.state = {
       inputValue: value,
-      value: value,
+      value,
       focused: props.autoFocus,
     };
   }
@@ -47,9 +61,75 @@ export default class InputNumber extends React.Component {
       const value = this.toPrecisionAsStep(nextProps.value);
       this.setState({
         inputValue: value,
-        value: value,
+        value,
       });
     }
+  }
+
+  onStep(type) {
+    const props = this.props;
+    if (props.disabled) {
+      return;
+    }
+
+    const value = this.state.value;
+    if (isNaN(value)) {
+      return;
+    }
+    const val = this[`${type}Step`](value);
+    if (val > props.max || val < props.min) {
+      return;
+    }
+    this.setValue(val);
+    this.setState({
+      focused: true,
+    });
+  }
+
+  onChange = (event) => {
+    this.setState({
+      inputValue: event.nativeEvent.text.trim(),
+    });
+  }
+
+  onFocus = (event) => {
+    this.setState({
+      focused: true,
+    });
+    this.props.onFocus(event);
+  }
+
+  onBlur = (event) => {
+    this.setState({
+      focused: false,
+    });
+    const value = this.getCurrentValidValue(event.nativeEvent.text.trim());
+    this.setValue(value);
+    this.props.onBlur(event);
+  }
+
+  onPressIn(type, disabled) {
+    if (this.props.disabled || disabled) {
+      return;
+    }
+    this[type].setNativeProps({
+      style: [styles.stepWrap, { borderColor: '#2DB7F5' }],
+    });
+    this[`${type}Text`].setNativeProps({
+      style: [styles.stepText, { color: '#2DB7F5' }],
+    });
+  }
+
+  onPressOut(type, disabled) {
+    if (this.props.disabled || disabled) {
+      return;
+    }
+    this[type].setNativeProps({
+      style: [styles.stepWrap],
+    });
+    this[`${type}Text`].setNativeProps({
+      style: [styles.stepText],
+    });
   }
 
   getCurrentValidValue(value) {
@@ -129,72 +209,6 @@ export default class InputNumber extends React.Component {
       result = min === -Infinity ? -step : min;
     }
     return this.toPrecisionAsStep(result);
-  }
-
-  onStep(type) {
-    const props = this.props;
-    if (props.disabled) {
-      return;
-    }
-
-    const value = this.state.value;
-    if (isNaN(value)) {
-      return;
-    }
-    const val = this[type + 'Step'](value);
-    if (val > props.max || val < props.min) {
-      return;
-    }
-    this.setValue(val);
-    this.setState({
-      focused: true,
-    });
-  }
-
-  onChange = (event) => {
-    this.setState({
-      inputValue: event.nativeEvent.text.trim(),
-    });
-  }
-
-  onFocus = (event) => {
-    this.setState({
-      focused: true,
-    });
-    this.props.onFocus(event);
-  }
-
-  onBlur = (event) => {
-    this.setState({
-      focused: false,
-    });
-    const value = this.getCurrentValidValue(event.nativeEvent.text.trim());
-    this.setValue(value);
-    this.props.onBlur(event);
-  }
-
-  onPressIn(type, disabled) {
-    if (this.props.disabled || disabled) {
-      return;
-    }
-    this[type].setNativeProps({
-      style: [styles.stepWrap, {borderColor: '#2DB7F5'}],
-    });
-    this[`${type}Text`].setNativeProps({
-      style: [styles.stepText, {color: '#2DB7F5'}],
-    });
-  }
-
-  onPressOut(type, disabled) {
-    if (this.props.disabled || disabled) {
-      return;
-    }
-    this[type].setNativeProps({
-      style: [styles.stepWrap, {borderColor: '#d9d9d9'}]
-    });
-    this[`${type}Text`].setNativeProps({
-      style: [styles.stepText],
-    });
   }
 
   render() {
@@ -278,7 +292,7 @@ export default class InputNumber extends React.Component {
         >
           <View
             ref={component => this._stepUp = component}
-            style={[styles.stepWrap, upDisabledStyle, downStyle]}
+            style={[styles.stepWrap, upDisabledStyle, upStyle]}
           >
             <Text
               ref={component => this._stepUpText = component}

@@ -48,7 +48,7 @@ const InputNumber = React.createClass({
     value = this.toPrecisionAsStep(value);
     return {
       inputValue: value,
-      value: value,
+      value,
       focused: props.autoFocus,
     };
   },
@@ -62,7 +62,7 @@ const InputNumber = React.createClass({
       const value = this.toPrecisionAsStep(nextProps.value);
       this.setState({
         inputValue: value,
-        value: value,
+        value,
       });
     }
   },
@@ -205,7 +205,7 @@ const InputNumber = React.createClass({
     if (isNaN(value)) {
       return;
     }
-    const val = this[type + 'Step'](value);
+    const val = this[`${type}Step`](value);
     if (val > props.max || val < props.min) {
       return;
     }
@@ -266,7 +266,9 @@ const InputNumber = React.createClass({
     }
 
     // Remove React warning.
-    // Warning: Input elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both).
+    // Warning: Input elements must be either controlled
+    // or uncontrolled (specify either the value prop, or
+    // the defaultValue prop, but not both).
     delete props.defaultValue;
     // https://fb.me/react-unknown-prop
     delete props.prefixCls;
@@ -276,20 +278,28 @@ const InputNumber = React.createClass({
       <div className={classes} style={props.style}>
         <div className={`${prefixCls}-handler-wrap`}>
           <a unselectable="unselectable"
-             ref="up"
-             onClick={upDisabledClass ? noop : this.up}
-             onMouseDown={this.onStepMouseDown}
-             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
-            <span unselectable="unselectable" className={`${prefixCls}-handler-up-inner`}
-                  onClick={preventDefault}/>
+            ref="up"
+            onClick={upDisabledClass ? noop : this.up}
+            onMouseDown={this.onStepMouseDown}
+            className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
+          >
+            <span
+              unselectable="unselectable"
+              className={`${prefixCls}-handler-up-inner`}
+              onClick={preventDefault}
+            />
           </a>
           <a unselectable="unselectable"
-             ref="down"
-             onMouseDown={this.onStepMouseDown}
-             onClick={downDisabledClass ? noop : this.down}
-             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
-            <span unselectable="unselectable" className={`${prefixCls}-handler-down-inner`}
-                  onClick={preventDefault}/>
+            ref="down"
+            onMouseDown={this.onStepMouseDown}
+            onClick={downDisabledClass ? noop : this.down}
+            className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
+          >
+            <span
+              unselectable="unselectable"
+              className={`${prefixCls}-handler-down-inner`}
+              onClick={preventDefault}
+            />
           </a>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
