@@ -1,12 +1,13 @@
 {
   "name": "rc-input-number",
   "version": "2.5.14",
-  "description": "input-number ui component for react",
+  "description": "input-number ui component for react(web & react-native)",
   "keywords": [
     "react",
     "react-component",
     "react-input-number",
-    "input-number"
+    "input-number",
+    "react-native",
   ],
   "files": [
     "lib",
