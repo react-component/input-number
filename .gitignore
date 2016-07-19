@@ -24,3 +24,5 @@ dist
 assets/**/*.css
 build
 lib
+index.ios.js
+index.android.js
