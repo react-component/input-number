@@ -4,10 +4,12 @@ import {
   StyleSheet,
   Text,
   View,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
 
-import InputNumber from './src/';
+import InputNumber from '../../src/';
+import inputNumberStyles from '../../src/styles';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class examples extends Component {
+class Demo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,25 +49,26 @@ class examples extends Component {
     this.setState({
       value: v,
     });
-  }
+  };
 
   toggleDisabled = () => {
     this.setState({
       disabled: !this.state.disabled,
     });
-  }
+  };
 
   toggleReadOnly = () => {
     this.setState({
       readOnly: !this.state.readOnly,
     });
-  }
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.stepper}>
           <InputNumber
+            styles={inputNumberStyles}
             min={-8}
             max={10}
             value={this.state.value}
@@ -87,9 +90,12 @@ class examples extends Component {
             </View>
           </TouchableOpacity>
         </View>
+        <View>
+          <TextInput style={{ flex: 1, fontSize: 16, height: 44, borderWidth: 1 }}/>
+        </View>
       </View>
     );
   }
 }
 
-AppRegistry.registerComponent('examples', () => examples);
+AppRegistry.registerComponent('demo', () => Demo);

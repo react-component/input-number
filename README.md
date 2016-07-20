@@ -9,9 +9,6 @@ input number ui component for react (web & react-native)
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
-[![Sauce Test Status](https://saucelabs.com/buildstatus/rc_input_number)](https://saucelabs.com/u/rc_input_number)
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/rc_input_number.svg)](https://saucelabs.com/u/rc_input_number)
 
 [npm-image]: http://img.shields.io/npm/v/rc-input-number.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-input-number
@@ -35,14 +32,6 @@ input number ui component for react (web & react-native)
 
   <img src="https://zos.alipayobjects.com/rmsportal/dojvWLzTShEfSAU.png" width="288"/>
 
-## Feature
-
-* support ie8,ie8+,chrome,firefox,safari
-
-### Keyboard
-
-
-
 ## install
 
 [![rc-input-number](https://nodei.co/npm/rc-input-number.png)](https://npmjs.org/package/rc-input-number)
@@ -61,15 +50,26 @@ ReactDOM.render(<InputNumber defaultValue={19}/>, container);
 ```
 npm install
 npm start
-(rn) npm run rn-start
 ```
 
 ## Example
 
 http://127.0.0.1:8000/examples/
 
-- online example: http://react-component.github.io/input-number/examples/
-- react-native example: examples/react-native.js
+online example: http://react-component.github.io/input-number/examples/
+
+
+## react-native
+
+```
+npm run rn-start
+```
+
+load
+
+http://localhost:8081/examples/react-native/demo.bundle?platform=ios
+
+in [RNPlayground](https://github.com/react-component/RNPlayground)
 
 
 ## API
@@ -151,6 +151,12 @@ http://127.0.0.1:8000/examples/
           <td>Object</td>
           <td></td>
           <td>root style. such as {width:100}</td>
+        </tr>
+        <tr>
+          <td>styles</td>
+          <td>ReactNative StyleSheet</td>
+          <td></td>
+          <td>component's stylesheet, can use lib/styles</td>
         </tr>
         <tr>
           <td>upStyle</td>
