@@ -179,15 +179,20 @@ in [RNPlayground](https://github.com/react-component/RNPlayground)
     </tbody>
 </table>
 
-
-
 ## Test Case
 
-http://127.0.0.1:8000/tests/runner.html?coverage
+```
+npm test
+npm run chrome-test
+```
 
 ## Coverage
 
-http://127.0.0.1:8000/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://127.0.0.1:8000/tests/runner.html?coverage
+```
+npm run coverage
+```
+
+open coverage/ dir
 
 ## License
 
