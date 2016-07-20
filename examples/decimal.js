@@ -13,7 +13,7 @@ const Component = React.createClass({
     };
   },
   onChange(v) {
-    console.log('onChange: ' + v);
+    console.log(`onChange: ${v}`);
     this.setState({
       value: v,
     });
@@ -30,16 +30,17 @@ const Component = React.createClass({
   },
   render() {
     return (
-      <div style={{margin: 10}}>
-        <InputNum min={-8}
-                  max={10}
-                  step={0.1}
-                  value={this.state.value}
-                  style={{width: 100}}
-                  readOnly={this.state.readOnly}
-                  onChange={this.onChange}
-                  disabled={this.state.disabled}/>
-
+      <div style={{ margin: 10 }}>
+        <InputNum
+          min={-8}
+          max={10}
+          step={0.1}
+          value={this.state.value}
+          style={{ width: 100 }}
+          readOnly={this.state.readOnly}
+          onChange={this.onChange}
+          disabled={this.state.disabled}
+        />
         <p>
           <button onClick={this.toggleDisabled}>toggle Disabled</button>
           <button onClick={this.toggleReadOnly}>toggle readOnly</button>

@@ -1,7 +1,7 @@
 # rc-input-number
 ---
 
-input number ui component for react
+input number ui component for react (web & react-native)
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
@@ -27,9 +27,13 @@ input number ui component for react
 [download-url]: https://npmjs.org/package/rc-input-number
 
 ## Screenshots
+- web:
 
-<img src="http://gtms01.alicdn.com/tps/i1/TB18CIlIpXXXXaxXFXXDa5hRXXX-268-124.png" width="288"/>
+  <img src="http://gtms01.alicdn.com/tps/i1/TB18CIlIpXXXXaxXFXXDa5hRXXX-268-124.png" width="288"/>
 
+- react-native:
+
+  <img src="https://zos.alipayobjects.com/rmsportal/dojvWLzTShEfSAU.png" width="288"/>
 
 ## Feature
 
@@ -57,13 +61,16 @@ ReactDOM.render(<InputNumber defaultValue={19}/>, container);
 ```
 npm install
 npm start
+(rn) npm run rn-start
 ```
 
 ## Example
 
 http://127.0.0.1:8000/examples/
 
-online example: http://react-component.github.io/input-number/examples/
+- online example: http://react-component.github.io/input-number/examples/
+- react-native example: examples/react-native.js
+
 
 ## API
 
@@ -119,7 +126,7 @@ online example: http://react-component.github.io/input-number/examples/
           <td>name</td>
           <td>String</td>
           <td></td>
-          <td>Specifies the name of an InputNumber</td>
+          <td>Specifies the name of an InputNumber(`web only`)</td>
         </tr>
         <tr>
           <td>value</td>
@@ -134,16 +141,34 @@ online example: http://react-component.github.io/input-number/examples/
           <td>Specifies the defaultValue of an InputNumber</td>
         </tr>
         <tr>
+          <td>onChange</td>
+          <td>Function</td>
+          <td></td>
+          <td>Called when value of an InputNumber changed</td>
+        </tr>
+        <tr>
           <td>style</td>
           <td>Object</td>
           <td></td>
           <td>root style. such as {width:100}</td>
         </tr>
         <tr>
-          <td>onChange</td>
-          <td>Function</td>
+          <td>upStyle</td>
+          <td>Object</td>
           <td></td>
-          <td>Called when value of an InputNumber changed</td>
+          <td>up step wrap style. `react native only`</td>
+        </tr>
+        <tr>
+          <td>downStyle</td>
+          <td>Object</td>
+          <td></td>
+          <td>down step style. `react native only`</td>
+        </tr>
+        <tr>
+          <td>inputStyle</td>
+          <td>Object</td>
+          <td></td>
+          <td>input style. `react native only`</td>
         </tr>
     </tbody>
 </table>

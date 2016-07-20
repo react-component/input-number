@@ -1,18 +1,19 @@
 {
   "name": "rc-input-number",
   "version": "2.5.14",
-  "description": "input-number ui component for react",
+  "description": "input-number ui component for react(web & react-native)",
   "keywords": [
     "react",
     "react-component",
     "react-input-number",
-    "input-number"
+    "input-number",
+    "react-native",
   ],
   "files": [
     "lib",
     "assets"
   ],
-  "main": "lib/index",
+  "main": "lib/index.web",
   "homepage": "https://github.com/react-component/input-number",
   "author": "tsjxyz@gmail.com",
   "repository": {
@@ -29,23 +30,25 @@
   "scripts": {
     "build": "rc-tools run build",
     "gh-pages": "rc-tools run gh-pages",
-    "start": "rc-server",
+    "start": "rc-tools run server",
     "pub": "rc-tools run pub",
     "lint": "rc-tools run lint",
     "karma": "rc-tools run karma",
+    "test": "rc-tools run test",
     "saucelabs": "rc-tools run saucelabs",
-    "browser-test": "rc-tools run browser-test",
-    "browser-test-cover": "rc-tools run browser-test-cover"
+    "chrome-test": "rc-tools run chrome-test",
+    "coverage": "rc-tools run coverage",
+    "rn-start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
     "pre-commit": "1.x",
-    "rc-server": "3.x",
-    "rc-tools": "4.x",
-    "rc-util": "^3.1.2",
+    "rc-tools": "5.x",
+    "rc-util": "^3.3.0",
     "react": "^15.2.0",
     "react-addons-test-utils": "^15.2.0",
-    "react-dom": "^15.2.0"
+    "react-dom": "^15.2.0",
+    "react-native": "~0.29.1"
   },
   "dependencies": {
     "classnames": "^2.2.0"

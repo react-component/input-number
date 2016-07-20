@@ -1,112 +1,136 @@
-import React from 'react';
-import classNames from 'classnames';
+import React, { PropTypes } from 'react';
+import { View, TextInput, Text, TouchableWithoutFeedback } from 'react-native';
+import styles from './styles';
 
-function noop() {
-}
-
-function preventDefault(e) {
-  e.preventDefault();
-}
-
-const InputNumber = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    onKeyDown: React.PropTypes.func,
-    onFocus: React.PropTypes.func,
-    onBlur: React.PropTypes.func,
-    max: React.PropTypes.number,
-    min: React.PropTypes.number,
-    step: React.PropTypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.string,
+export default class InputNumber extends React.Component {
+  static propTypes = {
+    style: PropTypes.object,
+    upStyle: PropTypes.object,
+    downStyle: PropTypes.object,
+    inputStyle: PropTypes.object,
+    onChange: PropTypes.func,
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
+    max: PropTypes.number,
+    min: PropTypes.number,
+    autoFocus: PropTypes.bool,
+    disabled: PropTypes.bool,
+    step: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
     ]),
-  },
+    value: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
+    defaultValue: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
+  };
 
-  getDefaultProps() {
-    return {
-      prefixCls: 'rc-input-number',
-      max: Infinity,
-      min: -Infinity,
-      step: 1,
-      style: {},
-      defaultValue: '',
-      onChange: noop,
-      onKeyDown: noop,
-      onFocus: noop,
-      onBlur: noop,
-    };
-  },
+  static defaultProps = {
+    max: Infinity,
+    min: -Infinity,
+    step: 1,
+    style: {},
+    defaultValue: '',
+    onChange() {},
+    onFocus() {},
+    onBlur() {},
+  }
 
-  getInitialState() {
+  constructor(props) {
+    super(props);
     let value;
-    const props = this.props;
     if ('value' in props) {
       value = props.value;
     } else {
       value = props.defaultValue;
     }
     value = this.toPrecisionAsStep(value);
-    return {
+    this.state = {
       inputValue: value,
-      value: value,
+      value,
       focused: props.autoFocus,
     };
-  },
-
-  componentDidMount() {
-    this.componentDidUpdate();
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       const value = this.toPrecisionAsStep(nextProps.value);
       this.setState({
         inputValue: value,
-        value: value,
+        value,
       });
     }
-  },
+  }
 
-  componentDidUpdate() {
-    if (this.state.focused && document.activeElement !== this.refs.input) {
-      this.refs.input.focus();
+  onStep(type) {
+    const props = this.props;
+    if (props.disabled) {
+      return;
     }
-  },
 
-  onChange(event) {
-    this.setInputValue(event.target.value.trim());
-  },
-
-  onKeyDown(e, ...args) {
-    if (e.keyCode === 38) {
-      this.up(e);
-    } else if (e.keyCode === 40) {
-      this.down(e);
+    const value = this.state.value;
+    if (isNaN(value)) {
+      return;
     }
-    this.props.onKeyDown(e, ...args);
-  },
-
-  onFocus(...args) {
+    const val = this[`${type}Step`](value);
+    if (val > props.max || val < props.min) {
+      return;
+    }
+    this.setValue(val);
     this.setState({
       focused: true,
     });
-    this.props.onFocus(...args);
-  },
+  }
 
-  onBlur(e, ...args) {
+  onChange = (event) => {
+    this.setState({
+      inputValue: event.nativeEvent.text.trim(),
+    });
+  }
+
+  onFocus = (event) => {
+    this.setState({
+      focused: true,
+    });
+    this.props.onFocus(event);
+  }
+
+  onBlur = (event) => {
     this.setState({
       focused: false,
     });
-    const value = this.getCurrentValidValue(e.target.value.trim());
+    const value = this.getCurrentValidValue(event.nativeEvent.text.trim());
     this.setValue(value);
-    this.props.onBlur(e, ...args);
-  },
+    this.props.onBlur(event);
+  }
 
-  onStepMouseDown(e) {
-    e.preventDefault();
-    const value = this.getCurrentValidValue(this.state.inputValue);
-    this.setState({ value });
-  },
+  onPressIn(type, disabled) {
+    if (this.props.disabled || disabled) {
+      return;
+    }
+    this[type].setNativeProps({
+      style: [styles.stepWrap, { borderColor: '#2DB7F5' }],
+    });
+    this[`${type}Text`].setNativeProps({
+      style: [styles.stepText, { color: '#2DB7F5' }],
+    });
+  }
+
+  onPressOut(type, disabled) {
+    if (this.props.disabled || disabled) {
+      return;
+    }
+    this[type].setNativeProps({
+      style: [styles.stepWrap],
+    });
+    this[`${type}Text`].setNativeProps({
+      style: [styles.stepText],
+    });
+  }
 
   getCurrentValidValue(value) {
     let val = value;
@@ -125,7 +149,7 @@ const InputNumber = React.createClass({
       val = this.state.value;
     }
     return this.toPrecisionAsStep(val);
-  },
+  }
 
   setValue(v) {
     if (!('value' in this.props)) {
@@ -135,13 +159,7 @@ const InputNumber = React.createClass({
       });
     }
     this.props.onChange(isNaN(v) || v === '' ? undefined : v);
-  },
-
-  setInputValue(v) {
-    this.setState({
-      inputValue: v,
-    });
-  },
+  }
 
   getPrecision() {
     const props = this.props;
@@ -154,12 +172,12 @@ const InputNumber = React.createClass({
       precision = stepString.length - stepString.indexOf('.') - 1;
     }
     return precision;
-  },
+  }
 
   getPrecisionFactor() {
     const precision = this.getPrecision();
     return Math.pow(10, precision);
-  },
+  }
 
   toPrecisionAsStep(num) {
     if (isNaN(num) || num === '') {
@@ -167,7 +185,7 @@ const InputNumber = React.createClass({
     }
     const precision = this.getPrecision();
     return Number(Number(num).toFixed(Math.abs(precision)));
-  },
+  }
 
   upStep(val) {
     const { step, min } = this.props;
@@ -179,7 +197,7 @@ const InputNumber = React.createClass({
       result = min === -Infinity ? step : min;
     }
     return this.toPrecisionAsStep(result);
-  },
+  }
 
   downStep(val) {
     const { step, min } = this.props;
@@ -191,130 +209,98 @@ const InputNumber = React.createClass({
       result = min === -Infinity ? -step : min;
     }
     return this.toPrecisionAsStep(result);
-  },
-
-  step(type, e) {
-    if (e) {
-      e.preventDefault();
-    }
-    const props = this.props;
-    if (props.disabled) {
-      return;
-    }
-    const value = this.state.value;
-    if (isNaN(value)) {
-      return;
-    }
-    const val = this[type + 'Step'](value);
-    if (val > props.max || val < props.min) {
-      return;
-    }
-    this.setValue(val);
-    this.setState({
-      focused: true,
-    });
-  },
-
-  down(e) {
-    this.step('down', e);
-  },
-
-  up(e) {
-    this.step('up', e);
-  },
-
-  focus() {
-    this.refs.input.focus();
-  },
+  }
 
   render() {
-    const props = { ...this.props };
-    const prefixCls = props.prefixCls;
-    const classes = classNames({
-      [prefixCls]: true,
-      [props.className]: !!props.className,
-      [`${prefixCls}-disabled`]: props.disabled,
-      [`${prefixCls}-focused`]: this.state.focused,
-    });
-    let upDisabledClass = '';
-    let downDisabledClass = '';
+    const props = this.props;
+    const { style, upStyle, downStyle, inputStyle } = this.props;
+
+    let upDisabledStyle = null;
+    let downDisabledStyle = null;
+    let upDisabledTextStyle = null;
+    let downDisabledTextStyle = null;
     const value = this.state.value;
     if (!isNaN(value)) {
       const val = Number(value);
       if (val >= props.max) {
-        upDisabledClass = `${prefixCls}-handler-up-disabled`;
+        upDisabledStyle = styles.stepDisabled;
+        upDisabledTextStyle = styles.textDisabled;
       }
       if (val <= props.min) {
-        downDisabledClass = `${prefixCls}-handler-down-disabled`;
+        downDisabledStyle = styles.stepDisabled;
+        downDisabledTextStyle = styles.textDisabled;
       }
     } else {
-      upDisabledClass = `${prefixCls}-handler-up-disabled`;
-      downDisabledClass = `${prefixCls}-handler-down-disabled`;
+      upDisabledStyle = styles.stepDisabled;
+      downDisabledStyle = styles.stepDisabled;
+      upDisabledTextStyle = styles.textDisabled;
+      downDisabledTextStyle = styles.textDisabled;
     }
 
-    // focus state, show input value
-    // unfocus state, show valid value
+    let inputDisabledStyle = null;
+    if (props.disabled) {
+      upDisabledStyle = styles.stepDisabled;
+      downDisabledStyle = styles.stepDisabled;
+      upDisabledTextStyle = styles.textDisabled;
+      downDisabledTextStyle = styles.textDisabled;
+      inputDisabledStyle = styles.textDisabled;
+    }
+
     let inputDisplayValue;
     if (this.state.focused) {
-      inputDisplayValue = this.state.inputValue;
+      inputDisplayValue = `${this.state.inputValue}`;
     } else {
-      inputDisplayValue = this.state.value;
+      inputDisplayValue = `${this.state.value}`;
     }
 
     if (inputDisplayValue === undefined) {
       inputDisplayValue = '';
     }
 
-    // Remove React warning.
-    // Warning: Input elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both).
-    delete props.defaultValue;
-    // https://fb.me/react-unknown-prop
-    delete props.prefixCls;
-
-    // ref for test
     return (
-      <div className={classes} style={props.style}>
-        <div className={`${prefixCls}-handler-wrap`}>
-          <a unselectable="unselectable"
-             ref="up"
-             onClick={upDisabledClass ? noop : this.up}
-             onMouseDown={this.onStepMouseDown}
-             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}>
-            <span unselectable="unselectable" className={`${prefixCls}-handler-up-inner`}
-                  onClick={preventDefault}/>
-          </a>
-          <a unselectable="unselectable"
-             ref="down"
-             onMouseDown={this.onStepMouseDown}
-             onClick={downDisabledClass ? noop : this.down}
-             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}>
-            <span unselectable="unselectable" className={`${prefixCls}-handler-down-inner`}
-                  onClick={preventDefault}/>
-          </a>
-        </div>
-        <div className={`${prefixCls}-input-wrap`}>
-          <input
-            {...props}
-            style={null}
-            className={`${prefixCls}-input`}
-            autoComplete="off"
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
-            onKeyDown={this.onKeyDown}
-            autoFocus={props.autoFocus}
-            readOnly={props.readOnly}
-            disabled={props.disabled}
-            max={props.max}
-            min={props.min}
-            name={props.name}
-            onChange={this.onChange}
-            ref="input"
-            value={inputDisplayValue}
-          />
-        </div>
-      </div>
+      <View style={[styles.container, style]}>
+        <TouchableWithoutFeedback
+          onPress={() => {this.onStep('down');}}
+          onPressIn={() => {this.onPressIn('_stepDown', downDisabledStyle);}}
+          onPressOut={() => {this.onPressOut('_stepDown', downDisabledStyle);}}
+        >
+          <View
+            ref={component => this._stepDown = component}
+            style={[styles.stepWrap, downDisabledStyle, downStyle]}
+          >
+            <Text
+              ref={component => this._stepDownText = component}
+              style={[styles.stepText, downDisabledTextStyle]}
+            >-</Text>
+          </View>
+        </TouchableWithoutFeedback>
+        <TextInput
+          style={[styles.input, inputDisabledStyle, inputStyle]}
+          ref="input"
+          value={inputDisplayValue}
+          autoFocus={props.autoFocus}
+          editable={!props.readOnly && !props.disabled}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+          onChange={this.onChange}
+          underlineColorAndroid="transparent"
+        />
+        <TouchableWithoutFeedback
+          onPress={() => this.onStep('up')}
+          onPressIn={() => {this.onPressIn('_stepUp', upDisabledStyle);}}
+          onPressOut={() => {this.onPressOut('_stepUp', upDisabledStyle);}}
+        >
+          <View
+            ref={component => this._stepUp = component}
+            style={[styles.stepWrap, upDisabledStyle, upStyle]}
+          >
+            <Text
+              ref={component => this._stepUpText = component}
+              style={[styles.stepText, upDisabledTextStyle]}
+            >+</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
     );
-  },
-});
-
-module.exports = InputNumber;
+  }
+}

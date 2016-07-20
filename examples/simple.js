@@ -31,15 +31,16 @@ const Component = React.createClass({
   },
   render() {
     return (
-      <div style={{margin: 10}}>
+      <div style={{ margin: 10 }}>
         <InputNumber
           min={-8}
           max={10}
           value={this.state.value}
-          style={{width: 100}}
+          style={{ width: 100 }}
           readOnly={this.state.readOnly}
           onChange={this.onChange}
-          disabled={this.state.disabled} />
+          disabled={this.state.disabled}
+        />
         <p>
           <button onClick={this.toggleDisabled}>toggle Disabled</button>
           <button onClick={this.toggleReadOnly}>toggle readOnly</button>

@@ -1,1 +1,1 @@
-module.exports = require('./InputNumber');
+export { default } from './InputNumber';

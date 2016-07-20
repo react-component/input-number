@@ -1,1 +1,2 @@
-module.exports = require('./src/');
+import Swipeout from './src/';
+export default Swipeout;

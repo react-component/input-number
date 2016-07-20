@@ -18,13 +18,15 @@ const Component = React.createClass({
   },
   render() {
     return (
-      <div style={{margin: 10}}>
-        <InputNum min={-10}
-                  max={10}
-                  step={0.000000001}
-                  value={this.state.value}
-                  style={{width: 100}}
-                  onChange={this.onChange} />
+      <div style={{ margin: 10 }}>
+        <InputNum
+          min={-10}
+          max={10}
+          step={0.000000001}
+          value={this.state.value}
+          style={{ width: 100 }}
+          onChange={this.onChange}
+        />
       </div>
     );
   },
