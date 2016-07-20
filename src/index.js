@@ -67,45 +67,45 @@ const InputNumber = React.createClass({
   },
 
   render() {
-    const props = this.props;
+    const { props, state } = this;
     const { style, upStyle, downStyle, inputStyle, styles } = this.props;
 
     let upDisabledStyle = null;
     let downDisabledStyle = null;
     let upDisabledTextStyle = null;
     let downDisabledTextStyle = null;
-    const value = this.state.value;
+    const value = state.value;
     if (!isNaN(value)) {
       const val = Number(value);
       if (val >= props.max) {
-        upDisabledStyle = styles.disabledStepStyle;
+        upDisabledStyle = styles.stepDisabled;
         upDisabledTextStyle = styles.disabledStepTextColor;
       }
       if (val <= props.min) {
-        downDisabledStyle = styles.disabledStepStyle;
+        downDisabledStyle = styles.stepDisabled;
         downDisabledTextStyle = styles.disabledStepTextColor;
       }
     } else {
-      upDisabledStyle = styles.disabledStepStyle;
-      downDisabledStyle = styles.disabledStepStyle;
+      upDisabledStyle = styles.stepDisabled;
+      downDisabledStyle = styles.stepDisabled;
       upDisabledTextStyle = styles.disabledStepTextColor;
       downDisabledTextStyle = styles.disabledStepTextColor;
     }
 
     let inputDisabledStyle = null;
     if (props.disabled) {
-      upDisabledStyle = styles.disabledStepStyle;
-      downDisabledStyle = styles.disabledStepStyle;
+      upDisabledStyle = styles.stepDisabled;
+      downDisabledStyle = styles.stepDisabled;
       upDisabledTextStyle = styles.disabledStepTextColor;
       downDisabledTextStyle = styles.disabledStepTextColor;
       inputDisabledStyle = styles.disabledStepTextColor;
     }
 
     let inputDisplayValue;
-    if (this.state.focused) {
-      inputDisplayValue = `${this.state.inputValue}`;
+    if (state.focused) {
+      inputDisplayValue = `${state.inputValue}`;
     } else {
-      inputDisplayValue = `${this.state.value}`;
+      inputDisplayValue = `${state.value}`;
     }
 
     if (inputDisplayValue === undefined) {

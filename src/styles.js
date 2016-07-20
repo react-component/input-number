@@ -28,7 +28,7 @@ export default StyleSheet.create({
     color: '#999',
     backgroundColor: 'transparent',
   },
-  disabledStepStyle: {
+  stepDisabled: {
     borderColor: '#d9d9d9',
     backgroundColor: 'rgba(239, 239, 239, 0.72)',
   },
