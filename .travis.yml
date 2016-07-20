@@ -25,13 +25,8 @@ script:
     else
       npm run $TEST_TYPE
     fi
-env:a
+env:
   matrix:
   - TEST_TYPE=lint
   - TEST_TYPE=test
   - TEST_TYPE=coverage
-
-
-matrix:
-  allow_failures:
-  - env: "TEST_TYPE=saucelabs"
