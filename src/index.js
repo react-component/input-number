@@ -29,10 +29,10 @@ const InputNumber = React.createClass({
     }
     const { styles } = this.props;
     this[type].setNativeProps({
-      style: [styles.stepWrap, { borderColor: '#2DB7F5' }],
+      style: [styles.stepWrap, styles.highlightStepBorderColor],
     });
     this[`${type}Text`].setNativeProps({
-      style: [styles.stepText, { color: '#2DB7F5' }],
+      style: [styles.stepText, styles.highlightStepTextColor],
     });
   },
 
@@ -78,27 +78,27 @@ const InputNumber = React.createClass({
     if (!isNaN(value)) {
       const val = Number(value);
       if (val >= props.max) {
-        upDisabledStyle = styles.stepDisabled;
-        upDisabledTextStyle = styles.textDisabled;
+        upDisabledStyle = styles.disabledStepStyle;
+        upDisabledTextStyle = styles.disabledStepTextColor;
       }
       if (val <= props.min) {
-        downDisabledStyle = styles.stepDisabled;
-        downDisabledTextStyle = styles.textDisabled;
+        downDisabledStyle = styles.disabledStepStyle;
+        downDisabledTextStyle = styles.disabledStepTextColor;
       }
     } else {
-      upDisabledStyle = styles.stepDisabled;
-      downDisabledStyle = styles.stepDisabled;
-      upDisabledTextStyle = styles.textDisabled;
-      downDisabledTextStyle = styles.textDisabled;
+      upDisabledStyle = styles.disabledStepStyle;
+      downDisabledStyle = styles.disabledStepStyle;
+      upDisabledTextStyle = styles.disabledStepTextColor;
+      downDisabledTextStyle = styles.disabledStepTextColor;
     }
 
     let inputDisabledStyle = null;
     if (props.disabled) {
-      upDisabledStyle = styles.stepDisabled;
-      downDisabledStyle = styles.stepDisabled;
-      upDisabledTextStyle = styles.textDisabled;
-      downDisabledTextStyle = styles.textDisabled;
-      inputDisabledStyle = styles.textDisabled;
+      upDisabledStyle = styles.disabledStepStyle;
+      downDisabledStyle = styles.disabledStepStyle;
+      upDisabledTextStyle = styles.disabledStepTextColor;
+      downDisabledTextStyle = styles.disabledStepTextColor;
+      inputDisabledStyle = styles.disabledStepTextColor;
     }
 
     let inputDisplayValue;
@@ -124,6 +124,7 @@ const InputNumber = React.createClass({
             style={[styles.stepWrap, downDisabledStyle, downStyle]}
           >
             <Text
+              ref={component => this._stepDownText = component}
               style={[styles.stepText, downDisabledTextStyle]}
             >-</Text>
           </View>
@@ -149,6 +150,7 @@ const InputNumber = React.createClass({
             style={[styles.stepWrap, upDisabledStyle, upStyle]}
           >
             <Text
+              ref={component => this._stepUpText = component}
               style={[styles.stepText, upDisabledTextStyle]}
             >+</Text>
           </View>
