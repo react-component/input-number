@@ -28,11 +28,17 @@ export default StyleSheet.create({
     color: '#999',
     backgroundColor: 'transparent',
   },
-  stepDisabled: {
+  disabledStepStyle: {
     borderColor: '#d9d9d9',
     backgroundColor: 'rgba(239, 239, 239, 0.72)',
   },
-  textDisabled: {
+  disabledStepTextColor: {
     color: '#ccc',
+  },
+  highlightStepTextColor: {
+    color: '#2DB7F5',
+  },
+  highlightStepBorderColor: {
+    borderColor: '#2DB7F5',
   },
 });
