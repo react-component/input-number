@@ -11,18 +11,17 @@ webpackJsonp([1],{
 /***/ 178:
 /***/ function(module, exports, __webpack_require__) {
 
-	/* eslint no-console:0 */
-	
 	'use strict';
+	
+	/* eslint no-console:0 */
 	
 	__webpack_require__(2);
 	var InputNumber = __webpack_require__(3);
-	var React = __webpack_require__(6);
+	var React = __webpack_require__(5);
 	var ReactDOM = __webpack_require__(39);
 	
 	var Component = React.createClass({
 	  displayName: 'Component',
-	
 	  getInitialState: function getInitialState() {
 	    return {
 	      disabled: false,
@@ -57,7 +56,8 @@ webpackJsonp([1],{
 	        style: { width: 100 },
 	        readOnly: this.state.readOnly,
 	        onChange: this.onChange,
-	        disabled: this.state.disabled }),
+	        disabled: this.state.disabled
+	      }),
 	      React.createElement(
 	        'p',
 	        null,
