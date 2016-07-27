@@ -13,11 +13,9 @@ const Component = React.createClass({
       value: 5,
     };
   },
-  onChange(v) {
-    console.log('onChange:', v);
-    this.setState({
-      value: v,
-    });
+  onChange(value) {
+    console.log('onChange:', value);
+    this.setState({ value });
   },
   toggleDisabled() {
     this.setState({
