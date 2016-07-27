@@ -11,16 +11,17 @@ webpackJsonp([2],{
 /***/ 179:
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
 	/* eslint no-console:0 */
+	
+	'use strict';
 	
 	__webpack_require__(2);
 	var InputNum = __webpack_require__(3);
-	var React = __webpack_require__(5);
+	var React = __webpack_require__(6);
 	var ReactDOM = __webpack_require__(39);
 	var Component = React.createClass({
 	  displayName: 'Component',
+	
 	  getInitialState: function getInitialState() {
 	    return {
 	      value: 0.000000001
@@ -36,14 +37,12 @@ webpackJsonp([2],{
 	    return React.createElement(
 	      'div',
 	      { style: { margin: 10 } },
-	      React.createElement(InputNum, {
-	        min: -10,
+	      React.createElement(InputNum, { min: -10,
 	        max: 10,
 	        step: 0.000000001,
 	        value: this.state.value,
 	        style: { width: 100 },
-	        onChange: this.onChange
-	      })
+	        onChange: this.onChange })
 	    );
 	  }
 	});

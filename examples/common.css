@@ -50,7 +50,7 @@
   line-height: 26px;
   height: 26px;
   -webkit-transition: all 0.3s ease;
-  transition: all 0.3s ease;
+          transition: all 0.3s ease;
   color: #666666;
   border: 0;
   border-radius: 5px;
