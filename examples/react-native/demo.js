@@ -1,3 +1,4 @@
+/* eslint no-console:0 */
 import React, { Component } from 'react';
 import {
   AppRegistry,
