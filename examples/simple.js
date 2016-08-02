@@ -14,7 +14,6 @@ webpackJsonp([1],{
 	'use strict';
 	
 	/* eslint no-console:0 */
-	
 	__webpack_require__(2);
 	var InputNumber = __webpack_require__(3);
 	var React = __webpack_require__(47);
@@ -29,11 +28,9 @@ webpackJsonp([1],{
 	      value: 5
 	    };
 	  },
-	  onChange: function onChange(v) {
-	    console.log('onChange:', v);
-	    this.setState({
-	      value: v
-	    });
+	  onChange: function onChange(value) {
+	    console.log('onChange:', value);
+	    this.setState({ value: value });
 	  },
 	  toggleDisabled: function toggleDisabled() {
 	    this.setState({

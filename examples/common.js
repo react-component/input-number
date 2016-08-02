@@ -4958,7 +4958,15 @@
 	        inputValue: v
 	      });
 	    }
-	    this.props.onChange(isNaN(v) || v === '' ? undefined : v);
+	    var newValue = isNaN(v) || v === '' ? undefined : v;
+	    if (newValue !== this.state.value) {
+	      this.props.onChange(newValue);
+	    } else {
+	      // revert input value
+	      this.setState({
+	        inputValue: this.state.value
+	      });
+	    }
 	  },
 	  setInputValue: function setInputValue(v) {
 	    this.setState({

@@ -12,7 +12,6 @@ webpackJsonp([0],[
 	'use strict';
 	
 	/* eslint no-console:0 */
-	
 	__webpack_require__(2);
 	var InputNum = __webpack_require__(3);
 	var React = __webpack_require__(47);
