@@ -143,6 +143,18 @@ describe('inputNumber', () => {
       done();
     });
 
+    it('step read only', (done) => {
+      // testing in read only.
+      example.setState({ step: 5 });
+      example.triggerBoolean('readOnly');
+      for (let i = 0; i < 3; i++) {
+        Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
+      }
+      expect(inputNumber.state.value).to.be(defaultValue);
+
+      done();
+    });
+
     it('decimal step', (done) => {
       example.setState({ step: 0.1 });
       for (let i = 0; i < 3; i++) {
