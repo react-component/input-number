@@ -50,17 +50,21 @@ const InputNumber = React.createClass({
     });
   },
 
-  onPressInDown() {
+  onPressInDown(e) {
     this.onPressIn('_stepDown');
+    this.down(e, true);
   },
-  onPressOutDown() {
+  onPressOutDown(e) {
     this.onPressOut('_stepDown');
+    this.stop();
   },
-  onPressInUp() {
+  onPressInUp(e) {
     this.onPressIn('_stepUp');
+    this.up(e, true);
   },
   onPressOutUp() {
     this.onPressOut('_stepUp');
+    this.stop();
   },
 
   getValueFromEvent(e) {
@@ -117,9 +121,8 @@ const InputNumber = React.createClass({
     return (
       <View style={[styles.container, style]}>
         <TouchableWithoutFeedback
-          onPress={!downDisabledStyle && editable && this.down || undefined}
-          onPressIn={!downDisabledStyle && editable && this.onPressInDown || undefined}
-          onPressOut={!downDisabledStyle && editable && this.onPressOutDown || undefined}
+          onPressIn={(!downDisabledStyle && editable) ? this.onPressInDown : undefined}
+          onPressOut={(!downDisabledStyle && editable) ? this.onPressOutDown : undefined}
         >
           <View
             ref={component => this._stepDown = component}
@@ -143,9 +146,8 @@ const InputNumber = React.createClass({
           underlineColorAndroid="transparent"
         />
         <TouchableWithoutFeedback
-          onPress={!upDisabledStyle && editable && this.up || undefined}
-          onPressIn={!upDisabledStyle && editable && this.onPressInUp || undefined}
-          onPressOut={!upDisabledStyle && editable && this.onPressOutUp || undefined}
+          onPressIn={(!upDisabledStyle && editable) ? this.onPressInUp : undefined}
+          onPressOut={(!upDisabledStyle && editable) ? this.onPressOutUp : undefined}
         >
           <View
             ref={component => this._stepUp = component}

@@ -199,7 +199,9 @@ export default {
   },
 
   down(e, recursive) {
-    e.persist();
+    if (e.persist) {
+      e.persist();
+    }
     this.stop();
     this.step('down', e);
     this.autoStepTimer = setTimeout(() => {
@@ -208,7 +210,9 @@ export default {
   },
 
   up(e, recursive) {
-    e.persist();
+    if (e.persist) {
+      e.persist();
+    }
     this.stop();
     this.step('up', e);
     this.autoStepTimer = setTimeout(() => {
