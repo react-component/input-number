@@ -54,7 +54,7 @@ const InputNumber = React.createClass({
     this.onPressIn('_stepDown');
     this.down(e, true);
   },
-  onPressOutDown(e) {
+  onPressOutDown() {
     this.onPressOut('_stepDown');
     this.stop();
   },
