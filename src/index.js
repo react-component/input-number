@@ -121,8 +121,8 @@ const InputNumber = React.createClass({
     return (
       <View style={[styles.container, style]}>
         <TouchableWithoutFeedback
-          onPressIn={(!downDisabledStyle && editable) ? this.onPressInDown : undefined}
-          onPressOut={(!downDisabledStyle && editable) ? this.onPressOutDown : undefined}
+          onPressIn={(editable && !downDisabledStyle) ? this.onPressInDown : undefined}
+          onPressOut={(editable && !downDisabledStyle) ? this.onPressOutDown : undefined}
         >
           <View
             ref={component => this._stepDown = component}
@@ -146,8 +146,8 @@ const InputNumber = React.createClass({
           underlineColorAndroid="transparent"
         />
         <TouchableWithoutFeedback
-          onPressIn={(!upDisabledStyle && editable) ? this.onPressInUp : undefined}
-          onPressOut={(!upDisabledStyle && editable) ? this.onPressOutUp : undefined}
+          onPressIn={(editable && !upDisabledStyle) ? this.onPressInUp : undefined}
+          onPressOut={(editable && !upDisabledStyle) ? this.onPressOutUp : undefined}
         >
           <View
             ref={component => this._stepUp = component}

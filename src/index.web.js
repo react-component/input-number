@@ -114,9 +114,9 @@ const InputNumber = React.createClass({
           <a
             unselectable="unselectable"
             ref="up"
-            onTouchStart={(editable && upDisabledClass) ? this.up : noop}
+            onTouchStart={(editable && !upDisabledClass) ? this.up : noop}
             onTouchEnd={this.stop}
-            onMouseDown={(editable && upDisabledClass) ? this.up : noop}
+            onMouseDown={(editable && !upDisabledClass) ? this.up : noop}
             onMouseUp={this.stop}
             onMouseLeave={this.stop}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
@@ -130,9 +130,9 @@ const InputNumber = React.createClass({
           <a
             unselectable="unselectable"
             ref="down"
-            onTouchStart={(editable && downDisabledClass) ? this.down : noop}
+            onTouchStart={(editable && !downDisabledClass) ? this.down : noop}
             onTouchEnd={this.stop}
-            onMouseDown={(editable && downDisabledClass) ? this.down : noop}
+            onMouseDown={(editable && !downDisabledClass) ? this.down : noop}
             onMouseUp={this.stop}
             onMouseLeave={this.stop}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
