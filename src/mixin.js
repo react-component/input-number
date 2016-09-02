@@ -1,6 +1,16 @@
 function noop() {
 }
 
+/**
+ * When click and hold on a button - the speed of auto changin the value.
+ */
+const SPEED = 50;
+
+/**
+ * When click and hold on a button - the delay before auto changin the value.
+ */
+const DELAY = 600;
+
 export default {
   getDefaultProps() {
     return {
@@ -40,6 +50,10 @@ export default {
         value,
       });
     }
+  },
+
+  componentWillUnmount() {
+    this.stop();
   },
 
   onChange(e) {
@@ -178,11 +192,31 @@ export default {
     });
   },
 
-  down(e) {
-    this.step('down', e);
+  stop() {
+    if (this.autoStepTimer) {
+      clearTimeout(this.autoStepTimer);
+    }
   },
 
-  up(e) {
+  down(e, recursive) {
+    if (e.persist) {
+      e.persist();
+    }
+    this.stop();
+    this.step('down', e);
+    this.autoStepTimer = setTimeout(() => {
+      this.down(e, true);
+    }, recursive ? SPEED : DELAY);
+  },
+
+  up(e, recursive) {
+    if (e.persist) {
+      e.persist();
+    }
+    this.stop();
     this.step('up', e);
+    this.autoStepTimer = setTimeout(() => {
+      this.up(e, true);
+    }, recursive ? SPEED : DELAY);
   },
 };

@@ -61,7 +61,6 @@ const InputNumber = React.createClass({
 
   render() {
     const props = { ...this.props };
-    const editable = !props.readOnly && !props.disabled;
     const prefixCls = props.prefixCls;
     const classes = classNames({
       [prefixCls]: true,
@@ -84,6 +83,8 @@ const InputNumber = React.createClass({
       upDisabledClass = `${prefixCls}-handler-up-disabled`;
       downDisabledClass = `${prefixCls}-handler-down-disabled`;
     }
+
+    const editable = !props.readOnly && !props.disabled;
 
     // focus state, show input value
     // unfocus state, show valid value
@@ -113,7 +114,11 @@ const InputNumber = React.createClass({
           <a
             unselectable="unselectable"
             ref="up"
-            onClick={upDisabledClass || !editable ? noop : this.up}
+            onTouchStart={(editable && !upDisabledClass) ? this.up : noop}
+            onTouchEnd={this.stop}
+            onMouseDown={(editable && !upDisabledClass) ? this.up : noop}
+            onMouseUp={this.stop}
+            onMouseLeave={this.stop}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
           >
             <span
@@ -125,7 +130,11 @@ const InputNumber = React.createClass({
           <a
             unselectable="unselectable"
             ref="down"
-            onClick={downDisabledClass || !editable ? noop : this.down}
+            onTouchStart={(editable && !downDisabledClass) ? this.down : noop}
+            onTouchEnd={this.stop}
+            onMouseDown={(editable && !downDisabledClass) ? this.down : noop}
+            onMouseUp={this.stop}
+            onMouseLeave={this.stop}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
           >
             <span
