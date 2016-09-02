@@ -19,6 +19,7 @@ const InputNumber = React.createClass({
     step: PropTypes.number,
     value: PropTypes.number,
     defaultValue: PropTypes.number,
+    readOnly: PropTypes.bool,
   },
 
   mixins: [mixin],
@@ -69,6 +70,7 @@ const InputNumber = React.createClass({
   render() {
     const { props, state } = this;
     const { style, upStyle, downStyle, inputStyle, styles } = this.props;
+    const editable = !this.props.readOnly && !this.props.disabled;
 
     let upDisabledStyle = null;
     let downDisabledStyle = null;
@@ -115,9 +117,9 @@ const InputNumber = React.createClass({
     return (
       <View style={[styles.container, style]}>
         <TouchableWithoutFeedback
-          onPress={!downDisabledStyle && this.down || undefined}
-          onPressIn={!downDisabledStyle && this.onPressInDown || undefined}
-          onPressOut={!downDisabledStyle && this.onPressOutDown || undefined}
+          onPress={!downDisabledStyle && editable && this.down || undefined}
+          onPressIn={!downDisabledStyle && editable && this.onPressInDown || undefined}
+          onPressOut={!downDisabledStyle && editable && this.onPressOutDown || undefined}
         >
           <View
             ref={component => this._stepDown = component}
@@ -134,16 +136,16 @@ const InputNumber = React.createClass({
           ref="input"
           value={inputDisplayValue}
           autoFocus={props.autoFocus}
-          editable={!props.readOnly && !props.disabled}
+          editable={editable}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChange={this.onChange}
           underlineColorAndroid="transparent"
         />
         <TouchableWithoutFeedback
-          onPress={!upDisabledStyle && this.up || undefined}
-          onPressIn={!upDisabledStyle && this.onPressInUp || undefined}
-          onPressOut={!upDisabledStyle && this.onPressOutUp || undefined}
+          onPress={!upDisabledStyle && editable && this.up || undefined}
+          onPressIn={!upDisabledStyle && editable && this.onPressInUp || undefined}
+          onPressOut={!upDisabledStyle && editable && this.onPressOutUp || undefined}
         >
           <View
             ref={component => this._stepUp = component}
