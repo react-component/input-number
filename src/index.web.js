@@ -118,6 +118,7 @@ const InputNumber = React.createClass({
             onTouchEnd={this.stop}
             onMouseDown={(editable && upDisabledClass) ? this.up : noop}
             onMouseUp={this.stop}
+            onMouseLeave={this.stop}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
           >
             <span
@@ -133,6 +134,7 @@ const InputNumber = React.createClass({
             onTouchEnd={this.stop}
             onMouseDown={(editable && downDisabledClass) ? this.down : noop}
             onMouseUp={this.stop}
+            onMouseLeave={this.stop}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
           >
             <span
