@@ -1,7 +1,6 @@
 /* eslint no-console:0 */
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Demo extends Component {
+class InputNumberDemo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -92,11 +91,12 @@ class Demo extends Component {
           </TouchableOpacity>
         </View>
         <View>
-          <TextInput style={{ flex: 1, fontSize: 16, height: 44, borderWidth: 1 }}/>
+          <TextInput style={{ flex: 1, fontSize: 16, height: 44, borderWidth: 1 }} />
         </View>
       </View>
     );
   }
 }
 
-AppRegistry.registerComponent('demo', () => Demo);
+export const title = 'input-number';
+export const Demo = InputNumberDemo;

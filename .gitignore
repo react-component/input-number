@@ -25,3 +25,5 @@ assets/**/*.css
 build
 lib
 coverage
+/ios/
+/android/

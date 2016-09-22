@@ -1,165 +1,170 @@
 import React, { PropTypes } from 'react';
-import { View, TextInput, Text, TouchableWithoutFeedback } from 'react-native';
+import classNames from 'classnames';
 import mixin from './mixin';
+
+function noop() {
+}
+
+function preventDefault(e) {
+  e.preventDefault();
+}
 
 const InputNumber = React.createClass({
   propTypes: {
-    styles: PropTypes.object,
-    style: PropTypes.object,
-    upStyle: PropTypes.object,
-    downStyle: PropTypes.object,
-    inputStyle: PropTypes.object,
     onChange: PropTypes.func,
+    onKeyDown: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
+    readOnly: PropTypes.bool,
     max: PropTypes.number,
     min: PropTypes.number,
-    autoFocus: PropTypes.bool,
-    disabled: PropTypes.bool,
-    step: PropTypes.number,
-    value: PropTypes.number,
-    defaultValue: PropTypes.number,
-    readOnly: PropTypes.bool,
+    step: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
   },
 
   mixins: [mixin],
 
-  onPressIn(type) {
-    if (this.props.disabled) {
-      return;
-    }
-    const { styles } = this.props;
-    this[type].setNativeProps({
-      style: [styles.stepWrap, styles.highlightStepBorderColor],
-    });
-    this[`${type}Text`].setNativeProps({
-      style: [styles.stepText, styles.highlightStepTextColor],
-    });
+  getDefaultProps() {
+    return {
+      prefixCls: 'rc-input-number',
+    };
   },
 
-  onPressOut(type) {
-    if (this.props.disabled) {
-      return;
-    }
-    const { styles } = this.props;
-    this[type].setNativeProps({
-      style: [styles.stepWrap],
-    });
-    this[`${type}Text`].setNativeProps({
-      style: [styles.stepText],
-    });
+  componentDidMount() {
+    this.componentDidUpdate();
   },
 
-  onPressInDown(e) {
-    this.onPressIn('_stepDown');
-    this.down(e, true);
+  componentDidUpdate() {
+    if (this.state.focused && document.activeElement !== this.refs.input) {
+      this.refs.input.focus();
+    }
   },
-  onPressOutDown() {
-    this.onPressOut('_stepDown');
-    this.stop();
-  },
-  onPressInUp(e) {
-    this.onPressIn('_stepUp');
-    this.up(e, true);
-  },
-  onPressOutUp() {
-    this.onPressOut('_stepUp');
-    this.stop();
+
+  onKeyDown(e, ...args) {
+    if (e.keyCode === 38) {
+      this.up(e);
+    } else if (e.keyCode === 40) {
+      this.down(e);
+    }
+    this.props.onKeyDown(e, ...args);
   },
 
   getValueFromEvent(e) {
-    return e.nativeEvent.text;
+    return e.target.value;
+  },
+
+  focus() {
+    this.refs.input.focus();
   },
 
   render() {
-    const { props, state } = this;
-    const { style, upStyle, downStyle, inputStyle, styles } = this.props;
-    const editable = !this.props.readOnly && !this.props.disabled;
-
-    let upDisabledStyle = null;
-    let downDisabledStyle = null;
-    let upDisabledTextStyle = null;
-    let downDisabledTextStyle = null;
-    const value = state.value;
+    const props = { ...this.props };
+    const prefixCls = props.prefixCls;
+    const classes = classNames({
+      [prefixCls]: true,
+      [props.className]: !!props.className,
+      [`${prefixCls}-disabled`]: props.disabled,
+      [`${prefixCls}-focused`]: this.state.focused,
+    });
+    let upDisabledClass = '';
+    let downDisabledClass = '';
+    const value = this.state.value;
     if (!isNaN(value)) {
       const val = Number(value);
       if (val >= props.max) {
-        upDisabledStyle = styles.stepDisabled;
-        upDisabledTextStyle = styles.disabledStepTextColor;
+        upDisabledClass = `${prefixCls}-handler-up-disabled`;
       }
       if (val <= props.min) {
-        downDisabledStyle = styles.stepDisabled;
-        downDisabledTextStyle = styles.disabledStepTextColor;
+        downDisabledClass = `${prefixCls}-handler-down-disabled`;
       }
     } else {
-      upDisabledStyle = styles.stepDisabled;
-      downDisabledStyle = styles.stepDisabled;
-      upDisabledTextStyle = styles.disabledStepTextColor;
-      downDisabledTextStyle = styles.disabledStepTextColor;
+      upDisabledClass = `${prefixCls}-handler-up-disabled`;
+      downDisabledClass = `${prefixCls}-handler-down-disabled`;
     }
 
-    let inputDisabledStyle = null;
-    if (props.disabled) {
-      upDisabledStyle = styles.stepDisabled;
-      downDisabledStyle = styles.stepDisabled;
-      upDisabledTextStyle = styles.disabledStepTextColor;
-      downDisabledTextStyle = styles.disabledStepTextColor;
-      inputDisabledStyle = styles.disabledStepTextColor;
-    }
+    const editable = !props.readOnly && !props.disabled;
 
+    // focus state, show input value
+    // unfocus state, show valid value
     let inputDisplayValue;
-    if (state.focused) {
-      inputDisplayValue = `${state.inputValue}`;
+    if (this.state.focused) {
+      inputDisplayValue = this.state.inputValue;
     } else {
-      inputDisplayValue = `${state.value}`;
+      inputDisplayValue = this.state.value;
     }
 
     if (inputDisplayValue === undefined) {
       inputDisplayValue = '';
     }
 
+    // Remove React warning.
+    // Warning: Input elements must be either controlled
+    // or uncontrolled (specify either the value prop, or
+    // the defaultValue prop, but not both).
+    delete props.defaultValue;
+    // https://fb.me/react-unknown-prop
+    delete props.prefixCls;
+
+    // ref for test
     return (
-      <View style={[styles.container, style]}>
-        <TouchableWithoutFeedback
-          onPressIn={(editable && !downDisabledStyle) ? this.onPressInDown : undefined}
-          onPressOut={(editable && !downDisabledStyle) ? this.onPressOutDown : undefined}
-        >
-          <View
-            ref={component => this._stepDown = component}
-            style={[styles.stepWrap, downDisabledStyle, downStyle]}
+      <div className={classes} style={props.style}>
+        <div className={`${prefixCls}-handler-wrap`}>
+          <a
+            unselectable="unselectable"
+            ref="up"
+            onTouchStart={(editable && !upDisabledClass) ? this.up : noop}
+            onTouchEnd={this.stop}
+            onMouseDown={(editable && !upDisabledClass) ? this.up : noop}
+            onMouseUp={this.stop}
+            onMouseLeave={this.stop}
+            className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
           >
-            <Text
-              ref={component => this._stepDownText = component}
-              style={[styles.stepText, downDisabledTextStyle]}
-            >-</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <TextInput
-          style={[styles.input, inputDisabledStyle, inputStyle]}
-          ref="input"
-          value={inputDisplayValue}
-          autoFocus={props.autoFocus}
-          editable={editable}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          onChange={this.onChange}
-          underlineColorAndroid="transparent"
-        />
-        <TouchableWithoutFeedback
-          onPressIn={(editable && !upDisabledStyle) ? this.onPressInUp : undefined}
-          onPressOut={(editable && !upDisabledStyle) ? this.onPressOutUp : undefined}
-        >
-          <View
-            ref={component => this._stepUp = component}
-            style={[styles.stepWrap, upDisabledStyle, upStyle]}
+            <span
+              unselectable="unselectable"
+              className={`${prefixCls}-handler-up-inner`}
+              onClick={preventDefault}
+            />
+          </a>
+          <a
+            unselectable="unselectable"
+            ref="down"
+            onTouchStart={(editable && !downDisabledClass) ? this.down : noop}
+            onTouchEnd={this.stop}
+            onMouseDown={(editable && !downDisabledClass) ? this.down : noop}
+            onMouseUp={this.stop}
+            onMouseLeave={this.stop}
+            className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
           >
-            <Text
-              ref={component => this._stepUpText = component}
-              style={[styles.stepText, upDisabledTextStyle]}
-            >+</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
+            <span
+              unselectable="unselectable"
+              className={`${prefixCls}-handler-down-inner`}
+              onClick={preventDefault}
+            />
+          </a>
+        </div>
+        <div className={`${prefixCls}-input-wrap`}>
+          <input
+            {...props}
+            style={null}
+            className={`${prefixCls}-input`}
+            autoComplete="off"
+            onFocus={this.onFocus}
+            onBlur={this.onBlur}
+            onKeyDown={this.onKeyDown}
+            autoFocus={props.autoFocus}
+            readOnly={props.readOnly}
+            disabled={props.disabled}
+            max={props.max}
+            min={props.min}
+            name={props.name}
+            onChange={this.onChange}
+            ref="input"
+            value={inputDisplayValue}
+          />
+        </div>
+      </div>
     );
   },
 });

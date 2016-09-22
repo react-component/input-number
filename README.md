@@ -58,19 +58,12 @@ http://127.0.0.1:8000/examples/
 
 online example: http://react-component.github.io/input-number/examples/
 
-
 ## react-native
 
 ```
-npm run rn-start
+./node_modules/rc-tools run react-native-init
+react-native run-ios
 ```
-
-load
-
-http://localhost:8081/examples/react-native/demo.bundle?platform=ios
-
-in [RNPlayground](https://github.com/react-component/RNPlayground)
-
 
 ## API
 

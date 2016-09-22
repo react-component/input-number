@@ -13,7 +13,7 @@
     "lib",
     "assets"
   ],
-  "main": "lib/index.web",
+  "main": "lib/index",
   "homepage": "https://github.com/react-component/input-number",
   "author": "tsjxyz@gmail.com",
   "repository": {
@@ -37,18 +37,18 @@
     "test": "rc-tools run test",
     "saucelabs": "rc-tools run saucelabs",
     "chrome-test": "rc-tools run chrome-test",
-    "coverage": "rc-tools run coverage",
-    "rn-start": "node node_modules/react-native/local-cli/cli.js start"
+    "coverage": "rc-tools run coverage"
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
     "pre-commit": "1.x",
     "rc-tools": "5.x",
     "rc-util": "^3.3.0",
-    "react": "^15.2.0",
-    "react-addons-test-utils": "^15.2.0",
-    "react-dom": "^15.2.0",
-    "react-native": "~0.29.1"
+    "react": "15.3.x",
+    "react-addons-test-utils": "15.3.x",
+    "react-dom": "15.3.x",
+    "react-native": "0.33.0",
+    "react-native-index-page": "~0.1.0"
   },
   "dependencies": {
     "babel-runtime": "6.x",
