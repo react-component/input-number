@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import mixin from './mixin';
+import InputHandler from './inputHandler';
 
 function noop() {
 }
@@ -111,7 +112,7 @@ const InputNumber = React.createClass({
     return (
       <div className={classes} style={props.style}>
         <div className={`${prefixCls}-handler-wrap`}>
-          <a
+          <InputHandler
             unselectable="unselectable"
             ref="up"
             onTouchStart={(editable && !upDisabledClass) ? this.up : noop}
@@ -126,8 +127,8 @@ const InputNumber = React.createClass({
               className={`${prefixCls}-handler-up-inner`}
               onClick={preventDefault}
             />
-          </a>
-          <a
+          </InputHandler>
+          <InputHandler
             unselectable="unselectable"
             ref="down"
             onTouchStart={(editable && !downDisabledClass) ? this.down : noop}
@@ -142,7 +143,7 @@ const InputNumber = React.createClass({
               className={`${prefixCls}-handler-down-inner`}
               onClick={preventDefault}
             />
-          </a>
+          </InputHandler>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
           <input
