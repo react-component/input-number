@@ -14,6 +14,8 @@ const InputNumber = React.createClass({
   propTypes: {
     onChange: PropTypes.func,
     onKeyDown: PropTypes.func,
+    prefixCls: PropTypes.string,
+    disabled: PropTypes.bool,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     readOnly: PropTypes.bool,
@@ -62,7 +64,7 @@ const InputNumber = React.createClass({
 
   render() {
     const props = { ...this.props };
-    const { prefixCls, disabled } = props;
+    const { prefixCls, disabled, readOnly } = props;
     const classes = classNames({
       [prefixCls]: true,
       [props.className]: !!props.className,
@@ -113,7 +115,8 @@ const InputNumber = React.createClass({
       <div className={classes} style={props.style}>
         <div className={`${prefixCls}-handler-wrap`}>
           <InputHandler
-            disabled={!!upDisabledClass}
+            ref="up"
+            disabled={!!upDisabledClass || disabled || readOnly}
             prefixCls={prefixCls}
             unselectable="unselectable"
             onTouchStart={(editable && !upDisabledClass) ? this.up : noop}
@@ -130,7 +133,8 @@ const InputNumber = React.createClass({
             />
           </InputHandler>
           <InputHandler
-            disabled={!!downDisabledClass}
+            ref="down"
+            disabled={!!downDisabledClass || disabled || readOnly}
             prefixCls={prefixCls}
             unselectable="unselectable"
             onTouchStart={(editable && !downDisabledClass) ? this.down : noop}
