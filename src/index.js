@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import mixin from './mixin';
-import InputHandler from './inputHandler';
+import InputHandler from './InputHandler';
 
 function noop() {
 }
@@ -62,11 +62,11 @@ const InputNumber = React.createClass({
 
   render() {
     const props = { ...this.props };
-    const prefixCls = props.prefixCls;
+    const { prefixCls, disabled } = props;
     const classes = classNames({
       [prefixCls]: true,
       [props.className]: !!props.className,
-      [`${prefixCls}-disabled`]: props.disabled,
+      [`${prefixCls}-disabled`]: disabled,
       [`${prefixCls}-focused`]: this.state.focused,
     });
     let upDisabledClass = '';
@@ -113,8 +113,9 @@ const InputNumber = React.createClass({
       <div className={classes} style={props.style}>
         <div className={`${prefixCls}-handler-wrap`}>
           <InputHandler
+            disabled={!!upDisabledClass}
+            prefixCls={prefixCls}
             unselectable="unselectable"
-            ref="up"
             onTouchStart={(editable && !upDisabledClass) ? this.up : noop}
             onTouchEnd={this.stop}
             onMouseDown={(editable && !upDisabledClass) ? this.up : noop}
@@ -129,8 +130,9 @@ const InputNumber = React.createClass({
             />
           </InputHandler>
           <InputHandler
+            disabled={!!downDisabledClass}
+            prefixCls={prefixCls}
             unselectable="unselectable"
-            ref="down"
             onTouchStart={(editable && !downDisabledClass) ? this.down : noop}
             onTouchEnd={this.stop}
             onMouseDown={(editable && !downDisabledClass) ? this.down : noop}

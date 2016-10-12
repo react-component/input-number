@@ -12,7 +12,7 @@ class InputHandler extends Component {
     const prefixCls = props.prefixCls;
     const wrapCls = classNames({
       [`${props.className}`]: true,
-      [`${prefixCls}-handler-touchFeedback`]: props.touchFeedback,
+      [`${prefixCls}-handler-active`]: !props.disabled && props.touchFeedback,
     });
     ['prefixCls', 'touchFeedback'].forEach(prop => {
       if (props.hasOwnProperty(prop)) {
@@ -20,7 +20,7 @@ class InputHandler extends Component {
       }
     });
 
-    return (<a {...props} className={wrapCls}>{props.children}</a>);
+    return (<span {...props} className={wrapCls}>{props.children}</span>);
   }
 }
 

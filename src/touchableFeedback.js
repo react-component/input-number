@@ -73,6 +73,7 @@ export default function touchableFeedBack(ComposedComponent, ComposedComponentNa
       } : {
         onMouseDown: this.onMouseDown,
         onMouseUp: this.onMouseUp,
+        onMouseLeave: this.onMouseUp,
       };
       return (<ComposedComponent
         {...this.props}
