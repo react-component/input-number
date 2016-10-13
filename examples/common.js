@@ -6530,8 +6530,8 @@
 	        onTouchCancel: this.onTouchCancel
 	      } : {
 	        onMouseDown: this.onMouseDown,
-	        onMouseUp: this.onMouseUp,
-	        onMouseLeave: this.onMouseUp
+	        onMouseUp: this.state.touchFeedback ? this.onMouseUp : undefined,
+	        onMouseLeave: this.state.touchFeedback ? this.onMouseUp : undefined
 	      };
 	      return _react2.default.createElement(ComposedComponent, (0, _extends3.default)({}, this.props, {
 	        touchFeedback: this.state.touchFeedback
