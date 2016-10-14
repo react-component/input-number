@@ -160,6 +160,7 @@ const InputNumber = React.createClass({
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             onKeyDown={this.onKeyDown}
+            onKeyUp={this.stop}
             autoFocus={props.autoFocus}
             readOnly={props.readOnly}
             disabled={props.disabled}
