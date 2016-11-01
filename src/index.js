@@ -12,6 +12,7 @@ function preventDefault(e) {
 
 const InputNumber = React.createClass({
   propTypes: {
+    focusOnUpDown: PropTypes.bool,
     onChange: PropTypes.func,
     onKeyDown: PropTypes.func,
     prefixCls: PropTypes.string,
@@ -31,6 +32,7 @@ const InputNumber = React.createClass({
 
   getDefaultProps() {
     return {
+      focusOnUpDown: true,
       prefixCls: 'rc-input-number',
     };
   },
@@ -40,8 +42,10 @@ const InputNumber = React.createClass({
   },
 
   componentDidUpdate() {
-    if (this.state.focused && document.activeElement !== this.refs.input) {
-      this.refs.input.focus();
+    if (this.props.focusOnUpDown &&
+      this.state.focused &&
+      document.activeElement !== this.refs.input) {
+      this.focus();
     }
   },
 
