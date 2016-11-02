@@ -106,14 +106,6 @@ const InputNumber = React.createClass({
       inputDisplayValue = '';
     }
 
-    // Remove React warning.
-    // Warning: Input elements must be either controlled
-    // or uncontrolled (specify either the value prop, or
-    // the defaultValue prop, but not both).
-    delete props.defaultValue;
-    // https://fb.me/react-unknown-prop
-    delete props.prefixCls;
-
     // ref for test
     return (
       <div className={classes} style={props.style}>
@@ -157,8 +149,6 @@ const InputNumber = React.createClass({
         </div>
         <div className={`${prefixCls}-input-wrap`}>
           <input
-            {...props}
-            style={null}
             className={`${prefixCls}-input`}
             autoComplete="off"
             onFocus={this.onFocus}
