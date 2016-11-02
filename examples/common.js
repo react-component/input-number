@@ -243,14 +243,6 @@
 	      inputDisplayValue = '';
 	    }
 	
-	    // Remove React warning.
-	    // Warning: Input elements must be either controlled
-	    // or uncontrolled (specify either the value prop, or
-	    // the defaultValue prop, but not both).
-	    delete props.defaultValue;
-	    // https://fb.me/react-unknown-prop
-	    delete props.prefixCls;
-	
 	    // ref for test
 	    return _react2.default.createElement(
 	      'div',
@@ -302,8 +294,7 @@
 	      _react2.default.createElement(
 	        'div',
 	        { className: prefixCls + '-input-wrap' },
-	        _react2.default.createElement('input', (0, _extends3.default)({}, props, {
-	          style: null,
+	        _react2.default.createElement('input', {
 	          className: prefixCls + '-input',
 	          autoComplete: 'off',
 	          onFocus: this.onFocus,
@@ -319,7 +310,7 @@
 	          onChange: this.onChange,
 	          ref: 'input',
 	          value: inputDisplayValue
-	        }))
+	        })
 	      )
 	    );
 	  }
