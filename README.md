@@ -86,6 +86,18 @@ react-native run-ios
           <td>Specifies the minimum value</td>
         </tr>
         <tr>
+          <td>onClick</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>placeholder</td>
+          <td>string</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
           <td>max</td>
           <td>Number</td>
           <td></td>

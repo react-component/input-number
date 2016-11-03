@@ -149,6 +149,8 @@ const InputNumber = React.createClass({
         </div>
         <div className={`${prefixCls}-input-wrap`}>
           <input
+            placeholder={props.placeholder}
+            onClick={props.onClick}
             className={`${prefixCls}-input`}
             autoComplete="off"
             onFocus={this.onFocus}
