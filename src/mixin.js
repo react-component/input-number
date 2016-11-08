@@ -177,7 +177,7 @@ export default {
     if (props.disabled) {
       return;
     }
-    const value = this.getCurrentValidValue(this.state.value);
+    const value = this.getCurrentValidValue(this.state.inputValue);
     this.setState({ value });
     if (isNaN(value)) {
       return;
