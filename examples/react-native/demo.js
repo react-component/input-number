@@ -1,11 +1,12 @@
 /* eslint no-console:0 */
 import React, { Component } from 'react';
 import {
+  Platform,
   StyleSheet,
   Text,
-  View,
   TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
 
 import InputNumber from '../../src/';
@@ -76,6 +77,7 @@ class InputNumberDemo extends Component {
             readOnly={this.state.readOnly}
             onChange={this.onChange}
             disabled={this.state.disabled}
+            keyboardType={Platform.OS === 'ios' ? 'number-pad' : 'numeric'}
           />
         </View>
         <View style={styles.buttons}>
