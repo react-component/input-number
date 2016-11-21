@@ -149,6 +149,7 @@ const InputNumber = React.createClass({
         </div>
         <div className={`${prefixCls}-input-wrap`}>
           <input
+            type={props.type}
             placeholder={props.placeholder}
             onClick={props.onClick}
             className={`${prefixCls}-input`}
