@@ -295,6 +295,7 @@
 	        'div',
 	        { className: prefixCls + '-input-wrap' },
 	        _react2.default.createElement('input', {
+	          type: props.type,
 	          placeholder: props.placeholder,
 	          onClick: props.onClick,
 	          className: prefixCls + '-input',
