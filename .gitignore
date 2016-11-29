@@ -27,3 +27,4 @@ lib
 coverage
 /ios/
 /android/
+yarn.lock
