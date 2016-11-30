@@ -113,48 +113,6 @@ describe('inputNumber', () => {
     });
   });
 
-  describe('touchFeedback', () => {
-    it('up button touchStart works', (done) => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
-      expect(inputNumber.refs.up.state.touchFeedback).to.be(true);
-      done();
-    });
-
-    it('down button touchStart works', (done) => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.down));
-      expect(inputNumber.refs.down.state.touchFeedback).to.be(true);
-      done();
-    });
-
-    it('up button touchEnd works', (done) => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
-      Simulate.touchEnd(ReactDOM.findDOMNode(inputNumber.refs.up));
-      expect(inputNumber.refs.up.state.touchFeedback).to.be(false);
-      done();
-    });
-
-    it('down button touchEnd works', (done) => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
-      Simulate.touchEnd(ReactDOM.findDOMNode(inputNumber.refs.down));
-      expect(inputNumber.refs.down.state.touchFeedback).to.be(false);
-      done();
-    });
-
-    it('up button touchCancel works', (done) => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
-      Simulate.touchCancel(ReactDOM.findDOMNode(inputNumber.refs.up));
-      expect(inputNumber.refs.up.state.touchFeedback).to.be(false);
-      done();
-    });
-
-    it('down button touchCancel works', (done) => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
-      Simulate.touchCancel(ReactDOM.findDOMNode(inputNumber.refs.down));
-      expect(inputNumber.refs.down.state.touchFeedback).to.be(false);
-      done();
-    });
-  });
-
   describe('long press', () => {
     it('up button works', (done) => {
       Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
