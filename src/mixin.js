@@ -57,7 +57,7 @@ export default {
   },
 
   onChange(e) {
-    this.setInputValue(this.getValueFromEvent(e).trim());
+    this.setState({ inputValue: this.getValueFromEvent(e).trim() });
   },
 
   onFocus(...args) {
@@ -107,16 +107,8 @@ export default {
       this.props.onChange(newValue);
     } else {
       // revert input value
-      this.setState({
-        inputValue: this.state.value,
-      });
+      this.setState({ inputValue: this.state.value });
     }
-  },
-
-  setInputValue(v) {
-    this.setState({
-      inputValue: v,
-    });
   },
 
   getPrecision() {
