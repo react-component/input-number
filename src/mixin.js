@@ -34,7 +34,7 @@ export default {
     } else {
       value = props.defaultValue;
     }
-    value = this.toPrecisionAsStep(value);
+    value = this.toNumber(value);
     return {
       inputValue: value,
       value,
@@ -44,7 +44,7 @@ export default {
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
-      const value = this.toPrecisionAsStep(nextProps.value);
+      const value = this.toNumber(nextProps.value);
       this.setState({
         inputValue: value,
         value,
@@ -92,7 +92,7 @@ export default {
     } else {
       val = this.state.value;
     }
-    return this.toPrecisionAsStep(val);
+    return this.toNumber(val);
   },
 
   setValue(v) {
@@ -112,8 +112,8 @@ export default {
   },
 
   getPrecision() {
-    const props = this.props;
-    const stepString = props.step.toString();
+    const { step } = this.props;
+    const stepString = step.toString();
     if (stepString.indexOf('e-') >= 0) {
       return parseInt(stepString.slice(stepString.indexOf('e-') + 1), 10);
     }
@@ -133,8 +133,18 @@ export default {
     if (isNaN(num) || num === '') {
       return num;
     }
-    const precision = this.getPrecision();
-    return Number(Number(num).toFixed(Math.abs(precision)));
+    const precision = Math.abs(this.getPrecision());
+    if (precision) {
+      return Number(num).toFixed(precision);
+    }
+    return num;
+  },
+
+  toNumber(num) {
+    if (isNaN(num) || num === '') {
+      return num;
+    }
+    return Number(num);
   },
 
   upStep(val) {
@@ -146,7 +156,7 @@ export default {
     } else {
       result = min === -Infinity ? step : min;
     }
-    return this.toPrecisionAsStep(result);
+    return this.toNumber(result);
   },
 
   downStep(val) {
@@ -158,7 +168,7 @@ export default {
     } else {
       result = min === -Infinity ? -step : min;
     }
-    return this.toPrecisionAsStep(result);
+    return this.toNumber(result);
   },
 
   step(type, e) {

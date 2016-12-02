@@ -283,29 +283,72 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(undefined);
       done();
     });
+  });
 
-    it('small step', () => {
+  describe('decimal', () => {
+    it('decimal value', () => {
       const Demo = React.createClass({
         render() {
-          return <InputNum ref="inputNum" value={1.0000001} step={0.0000001} />;
+          return <InputNum ref="inputNum" step={1} value={2.1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      expect(inputNumber.state.inputValue).to.be(1.0000001);
-      expect(inputNumber.state.value).to.be(1.0000001);
+      expect(inputNumber.state.inputValue).to.be(2.1);
+      expect(inputNumber.state.value).to.be(2.1);
+      expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('2.1');
     });
-  });
 
-  it('string step', () => {
-    const Demo = React.createClass({
-      render() {
-        return <InputNum ref="inputNum" step="1.000" value={2.123} />;
-      },
+    it('decimal step should not display complete precision', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" step={0.01} value={2.1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(inputNumber.state.inputValue).to.be(2.1);
+      expect(inputNumber.state.value).to.be(2.1);
+      expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('2.10');
     });
-    example = ReactDOM.render(<Demo />, container);
-    inputNumber = example.refs.inputNum;
-    expect(inputNumber.state.inputValue).to.be(2.123);
-    expect(inputNumber.state.value).to.be(2.123);
+
+    it('string step should display complete precision', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" step="1.000" value={2.1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(inputNumber.state.inputValue).to.be(2.1);
+      expect(inputNumber.state.value).to.be(2.1);
+      expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('2.100');
+    });
+
+    it('small value and step', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" value={0.000000001} step={0.000000001} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(inputNumber.state.inputValue).to.be(0.000000001);
+      expect(inputNumber.state.value).to.be(0.000000001);
+      expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('0.000000001');
+    });
+
+    it('small step with integer value', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" value={1} step="0.000000001" />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(inputNumber.state.inputValue).to.be(1);
+      expect(inputNumber.state.value).to.be(1);
+      expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('1.000000000');
+    });
   });
 });
