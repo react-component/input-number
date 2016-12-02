@@ -312,7 +312,7 @@
 	          name: props.name,
 	          onChange: this.onChange,
 	          ref: 'input',
-	          value: inputDisplayValue
+	          value: this.toPrecisionAsStep(inputDisplayValue)
 	        })
 	      )
 	    );
@@ -5181,7 +5181,7 @@
 	    } else {
 	      value = props.defaultValue;
 	    }
-	    value = this.toPrecisionAsStep(value);
+	    value = this.toNumber(value);
 	    return {
 	      inputValue: value,
 	      value: value,
@@ -5190,7 +5190,7 @@
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    if ('value' in nextProps) {
-	      var value = this.toPrecisionAsStep(nextProps.value);
+	      var value = this.toNumber(nextProps.value);
 	      this.setState({
 	        inputValue: value,
 	        value: value
@@ -5201,7 +5201,7 @@
 	    this.stop();
 	  },
 	  onChange: function onChange(e) {
-	    this.setInputValue(this.getValueFromEvent(e).trim());
+	    this.setState({ inputValue: this.getValueFromEvent(e).trim() });
 	  },
 	  onFocus: function onFocus() {
 	    var _props;
@@ -5242,7 +5242,7 @@
 	    } else {
 	      val = this.state.value;
 	    }
-	    return this.toPrecisionAsStep(val);
+	    return this.toNumber(val);
 	  },
 	  setValue: function setValue(v) {
 	    if (!('value' in this.props)) {
@@ -5256,19 +5256,13 @@
 	      this.props.onChange(newValue);
 	    } else {
 	      // revert input value
-	      this.setState({
-	        inputValue: this.state.value
-	      });
+	      this.setState({ inputValue: this.state.value });
 	    }
 	  },
-	  setInputValue: function setInputValue(v) {
-	    this.setState({
-	      inputValue: v
-	    });
-	  },
 	  getPrecision: function getPrecision() {
-	    var props = this.props;
-	    var stepString = props.step.toString();
+	    var step = this.props.step;
+	
+	    var stepString = step.toString();
 	    if (stepString.indexOf('e-') >= 0) {
 	      return parseInt(stepString.slice(stepString.indexOf('e-') + 1), 10);
 	    }
@@ -5286,8 +5280,17 @@
 	    if (isNaN(num) || num === '') {
 	      return num;
 	    }
-	    var precision = this.getPrecision();
-	    return Number(Number(num).toFixed(Math.abs(precision)));
+	    var precision = Math.abs(this.getPrecision());
+	    if (precision) {
+	      return Number(num).toFixed(precision);
+	    }
+	    return num;
+	  },
+	  toNumber: function toNumber(num) {
+	    if (isNaN(num) || num === '') {
+	      return num;
+	    }
+	    return Number(num);
 	  },
 	  upStep: function upStep(val) {
 	    var _props3 = this.props,
@@ -5301,7 +5304,7 @@
 	    } else {
 	      result = min === -Infinity ? step : min;
 	    }
-	    return this.toPrecisionAsStep(result);
+	    return this.toNumber(result);
 	  },
 	  downStep: function downStep(val) {
 	    var _props4 = this.props,
@@ -5315,7 +5318,7 @@
 	    } else {
 	      result = min === -Infinity ? -step : min;
 	    }
-	    return this.toPrecisionAsStep(result);
+	    return this.toNumber(result);
 	  },
 	  step: function step(type, e) {
 	    if (e) {
@@ -6451,6 +6454,10 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
+	var _raf = __webpack_require__(267);
+	
+	var _raf2 = _interopRequireDefault(_raf);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
 	function keyMirror(obj) {
@@ -6636,38 +6643,44 @@
 	    componentDidMount: function componentDidMount() {
 	        var _this = this;
 	
-	        if ('ontouchstart' in window) {
-	            this.eventsToBeBinded = {
-	                touchstart: this.touchableHandleResponderGrant,
-	                touchmove: this.touchableHandleResponderMove,
-	                touchend: this.touchableHandleResponderRelease,
-	                touchcancel: this.touchableHandleResponderTerminate
-	            };
-	        } else {
-	            (function () {
-	                var onMouseUp = function onMouseUp(e) {
-	                    document.removeEventListener('mousemove', _this.touchableHandleResponderMove, false);
-	                    document.removeEventListener('mouseup', onMouseUp, false);
-	                    _this.touchableHandleResponderRelease(e);
-	                };
-	                _this.eventsToBeBinded = {
-	                    mousedown: function mousedown(e) {
-	                        _this.touchableHandleResponderGrant(e);
-	                        document.addEventListener('mousemove', _this.touchableHandleResponderMove, false);
-	                        document.addEventListener('mouseup', onMouseUp, false);
-	                    }
-	                };
-	            })();
-	        }
+	        this.root = _reactDom2["default"].findDOMNode(this);
+	        this.eventsToBeBinded = {
+	            touchstart: function touchstart(e) {
+	                _this.lockMouse = true;
+	                if (_this.releaseLockTimer) {
+	                    clearTimeout(_this.releaseLockTimer);
+	                }
+	                _this.touchableHandleResponderGrant(e);
+	            },
+	            touchmove: this.touchableHandleResponderMove,
+	            touchend: function touchend(e) {
+	                _this.releaseLockTimer = setTimeout(function () {
+	                    _this.lockMouse = false;
+	                }, 300);
+	                _this.touchableHandleResponderRelease(e);
+	            },
+	            touchcancel: function touchcancel(e) {
+	                _this.releaseLockTimer = setTimeout(function () {
+	                    _this.lockMouse = false;
+	                }, 300);
+	                _this.touchableHandleResponderTerminate(e);
+	            },
+	            mousedown: this.onMouseDown
+	        };
 	        this.bindEvents();
 	    },
 	    componentDidUpdate: function componentDidUpdate() {
+	        this.root = _reactDom2["default"].findDOMNode(this);
 	        this.bindEvents();
 	    },
 	    componentWillUnmount: function componentWillUnmount() {
+	        this.clearRaf();
 	        if (this.eventsReleaseHandle) {
 	            this.eventsReleaseHandle();
 	            this.eventsReleaseHandle = null;
+	        }
+	        if (this.releaseLockTimer) {
+	            clearTimeout(this.releaseLockTimer);
 	        }
 	        if (this.touchableDelayTimeout) {
 	            clearTimeout(this.touchableDelayTimeout);
@@ -6679,8 +6692,21 @@
 	            clearTimeout(this.pressOutDelayTimeout);
 	        }
 	    },
+	    onMouseDown: function onMouseDown(e) {
+	        if (this.lockMouse) {
+	            return;
+	        }
+	        this.touchableHandleResponderGrant(e);
+	        document.addEventListener('mousemove', this.touchableHandleResponderMove, false);
+	        document.addEventListener('mouseup', this.onMouseUp, false);
+	    },
+	    onMouseUp: function onMouseUp(e) {
+	        document.removeEventListener('mousemove', this.touchableHandleResponderMove, false);
+	        document.removeEventListener('mouseup', this.onMouseUp, false);
+	        this.touchableHandleResponderRelease(e);
+	    },
 	    bindEvents: function bindEvents() {
-	        var root = _reactDom2["default"].findDOMNode(this);
+	        var root = this.root;
 	        var disabled = this.props.disabled;
 	
 	        if (disabled && this.eventsReleaseHandle) {
@@ -6693,9 +6719,6 @@
 	    touchableHandleResponderGrant: function touchableHandleResponderGrant(e) {
 	        var _this2 = this;
 	
-	        if (this.props.onLongPress && e.preventDefault) {
-	            e.preventDefault();
-	        }
 	        if (this.pressOutDelayTimeout) {
 	            clearTimeout(this.pressOutDelayTimeout);
 	            this.pressOutDelayTimeout = null;
@@ -6715,23 +6738,42 @@
 	            _this2._handleLongDelay(e);
 	        }, longDelayMS + delayMS);
 	    },
+	    clearRaf: function clearRaf() {
+	        if (this.rafHandle) {
+	            _raf2["default"].cancel(this.rafHandle);
+	            this.rafHandle = null;
+	        }
+	    },
 	    touchableHandleResponderRelease: function touchableHandleResponderRelease(e) {
+	        this.clearRaf();
 	        this._receiveSignal(Signals.RESPONDER_RELEASE, e);
 	    },
 	    touchableHandleResponderTerminate: function touchableHandleResponderTerminate(e) {
+	        this.clearRaf();
 	        this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
 	    },
+	    checkScroll: function checkScroll(e) {
+	        var positionOnActivate = this.touchable.positionOnActivate;
+	        if (positionOnActivate) {
+	            // container or window scroll
+	            var boundingRect = this.root.getBoundingClientRect();
+	            if (boundingRect.left !== positionOnActivate.clientLeft || boundingRect.top !== positionOnActivate.clientTop) {
+	                this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
+	            }
+	        }
+	    },
 	    touchableHandleResponderMove: function touchableHandleResponderMove(e) {
+	        // Measurement may not have returned yet.
+	        if (!this.touchable.positionOnActivate || this.touchable.touchState === States.NOT_RESPONDER) {
+	            return;
+	        }
+	        this.rafHandle = (0, _raf2["default"])(this.checkScroll);
+	        var positionOnActivate = this.touchable.positionOnActivate;
 	        // Not enough time elapsed yet, wait for highlight -
 	        // this is just a perf optimization.
 	        if (this.touchable.touchState === States.RESPONDER_INACTIVE_PRESS_IN) {
 	            return;
 	        }
-	        // Measurement may not have returned yet.
-	        if (!this.touchable.positionOnActivate) {
-	            return;
-	        }
-	        var positionOnActivate = this.touchable.positionOnActivate;
 	        var dimensionsOnActivate = this.touchable.dimensionsOnActivate;
 	        var _props = this.props,
 	            pressRetentionOffset = _props.pressRetentionOffset,
@@ -6798,11 +6840,14 @@
 	        }
 	    },
 	    _remeasureMetricsOnActivation: function _remeasureMetricsOnActivation() {
-	        var root = _reactDom2["default"].findDOMNode(this);
+	        var root = this.root;
+	
 	        var boundingRect = root.getBoundingClientRect();
 	        this.touchable.positionOnActivate = {
 	            left: boundingRect.left + window.pageXOffset,
-	            top: boundingRect.top + window.pageYOffset
+	            top: boundingRect.top + window.pageYOffset,
+	            clientLeft: boundingRect.left,
+	            clientTop: boundingRect.top
 	        };
 	        this.touchable.dimensionsOnActivate = {
 	            width: boundingRect.width,
@@ -6826,10 +6871,10 @@
 	        var curState = this.touchable.touchState;
 	        var nextState = Transitions[curState] && Transitions[curState][signal];
 	        if (!nextState) {
-	            throw new Error('Unrecognized signal `' + signal + '` or state `' + curState + '` for Touchable responder `' + '`');
+	            return;
 	        }
 	        if (nextState === States.ERROR) {
-	            throw new Error('Touchable cannot transition from `' + curState + '` to `' + signal + '` for responder `' + '`');
+	            return;
 	        }
 	        if (curState !== nextState) {
 	            this._performSideEffectsForTransition(curState, nextState, signal, e);
@@ -24127,6 +24172,124 @@
 	};
 	
 	module.exports = ReactDOMNullInputValuePropHook;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var now = __webpack_require__(268)
+	  , root = typeof window === 'undefined' ? global : window
+	  , vendors = ['moz', 'webkit']
+	  , suffix = 'AnimationFrame'
+	  , raf = root['request' + suffix]
+	  , caf = root['cancel' + suffix] || root['cancelRequest' + suffix]
+	
+	for(var i = 0; !raf && i < vendors.length; i++) {
+	  raf = root[vendors[i] + 'Request' + suffix]
+	  caf = root[vendors[i] + 'Cancel' + suffix]
+	      || root[vendors[i] + 'CancelRequest' + suffix]
+	}
+	
+	// Some versions of FF have rAF but not cAF
+	if(!raf || !caf) {
+	  var last = 0
+	    , id = 0
+	    , queue = []
+	    , frameDuration = 1000 / 60
+	
+	  raf = function(callback) {
+	    if(queue.length === 0) {
+	      var _now = now()
+	        , next = Math.max(0, frameDuration - (_now - last))
+	      last = next + _now
+	      setTimeout(function() {
+	        var cp = queue.slice(0)
+	        // Clear queue here to prevent
+	        // callbacks from appending listeners
+	        // to the current frame's queue
+	        queue.length = 0
+	        for(var i = 0; i < cp.length; i++) {
+	          if(!cp[i].cancelled) {
+	            try{
+	              cp[i].callback(last)
+	            } catch(e) {
+	              setTimeout(function() { throw e }, 0)
+	            }
+	          }
+	        }
+	      }, Math.round(next))
+	    }
+	    queue.push({
+	      handle: ++id,
+	      callback: callback,
+	      cancelled: false
+	    })
+	    return id
+	  }
+	
+	  caf = function(handle) {
+	    for(var i = 0; i < queue.length; i++) {
+	      if(queue[i].handle === handle) {
+	        queue[i].cancelled = true
+	      }
+	    }
+	  }
+	}
+	
+	module.exports = function(fn) {
+	  // Wrap in a new function to prevent
+	  // `cancel` potentially being assigned
+	  // to the native rAF function
+	  return raf.call(root, fn)
+	}
+	module.exports.cancel = function() {
+	  caf.apply(root, arguments)
+	}
+	module.exports.polyfill = function() {
+	  root.requestAnimationFrame = raf
+	  root.cancelAnimationFrame = caf
+	}
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {// Generated by CoffeeScript 1.7.1
+	(function() {
+	  var getNanoSeconds, hrtime, loadTime;
+	
+	  if ((typeof performance !== "undefined" && performance !== null) && performance.now) {
+	    module.exports = function() {
+	      return performance.now();
+	    };
+	  } else if ((typeof process !== "undefined" && process !== null) && process.hrtime) {
+	    module.exports = function() {
+	      return (getNanoSeconds() - loadTime) / 1e6;
+	    };
+	    hrtime = process.hrtime;
+	    getNanoSeconds = function() {
+	      var hr;
+	      hr = hrtime();
+	      return hr[0] * 1e9 + hr[1];
+	    };
+	    loadTime = getNanoSeconds();
+	  } else if (Date.now) {
+	    module.exports = function() {
+	      return Date.now() - loadTime;
+	    };
+	    loadTime = Date.now();
+	  } else {
+	    module.exports = function() {
+	      return new Date().getTime() - loadTime;
+	    };
+	    loadTime = new Date().getTime();
+	  }
+	
+	}).call(this);
+	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ }
