@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
 import Touchable from 'rc-touchable';
 
-class InputHandler extends Component {
+export default class InputHandler extends Component {
   render() {
-    const props = { ...this.props };
-    const { prefixCls, disabled } = props;
-    delete props.prefixCls;
+    const { prefixCls, disabled, ...otherProps } = this.props;
     return (
-      <Touchable
-        disabled={disabled}
-        activeClassName={`${prefixCls}-handler-active`}
-      >
-      <span {...props}>
-        {props.children}
-      </span>
-      </Touchable>);
+      <Touchable disabled={disabled} activeClassName={`${prefixCls}-handler-active`}>
+        <span {...otherProps} />
+      </Touchable>
+    );
   }
 }
-
-export default InputHandler;
