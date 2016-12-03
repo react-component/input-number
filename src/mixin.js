@@ -18,7 +18,6 @@ export default {
       min: -Infinity,
       step: 1,
       style: {},
-      defaultValue: null,
       onChange: noop,
       onKeyDown: noop,
       onFocus: noop,

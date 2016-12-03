@@ -285,6 +285,47 @@ describe('inputNumber', () => {
     });
   });
 
+  describe('default value', () => {
+    it('default value should be empty', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(inputNumber.state.inputValue).to.be(undefined);
+      expect(inputNumber.state.value).to.be(undefined);
+      expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('');
+    });
+
+    it('default value should be empty when step is decimal', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" step={0.1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(inputNumber.state.inputValue).to.be(undefined);
+      expect(inputNumber.state.value).to.be(undefined);
+      expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('');
+    });
+
+    it('default value should be 1', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" defaultValue={1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(inputNumber.state.inputValue).to.be(1);
+      expect(inputNumber.state.value).to.be(1);
+      expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('1');
+    });
+  });
+
   describe('decimal', () => {
     it('decimal value', () => {
       const Demo = React.createClass({
