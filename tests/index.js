@@ -294,8 +294,8 @@ describe('inputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      expect(inputNumber.state.inputValue).to.be(undefined);
-      expect(inputNumber.state.value).to.be(undefined);
+      expect(inputNumber.state.inputValue).to.be('');
+      expect(inputNumber.state.value).to.be('');
       expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('');
     });
 
@@ -307,8 +307,8 @@ describe('inputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      expect(inputNumber.state.inputValue).to.be(undefined);
-      expect(inputNumber.state.value).to.be(undefined);
+      expect(inputNumber.state.inputValue).to.be('');
+      expect(inputNumber.state.value).to.be('');
       expect(ReactDOM.findDOMNode(inputNumber.refs.input).value).to.be('');
     });
 
