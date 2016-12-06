@@ -5250,13 +5250,14 @@
 	        value: v,
 	        inputValue: v
 	      });
+	    } else {
+	      // always set input value same as value
+	      this.setState({ inputValue: this.state.value });
 	    }
+	    // trigger onChange
 	    var newValue = isNaN(v) || v === '' ? undefined : v;
 	    if (newValue !== this.state.value) {
 	      this.props.onChange(newValue);
-	    } else {
-	      // revert input value
-	      this.setState({ inputValue: this.state.value });
 	    }
 	  },
 	  getPrecision: function getPrecision() {
@@ -5433,6 +5434,11 @@
 	
 	  return InputHandler;
 	}(_react.Component);
+	
+	InputHandler.propTypes = {
+	  prefixCls: _react.propTypes.string,
+	  disabled: _react.propTypes.bool
+	};
 	
 	exports.default = InputHandler;
 	module.exports = exports['default'];
