@@ -5436,8 +5436,8 @@
 	}(_react.Component);
 	
 	InputHandler.propTypes = {
-	  prefixCls: _react.propTypes.string,
-	  disabled: _react.propTypes.bool
+	  prefixCls: _react.PropTypes.string,
+	  disabled: _react.PropTypes.bool
 	};
 	
 	exports.default = InputHandler;
