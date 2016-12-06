@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, propTypes } from 'react';
 import Touchable from 'rc-touchable';
 
-export default class InputHandler extends Component {
+class InputHandler extends Component {
   render() {
     const { prefixCls, disabled, ...otherProps } = this.props;
     return (
@@ -11,3 +11,10 @@ export default class InputHandler extends Component {
     );
   }
 }
+
+InputHandler.propTypes = {
+  prefixCls: propTypes.string,
+  disabled: propTypes.bool,
+};
+
+export default InputHandler;

@@ -201,6 +201,29 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(defaultValue - 3 * 0.1);
       done();
     });
+
+    it('controlled component will restore when blur input', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" value={1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      const inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputNumber.state.inputValue).to.be(1);
+      expect(inputNumber.state.value).to.be(1);
+      expect(inputElement.value).to.be('1');
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '6' } });
+      expect(inputNumber.state.inputValue).to.be('6');
+      expect(inputNumber.state.value).to.be(1);
+      expect(inputElement.value).to.be('6');
+      Simulate.blur(inputElement);
+      expect(inputNumber.state.inputValue).to.be(1);
+      expect(inputNumber.state.value).to.be(1);
+      expect(inputElement.value).to.be('1');
+    });
   });
 
   describe('input directly', () => {

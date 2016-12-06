@@ -101,13 +101,14 @@ export default {
         value: v,
         inputValue: v,
       });
+    } else {
+      // always set input value same as value
+      this.setState({ inputValue: this.state.value });
     }
+    // trigger onChange
     const newValue = isNaN(v) || v === '' ? undefined : v;
     if (newValue !== this.state.value) {
       this.props.onChange(newValue);
-    } else {
-      // revert input value
-      this.setState({ inputValue: this.state.value });
     }
   },
 
