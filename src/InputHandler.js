@@ -1,4 +1,4 @@
-import React, { Component, propTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Touchable from 'rc-touchable';
 
 class InputHandler extends Component {
@@ -13,8 +13,8 @@ class InputHandler extends Component {
 }
 
 InputHandler.propTypes = {
-  prefixCls: propTypes.string,
-  disabled: propTypes.bool,
+  prefixCls: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 export default InputHandler;
