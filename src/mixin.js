@@ -136,7 +136,7 @@ export default {
     }
     const precision = Math.abs(this.getPrecision());
     if (precision) {
-      return Number(num).toFixed(precision);
+      return this.state.inputValue == this.state.value?Number(num).toFixed(precision):this.state.inputValue;
     }
     return num;
   },
