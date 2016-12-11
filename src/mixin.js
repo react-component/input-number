@@ -36,7 +36,7 @@ export default {
     }
     value = this.toNumber(value);
     return {
-      inputValue: value,
+      inputValue: this.toPrecisionAsStep(value),
       value,
       focused: props.autoFocus,
     };
@@ -46,7 +46,7 @@ export default {
     if ('value' in nextProps) {
       const value = this.toNumber(nextProps.value);
       this.setState({
-        inputValue: value,
+        inputValue: this.toPrecisionAsStep(value),
         value,
       });
     }
@@ -99,11 +99,13 @@ export default {
     if (!('value' in this.props)) {
       this.setState({
         value: v,
-        inputValue: v,
+        inputValue: this.toPrecisionAsStep(v),
       });
     } else {
       // always set input value same as value
-      this.setState({ inputValue: this.state.value });
+      this.setState({
+        inputValue: this.toPrecisionAsStep(this.state.value),
+      });
     }
     // trigger onChange
     const newValue = isNaN(v) || v === '' ? undefined : v;
@@ -138,7 +140,7 @@ export default {
     if (precision) {
       return Number(num).toFixed(precision);
     }
-    return num;
+    return num.toString();
   },
 
   toNumber(num) {
