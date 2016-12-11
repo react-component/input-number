@@ -393,7 +393,8 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('1.000000000');
     });
 
-    it('input a number char', () => {
+    // https://github.com/react-component/input-number/issues/32
+    it('issue 32', () => {
       const Demo = React.createClass({
         render() {
           return <InputNum ref="inputNum" step={0.1} />;
