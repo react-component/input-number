@@ -236,7 +236,7 @@
 	    if (this.state.focused) {
 	      inputDisplayValue = this.state.inputValue;
 	    } else {
-	      inputDisplayValue = this.state.value;
+	      inputDisplayValue = this.toPrecisionAsStep(this.state.value);
 	    }
 	
 	    if (inputDisplayValue === undefined) {
@@ -312,7 +312,7 @@
 	          name: props.name,
 	          onChange: this.onChange,
 	          ref: 'input',
-	          value: this.toPrecisionAsStep(inputDisplayValue)
+	          value: inputDisplayValue
 	        })
 	      )
 	    );
@@ -5183,7 +5183,7 @@
 	    }
 	    value = this.toNumber(value);
 	    return {
-	      inputValue: value,
+	      inputValue: this.toPrecisionAsStep(value),
 	      value: value,
 	      focused: props.autoFocus
 	    };
@@ -5192,7 +5192,7 @@
 	    if ('value' in nextProps) {
 	      var value = this.toNumber(nextProps.value);
 	      this.setState({
-	        inputValue: value,
+	        inputValue: this.toPrecisionAsStep(value),
 	        value: value
 	      });
 	    }
@@ -5248,11 +5248,13 @@
 	    if (!('value' in this.props)) {
 	      this.setState({
 	        value: v,
-	        inputValue: v
+	        inputValue: this.toPrecisionAsStep(v)
 	      });
 	    } else {
 	      // always set input value same as value
-	      this.setState({ inputValue: this.state.value });
+	      this.setState({
+	        inputValue: this.toPrecisionAsStep(this.state.value)
+	      });
 	    }
 	    // trigger onChange
 	    var newValue = isNaN(v) || v === '' ? undefined : v;
@@ -5285,7 +5287,7 @@
 	    if (precision) {
 	      return Number(num).toFixed(precision);
 	    }
-	    return num;
+	    return num.toString();
 	  },
 	  toNumber: function toNumber(num) {
 	    if (isNaN(num) || num === '') {
