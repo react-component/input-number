@@ -153,9 +153,11 @@ export default {
   upStep(val) {
     const { step, min } = this.props;
     const precisionFactor = this.getPrecisionFactor();
+    const precision = Math.abs(this.getPrecision());
     let result;
     if (typeof val === 'number') {
-      result = (precisionFactor * val + precisionFactor * step) / precisionFactor;
+      result =
+        ((precisionFactor * val + precisionFactor * step) / precisionFactor).toFixed(precision);
     } else {
       result = min === -Infinity ? step : min;
     }
@@ -165,9 +167,11 @@ export default {
   downStep(val) {
     const { step, min } = this.props;
     const precisionFactor = this.getPrecisionFactor();
+    const precision = Math.abs(this.getPrecision());
     let result;
     if (typeof val === 'number') {
-      result = (precisionFactor * val - precisionFactor * step) / precisionFactor;
+      result =
+        ((precisionFactor * val - precisionFactor * step) / precisionFactor).toFixed(precision);
     } else {
       result = min === -Infinity ? -step : min;
     }

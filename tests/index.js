@@ -411,5 +411,47 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(2);
       expect(inputElement.value).to.be('2.0');
     });
+
+    // https://github.com/react-component/input-number/issues/35
+    it('issue 35', () => {
+      let num;
+      const Demo = React.createClass({
+        render() {
+          return (
+            <InputNum
+              ref="inputNum"
+              step={0.01}
+              defaultValue={2}
+              onChange={value => { num = value; } }
+            />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+
+      for (let i = 1; i <= 400; i++) {
+        Simulate.keyDown(inputElement, {
+          keyCode: keyCode.DOWN,
+        });
+        // no number like 1.5499999999999999
+        expect((num.toString().split('.')[1] || '').length).to.below(3);
+        const expectedValue = Number(((200 - i) / 100).toFixed(2));
+        expect(inputNumber.state.value).to.be(expectedValue);
+        expect(num).to.be(expectedValue);
+      }
+
+      for (let i = 1; i <= 300; i++) {
+        Simulate.keyDown(inputElement, {
+          keyCode: keyCode.UP,
+        });
+        // no number like 1.5499999999999999
+        expect((num.toString().split('.')[1] || '').length).to.below(3);
+        const expectedValue = Number(((i - 200) / 100).toFixed(2));
+        expect(num).to.be(expectedValue);
+        expect(inputNumber.state.value).to.be(expectedValue);
+      }
+    });
   });
 });
