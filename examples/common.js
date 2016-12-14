@@ -5301,9 +5301,10 @@
 	        min = _props3.min;
 	
 	    var precisionFactor = this.getPrecisionFactor();
+	    var precision = Math.abs(this.getPrecision());
 	    var result = void 0;
 	    if (typeof val === 'number') {
-	      result = (precisionFactor * val + precisionFactor * step) / precisionFactor;
+	      result = ((precisionFactor * val + precisionFactor * step) / precisionFactor).toFixed(precision);
 	    } else {
 	      result = min === -Infinity ? step : min;
 	    }
@@ -5315,9 +5316,10 @@
 	        min = _props4.min;
 	
 	    var precisionFactor = this.getPrecisionFactor();
+	    var precision = Math.abs(this.getPrecision());
 	    var result = void 0;
 	    if (typeof val === 'number') {
-	      result = (precisionFactor * val - precisionFactor * step) / precisionFactor;
+	      result = ((precisionFactor * val - precisionFactor * step) / precisionFactor).toFixed(precision);
 	    } else {
 	      result = min === -Infinity ? -step : min;
 	    }
