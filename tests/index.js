@@ -176,7 +176,7 @@ describe('inputNumber', () => {
       example.setState({ step: 5 });
       example.triggerBoolean('readOnly');
       for (let i = 0; i < 3; i++) {
-        Simulate.click(ReactDOM.findDOMNode(inputNumber.refs.down));
+        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
       }
       expect(inputNumber.state.value).to.be(defaultValue);
     });
@@ -252,7 +252,6 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('-98');
       expect(inputNumber.state.value).to.be(-98);
     });
-
 
     it('input decimal number with integer step', () => {
       Simulate.focus(inputElement);
@@ -392,7 +391,9 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(1);
       expect(inputElement.value).to.be('1.000000000');
     });
+  });
 
+  describe('GitHub issues', () => {
     // https://github.com/react-component/input-number/issues/32
     it('issue 32', () => {
       const Demo = React.createClass({
@@ -452,6 +453,33 @@ describe('inputNumber', () => {
         expect(num).to.be(expectedValue);
         expect(inputNumber.state.value).to.be(expectedValue);
       }
+    });
+
+    // https://github.com/ant-design/ant-design/issues/4229
+    it('long press not trigger onChange in uncontrolled component', (done) => {
+      let num;
+      const Demo = React.createClass({
+        render() {
+          return (
+            <InputNum
+              ref="inputNum"
+              defaultValue={0}
+              onChange={value => { num = value; } }
+            />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      setTimeout(() => {
+        expect(num).to.be(1);
+        setTimeout(() => {
+          expect(num).to.above(1);
+          done();
+        }, 200);
+      }, 500);
     });
   });
 });

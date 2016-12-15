@@ -96,6 +96,9 @@ export default {
   },
 
   setValue(v) {
+    // trigger onChange
+    const newValue = isNaN(v) || v === '' ? undefined : v;
+    const changed = newValue !== this.state.value;
     if (!('value' in this.props)) {
       this.setState({
         value: v,
@@ -107,9 +110,7 @@ export default {
         inputValue: this.toPrecisionAsStep(this.state.value),
       });
     }
-    // trigger onChange
-    const newValue = isNaN(v) || v === '' ? undefined : v;
-    if (newValue !== this.state.value) {
+    if (changed) {
       this.props.onChange(newValue);
     }
   },
@@ -187,7 +188,6 @@ export default {
       return;
     }
     const value = this.getCurrentValidValue(this.state.inputValue);
-    this.setState({ value });
     if (isNaN(value)) {
       return;
     }
