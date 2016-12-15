@@ -5212,19 +5212,21 @@
 	    (_props = this.props).onFocus.apply(_props, arguments);
 	  },
 	  onBlur: function onBlur(e) {
-	    var _props2;
-	
-	    this.setState({
-	      focused: false
-	    });
-	    var value = this.getCurrentValidValue(this.getValueFromEvent(e).trim());
-	    this.setValue(value);
+	    var _this = this;
 	
 	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 	      args[_key - 1] = arguments[_key];
 	    }
 	
-	    (_props2 = this.props).onBlur.apply(_props2, [e].concat(args));
+	    this.setState({
+	      focused: false
+	    });
+	    var value = this.getCurrentValidValue(this.getValueFromEvent(e).trim());
+	    this.setValue(value, function () {
+	      var _props2;
+	
+	      (_props2 = _this.props).onBlur.apply(_props2, [e].concat(args));
+	    });
 	  },
 	  getCurrentValidValue: function getCurrentValidValue(value) {
 	    var val = value;
@@ -5244,21 +5246,22 @@
 	    }
 	    return this.toNumber(val);
 	  },
-	  setValue: function setValue(v) {
+	  setValue: function setValue(v, callback) {
+	    // trigger onChange
+	    var newValue = isNaN(v) || v === '' ? undefined : v;
+	    var changed = newValue !== this.state.value;
 	    if (!('value' in this.props)) {
 	      this.setState({
 	        value: v,
 	        inputValue: this.toPrecisionAsStep(v)
-	      });
+	      }, callback);
 	    } else {
 	      // always set input value same as value
 	      this.setState({
 	        inputValue: this.toPrecisionAsStep(this.state.value)
-	      });
+	      }, callback);
 	    }
-	    // trigger onChange
-	    var newValue = isNaN(v) || v === '' ? undefined : v;
-	    if (newValue !== this.state.value) {
+	    if (changed) {
 	      this.props.onChange(newValue);
 	    }
 	  },
@@ -5334,7 +5337,6 @@
 	      return;
 	    }
 	    var value = this.getCurrentValidValue(this.state.inputValue);
-	    this.setState({ value: value });
 	    if (isNaN(value)) {
 	      return;
 	    }
@@ -5353,7 +5355,7 @@
 	    }
 	  },
 	  down: function down(e, recursive) {
-	    var _this = this;
+	    var _this2 = this;
 	
 	    if (e.persist) {
 	      e.persist();
@@ -5361,11 +5363,11 @@
 	    this.stop();
 	    this.step('down', e);
 	    this.autoStepTimer = setTimeout(function () {
-	      _this.down(e, true);
+	      _this2.down(e, true);
 	    }, recursive ? SPEED : DELAY);
 	  },
 	  up: function up(e, recursive) {
-	    var _this2 = this;
+	    var _this3 = this;
 	
 	    if (e.persist) {
 	      e.persist();
@@ -5373,7 +5375,7 @@
 	    this.stop();
 	    this.step('up', e);
 	    this.autoStepTimer = setTimeout(function () {
-	      _this2.up(e, true);
+	      _this3.up(e, true);
 	    }, recursive ? SPEED : DELAY);
 	  }
 	};
@@ -6477,10 +6479,6 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _raf = __webpack_require__(268);
-	
-	var _raf2 = _interopRequireDefault(_raf);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
 	function keyMirror(obj) {
@@ -6489,24 +6487,19 @@
 	    });
 	    return obj;
 	}
+	function copy(from, list) {
+	    var to = {};
+	    list.forEach(function (k) {
+	        to[k] = from[k];
+	    });
+	    return to;
+	}
 	function extractSingleTouch(nativeEvent) {
 	    var touches = nativeEvent.touches;
 	    var changedTouches = nativeEvent.changedTouches;
 	    var hasTouches = touches && touches.length > 0;
 	    var hasChangedTouches = changedTouches && changedTouches.length > 0;
 	    return !hasTouches && hasChangedTouches ? changedTouches[0] : hasTouches ? touches[0] : nativeEvent;
-	}
-	function _bindEvents(el, events) {
-	    Object.keys(events).forEach(function (event) {
-	        var listener = events[event];
-	        el.addEventListener(event, listener, false);
-	    });
-	    return function () {
-	        Object.keys(events).forEach(function (event) {
-	            var listener = events[event];
-	            el.removeEventListener(event, listener, false);
-	        });
-	    };
 	}
 	/**
 	 * Touchable states.
@@ -6637,6 +6630,12 @@
 	var LONG_PRESS_THRESHOLD = 500;
 	var LONG_PRESS_DELAY_MS = LONG_PRESS_THRESHOLD - HIGHLIGHT_DELAY_MS;
 	var LONG_PRESS_ALLOWED_MOVEMENT = 10;
+	var lastClickTime = 0;
+	var pressDelay = 200;
+	function isAllowPress() {
+	    // avoid click penetration
+	    return Date.now() - lastClickTime >= pressDelay;
+	}
 	var Touchable = _react2["default"].createClass({
 	    displayName: 'Touchable',
 	    getDefaultProps: function getDefaultProps() {
@@ -6664,44 +6663,12 @@
 	        this.touchable = { touchState: undefined };
 	    },
 	    componentDidMount: function componentDidMount() {
-	        var _this = this;
-	
 	        this.root = _reactDom2["default"].findDOMNode(this);
-	        this.eventsToBeBinded = {
-	            touchstart: function touchstart(e) {
-	                _this.lockMouse = true;
-	                if (_this.releaseLockTimer) {
-	                    clearTimeout(_this.releaseLockTimer);
-	                }
-	                _this.touchableHandleResponderGrant(e);
-	            },
-	            touchmove: this.touchableHandleResponderMove,
-	            touchend: function touchend(e) {
-	                _this.releaseLockTimer = setTimeout(function () {
-	                    _this.lockMouse = false;
-	                }, 300);
-	                _this.touchableHandleResponderRelease(e);
-	            },
-	            touchcancel: function touchcancel(e) {
-	                _this.releaseLockTimer = setTimeout(function () {
-	                    _this.lockMouse = false;
-	                }, 300);
-	                _this.touchableHandleResponderTerminate(e);
-	            },
-	            mousedown: this.onMouseDown
-	        };
-	        this.bindEvents();
 	    },
 	    componentDidUpdate: function componentDidUpdate() {
 	        this.root = _reactDom2["default"].findDOMNode(this);
-	        this.bindEvents();
 	    },
 	    componentWillUnmount: function componentWillUnmount() {
-	        this.clearRaf();
-	        if (this.eventsReleaseHandle) {
-	            this.eventsReleaseHandle();
-	            this.eventsReleaseHandle = null;
-	        }
 	        if (this.releaseLockTimer) {
 	            clearTimeout(this.releaseLockTimer);
 	        }
@@ -6715,11 +6682,48 @@
 	            clearTimeout(this.pressOutDelayTimeout);
 	        }
 	    },
+	    callChildEvent: function callChildEvent(event, e) {
+	        var childHandle = this.props.children.props[event];
+	        if (childHandle) {
+	            childHandle(e);
+	        }
+	    },
+	    onTouchStart: function onTouchStart(e) {
+	        this.callChildEvent('onTouchStart', e);
+	        this.lockMouse = true;
+	        if (this.releaseLockTimer) {
+	            clearTimeout(this.releaseLockTimer);
+	        }
+	        this.touchableHandleResponderGrant(e.nativeEvent);
+	    },
+	    onTouchMove: function onTouchMove(e) {
+	        this.callChildEvent('onTouchMove', e);
+	        this.touchableHandleResponderMove(e.nativeEvent);
+	    },
+	    onTouchEnd: function onTouchEnd(e) {
+	        var _this = this;
+	
+	        this.callChildEvent('onTouchEnd', e);
+	        this.releaseLockTimer = setTimeout(function () {
+	            _this.lockMouse = false;
+	        }, 300);
+	        this.touchableHandleResponderRelease(e.nativeEvent);
+	    },
+	    onTouchCancel: function onTouchCancel(e) {
+	        var _this2 = this;
+	
+	        this.callChildEvent('onTouchCancel', e);
+	        this.releaseLockTimer = setTimeout(function () {
+	            _this2.lockMouse = false;
+	        }, 300);
+	        this.touchableHandleResponderTerminate(e.nativeEvent);
+	    },
 	    onMouseDown: function onMouseDown(e) {
+	        this.callChildEvent('onMouseDown', e);
 	        if (this.lockMouse) {
 	            return;
 	        }
-	        this.touchableHandleResponderGrant(e);
+	        this.touchableHandleResponderGrant(e.nativeEvent);
 	        document.addEventListener('mousemove', this.touchableHandleResponderMove, false);
 	        document.addEventListener('mouseup', this.onMouseUp, false);
 	    },
@@ -6728,76 +6732,82 @@
 	        document.removeEventListener('mouseup', this.onMouseUp, false);
 	        this.touchableHandleResponderRelease(e);
 	    },
-	    bindEvents: function bindEvents() {
+	    _remeasureMetricsOnInit: function _remeasureMetricsOnInit(e) {
 	        var root = this.root;
-	        var disabled = this.props.disabled;
 	
-	        if (disabled && this.eventsReleaseHandle) {
-	            this.eventsReleaseHandle();
-	            this.eventsReleaseHandle = null;
-	        } else if (!disabled && !this.eventsReleaseHandle) {
-	            this.eventsReleaseHandle = _bindEvents(root, this.eventsToBeBinded);
-	        }
+	        var touch = extractSingleTouch(e);
+	        var boundingRect = root.getBoundingClientRect();
+	        this.touchable = {
+	            touchState: this.touchable.touchState,
+	            startMouse: {
+	                pageX: touch.pageX,
+	                pageY: touch.pageY
+	            },
+	            positionOnGrant: {
+	                left: boundingRect.left + window.pageXOffset,
+	                top: boundingRect.top + window.pageYOffset,
+	                width: boundingRect.width,
+	                height: boundingRect.height,
+	                clientLeft: boundingRect.left,
+	                clientTop: boundingRect.top
+	            }
+	        };
 	    },
 	    touchableHandleResponderGrant: function touchableHandleResponderGrant(e) {
-	        var _this2 = this;
+	        var _this3 = this;
 	
+	        this.touchable.touchState = States.NOT_RESPONDER;
 	        if (this.pressOutDelayTimeout) {
 	            clearTimeout(this.pressOutDelayTimeout);
 	            this.pressOutDelayTimeout = null;
 	        }
-	        this.touchable.touchState = States.NOT_RESPONDER;
+	        if (!isAllowPress()) {
+	            return;
+	        }
+	        this._remeasureMetricsOnInit(e);
 	        this._receiveSignal(Signals.RESPONDER_GRANT, e);
 	        var delayMS = this.props.delayPressIn;
 	        if (delayMS) {
 	            this.touchableDelayTimeout = setTimeout(function () {
-	                _this2._handleDelay(e);
+	                _this3._handleDelay(e);
 	            }, delayMS);
 	        } else {
 	            this._handleDelay(e);
 	        }
 	        var longDelayMS = this.props.delayLongPress;
 	        this.longPressDelayTimeout = setTimeout(function () {
-	            _this2._handleLongDelay(e);
+	            _this3._handleLongDelay(e);
 	        }, longDelayMS + delayMS);
 	    },
-	    clearRaf: function clearRaf() {
-	        if (this.rafHandle) {
-	            _raf2["default"].cancel(this.rafHandle);
-	            this.rafHandle = null;
+	    checkScroll: function checkScroll(e) {
+	        var positionOnGrant = this.touchable.positionOnGrant;
+	        // container or window scroll
+	        var boundingRect = this.root.getBoundingClientRect();
+	        if (boundingRect.left !== positionOnGrant.clientLeft || boundingRect.top !== positionOnGrant.clientTop) {
+	            this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
+	            return false;
 	        }
 	    },
 	    touchableHandleResponderRelease: function touchableHandleResponderRelease(e) {
-	        this.clearRaf();
+	        if (!isAllowPress()) {
+	            this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
+	            return;
+	        }
+	        var touch = extractSingleTouch(e);
+	        if (Math.abs(touch.pageX - this.touchable.startMouse.pageX) > 30 || Math.abs(touch.pageY - this.touchable.startMouse.pageY) > 30) {
+	            this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
+	            return;
+	        }
+	        if (this.checkScroll(e) === false) {
+	            return;
+	        }
 	        this._receiveSignal(Signals.RESPONDER_RELEASE, e);
 	    },
 	    touchableHandleResponderTerminate: function touchableHandleResponderTerminate(e) {
-	        this.clearRaf();
 	        this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
 	    },
-	    checkScroll: function checkScroll(e) {
-	        var positionOnActivate = this.touchable.positionOnActivate;
-	        if (positionOnActivate) {
-	            // container or window scroll
-	            var boundingRect = this.root.getBoundingClientRect();
-	            if (boundingRect.left !== positionOnActivate.clientLeft || boundingRect.top !== positionOnActivate.clientTop) {
-	                this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
-	            }
-	        }
-	    },
-	    touchableHandleResponderMove: function touchableHandleResponderMove(e) {
-	        // Measurement may not have returned yet.
-	        if (!this.touchable.positionOnActivate || this.touchable.touchState === States.NOT_RESPONDER) {
-	            return;
-	        }
-	        this.rafHandle = (0, _raf2["default"])(this.checkScroll);
-	        var positionOnActivate = this.touchable.positionOnActivate;
-	        // Not enough time elapsed yet, wait for highlight -
-	        // this is just a perf optimization.
-	        if (this.touchable.touchState === States.RESPONDER_INACTIVE_PRESS_IN) {
-	            return;
-	        }
-	        var dimensionsOnActivate = this.touchable.dimensionsOnActivate;
+	    checkTouchWithinActive: function checkTouchWithinActive(e) {
+	        var positionOnGrant = this.touchable.positionOnGrant;
 	        var _props = this.props,
 	            pressRetentionOffset = _props.pressRetentionOffset,
 	            hitSlop = _props.hitSlop;
@@ -6815,14 +6825,28 @@
 	        var touch = extractSingleTouch(e);
 	        var pageX = touch && touch.pageX;
 	        var pageY = touch && touch.pageY;
+	        return pageX > positionOnGrant.left - pressExpandLeft && pageY > positionOnGrant.top - pressExpandTop && pageX < positionOnGrant.left + positionOnGrant.width + pressExpandRight && pageY < positionOnGrant.top + positionOnGrant.height + pressExpandBottom;
+	    },
+	    touchableHandleResponderMove: function touchableHandleResponderMove(e) {
+	        // Measurement may not have returned yet.
+	        if (!this.touchable.dimensionsOnActivate || this.touchable.touchState === States.NOT_RESPONDER) {
+	            return;
+	        }
+	        // Not enough time elapsed yet, wait for highlight -
+	        // this is just a perf optimization.
+	        if (this.touchable.touchState === States.RESPONDER_INACTIVE_PRESS_IN) {
+	            return;
+	        }
+	        var touch = extractSingleTouch(e);
+	        var pageX = touch && touch.pageX;
+	        var pageY = touch && touch.pageY;
 	        if (this.pressInLocation) {
 	            var movedDistance = this._getDistanceBetweenPoints(pageX, pageY, this.pressInLocation.pageX, this.pressInLocation.pageY);
 	            if (movedDistance > LONG_PRESS_ALLOWED_MOVEMENT) {
 	                this._cancelLongPressDelayTimeout();
 	            }
 	        }
-	        var isTouchWithinActive = pageX > positionOnActivate.left - pressExpandLeft && pageY > positionOnActivate.top - pressExpandTop && pageX < positionOnActivate.left + dimensionsOnActivate.width + pressExpandRight && pageY < positionOnActivate.top + dimensionsOnActivate.height + pressExpandBottom;
-	        if (isTouchWithinActive) {
+	        if (this.checkTouchWithinActive(e)) {
 	            this._receiveSignal(Signals.ENTER_PRESS_RECT, e);
 	            var curState = this.touchable.touchState;
 	            if (curState === States.RESPONDER_INACTIVE_PRESS_IN) {
@@ -6849,6 +6873,7 @@
 	        if (this.props.onPress) {
 	            this.props.onPress(e);
 	        }
+	        lastClickTime = Date.now();
 	    },
 	    touchableHandleLongPress: function touchableHandleLongPress(e) {
 	        if (this.props.onLongPress) {
@@ -6863,19 +6888,7 @@
 	        }
 	    },
 	    _remeasureMetricsOnActivation: function _remeasureMetricsOnActivation() {
-	        var root = this.root;
-	
-	        var boundingRect = root.getBoundingClientRect();
-	        this.touchable.positionOnActivate = {
-	            left: boundingRect.left + window.pageXOffset,
-	            top: boundingRect.top + window.pageYOffset,
-	            clientLeft: boundingRect.left,
-	            clientTop: boundingRect.top
-	        };
-	        this.touchable.dimensionsOnActivate = {
-	            width: boundingRect.width,
-	            height: boundingRect.height
-	        };
+	        this.touchable.dimensionsOnActivate = this.touchable.positionOnGrant;
 	    },
 	    _handleDelay: function _handleDelay(e) {
 	        this.touchableDelayTimeout = null;
@@ -6966,24 +6979,29 @@
 	        this.touchableHandleActivePressIn(e);
 	    },
 	    _endHighlight: function _endHighlight(e) {
-	        var _this3 = this;
+	        var _this4 = this;
 	
 	        if (this.props.delayPressOut) {
 	            this.pressOutDelayTimeout = setTimeout(function () {
-	                _this3.touchableHandleActivePressOut(e);
+	                _this4.touchableHandleActivePressOut(e);
 	            }, this.props.delayPressOut);
 	        } else {
 	            this.touchableHandleActivePressOut(e);
 	        }
 	    },
 	    render: function render() {
-	        var child = _react2["default"].Children.only(this.props.children);
+	        var _props2 = this.props,
+	            children = _props2.children,
+	            disabled = _props2.disabled,
+	            activeStyle = _props2.activeStyle,
+	            activeClassName = _props2.activeClassName;
+	
+	        var events = disabled ? undefined : copy(this, ['onTouchStart', 'onTouchMove', 'onTouchEnd', 'onTouchCancel', 'onMouseDown']);
+	        var child = _react2["default"].Children.only(children);
 	        if (this.state.active) {
-	            var style = child.props.style;
-	            var className = child.props.className;
-	            var _props2 = this.props,
-	                activeStyle = _props2.activeStyle,
-	                activeClassName = _props2.activeClassName;
+	            var _child$props = child.props,
+	                style = _child$props.style,
+	                className = _child$props.className;
 	
 	            if (activeStyle) {
 	                style = (0, _objectAssign2["default"])({}, style, activeStyle);
@@ -6995,12 +7013,12 @@
 	                    className = activeClassName;
 	                }
 	            }
-	            return _react2["default"].cloneElement(child, {
+	            return _react2["default"].cloneElement(child, (0, _objectAssign2["default"])({
 	                className: className,
 	                style: style
-	            });
+	            }, events));
 	        }
-	        return child;
+	        return _react2["default"].cloneElement(child, events);
 	    }
 	});
 	exports["default"] = Touchable;
@@ -24195,124 +24213,6 @@
 	};
 	
 	module.exports = ReactDOMNullInputValuePropHook;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
-
-/***/ },
-/* 268 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {var now = __webpack_require__(269)
-	  , root = typeof window === 'undefined' ? global : window
-	  , vendors = ['moz', 'webkit']
-	  , suffix = 'AnimationFrame'
-	  , raf = root['request' + suffix]
-	  , caf = root['cancel' + suffix] || root['cancelRequest' + suffix]
-	
-	for(var i = 0; !raf && i < vendors.length; i++) {
-	  raf = root[vendors[i] + 'Request' + suffix]
-	  caf = root[vendors[i] + 'Cancel' + suffix]
-	      || root[vendors[i] + 'CancelRequest' + suffix]
-	}
-	
-	// Some versions of FF have rAF but not cAF
-	if(!raf || !caf) {
-	  var last = 0
-	    , id = 0
-	    , queue = []
-	    , frameDuration = 1000 / 60
-	
-	  raf = function(callback) {
-	    if(queue.length === 0) {
-	      var _now = now()
-	        , next = Math.max(0, frameDuration - (_now - last))
-	      last = next + _now
-	      setTimeout(function() {
-	        var cp = queue.slice(0)
-	        // Clear queue here to prevent
-	        // callbacks from appending listeners
-	        // to the current frame's queue
-	        queue.length = 0
-	        for(var i = 0; i < cp.length; i++) {
-	          if(!cp[i].cancelled) {
-	            try{
-	              cp[i].callback(last)
-	            } catch(e) {
-	              setTimeout(function() { throw e }, 0)
-	            }
-	          }
-	        }
-	      }, Math.round(next))
-	    }
-	    queue.push({
-	      handle: ++id,
-	      callback: callback,
-	      cancelled: false
-	    })
-	    return id
-	  }
-	
-	  caf = function(handle) {
-	    for(var i = 0; i < queue.length; i++) {
-	      if(queue[i].handle === handle) {
-	        queue[i].cancelled = true
-	      }
-	    }
-	  }
-	}
-	
-	module.exports = function(fn) {
-	  // Wrap in a new function to prevent
-	  // `cancel` potentially being assigned
-	  // to the native rAF function
-	  return raf.call(root, fn)
-	}
-	module.exports.cancel = function() {
-	  caf.apply(root, arguments)
-	}
-	module.exports.polyfill = function() {
-	  root.requestAnimationFrame = raf
-	  root.cancelAnimationFrame = caf
-	}
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 269 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {// Generated by CoffeeScript 1.7.1
-	(function() {
-	  var getNanoSeconds, hrtime, loadTime;
-	
-	  if ((typeof performance !== "undefined" && performance !== null) && performance.now) {
-	    module.exports = function() {
-	      return performance.now();
-	    };
-	  } else if ((typeof process !== "undefined" && process !== null) && process.hrtime) {
-	    module.exports = function() {
-	      return (getNanoSeconds() - loadTime) / 1e6;
-	    };
-	    hrtime = process.hrtime;
-	    getNanoSeconds = function() {
-	      var hr;
-	      hr = hrtime();
-	      return hr[0] * 1e9 + hr[1];
-	    };
-	    loadTime = getNanoSeconds();
-	  } else if (Date.now) {
-	    module.exports = function() {
-	      return Date.now() - loadTime;
-	    };
-	    loadTime = Date.now();
-	  } else {
-	    module.exports = function() {
-	      return new Date().getTime() - loadTime;
-	    };
-	    loadTime = new Date().getTime();
-	  }
-	
-	}).call(this);
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
 /***/ }
