@@ -72,8 +72,9 @@ export default {
       focused: false,
     });
     const value = this.getCurrentValidValue(this.getValueFromEvent(e).trim());
-    this.setValue(value);
-    this.props.onBlur(e, ...args);
+    this.setValue(value, () => {
+      this.props.onBlur(e, ...args);
+    });
   },
 
   getCurrentValidValue(value) {
@@ -95,7 +96,7 @@ export default {
     return this.toNumber(val);
   },
 
-  setValue(v) {
+  setValue(v, callback) {
     // trigger onChange
     const newValue = isNaN(v) || v === '' ? undefined : v;
     const changed = newValue !== this.state.value;
@@ -103,12 +104,12 @@ export default {
       this.setState({
         value: v,
         inputValue: this.toPrecisionAsStep(v),
-      });
+      }, callback);
     } else {
       // always set input value same as value
       this.setState({
         inputValue: this.toPrecisionAsStep(this.state.value),
-      });
+      }, callback);
     }
     if (changed) {
       this.props.onChange(newValue);
