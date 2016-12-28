@@ -5265,28 +5265,42 @@
 	      this.props.onChange(newValue);
 	    }
 	  },
-	  getPrecision: function getPrecision() {
-	    var step = this.props.step;
-	
-	    var stepString = step.toString();
-	    if (stepString.indexOf('e-') >= 0) {
-	      return parseInt(stepString.slice(stepString.indexOf('e-') + 1), 10);
+	  getPrecision: function getPrecision(value) {
+	    var valueString = value.toString();
+	    if (valueString.indexOf('e-') >= 0) {
+	      return parseInt(valueString.slice(valueString.indexOf('e-') + 1), 10);
 	    }
 	    var precision = 0;
-	    if (stepString.indexOf('.') >= 0) {
-	      precision = stepString.length - stepString.indexOf('.') - 1;
+	    if (valueString.indexOf('.') >= 0) {
+	      precision = valueString.length - valueString.indexOf('.') - 1;
 	    }
 	    return precision;
 	  },
-	  getPrecisionFactor: function getPrecisionFactor() {
-	    var precision = this.getPrecision();
+	
+	
+	  // step={1.0} value={1.51}
+	  // press +
+	  // then value should be 2.51, rather than 2.5
+	  // https://github.com/react-component/input-number/issues/39
+	  getMaxPrecision: function getMaxPrecision(currentValue) {
+	    var step = this.props.step;
+	
+	    var stepPrecision = this.getPrecision(step);
+	    if (!currentValue) {
+	      return stepPrecision;
+	    }
+	    var currentValuePrecision = this.getPrecision(currentValue);
+	    return currentValuePrecision > stepPrecision ? currentValuePrecision : stepPrecision;
+	  },
+	  getPrecisionFactor: function getPrecisionFactor(currentValue) {
+	    var precision = this.getMaxPrecision(currentValue);
 	    return Math.pow(10, precision);
 	  },
 	  toPrecisionAsStep: function toPrecisionAsStep(num) {
 	    if (isNaN(num) || num === '') {
 	      return num;
 	    }
-	    var precision = Math.abs(this.getPrecision());
+	    var precision = Math.abs(this.getMaxPrecision(num));
 	    if (precision) {
 	      return Number(num).toFixed(precision);
 	    }
@@ -5303,8 +5317,8 @@
 	        step = _props3.step,
 	        min = _props3.min;
 	
-	    var precisionFactor = this.getPrecisionFactor();
-	    var precision = Math.abs(this.getPrecision());
+	    var precisionFactor = this.getPrecisionFactor(val);
+	    var precision = Math.abs(this.getMaxPrecision(val));
 	    var result = void 0;
 	    if (typeof val === 'number') {
 	      result = ((precisionFactor * val + precisionFactor * step) / precisionFactor).toFixed(precision);
@@ -5318,8 +5332,8 @@
 	        step = _props4.step,
 	        min = _props4.min;
 	
-	    var precisionFactor = this.getPrecisionFactor();
-	    var precision = Math.abs(this.getPrecision());
+	    var precisionFactor = this.getPrecisionFactor(val);
+	    var precision = Math.abs(this.getMaxPrecision(val));
 	    var result = void 0;
 	    if (typeof val === 'number') {
 	      result = ((precisionFactor * val - precisionFactor * step) / precisionFactor).toFixed(precision);
