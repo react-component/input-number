@@ -340,6 +340,36 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('2.1');
     });
 
+    it('decimal defaultValue', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" step={1} defaultValue={2.1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputNumber.state.value).to.be(2.1);
+      expect(inputElement.value).to.be('2.1');
+    });
+
+    it('increase and decrease decimal InputNumber by integer step', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" step={1} defaultValue={2.1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      expect(inputNumber.state.value).to.be(3.1);
+      expect(inputElement.value).to.be('3.1');
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      expect(inputNumber.state.value).to.be(2.1);
+      expect(inputElement.value).to.be('2.1');
+    });
+
     it('decimal step should not display complete precision', () => {
       const Demo = React.createClass({
         render() {
