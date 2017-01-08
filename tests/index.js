@@ -14,6 +14,7 @@ const defaultValue = 98;
 describe('inputNumber', () => {
   const container = document.createElement('div');
   document.body.appendChild(container);
+  let onChangeFirstArgument;
 
   const Component = React.createClass({
     getInitialState() {
@@ -29,6 +30,7 @@ describe('inputNumber', () => {
       };
     },
     onChange(value) {
+      onChangeFirstArgument = value;
       this.setState({ value });
     },
     triggerBoolean(propName) {
@@ -215,20 +217,20 @@ describe('inputNumber', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '6' } });
       expect(inputElement.value).to.be('6');
-      expect(inputNumber.state.value).to.be(98);
+      expect(onChangeFirstArgument).to.be(6);
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('6');
-      expect(inputNumber.state.value).to.be(6);
+      expect(onChangeFirstArgument).to.be(6);
     });
 
     it('input invalid number', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: 'xx' } });
       expect(inputElement.value).to.be('xx');
-      expect(inputNumber.state.value).to.be(98);
+      expect(onChangeFirstArgument).to.be('xx');
       Simulate.blur(inputElement);
-      expect(inputElement.value).to.be('98');
-      expect(inputNumber.state.value).to.be(98);
+      expect(inputElement.value).to.be('');
+      expect(onChangeFirstArgument).to.be(undefined);
     });
 
     it('input negative symbol', () => {
@@ -236,10 +238,10 @@ describe('inputNumber', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '-' } });
       expect(inputElement.value).to.be('-');
-      expect(inputNumber.state.value).to.be(98);
+      expect(onChangeFirstArgument).to.be('-');
       Simulate.blur(inputElement);
-      expect(inputElement.value).to.be('98');
-      expect(inputNumber.state.value).to.be(98);
+      expect(inputElement.value).to.be('');
+      expect(onChangeFirstArgument).to.be(undefined);
     });
 
     it('input negative number', () => {
@@ -247,41 +249,41 @@ describe('inputNumber', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '-98' } });
       expect(inputElement.value).to.be('-98');
-      expect(inputNumber.state.value).to.be(98);
+      expect(onChangeFirstArgument).to.be(-98);
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('-98');
-      expect(inputNumber.state.value).to.be(-98);
+      expect(onChangeFirstArgument).to.be(-98);
     });
 
     it('input decimal number with integer step', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '1.2' } });
-      expect(inputNumber.state.value).to.be(98);
       expect(inputElement.value).to.be('1.2');
+      expect(onChangeFirstArgument).to.be(1.2);
       Simulate.blur(inputElement);
-      expect(inputNumber.state.value).to.be(1.2);
       expect(inputElement.value).to.be('1.2');
+      expect(onChangeFirstArgument).to.be(1.2);
     });
 
     it('input decimal number with decimal step', () => {
       example.setState({ step: 0.1 });
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '1.2' } });
-      expect(inputNumber.state.value).to.be(98);
       expect(inputElement.value).to.be('1.2');
+      expect(onChangeFirstArgument).to.be(1.2);
       Simulate.blur(inputElement);
-      expect(inputNumber.state.value).to.be(1.2);
       expect(inputElement.value).to.be('1.2');
+      expect(onChangeFirstArgument).to.be(1.2);
     });
 
     it('input empty text and blur', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '' } });
       expect(inputElement.value).to.be('');
-      expect(inputNumber.state.value).to.be(98);
+      expect(onChangeFirstArgument).to.be('');
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('');
-      expect(inputNumber.state.value).to.be(undefined);
+      expect(onChangeFirstArgument).to.be(undefined);
     });
   });
 
