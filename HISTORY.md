@@ -4,6 +4,7 @@
 ## 3.0.0
 
 - Trigger onChange when user input
+- support `keyboardType` prop for fixing crash on Android on textInput blur
 
 ## 2.8.0 / 2016-11-29
 
