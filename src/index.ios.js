@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { View, TextInput, Text, TouchableWithoutFeedback } from 'react-native';
+import { Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import mixin from './mixin';
 
 const InputNumber = React.createClass({
@@ -20,6 +20,7 @@ const InputNumber = React.createClass({
     value: PropTypes.number,
     defaultValue: PropTypes.number,
     readOnly: PropTypes.bool,
+    keyboardType: PropTypes.string,
   },
 
   mixins: [mixin],
@@ -141,9 +142,10 @@ const InputNumber = React.createClass({
           autoFocus={props.autoFocus}
           editable={editable}
           onFocus={this.onFocus}
-          onBlur={this.onBlur}
+          onEndEditing={this.onBlur}
           onChange={this.onChange}
           underlineColorAndroid="transparent"
+          keyboardType={props.keyboardType}
         />
         <TouchableWithoutFeedback
           onPressIn={(editable && !upDisabledStyle) ? this.onPressInUp : undefined}
