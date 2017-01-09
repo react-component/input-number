@@ -5201,7 +5201,9 @@
 	    this.stop();
 	  },
 	  onChange: function onChange(e) {
-	    this.setState({ inputValue: this.getValueFromEvent(e).trim() });
+	    var input = this.getValueFromEvent(e).trim();
+	    this.setState({ inputValue: input });
+	    this.props.onChange(this.toNumber(input)); // valid number or invali string
 	  },
 	  onFocus: function onFocus() {
 	    var _props;
