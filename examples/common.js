@@ -5203,7 +5203,7 @@
 	  onChange: function onChange(e) {
 	    var input = this.getValueFromEvent(e).trim();
 	    this.setState({ inputValue: input });
-	    this.props.onChange(this.toNumber(input)); // valid number or invali string
+	    this.props.onChange(this.toNumber(input)); // valid number or invalid string
 	  },
 	  onFocus: function onFocus() {
 	    var _props;
@@ -5250,7 +5250,7 @@
 	  },
 	  setValue: function setValue(v, callback) {
 	    // trigger onChange
-	    var newValue = isNaN(v) || v === '' ? undefined : v;
+	    var newValue = isNaN(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
 	    var changed = newValue !== this.state.value;
 	    if (!('value' in this.props)) {
 	      this.setState({
