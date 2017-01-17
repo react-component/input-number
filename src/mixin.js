@@ -59,7 +59,7 @@ export default {
   onChange(e) {
     const input = this.getValueFromEvent(e).trim();
     this.setState({ inputValue: input });
-    this.props.onChange(this.toNumber(input)); // valid number or invali string
+    this.props.onChange(this.toNumber(input)); // valid number or invalid string
   },
 
   onFocus(...args) {
