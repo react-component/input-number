@@ -233,6 +233,16 @@ describe('inputNumber', () => {
       expect(onChangeFirstArgument).to.be(undefined);
     });
 
+    it('input invalid string with number', () => {
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '2x' } });
+      expect(inputElement.value).to.be('2x');
+      expect(onChangeFirstArgument).to.be('2x');
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('2');
+      expect(onChangeFirstArgument).to.be(2);
+    });
+
     it('input negative symbol', () => {
       example.setState({ min: -100 });
       Simulate.focus(inputElement);

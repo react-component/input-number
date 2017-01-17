@@ -100,7 +100,7 @@ export default {
 
   setValue(v, callback) {
     // trigger onChange
-    const newValue = isNaN(v) || v === '' ? undefined : v;
+    const newValue = isNaN(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
     const changed = newValue !== this.state.value;
     if (!('value' in this.props)) {
       this.setState({
