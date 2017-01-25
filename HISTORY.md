@@ -1,6 +1,14 @@
 # History
 ----
 
+## 3.0.2
+
+- Fix `onKeyUp`.
+
+## 3.0.1
+
+- Fix invalid input like '11x'.
+
 ## 3.0.0
 
 - Trigger onChange when user input

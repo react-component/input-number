@@ -15,6 +15,7 @@ const InputNumber = React.createClass({
     focusOnUpDown: PropTypes.bool,
     onChange: PropTypes.func,
     onKeyDown: PropTypes.func,
+    onKeyUp: PropTypes.func,
     prefixCls: PropTypes.string,
     disabled: PropTypes.bool,
     onFocus: PropTypes.func,
@@ -55,7 +56,18 @@ const InputNumber = React.createClass({
     } else if (e.keyCode === 40) {
       this.down(e);
     }
-    this.props.onKeyDown(e, ...args);
+    const { onKeyDown } = this.props;
+    if (onKeyDown) {
+      onKeyDown(e, ...args);
+    }
+  },
+
+  onKeyUp(e, ...args) {
+    this.stop();
+    const { onKeyUp } = this.props;
+    if (onKeyUp) {
+      onKeyUp(e, ...args);
+    }
   },
 
   getValueFromEvent(e) {
@@ -157,7 +169,7 @@ const InputNumber = React.createClass({
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             onKeyDown={this.onKeyDown}
-            onKeyUp={this.stop}
+            onKeyUp={this.onKeyUp}
             autoFocus={props.autoFocus}
             readOnly={props.readOnly}
             disabled={props.disabled}
