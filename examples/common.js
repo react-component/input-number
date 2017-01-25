@@ -156,6 +156,7 @@
 	    focusOnUpDown: _react.PropTypes.bool,
 	    onChange: _react.PropTypes.func,
 	    onKeyDown: _react.PropTypes.func,
+	    onKeyUp: _react.PropTypes.func,
 	    prefixCls: _react.PropTypes.string,
 	    disabled: _react.PropTypes.bool,
 	    onFocus: _react.PropTypes.func,
@@ -183,19 +184,32 @@
 	    }
 	  },
 	  onKeyDown: function onKeyDown(e) {
-	    var _props;
-	
 	    if (e.keyCode === 38) {
 	      this.up(e);
 	    } else if (e.keyCode === 40) {
 	      this.down(e);
 	    }
+	    var onKeyDown = this.props.onKeyDown;
 	
-	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	      args[_key - 1] = arguments[_key];
+	    if (onKeyDown) {
+	      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	      }
+	
+	      onKeyDown.apply(undefined, [e].concat(args));
 	    }
+	  },
+	  onKeyUp: function onKeyUp(e) {
+	    this.stop();
+	    var onKeyUp = this.props.onKeyUp;
 	
-	    (_props = this.props).onKeyDown.apply(_props, [e].concat(args));
+	    if (onKeyUp) {
+	      for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	        args[_key2 - 1] = arguments[_key2];
+	      }
+	
+	      onKeyUp.apply(undefined, [e].concat(args));
+	    }
 	  },
 	  getValueFromEvent: function getValueFromEvent(e) {
 	    return e.target.value;
@@ -303,7 +317,7 @@
 	          onFocus: this.onFocus,
 	          onBlur: this.onBlur,
 	          onKeyDown: this.onKeyDown,
-	          onKeyUp: this.stop,
+	          onKeyUp: this.onKeyUp,
 	          autoFocus: props.autoFocus,
 	          readOnly: props.readOnly,
 	          disabled: props.disabled,
