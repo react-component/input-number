@@ -5206,7 +5206,7 @@
 	    if ('value' in nextProps) {
 	      var value = this.toNumber(nextProps.value);
 	      this.setState({
-	        inputValue: this.toPrecisionAsStep(value),
+	        inputValue: nextProps.value,
 	        value: value
 	      });
 	    }
@@ -5249,7 +5249,7 @@
 	    var props = this.props;
 	    if (val === '') {
 	      val = '';
-	    } else if (!isNaN(val)) {
+	    } else if (!this.isNotCompleteNumber(val)) {
 	      val = Number(val);
 	      if (val < props.min) {
 	        val = props.min;
@@ -5264,7 +5264,7 @@
 	  },
 	  setValue: function setValue(v, callback) {
 	    // trigger onChange
-	    var newValue = isNaN(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
+	    var newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
 	    var changed = newValue !== this.state.value;
 	    if (!('value' in this.props)) {
 	      this.setState({
@@ -5313,7 +5313,7 @@
 	    return Math.pow(10, precision);
 	  },
 	  toPrecisionAsStep: function toPrecisionAsStep(num) {
-	    if (isNaN(num) || num === '') {
+	    if (this.isNotCompleteNumber(num) || num === '') {
 	      return num;
 	    }
 	    var precision = Math.abs(this.getMaxPrecision(num));
@@ -5322,8 +5322,14 @@
 	    }
 	    return num.toString();
 	  },
+	
+	
+	  // '1.' '1x' 'xx' ''  => are not complete numbers
+	  isNotCompleteNumber: function isNotCompleteNumber(num) {
+	    return isNaN(num) || num === '' || num.toString().indexOf('.') === num.toString().length - 1;
+	  },
 	  toNumber: function toNumber(num) {
-	    if (isNaN(num) || num === '') {
+	    if (this.isNotCompleteNumber(num)) {
 	      return num;
 	    }
 	    return Number(num);
@@ -5367,7 +5373,7 @@
 	      return;
 	    }
 	    var value = this.getCurrentValidValue(this.state.inputValue);
-	    if (isNaN(value)) {
+	    if (this.isNotCompleteNumber(value)) {
 	      return;
 	    }
 	    var val = this[type + 'Step'](value);
