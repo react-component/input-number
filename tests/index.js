@@ -523,5 +523,16 @@ describe('inputNumber', () => {
         }, 200);
       }, 500);
     });
+
+    // https://github.com/ant-design/ant-design/issues/4757
+    it('should allow to input text like "1."', () => {
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '1.' } });
+      expect(inputElement.value).to.be('1.');
+      expect(onChangeFirstArgument).to.be('1.');
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('1');
+      expect(onChangeFirstArgument).to.be(1);
+    });
   });
 });

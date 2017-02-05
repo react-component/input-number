@@ -1,13 +1,17 @@
 # History
 ----
 
+## 3.0.3
+
+- Fixed https://github.com/ant-design/ant-design/issues/4757
+
 ## 3.0.2
 
-- Fix `onKeyUp`.
+- Fixed `onKeyUp`.
 
 ## 3.0.1
 
-- Fix invalid input like '11x'.
+- Fixed invalid input like '11x'.
 
 ## 3.0.0
 

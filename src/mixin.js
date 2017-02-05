@@ -46,7 +46,7 @@ export default {
     if ('value' in nextProps) {
       const value = this.toNumber(nextProps.value);
       this.setState({
-        inputValue: this.toPrecisionAsStep(value),
+        inputValue: nextProps.value,
         value,
       });
     }
@@ -84,7 +84,7 @@ export default {
     const props = this.props;
     if (val === '') {
       val = '';
-    } else if (!isNaN(val)) {
+    } else if (!this.isNotCompleteNumber(val)) {
       val = Number(val);
       if (val < props.min) {
         val = props.min;
@@ -100,7 +100,7 @@ export default {
 
   setValue(v, callback) {
     // trigger onChange
-    const newValue = isNaN(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
+    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
     const changed = newValue !== this.state.value;
     if (!('value' in this.props)) {
       this.setState({
@@ -150,7 +150,7 @@ export default {
   },
 
   toPrecisionAsStep(num) {
-    if (isNaN(num) || num === '') {
+    if (this.isNotCompleteNumber(num) || num === '') {
       return num;
     }
     const precision = Math.abs(this.getMaxPrecision(num));
@@ -160,8 +160,17 @@ export default {
     return num.toString();
   },
 
+  // '1.' '1x' 'xx' ''  => are not complete numbers
+  isNotCompleteNumber(num) {
+    return (
+      isNaN(num) ||
+      num === '' ||
+      num.toString().indexOf('.') === num.toString().length - 1
+    );
+  },
+
   toNumber(num) {
-    if (isNaN(num) || num === '') {
+    if (this.isNotCompleteNumber(num)) {
       return num;
     }
     return Number(num);
@@ -204,7 +213,7 @@ export default {
       return;
     }
     const value = this.getCurrentValidValue(this.state.inputValue);
-    if (isNaN(value)) {
+    if (this.isNotCompleteNumber(value)) {
       return;
     }
     const val = this[`${type}Step`](value);
