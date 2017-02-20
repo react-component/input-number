@@ -5166,7 +5166,7 @@
 	/**
 	 * When click and hold on a button - the speed of auto changin the value.
 	 */
-	var SPEED = 50;
+	var SPEED = 200;
 	
 	/**
 	 * When click and hold on a button - the delay before auto changin the value.
