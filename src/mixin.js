@@ -4,7 +4,7 @@ function noop() {
 /**
  * When click and hold on a button - the speed of auto changin the value.
  */
-const SPEED = 50;
+const SPEED = 200;
 
 /**
  * When click and hold on a button - the delay before auto changin the value.
