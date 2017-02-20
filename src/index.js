@@ -27,6 +27,8 @@ const InputNumber = React.createClass({
       PropTypes.number,
       PropTypes.string,
     ]),
+    upHandler: PropTypes.node,
+    downHandler: PropTypes.node,
   },
 
   mixins: [mixin],
@@ -134,11 +136,11 @@ const InputNumber = React.createClass({
             onMouseLeave={this.stop}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
           >
-            <span
+            {this.props.upHandler || <span
               unselectable="unselectable"
               className={`${prefixCls}-handler-up-inner`}
               onClick={preventDefault}
-            />
+            />}
           </InputHandler>
           <InputHandler
             ref="down"
@@ -152,11 +154,11 @@ const InputNumber = React.createClass({
             onMouseLeave={this.stop}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
           >
-            <span
+            {this.props.downHandler || <span
               unselectable="unselectable"
               className={`${prefixCls}-handler-down-inner`}
               onClick={preventDefault}
-            />
+            />}
           </InputHandler>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
