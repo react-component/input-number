@@ -187,6 +187,18 @@ react-native run-ios
           <td></td>
           <td>input style. `react native only`</td>
         </tr>
+        <tr>
+          <td>upHandler</td>
+          <td>React.Node</td>
+          <td></td>
+          <td>custom the up step element</td>
+        </tr>
+        <tr>
+          <td>downHandler</td>
+          <td>React.Node</td>
+          <td></td>
+          <td>custom the down step element</td>
+        </tr>
     </tbody>
 </table>
 
