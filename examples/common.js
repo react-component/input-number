@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		3:0
+/******/ 		4:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"decimal","1":"simple","2":"small-step"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"custom","1":"decimal","2":"simple","3":"small-step"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -164,7 +164,9 @@
 	    readOnly: _react.PropTypes.bool,
 	    max: _react.PropTypes.number,
 	    min: _react.PropTypes.number,
-	    step: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string])
+	    step: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	    upHandler: _react.PropTypes.node,
+	    downHandler: _react.PropTypes.node
 	  },
 	
 	  mixins: [_mixin2.default],
@@ -278,7 +280,7 @@
 	            onMouseLeave: this.stop,
 	            className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass
 	          },
-	          _react2.default.createElement('span', {
+	          this.props.upHandler || _react2.default.createElement('span', {
 	            unselectable: 'unselectable',
 	            className: prefixCls + '-handler-up-inner',
 	            onClick: preventDefault
@@ -298,7 +300,7 @@
 	            onMouseLeave: this.stop,
 	            className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass
 	          },
-	          _react2.default.createElement('span', {
+	          this.props.downHandler || _react2.default.createElement('span', {
 	            unselectable: 'unselectable',
 	            className: prefixCls + '-handler-down-inner',
 	            onClick: preventDefault
