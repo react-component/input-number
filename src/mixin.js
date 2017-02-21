@@ -73,6 +73,9 @@ export default {
     this.setState({
       focused: false,
     });
+    if("undefined" == typeof( this.getValueFromEvent(e))){
+      return;
+    };    
     const value = this.getCurrentValidValue(this.getValueFromEvent(e).trim());
     this.setValue(value, () => {
       this.props.onBlur(e, ...args);
