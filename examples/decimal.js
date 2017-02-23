@@ -12,7 +12,7 @@ const Component = React.createClass({
     };
   },
   onChange(v) {
-    console.log(`onChange: ${v}`);
+    console.log('onChange:', v);
     this.setState({
       value: v,
     });

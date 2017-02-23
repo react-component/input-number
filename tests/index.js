@@ -534,5 +534,38 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('1');
       expect(onChangeFirstArgument).to.be(1);
     });
+
+    // https://github.com/ant-design/ant-design/issues/5012
+    it('controller InputNumber should be able to input number like 1.00*', () => {
+      let num;
+      const Demo = React.createClass({
+        getInitialState() {
+          return { value: 2 };
+        },
+        onChange(value) {
+          this.setState({ value });
+        },
+        render() {
+          return (
+            <InputNum
+              ref="inputNum"
+              value={this.state.value}
+              onChange={value => { num = value; this.onChange(value); } }
+            />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '6.0' } });
+      expect(inputElement.value).to.be('6.0');
+      expect(num).to.be('6.0');
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('6');
+      expect(num).to.be(6);
+    });
   });
 });

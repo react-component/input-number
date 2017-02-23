@@ -46,7 +46,7 @@ export default {
     if ('value' in nextProps) {
       const value = this.toNumber(nextProps.value);
       this.setState({
-        inputValue: nextProps.value,
+        inputValue: nextProps.value ? nextProps.value.toString() : nextProps.value,
         value,
       });
     }
@@ -59,7 +59,7 @@ export default {
   onChange(e) {
     const input = this.getValueFromEvent(e).trim();
     this.setState({ inputValue: input });
-    this.props.onChange(this.toNumber(input)); // valid number or invalid string
+    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
   },
 
   onFocus(...args) {
@@ -73,7 +73,7 @@ export default {
     this.setState({
       focused: false,
     });
-    const value = this.getCurrentValidValue(this.getValueFromEvent(e).trim());
+    const value = this.getCurrentValidValue(this.state.inputValue);
     this.setValue(value, () => {
       this.props.onBlur(e, ...args);
     });
@@ -101,7 +101,7 @@ export default {
   setValue(v, callback) {
     // trigger onChange
     const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
-    const changed = newValue !== this.state.value;
+    const changed = `${newValue}` !== this.state.inputValue;
     if (!('value' in this.props)) {
       this.setState({
         value: v,
@@ -160,7 +160,7 @@ export default {
     return num.toString();
   },
 
-  // '1.' '1x' 'xx' ''  => are not complete numbers
+  // '1.' '1x' 'xx' '' => are not complete numbers
   isNotCompleteNumber(num) {
     return (
       isNaN(num) ||
@@ -174,6 +174,14 @@ export default {
       return num;
     }
     return Number(num);
+  },
+
+  // '1.0' '1.00'  => may be a inputing number
+  toNumberWhenUserInput(num) {
+    if (/\.0+$/.test(num) && this.state.focused) {
+      return num;
+    }
+    return this.toNumber(num);
   },
 
   upStep(val) {
