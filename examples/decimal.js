@@ -28,7 +28,7 @@ webpackJsonp([1],{
 	    };
 	  },
 	  onChange: function onChange(v) {
-	    console.log('onChange: ' + v);
+	    console.log('onChange:', v);
 	    this.setState({
 	      value: v
 	    });

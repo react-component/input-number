@@ -5208,7 +5208,7 @@
 	    if ('value' in nextProps) {
 	      var value = this.toNumber(nextProps.value);
 	      this.setState({
-	        inputValue: nextProps.value,
+	        inputValue: nextProps.value ? nextProps.value.toString() : nextProps.value,
 	        value: value
 	      });
 	    }
@@ -5219,7 +5219,7 @@
 	  onChange: function onChange(e) {
 	    var input = this.getValueFromEvent(e).trim();
 	    this.setState({ inputValue: input });
-	    this.props.onChange(this.toNumber(input)); // valid number or invalid string
+	    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
 	  },
 	  onFocus: function onFocus() {
 	    var _props;
@@ -5239,7 +5239,7 @@
 	    this.setState({
 	      focused: false
 	    });
-	    var value = this.getCurrentValidValue(this.getValueFromEvent(e).trim());
+	    var value = this.getCurrentValidValue(this.state.inputValue);
 	    this.setValue(value, function () {
 	      var _props2;
 	
@@ -5267,7 +5267,7 @@
 	  setValue: function setValue(v, callback) {
 	    // trigger onChange
 	    var newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
-	    var changed = newValue !== this.state.value;
+	    var changed = '' + newValue !== this.state.inputValue;
 	    if (!('value' in this.props)) {
 	      this.setState({
 	        value: v,
@@ -5326,7 +5326,7 @@
 	  },
 	
 	
-	  // '1.' '1x' 'xx' ''  => are not complete numbers
+	  // '1.' '1x' 'xx' '' => are not complete numbers
 	  isNotCompleteNumber: function isNotCompleteNumber(num) {
 	    return isNaN(num) || num === '' || num.toString().indexOf('.') === num.toString().length - 1;
 	  },
@@ -5335,6 +5335,15 @@
 	      return num;
 	    }
 	    return Number(num);
+	  },
+	
+	
+	  // '1.0' '1.00'  => may be a inputing number
+	  toNumberWhenUserInput: function toNumberWhenUserInput(num) {
+	    if (/\.0+$/.test(num) && this.state.focused) {
+	      return num;
+	    }
+	    return this.toNumber(num);
 	  },
 	  upStep: function upStep(val) {
 	    var _props3 = this.props,
