@@ -44,10 +44,9 @@ export default {
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
-      const value = this.toNumber(nextProps.value);
       this.setState({
-        inputValue: nextProps.value ? nextProps.value.toString() : nextProps.value,
-        value,
+        inputValue: nextProps.value,
+        value: nextProps.value,
       });
     }
   },
@@ -101,7 +100,7 @@ export default {
   setValue(v, callback) {
     // trigger onChange
     const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
-    const changed = `${newValue}` !== this.state.inputValue;
+    const changed = newValue !== this.state.value;
     if (!('value' in this.props)) {
       this.setState({
         value: v,

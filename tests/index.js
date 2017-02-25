@@ -15,6 +15,7 @@ describe('inputNumber', () => {
   const container = document.createElement('div');
   document.body.appendChild(container);
   let onChangeFirstArgument;
+  let onChangeCallCount = 0;
 
   const Component = React.createClass({
     getInitialState() {
@@ -31,6 +32,7 @@ describe('inputNumber', () => {
     },
     onChange(value) {
       onChangeFirstArgument = value;
+      onChangeCallCount += 1;
       this.setState({ value });
     },
     triggerBoolean(propName) {
@@ -65,10 +67,12 @@ describe('inputNumber', () => {
     example = ReactDOM.render(<Component />, container);
     inputNumber = example.refs.inputNum;
     inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+    onChangeCallCount = 0;
   });
 
   afterEach(() => {
     ReactDOM.unmountComponentAtNode(container);
+    onChangeCallCount = 0;
   });
 
   describe('keyboard works', () => {
@@ -566,6 +570,25 @@ describe('inputNumber', () => {
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('6');
       expect(num).to.be(6);
+    });
+
+    it('onChange should not be called when input is not changed', () => {
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '1' } });
+      expect(onChangeCallCount).to.be(1);
+      expect(onChangeFirstArgument).to.be(1);
+      Simulate.blur(inputElement);
+      expect(onChangeCallCount).to.be(1);
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '' } });
+      expect(onChangeCallCount).to.be(2);
+      expect(onChangeFirstArgument).to.be('');
+      Simulate.blur(inputElement);
+      expect(onChangeCallCount).to.be(3);
+      expect(onChangeFirstArgument).to.be(undefined);
+      Simulate.focus(inputElement);
+      Simulate.blur(inputElement);
+      expect(onChangeCallCount).to.be(3);
     });
   });
 });
