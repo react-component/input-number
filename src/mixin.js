@@ -185,7 +185,7 @@ export default {
     return this.toNumber(num);
   },
 
-  upStep(val, rat) { {
+  upStep(val, rat) {
     const { step, min } = this.props;
     const precisionFactor = this.getPrecisionFactor(val, rat);
     const precision = Math.abs(this.getMaxPrecision(val, rat));
