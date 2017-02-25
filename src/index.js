@@ -52,9 +52,13 @@ const InputNumber = React.createClass({
 
   onKeyDown(e, ...args) {
     if (e.keyCode === 38) {
-      this.up(e);
+      e.preventDefault();
+      let ratio = ((e.metaKey || e.ctrlKey) ? 0.1 : e.shiftKey ? 10 : 1);
+      this.up(e, ratio);
     } else if (e.keyCode === 40) {
-      this.down(e);
+      e.preventDefault();
+      let ratio = ((e.metaKey || e.ctrlKey) ? 0.1 : e.shiftKey ? 10 : 1);
+      this.down(e, ratio);
     }
     const { onKeyDown } = this.props;
     if (onKeyDown) {
@@ -115,7 +119,7 @@ const InputNumber = React.createClass({
     }
 
     if (inputDisplayValue === undefined) {
-      inputDisplayValue = '';
+      inputDisplayValue = '0';
     }
 
     // ref for test

@@ -26,17 +26,20 @@ const Component = React.createClass({
       readOnly: !this.state.readOnly,
     });
   },
+
   render() {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
-          min={-8}
-          max={10}
+          min={-8000}
+          max={10000}
           value={this.state.value}
           style={{ width: 100 }}
           readOnly={this.state.readOnly}
           onChange={this.onChange}
           disabled={this.state.disabled}
+          autoFocus={false}
+          step={0.1}
         />
         <p>
           <button onClick={this.toggleDisabled}>toggle Disabled</button>

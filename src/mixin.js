@@ -120,6 +120,7 @@ export default {
 
   getPrecision(value) {
     const valueString = value.toString();
+    console.log('get precision:', value)
     if (valueString.indexOf('e-') >= 0) {
       return parseInt(valueString.slice(valueString.indexOf('e-') + 1), 10);
     }
@@ -134,18 +135,20 @@ export default {
   // press +
   // then value should be 2.51, rather than 2.5
   // https://github.com/react-component/input-number/issues/39
-  getMaxPrecision(currentValue) {
+  getMaxPrecision(currentValue, ratio = 1) {
     const { step } = this.props;
+    const ratioPrecision = this.getPrecision(ratio);
     const stepPrecision = this.getPrecision(step);
-    if (!currentValue) {
-      return stepPrecision;
-    }
     const currentValuePrecision = this.getPrecision(currentValue);
-    return currentValuePrecision > stepPrecision ? currentValuePrecision : stepPrecision;
+    console.log('max precision:', currentValue, stepPrecision, ratioPrecision, stepPrecision * ratioPrecision, currentValuePrecision);
+    if (!currentValue) {
+      return ratioPrecision * stepPrecision;
+    }
+    return Math.max(currentValuePrecision, ratioPrecision * stepPrecision);
   },
 
-  getPrecisionFactor(currentValue) {
-    const precision = this.getMaxPrecision(currentValue);
+  getPrecisionFactor(currentValue, ratio = 1) {
+    const precision = this.getMaxPrecision(currentValue, ratio);
     return Math.pow(10, precision);
   },
 
@@ -171,40 +174,41 @@ export default {
 
   toNumber(num) {
     if (this.isNotCompleteNumber(num)) {
-      return num;
+      return 0; // Maybe 0 will be better for the invalid none-numbers
     }
     return Number(num);
   },
 
-  upStep(val) {
+  upStep(val, rat) {
     const { step, min } = this.props;
-    const precisionFactor = this.getPrecisionFactor(val);
-    const precision = Math.abs(this.getMaxPrecision(val));
+    const precisionFactor = this.getPrecisionFactor(val, rat);
+    const precision = Math.abs(this.getMaxPrecision(val, rat));
     let result;
     if (typeof val === 'number') {
       result =
-        ((precisionFactor * val + precisionFactor * step) / precisionFactor).toFixed(precision);
+        ((precisionFactor * val + precisionFactor * step * rat) / precisionFactor);//.toFixed(precision);
     } else {
       result = min === -Infinity ? step : min;
     }
     return this.toNumber(result);
   },
 
-  downStep(val) {
+  downStep(val, rat) {
     const { step, min } = this.props;
-    const precisionFactor = this.getPrecisionFactor(val);
-    const precision = Math.abs(this.getMaxPrecision(val));
+    const precisionFactor = this.getPrecisionFactor(val, rat);
+    const precision = Math.abs(this.getMaxPrecision(val, rat));
+    console.log('precision:', val, rat, step, precisionFactor, precision)
     let result;
     if (typeof val === 'number') {
       result =
-        ((precisionFactor * val - precisionFactor * step) / precisionFactor).toFixed(precision);
+        ((precisionFactor * val - precisionFactor * step * rat) / precisionFactor).toFixed(precision);
     } else {
       result = min === -Infinity ? -step : min;
     }
     return this.toNumber(result);
   },
 
-  step(type, e) {
+  step(type, e, ratio) {
     if (e) {
       e.preventDefault();
     }
@@ -216,7 +220,7 @@ export default {
     if (this.isNotCompleteNumber(value)) {
       return;
     }
-    const val = this[`${type}Step`](value);
+    const val = this[`${type}Step`](value, ratio);
     if (val > props.max || val < props.min) {
       return;
     }
@@ -232,25 +236,25 @@ export default {
     }
   },
 
-  down(e, recursive) {
+  down(e, ratio, recursive) {
     if (e.persist) {
       e.persist();
     }
     this.stop();
-    this.step('down', e);
+    this.step('down', e, (ratio) ? ratio : 1);
     this.autoStepTimer = setTimeout(() => {
-      this.down(e, true);
+      this.down(e, ratio, true);
     }, recursive ? SPEED : DELAY);
   },
 
-  up(e, recursive) {
+  up(e, ratio, recursive) {
     if (e.persist) {
       e.persist();
     }
     this.stop();
-    this.step('up', e);
+    this.step('up', e, (ratio) ? ratio : 1);
     this.autoStepTimer = setTimeout(() => {
-      this.up(e, true);
+      this.up(e, ratio, true);
     }, recursive ? SPEED : DELAY);
   },
 };
