@@ -5206,10 +5206,9 @@
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    if ('value' in nextProps) {
-	      var value = this.toNumber(nextProps.value);
 	      this.setState({
-	        inputValue: nextProps.value ? nextProps.value.toString() : nextProps.value,
-	        value: value
+	        inputValue: nextProps.value,
+	        value: nextProps.value
 	      });
 	    }
 	  },
@@ -5267,7 +5266,7 @@
 	  setValue: function setValue(v, callback) {
 	    // trigger onChange
 	    var newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
-	    var changed = '' + newValue !== this.state.inputValue;
+	    var changed = newValue !== this.state.value;
 	    if (!('value' in this.props)) {
 	      this.setState({
 	        value: v,
