@@ -29,6 +29,7 @@ const InputNumber = React.createClass({
     ]),
     upHandler: PropTypes.node,
     downHandler: PropTypes.node,
+    formatter: PropTypes.func,
   },
 
   mixins: [mixin],
@@ -54,9 +55,11 @@ const InputNumber = React.createClass({
 
   onKeyDown(e, ...args) {
     if (e.keyCode === 38) {
-      this.up(e);
+      let ratio = ((e.metaKey || e.ctrlKey) ? 0.1 : e.shiftKey ? 10 : 1);
+      this.up(e, ratio);
     } else if (e.keyCode === 40) {
-      this.down(e);
+      let ratio = ((e.metaKey || e.ctrlKey) ? 0.1 : e.shiftKey ? 10 : 1);
+      this.down(e, ratio);
     }
     const { onKeyDown } = this.props;
     if (onKeyDown) {
@@ -78,6 +81,13 @@ const InputNumber = React.createClass({
 
   focus() {
     this.refs.input.focus();
+  },
+
+  formatWrapper(num) {
+    if(this.props.formatter){
+      return this.props.formatter(num);
+    }
+    return num;
   },
 
   render() {
@@ -119,6 +129,8 @@ const InputNumber = React.createClass({
     if (inputDisplayValue === undefined) {
       inputDisplayValue = '';
     }
+
+    let inputDisplayValueFormat = this.formatWrapper(inputDisplayValue)
 
     // ref for test
     return (
@@ -170,8 +182,8 @@ const InputNumber = React.createClass({
             autoComplete="off"
             onFocus={this.onFocus}
             onBlur={this.onBlur}
-            onKeyDown={this.onKeyDown}
-            onKeyUp={this.onKeyUp}
+            onKeyDown={editable ? this.onKeyDown : noop}
+            onKeyUp={editable ? this.onKeyUp : noop}
             autoFocus={props.autoFocus}
             readOnly={props.readOnly}
             disabled={props.disabled}
@@ -180,7 +192,7 @@ const InputNumber = React.createClass({
             name={props.name}
             onChange={this.onChange}
             ref="input"
-            value={inputDisplayValue}
+            value={inputDisplayValueFormat}
           />
         </div>
       </div>
