@@ -1,21 +1,20 @@
 /* eslint no-console:0 */
 require('rc-input-number/assets/index.less');
-const InputNum = require('rc-input-number');
+const InputNumber = require('rc-input-number');
 const React = require('react');
 const ReactDOM = require('react-dom');
+
 const Component = React.createClass({
   getInitialState() {
     return {
       disabled: false,
       readOnly: false,
-      value: 8,
+      value: 5,
     };
   },
-  onChange(v) {
-    console.log('onChange:', v);
-    this.setState({
-      value: v,
-    });
+  onChange(value) {
+    console.log('onChange:', value);
+    this.setState({ value });
   },
   toggleDisabled() {
     this.setState({
@@ -28,24 +27,24 @@ const Component = React.createClass({
     });
   },
   render() {
+    const upHandler = (<div style={{ color: 'blue' }}>x</div>);
+    const downHandler = (<div style={{ color: 'red' }}>V</div>);
     return (
       <div style={{ margin: 10 }}>
-        <InputNum
+        <InputNumber
           min={-8}
           max={10}
-          step={0.1}
           value={this.state.value}
           style={{ width: 100 }}
           readOnly={this.state.readOnly}
           onChange={this.onChange}
           disabled={this.state.disabled}
+          upHandler={upHandler}
+          downHandler={downHandler}
         />
-        <p>
-          <button onClick={this.toggleDisabled}>toggle Disabled</button>
-          <button onClick={this.toggleReadOnly}>toggle readOnly</button>
-        </p>
       </div>
     );
   },
 });
+
 ReactDOM.render(<Component/>, document.getElementById('__react-content'));

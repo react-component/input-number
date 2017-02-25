@@ -1,6 +1,14 @@
 # History
 ----
 
+## 3.1.0
+
+- Added props `upHanlder` and `downHanlder`.
+
+## 3.0.4
+
+- Fixed long press not working in Android. #42
+
 ## 3.0.3
 
 - Fixed https://github.com/ant-design/ant-design/issues/4757
