@@ -57,7 +57,7 @@ export default {
   },
 
   onChange(e) {
-    const input = this.getValueFromEvent(e).trim();
+    const input = this.getValueFromEvent(e).trim().replace(/^\W*|\W*$/, ''); // really trick, need more consideration and can not be '$ 1.1 ¥'
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumber(input)); // valid number or invalid string
   },

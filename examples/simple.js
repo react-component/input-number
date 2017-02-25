@@ -9,7 +9,7 @@ const Component = React.createClass({
     return {
       disabled: false,
       readOnly: false,
-      value: 5,
+      value: 1314.521,
     };
   },
   onChange(value) {
@@ -26,7 +26,9 @@ const Component = React.createClass({
       readOnly: !this.state.readOnly,
     });
   },
-
+  format(num){
+    return "$ " + num;
+  },
   render() {
     return (
       <div style={{ margin: 10 }}>
@@ -39,7 +41,8 @@ const Component = React.createClass({
           onChange={this.onChange}
           disabled={this.state.disabled}
           autoFocus={false}
-          step={0.1}
+          step={1}
+          formatter={this.format}
         />
         <p>
           <button onClick={this.toggleDisabled}>toggle Disabled</button>

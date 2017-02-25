@@ -27,6 +27,7 @@ const InputNumber = React.createClass({
       PropTypes.number,
       PropTypes.string,
     ]),
+    formatter: PropTypes.func,
   },
 
   mixins: [mixin],
@@ -52,11 +53,9 @@ const InputNumber = React.createClass({
 
   onKeyDown(e, ...args) {
     if (e.keyCode === 38) {
-      e.preventDefault();
       let ratio = ((e.metaKey || e.ctrlKey) ? 0.1 : e.shiftKey ? 10 : 1);
       this.up(e, ratio);
     } else if (e.keyCode === 40) {
-      e.preventDefault();
       let ratio = ((e.metaKey || e.ctrlKey) ? 0.1 : e.shiftKey ? 10 : 1);
       this.down(e, ratio);
     }
@@ -80,6 +79,13 @@ const InputNumber = React.createClass({
 
   focus() {
     this.refs.input.focus();
+  },
+
+  formatWrapper(num) {
+    if(this.props.formatter){
+      return this.props.formatter(num);
+    }
+    return num;
   },
 
   render() {
@@ -121,6 +127,8 @@ const InputNumber = React.createClass({
     if (inputDisplayValue === undefined) {
       inputDisplayValue = '';
     }
+
+    let inputDisplayValueFormat = this.formatWrapper(inputDisplayValue)
 
     // ref for test
     return (
@@ -182,7 +190,7 @@ const InputNumber = React.createClass({
             name={props.name}
             onChange={this.onChange}
             ref="input"
-            value={inputDisplayValue}
+            value={inputDisplayValueFormat}
           />
         </div>
       </div>
