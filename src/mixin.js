@@ -120,7 +120,6 @@ export default {
 
   getPrecision(value) {
     const valueString = value.toString();
-    console.log('get precision:', value)
     if (valueString.indexOf('e-') >= 0) {
       return parseInt(valueString.slice(valueString.indexOf('e-') + 1), 10);
     }
@@ -140,11 +139,10 @@ export default {
     const ratioPrecision = this.getPrecision(ratio);
     const stepPrecision = this.getPrecision(step);
     const currentValuePrecision = this.getPrecision(currentValue);
-    console.log('max precision:', currentValue, stepPrecision, ratioPrecision, stepPrecision * ratioPrecision, currentValuePrecision);
     if (!currentValue) {
-      return ratioPrecision * stepPrecision;
+      return ratioPrecision + stepPrecision;
     }
-    return Math.max(currentValuePrecision, ratioPrecision * stepPrecision);
+    return Math.max(currentValuePrecision, ratioPrecision + stepPrecision);
   },
 
   getPrecisionFactor(currentValue, ratio = 1) {
@@ -186,7 +184,7 @@ export default {
     let result;
     if (typeof val === 'number') {
       result =
-        ((precisionFactor * val + precisionFactor * step * rat) / precisionFactor);//.toFixed(precision);
+        ((precisionFactor * val + precisionFactor * step * rat) / precisionFactor).toFixed(precision);
     } else {
       result = min === -Infinity ? step : min;
     }
@@ -197,7 +195,6 @@ export default {
     const { step, min } = this.props;
     const precisionFactor = this.getPrecisionFactor(val, rat);
     const precision = Math.abs(this.getMaxPrecision(val, rat));
-    console.log('precision:', val, rat, step, precisionFactor, precision)
     let result;
     if (typeof val === 'number') {
       result =
