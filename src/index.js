@@ -119,7 +119,7 @@ const InputNumber = React.createClass({
     }
 
     if (inputDisplayValue === undefined) {
-      inputDisplayValue = '0';
+      inputDisplayValue = '';
     }
 
     // ref for test

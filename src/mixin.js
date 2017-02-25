@@ -172,7 +172,7 @@ export default {
 
   toNumber(num) {
     if (this.isNotCompleteNumber(num)) {
-      return 0; // Maybe 0 will be better for the invalid none-numbers
+      return num;
     }
     return Number(num);
   },
