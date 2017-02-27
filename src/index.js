@@ -30,6 +30,7 @@ const InputNumber = React.createClass({
     upHandler: PropTypes.node,
     downHandler: PropTypes.node,
     useTouch: PropTypes.bool,
+    formatter: PropTypes.func,
   },
 
   mixins: [mixin],
@@ -56,9 +57,13 @@ const InputNumber = React.createClass({
 
   onKeyDown(e, ...args) {
     if (e.keyCode === 38) {
-      this.up(e);
+      const ratio = this.getRatio(e);
+      this.up(e, ratio);
+      this.stop();
     } else if (e.keyCode === 40) {
-      this.down(e);
+      const ratio = this.getRatio(e);
+      this.down(e, ratio);
+      this.stop();
     }
     const { onKeyDown } = this.props;
     if (onKeyDown) {
@@ -74,12 +79,29 @@ const InputNumber = React.createClass({
     }
   },
 
+  getRatio(e) {
+    let ratio = 1;
+    if (e.metaKey || e.ctrlKey) {
+      ratio = 0.1;
+    } else if (e.shiftKey) {
+      ratio = 10;
+    }
+    return ratio;
+  },
+
   getValueFromEvent(e) {
     return e.target.value;
   },
 
   focus() {
     this.refs.input.focus();
+  },
+
+  formatWrapper(num) {
+    if (this.props.formatter) {
+      return this.props.formatter(num);
+    }
+    return num;
   },
 
   render() {
@@ -145,6 +167,7 @@ const InputNumber = React.createClass({
         onMouseLeave: this.stop,
       };
     }
+    const inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
 
     // ref for test
     return (
@@ -188,8 +211,8 @@ const InputNumber = React.createClass({
             autoComplete="off"
             onFocus={this.onFocus}
             onBlur={this.onBlur}
-            onKeyDown={this.onKeyDown}
-            onKeyUp={this.onKeyUp}
+            onKeyDown={editable ? this.onKeyDown : noop}
+            onKeyUp={editable ? this.onKeyUp : noop}
             autoFocus={props.autoFocus}
             readOnly={props.readOnly}
             disabled={props.disabled}
@@ -198,7 +221,7 @@ const InputNumber = React.createClass({
             name={props.name}
             onChange={this.onChange}
             ref="input"
-            value={inputDisplayValue}
+            value={inputDisplayValueFormat}
           />
         </div>
       </div>

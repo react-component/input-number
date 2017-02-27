@@ -89,6 +89,28 @@ describe('inputNumber', () => {
       });
       expect(inputNumber.state.value).to.be(97);
     });
+
+    it('combination keys works', () => {
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.DOWN, shiftKey: true,
+      });
+      expect(inputNumber.state.value).to.be(88);
+
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.UP, ctrlKey: true,
+      });
+      expect(inputNumber.state.value).to.be(88.1);
+
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.UP, shiftKey: true,
+      });
+      expect(inputNumber.state.value).to.be(98.1);
+
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.DOWN, ctrlKey: true,
+      });
+      expect(inputNumber.state.value).to.be(98);
+    });
   });
 
   describe('clickable', () => {
@@ -201,6 +223,17 @@ describe('inputNumber', () => {
       Simulate.blur(inputElement);
       expect(inputNumber.state.value).to.be(1);
       expect(inputElement.value).to.be('1');
+    });
+  });
+
+  describe('check value changes with readonly props set to true', () => {
+    it('no value changes after readonly works', () => {
+      example.triggerBoolean('readOnly');
+      Simulate.focus(inputElement);
+      Simulate.keyDown(inputElement, { keyCode: keyCode.UP });
+      expect(inputNumber.state.value).to.be(98);
+      Simulate.keyDown(inputElement, { keyCode: keyCode.DOWN });
+      expect(inputNumber.state.value).to.be(98);
     });
   });
 
@@ -577,6 +610,134 @@ describe('inputNumber', () => {
       Simulate.focus(inputElement);
       Simulate.blur(inputElement);
       expect(onChangeCallCount).to.be(3);
+    });
+  });
+
+  describe('formatter', () => {
+    it('formatter on default', () => {
+      const Demo = React.createClass({
+        render() {
+          return (<InputNum
+            ref="inputNum"
+            step={1}
+            value={5}
+            formatter={num => `$ ${num}`}
+          />);
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+
+      expect(inputNumber.state.value).to.be(5);
+      expect(inputElement.value).to.be('$ 5');
+    });
+
+    it('formatter on mousedown', () => {
+      const Demo = React.createClass({
+        render() {
+          return (<InputNum
+            ref="inputNum"
+            step={1}
+            defaultValue={5}
+            formatter={num => `$ ${num}`}
+          />);
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      expect(inputNumber.state.value).to.be(6);
+      expect(inputElement.value).to.be('$ 6');
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      expect(inputNumber.state.value).to.be(5);
+      expect(inputElement.value).to.be('$ 5');
+    });
+
+    it('formatter on touchstart', () => {
+      const Demo = React.createClass({
+        render() {
+          return (<InputNum
+            ref="inputNum"
+            step={1}
+            defaultValue={5}
+            useTouch
+            formatter={num => `${num} ¥`}
+          />);
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
+      expect(inputNumber.state.value).to.be(6);
+      expect(inputElement.value).to.be('6 ¥');
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.down));
+      expect(inputNumber.state.value).to.be(5);
+      expect(inputElement.value).to.be('5 ¥');
+    });
+
+    it('formatter on keydown', () => {
+      const Demo = React.createClass({
+        render() {
+          return (<InputNum
+            ref="inputNum"
+            step={1}
+            defaultValue={5}
+            formatter={num => `$ ${num} ¥`}
+          />);
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+
+      Simulate.focus(inputElement);
+      Simulate.keyDown(inputElement, { keyCode: keyCode.UP });
+      expect(inputNumber.state.value).to.be(6);
+      expect(inputElement.value).to.be('$ 6 ¥');
+      Simulate.keyDown(inputElement, { keyCode: keyCode.DOWN });
+      expect(inputNumber.state.value).to.be(5);
+      expect(inputElement.value).to.be('$ 5 ¥');
+    });
+
+    it('formatter on direct input', () => {
+      let onChangeFirstArgumentFormat;
+      let onChangeCallCountFormat = 0;
+
+      const Demo = React.createClass({
+        getInitialState() {
+          return { value: 5 };
+        },
+        onChange(value) {
+          onChangeFirstArgumentFormat = value;
+          onChangeCallCountFormat += 1;
+          this.setState({ value });
+        },
+        render() {
+          return (<InputNum
+            ref="inputNum"
+            step={1}
+            defaultValue={5}
+            formatter={num => `$ ${num}`}
+            onChange={this.onChange}
+          />);
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '100' } });
+      expect(inputElement.value).to.be('$ 100');
+      expect(onChangeFirstArgumentFormat).to.be(100);
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('$ 100');
+      expect(inputNumber.state.value).to.be(100);
     });
   });
 });
