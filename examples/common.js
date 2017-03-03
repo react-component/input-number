@@ -166,7 +166,8 @@
 	    min: _react.PropTypes.number,
 	    step: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
 	    upHandler: _react.PropTypes.node,
-	    downHandler: _react.PropTypes.node
+	    downHandler: _react.PropTypes.node,
+	    useTouch: _react.PropTypes.bool
 	  },
 	
 	  mixins: [_mixin2.default],
@@ -174,6 +175,7 @@
 	  getDefaultProps: function getDefaultProps() {
 	    return {
 	      focusOnUpDown: true,
+	      useTouch: false,
 	      prefixCls: 'rc-input-number'
 	    };
 	  },
@@ -225,7 +227,8 @@
 	    var props = (0, _extends3.default)({}, this.props);
 	    var prefixCls = props.prefixCls,
 	        disabled = props.disabled,
-	        readOnly = props.readOnly;
+	        readOnly = props.readOnly,
+	        useTouch = props.useTouch;
 	
 	    var classes = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, prefixCls, true), (0, _defineProperty3.default)(_classNames, props.className, !!props.className), (0, _defineProperty3.default)(_classNames, prefixCls + '-disabled', disabled), (0, _defineProperty3.default)(_classNames, prefixCls + '-focused', this.state.focused), _classNames));
 	    var upDisabledClass = '';
@@ -259,6 +262,30 @@
 	      inputDisplayValue = '';
 	    }
 	
+	    var upEvents = void 0;
+	    var downEvents = void 0;
+	    if (useTouch) {
+	      upEvents = {
+	        onTouchStart: editable && !upDisabledClass ? this.up : noop,
+	        onTouchEnd: this.stop
+	      };
+	      downEvents = {
+	        onTouchStart: editable && !downDisabledClass ? this.down : noop,
+	        onTouchEnd: this.stop
+	      };
+	    } else {
+	      upEvents = {
+	        onMouseDown: editable && !upDisabledClass ? this.up : noop,
+	        onMouseUp: this.stop,
+	        onMouseLeave: this.stop
+	      };
+	      downEvents = {
+	        onMouseDown: editable && !downDisabledClass ? this.down : noop,
+	        onMouseUp: this.stop,
+	        onMouseLeave: this.stop
+	      };
+	    }
+	
 	    // ref for test
 	    return _react2.default.createElement(
 	      'div',
@@ -268,18 +295,14 @@
 	        { className: prefixCls + '-handler-wrap' },
 	        _react2.default.createElement(
 	          _InputHandler2.default,
-	          {
+	          (0, _extends3.default)({
 	            ref: 'up',
 	            disabled: !!upDisabledClass || disabled || readOnly,
 	            prefixCls: prefixCls,
-	            unselectable: 'unselectable',
-	            onTouchStart: editable && !upDisabledClass ? this.up : noop,
-	            onTouchEnd: this.stop,
-	            onMouseDown: editable && !upDisabledClass ? this.up : noop,
-	            onMouseUp: this.stop,
-	            onMouseLeave: this.stop,
+	            unselectable: 'unselectable'
+	          }, upEvents, {
 	            className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass
-	          },
+	          }),
 	          this.props.upHandler || _react2.default.createElement('span', {
 	            unselectable: 'unselectable',
 	            className: prefixCls + '-handler-up-inner',
@@ -288,18 +311,14 @@
 	        ),
 	        _react2.default.createElement(
 	          _InputHandler2.default,
-	          {
+	          (0, _extends3.default)({
 	            ref: 'down',
 	            disabled: !!downDisabledClass || disabled || readOnly,
 	            prefixCls: prefixCls,
-	            unselectable: 'unselectable',
-	            onTouchStart: editable && !downDisabledClass ? this.down : noop,
-	            onTouchEnd: this.stop,
-	            onMouseDown: editable && !downDisabledClass ? this.down : noop,
-	            onMouseUp: this.stop,
-	            onMouseLeave: this.stop,
+	            unselectable: 'unselectable'
+	          }, downEvents, {
 	            className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass
-	          },
+	          }),
 	          this.props.downHandler || _react2.default.createElement('span', {
 	            unselectable: 'unselectable',
 	            className: prefixCls + '-handler-down-inner',
@@ -1218,8 +1237,15 @@
 /* 50 */
 /***/ function(module, exports) {
 
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+	
 	'use strict';
 	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 	
@@ -1240,7 +1266,7 @@
 			// Detect buggy property enumeration order in older V8 versions.
 	
 			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
 			test1[5] = 'de';
 			if (Object.getOwnPropertyNames(test1)[0] === '5') {
 				return false;
@@ -1269,7 +1295,7 @@
 			}
 	
 			return true;
-		} catch (e) {
+		} catch (err) {
 			// We don't expect any of the above to throw, but better to be safe.
 			return false;
 		}
@@ -1289,8 +1315,8 @@
 				}
 			}
 	
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
 					if (propIsEnumerable.call(from, symbols[i])) {
 						to[symbols[i]] = from[symbols[i]];
@@ -1697,12 +1723,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
+	var validateFormat = function validateFormat(format) {};
+	
+	if (process.env.NODE_ENV !== 'production') {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+	
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 	
 	  if (!condition) {
 	    var error;
@@ -6807,7 +6839,7 @@
 	            clearTimeout(this.pressOutDelayTimeout);
 	            this.pressOutDelayTimeout = null;
 	        }
-	        if (!isAllowPress()) {
+	        if (this.props.fixClickPenetration && !isAllowPress()) {
 	            return;
 	        }
 	        this._remeasureMetricsOnInit(e);
@@ -6835,8 +6867,7 @@
 	        }
 	    },
 	    touchableHandleResponderRelease: function touchableHandleResponderRelease(e) {
-	        if (!isAllowPress()) {
-	            this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
+	        if (!this.touchable.startMouse) {
 	            return;
 	        }
 	        var touch = extractSingleTouch(e);
@@ -6850,6 +6881,9 @@
 	        this._receiveSignal(Signals.RESPONDER_RELEASE, e);
 	    },
 	    touchableHandleResponderTerminate: function touchableHandleResponderTerminate(e) {
+	        if (!this.touchable.startMouse) {
+	            return;
+	        }
 	        this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
 	    },
 	    checkTouchWithinActive: function checkTouchWithinActive(e) {
@@ -6874,6 +6908,9 @@
 	        return pageX > positionOnGrant.left - pressExpandLeft && pageY > positionOnGrant.top - pressExpandTop && pageX < positionOnGrant.left + positionOnGrant.width + pressExpandRight && pageY < positionOnGrant.top + positionOnGrant.height + pressExpandBottom;
 	    },
 	    touchableHandleResponderMove: function touchableHandleResponderMove(e) {
+	        if (!this.touchable.startMouse) {
+	            return;
+	        }
 	        // Measurement may not have returned yet.
 	        if (!this.touchable.dimensionsOnActivate || this.touchable.touchState === States.NOT_RESPONDER) {
 	            return;
