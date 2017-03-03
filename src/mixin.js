@@ -73,6 +73,7 @@ export default {
       focused: false,
     });
     const value = this.getCurrentValidValue(this.state.inputValue);
+    e.persist();  // fix https://github.com/react-component/input-number/issues/51
     this.setValue(value, () => {
       this.props.onBlur(e, ...args);
     });
