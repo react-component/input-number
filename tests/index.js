@@ -1,4 +1,4 @@
-/* eslint-disable react/no-multi-comp */
+/* eslint-disable react/no-multi-comp, no-unused-vars */
 require('../assets/index.less');
 const keyCode = require('rc-util/lib/KeyCode');
 const expect = require('expect.js');
@@ -99,18 +99,6 @@ describe('inputNumber', () => {
 
     it('down button works', () => {
       Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
-      expect(inputNumber.state.value).to.be(97);
-    });
-  });
-
-  describe('touchable', () => {
-    it('up button works', () => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
-      expect(inputNumber.state.value).to.be(99);
-    });
-
-    it('down button works', () => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.down));
       expect(inputNumber.state.value).to.be(97);
     });
   });
@@ -589,6 +577,84 @@ describe('inputNumber', () => {
       Simulate.focus(inputElement);
       Simulate.blur(inputElement);
       expect(onChangeCallCount).to.be(3);
+    });
+  });
+});
+
+describe('Mobile inputNumber use TouchEvents', () => {
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+  let onChangeFirstArgument;
+  let onChangeCallCount = 0;
+
+  const Component = React.createClass({
+    getInitialState() {
+      return {
+        min: 1,
+        max: 200,
+        value: defaultValue,
+        step: 1,
+        disabled: false,
+        autoFocus: false,
+        readOnly: false,
+        name: 'inputNumber',
+      };
+    },
+    onChange(value) {
+      onChangeFirstArgument = value;
+      onChangeCallCount += 1;
+      this.setState({ value });
+    },
+    triggerBoolean(propName) {
+      const prop = {};
+      prop[propName] = !this.state[propName];
+      this.setState(prop);
+    },
+    render() {
+      return (
+        <div>
+          <InputNum
+            ref="inputNum"
+            min={this.state.min}
+            max={this.state.max}
+            onChange={this.onChange}
+            value={this.state.value}
+            step={this.state.step}
+            disabled={this.state.disabled}
+            autoFocus={this.state.autoFocus}
+            readOnly={this.state.readOnly}
+            name={this.state.name}
+            useTouch
+          />
+        </div>
+      );
+    },
+  });
+
+  let inputNumber;
+  let example;
+  let inputElement;
+  beforeEach(() => {
+    example = ReactDOM.render(<Component />, container);
+    inputNumber = example.refs.inputNum;
+    inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+    onChangeCallCount = 0;
+  });
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(container);
+    onChangeCallCount = 0;
+  });
+
+  describe('touchable', () => {
+    it('up button works', () => {
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
+      expect(inputNumber.state.value).to.be(99);
+    });
+
+    it('down button works', () => {
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.down));
+      expect(inputNumber.state.value).to.be(97);
     });
   });
 });
