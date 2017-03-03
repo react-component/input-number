@@ -166,7 +166,8 @@
 	    min: _react.PropTypes.number,
 	    step: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
 	    upHandler: _react.PropTypes.node,
-	    downHandler: _react.PropTypes.node
+	    downHandler: _react.PropTypes.node,
+	    useTouch: _react.PropTypes.bool
 	  },
 	
 	  mixins: [_mixin2.default],
@@ -174,6 +175,7 @@
 	  getDefaultProps: function getDefaultProps() {
 	    return {
 	      focusOnUpDown: true,
+	      useTouch: false,
 	      prefixCls: 'rc-input-number'
 	    };
 	  },
@@ -225,7 +227,8 @@
 	    var props = (0, _extends3.default)({}, this.props);
 	    var prefixCls = props.prefixCls,
 	        disabled = props.disabled,
-	        readOnly = props.readOnly;
+	        readOnly = props.readOnly,
+	        useTouch = props.useTouch;
 	
 	    var classes = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, prefixCls, true), (0, _defineProperty3.default)(_classNames, props.className, !!props.className), (0, _defineProperty3.default)(_classNames, prefixCls + '-disabled', disabled), (0, _defineProperty3.default)(_classNames, prefixCls + '-focused', this.state.focused), _classNames));
 	    var upDisabledClass = '';
@@ -259,6 +262,30 @@
 	      inputDisplayValue = '';
 	    }
 	
+	    var upEvents = void 0;
+	    var downEvents = void 0;
+	    if (useTouch) {
+	      upEvents = {
+	        onTouchStart: editable && !upDisabledClass ? this.up : noop,
+	        onTouchEnd: this.stop
+	      };
+	      downEvents = {
+	        onTouchStart: editable && !downDisabledClass ? this.down : noop,
+	        onTouchEnd: this.stop
+	      };
+	    } else {
+	      upEvents = {
+	        onMouseDown: editable && !upDisabledClass ? this.up : noop,
+	        onMouseUp: this.stop,
+	        onMouseLeave: this.stop
+	      };
+	      downEvents = {
+	        onMouseDown: editable && !downDisabledClass ? this.down : noop,
+	        onMouseUp: this.stop,
+	        onMouseLeave: this.stop
+	      };
+	    }
+	
 	    // ref for test
 	    return _react2.default.createElement(
 	      'div',
@@ -268,18 +295,14 @@
 	        { className: prefixCls + '-handler-wrap' },
 	        _react2.default.createElement(
 	          _InputHandler2.default,
-	          {
+	          (0, _extends3.default)({
 	            ref: 'up',
 	            disabled: !!upDisabledClass || disabled || readOnly,
 	            prefixCls: prefixCls,
-	            unselectable: 'unselectable',
-	            onTouchStart: editable && !upDisabledClass ? this.up : noop,
-	            onTouchEnd: this.stop,
-	            onMouseDown: editable && !upDisabledClass ? this.up : noop,
-	            onMouseUp: this.stop,
-	            onMouseLeave: this.stop,
+	            unselectable: 'unselectable'
+	          }, upEvents, {
 	            className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass
-	          },
+	          }),
 	          this.props.upHandler || _react2.default.createElement('span', {
 	            unselectable: 'unselectable',
 	            className: prefixCls + '-handler-up-inner',
@@ -288,18 +311,14 @@
 	        ),
 	        _react2.default.createElement(
 	          _InputHandler2.default,
-	          {
+	          (0, _extends3.default)({
 	            ref: 'down',
 	            disabled: !!downDisabledClass || disabled || readOnly,
 	            prefixCls: prefixCls,
-	            unselectable: 'unselectable',
-	            onTouchStart: editable && !downDisabledClass ? this.down : noop,
-	            onTouchEnd: this.stop,
-	            onMouseDown: editable && !downDisabledClass ? this.down : noop,
-	            onMouseUp: this.stop,
-	            onMouseLeave: this.stop,
+	            unselectable: 'unselectable'
+	          }, downEvents, {
 	            className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass
-	          },
+	          }),
 	          this.props.downHandler || _react2.default.createElement('span', {
 	            unselectable: 'unselectable',
 	            className: prefixCls + '-handler-down-inner',
