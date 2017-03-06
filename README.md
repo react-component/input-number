@@ -199,8 +199,19 @@ react-native run-ios
           <td></td>
           <td>custom the down step element</td>
         </tr>
+        <tr>
+          <td>formatter</td>
+          <td>Function</td>
+          <td></td>
+          <td>Specifies the format of the value presented</td>
+        </tr>
     </tbody>
 </table>
+
+## Keyboard Navigation
+* When you hit the <kbd>⬆</kbd> or <kbd>⬇</kbd> key, the input value will be increased or decreased by `step`
+* With the <kbd>Shift</kbd> key (<kbd>Shift+⬆</kbd>, <kbd>Shift+⬇</kbd>), the input value will be changed by `10 * step`
+* With the <kbd>Ctrl</kbd> or <kbd>⌘</kbd> key (<kbd>Ctrl+⬆</kbd> or <kbd>⌘+⬆</kbd> or <kbd>Ctrl+⬇</kbd> or <kbd>⌘+⬇</kbd> ), the input value will be changed by `0.1 * step`
 
 ## Test Case
 
