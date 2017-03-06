@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		4:0
+/******/ 		5:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"custom","1":"decimal","2":"simple","3":"small-step"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"combination-key-format","1":"custom","2":"decimal","3":"simple","4":"small-step"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -167,7 +167,8 @@
 	    step: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
 	    upHandler: _react.PropTypes.node,
 	    downHandler: _react.PropTypes.node,
-	    useTouch: _react.PropTypes.bool
+	    useTouch: _react.PropTypes.bool,
+	    formatter: _react.PropTypes.func
 	  },
 	
 	  mixins: [_mixin2.default],
@@ -189,9 +190,13 @@
 	  },
 	  onKeyDown: function onKeyDown(e) {
 	    if (e.keyCode === 38) {
-	      this.up(e);
+	      var ratio = this.getRatio(e);
+	      this.up(e, ratio);
+	      this.stop();
 	    } else if (e.keyCode === 40) {
-	      this.down(e);
+	      var _ratio = this.getRatio(e);
+	      this.down(e, _ratio);
+	      this.stop();
 	    }
 	    var onKeyDown = this.props.onKeyDown;
 	
@@ -215,11 +220,26 @@
 	      onKeyUp.apply(undefined, [e].concat(args));
 	    }
 	  },
+	  getRatio: function getRatio(e) {
+	    var ratio = 1;
+	    if (e.metaKey || e.ctrlKey) {
+	      ratio = 0.1;
+	    } else if (e.shiftKey) {
+	      ratio = 10;
+	    }
+	    return ratio;
+	  },
 	  getValueFromEvent: function getValueFromEvent(e) {
 	    return e.target.value;
 	  },
 	  focus: function focus() {
 	    this.refs.input.focus();
+	  },
+	  formatWrapper: function formatWrapper(num) {
+	    if (this.props.formatter) {
+	      return this.props.formatter(num);
+	    }
+	    return num;
 	  },
 	  render: function render() {
 	    var _classNames;
@@ -285,6 +305,7 @@
 	        onMouseLeave: this.stop
 	      };
 	    }
+	    var inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
 	
 	    // ref for test
 	    return _react2.default.createElement(
@@ -337,8 +358,8 @@
 	          autoComplete: 'off',
 	          onFocus: this.onFocus,
 	          onBlur: this.onBlur,
-	          onKeyDown: this.onKeyDown,
-	          onKeyUp: this.onKeyUp,
+	          onKeyDown: editable ? this.onKeyDown : noop,
+	          onKeyUp: editable ? this.onKeyUp : noop,
 	          autoFocus: props.autoFocus,
 	          readOnly: props.readOnly,
 	          disabled: props.disabled,
@@ -347,7 +368,7 @@
 	          name: props.name,
 	          onChange: this.onChange,
 	          ref: 'input',
-	          value: inputDisplayValue
+	          value: inputDisplayValueFormat
 	        })
 	      )
 	    );
@@ -5235,7 +5256,7 @@
 	    this.stop();
 	  },
 	  onChange: function onChange(e) {
-	    var input = this.getValueFromEvent(e).trim();
+	    var input = this.getValueFromEvent(e).trim().replace(/^[^\w\.-]*|[^\w\.-]*$/g, '');
 	    this.setState({ inputValue: input });
 	    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
 	  },
@@ -5320,17 +5341,21 @@
 	  // then value should be 2.51, rather than 2.5
 	  // https://github.com/react-component/input-number/issues/39
 	  getMaxPrecision: function getMaxPrecision(currentValue) {
+	    var ratio = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 	    var step = this.props.step;
 	
+	    var ratioPrecision = this.getPrecision(ratio);
 	    var stepPrecision = this.getPrecision(step);
-	    if (!currentValue) {
-	      return stepPrecision;
-	    }
 	    var currentValuePrecision = this.getPrecision(currentValue);
-	    return currentValuePrecision > stepPrecision ? currentValuePrecision : stepPrecision;
+	    if (!currentValue) {
+	      return ratioPrecision + stepPrecision;
+	    }
+	    return Math.max(currentValuePrecision, ratioPrecision + stepPrecision);
 	  },
 	  getPrecisionFactor: function getPrecisionFactor(currentValue) {
-	    var precision = this.getMaxPrecision(currentValue);
+	    var ratio = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+	
+	    var precision = this.getMaxPrecision(currentValue, ratio);
 	    return Math.pow(10, precision);
 	  },
 	  toPrecisionAsStep: function toPrecisionAsStep(num) {
@@ -5364,37 +5389,39 @@
 	    }
 	    return this.toNumber(num);
 	  },
-	  upStep: function upStep(val) {
+	  upStep: function upStep(val, rat) {
 	    var _props3 = this.props,
 	        step = _props3.step,
 	        min = _props3.min;
 	
-	    var precisionFactor = this.getPrecisionFactor(val);
-	    var precision = Math.abs(this.getMaxPrecision(val));
+	    var precisionFactor = this.getPrecisionFactor(val, rat);
+	    var precision = Math.abs(this.getMaxPrecision(val, rat));
 	    var result = void 0;
 	    if (typeof val === 'number') {
-	      result = ((precisionFactor * val + precisionFactor * step) / precisionFactor).toFixed(precision);
+	      result = ((precisionFactor * val + precisionFactor * step * rat) / precisionFactor).toFixed(precision);
 	    } else {
 	      result = min === -Infinity ? step : min;
 	    }
 	    return this.toNumber(result);
 	  },
-	  downStep: function downStep(val) {
+	  downStep: function downStep(val, rat) {
 	    var _props4 = this.props,
 	        step = _props4.step,
 	        min = _props4.min;
 	
-	    var precisionFactor = this.getPrecisionFactor(val);
-	    var precision = Math.abs(this.getMaxPrecision(val));
+	    var precisionFactor = this.getPrecisionFactor(val, rat);
+	    var precision = Math.abs(this.getMaxPrecision(val, rat));
 	    var result = void 0;
 	    if (typeof val === 'number') {
-	      result = ((precisionFactor * val - precisionFactor * step) / precisionFactor).toFixed(precision);
+	      result = ((precisionFactor * val - precisionFactor * step * rat) / precisionFactor).toFixed(precision);
 	    } else {
 	      result = min === -Infinity ? -step : min;
 	    }
 	    return this.toNumber(result);
 	  },
 	  step: function step(type, e) {
+	    var ratio = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+	
 	    if (e) {
 	      e.preventDefault();
 	    }
@@ -5406,7 +5433,7 @@
 	    if (this.isNotCompleteNumber(value)) {
 	      return;
 	    }
-	    var val = this[type + 'Step'](value);
+	    var val = this[type + 'Step'](value, ratio);
 	    if (val > props.max || val < props.min) {
 	      return;
 	    }
@@ -5420,28 +5447,28 @@
 	      clearTimeout(this.autoStepTimer);
 	    }
 	  },
-	  down: function down(e, recursive) {
+	  down: function down(e, ratio, recursive) {
 	    var _this2 = this;
 	
 	    if (e.persist) {
 	      e.persist();
 	    }
 	    this.stop();
-	    this.step('down', e);
+	    this.step('down', e, ratio);
 	    this.autoStepTimer = setTimeout(function () {
-	      _this2.down(e, true);
+	      _this2.down(e, ratio, true);
 	    }, recursive ? SPEED : DELAY);
 	  },
-	  up: function up(e, recursive) {
+	  up: function up(e, ratio, recursive) {
 	    var _this3 = this;
 	
 	    if (e.persist) {
 	      e.persist();
 	    }
 	    this.stop();
-	    this.step('up', e);
+	    this.step('up', e, ratio);
 	    this.autoStepTimer = setTimeout(function () {
-	      _this3.up(e, true);
+	      _this3.up(e, ratio, true);
 	    }, recursive ? SPEED : DELAY);
 	  }
 	};

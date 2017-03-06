@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-input-number@3.2.1 - input-number ui component for react(web &amp; react-native)</title>
+  <title>rc-input-number@3.3.0 - input-number ui component for react(web &amp; react-native)</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,12 +737,14 @@
 
 <body>
 <div class="header">
-  <h1>rc-input-number@3.2.1</h1>
+  <h1>rc-input-number@3.3.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
   <div class="examples-body">
     <ul>
+      
+      <li><a href="examples/combination-key-format.html">combination-key-format</a></li>
       
       <li><a href="examples/custom.html">custom</a></li>
       
@@ -912,9 +914,20 @@ react-native run-ios</code></pre></div><h2>API<a id="user-content-api" name="api
           <td></td>
           <td>custom the down step element</td>
         </tr>
+        <tr>
+          <td>formatter</td>
+          <td>Function</td>
+          <td></td>
+          <td>Specifies the format of the value presented</td>
+        </tr>
     </tbody>
 </table>
 
+<h2>Keyboard Navigation<a id="user-content-keyboard-navigation" name="keyboard-navigation" class="anchor" aria-hidden="true" href="#keyboard-navigation"><span class="octicon octicon-link"></span></a></h2><ul>
+<li>When you hit the <kbd>⬆</kbd> or <kbd>⬇</kbd> key, the input value will be increased or decreased by <code>step</code></li>
+<li>With the <kbd>Shift</kbd> key (<kbd>Shift+⬆</kbd>, <kbd>Shift+⬇</kbd>), the input value will be changed by <code>10 * step</code></li>
+<li>With the <kbd>Ctrl</kbd> or <kbd>⌘</kbd> key (<kbd>Ctrl+⬆</kbd> or <kbd>⌘+⬆</kbd> or <kbd>Ctrl+⬇</kbd> or <kbd>⌘+⬇</kbd> ), the input value will be changed by <code>0.1 * step</code></li>
+</ul>
 <h2>Test Case<a id="user-content-test-case" name="test-case" class="anchor" aria-hidden="true" href="#test-case"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm test
 npm run chrome-test</code></pre></div><h2>Coverage<a id="user-content-coverage" name="coverage" class="anchor" aria-hidden="true" href="#coverage"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="undefined">npm run coverage</code></pre></div><p>open coverage/ dir</p>
 <h2>License<a id="user-content-license" name="license" class="anchor" aria-hidden="true" href="#license"><span class="octicon octicon-link"></span></a></h2><p>rc-input-number is released under the MIT license.</p>
