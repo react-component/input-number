@@ -1,6 +1,15 @@
 # History
 ----
 
+## 3.3.0
+
+- Added prop `formatter`.
+- Support changing radio using ctrl and shift.
+
+## 3.2.0
+
+- Fixed touch events.
+
 ## 3.1.0
 
 - Added props `upHanlder` and `downHanlder`.
