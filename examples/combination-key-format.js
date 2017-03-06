@@ -9,7 +9,7 @@ const Component = React.createClass({
     return {
       disabled: false,
       readOnly: false,
-      value: 5,
+      value: 50000,
     };
   },
   onChange(value) {
@@ -26,23 +26,30 @@ const Component = React.createClass({
       readOnly: !this.state.readOnly,
     });
   },
+  numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  },
   format(num) {
-    return `$ ${num}`;
+    return `$ ${this.numberWithCommas(num)} boeing737`;
+  },
+  parser(num) {
+    return num.toString().split(' ')[1].replace(/,*/g, '');
   },
   render() {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
           min={-8000}
-          max={10000}
+          max={10000000}
           value={this.state.value}
-          style={{ width: 100 }}
+          style={{ width: 200 }}
           readOnly={this.state.readOnly}
           onChange={this.onChange}
           disabled={this.state.disabled}
           autoFocus={false}
-          step={0.5}
+          step={100}
           formatter={this.format}
+          parser={this.parser}
         />
         <p>
           <button onClick={this.toggleDisabled}>toggle Disabled</button>

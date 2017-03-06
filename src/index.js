@@ -31,6 +31,7 @@ const InputNumber = React.createClass({
     downHandler: PropTypes.node,
     useTouch: PropTypes.bool,
     formatter: PropTypes.func,
+    parser: PropTypes.func,
   },
 
   mixins: [mixin],
