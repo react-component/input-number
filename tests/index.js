@@ -611,6 +611,15 @@ describe('inputNumber', () => {
       Simulate.blur(inputElement);
       expect(onChangeCallCount).to.be(3);
     });
+
+    // https://github.com/ant-design/ant-design/issues/5235
+    it('input long number', () => {
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '111111111111111111111' } });
+      expect(inputElement.value).to.be('111111111111111111111');
+      Simulate.change(inputElement, { target: { value: '11111111111111111111111111111' } });
+      expect(inputElement.value).to.be('11111111111111111111111111111');
+    });
   });
 
   describe('formatter', () => {
