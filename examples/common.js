@@ -168,8 +168,7 @@
 	    upHandler: _react.PropTypes.node,
 	    downHandler: _react.PropTypes.node,
 	    useTouch: _react.PropTypes.bool,
-	    formatter: _react.PropTypes.func,
-	    parser: _react.PropTypes.func
+	    formatter: _react.PropTypes.func
 	  },
 	
 	  mixins: [_mixin2.default],
@@ -5206,10 +5205,6 @@
 	});
 	function noop() {}
 	
-	function defaultParser(input) {
-	  return input.replace(/[^\w\.-]*/g, '');
-	}
-	
 	/**
 	 * When click and hold on a button - the speed of auto changin the value.
 	 */
@@ -5231,8 +5226,7 @@
 	      onChange: noop,
 	      onKeyDown: noop,
 	      onFocus: noop,
-	      onBlur: noop,
-	      parser: defaultParser
+	      onBlur: noop
 	    };
 	  },
 	  getInitialState: function getInitialState() {
@@ -5262,7 +5256,7 @@
 	    this.stop();
 	  },
 	  onChange: function onChange(e) {
-	    var input = this.props.parser(this.getValueFromEvent(e).trim());
+	    var input = this.getValueFromEvent(e).trim().replace(/^[^\w\.-]*|[^\w\.-]*$/g, '');
 	    this.setState({ inputValue: input });
 	    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
 	  },
@@ -5390,7 +5384,8 @@
 	
 	  // '1.0' '1.00'  => may be a inputing number
 	  toNumberWhenUserInput: function toNumberWhenUserInput(num) {
-	    if (/\.0+$/.test(num) && this.state.focused) {
+	    // num.length > 16 => prevent input large number will became Infinity
+	    if ((/\.0+$/.test(num) || num.length > 16) && this.state.focused) {
 	      return num;
 	    }
 	    return this.toNumber(num);
