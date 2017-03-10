@@ -739,6 +739,34 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('$ 100');
       expect(inputNumber.state.value).to.be(100);
     });
+
+    it('formatter and parser', () => {
+      const Demo = React.createClass({
+        render() {
+          return (<InputNum
+            ref="inputNum"
+            step={1}
+            defaultValue={5}
+            useTouch
+            formatter={num => `$ ${num} boeing 737`}
+            parser={num => num.toString().split(' ')[1]}
+          />);
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      Simulate.focus(inputElement);
+      Simulate.keyDown(inputElement, { keyCode: keyCode.UP });
+      expect(inputNumber.state.value).to.be(6);
+      expect(inputElement.value).to.be('$ 6 boeing 737');
+      Simulate.keyDown(inputElement, { keyCode: keyCode.DOWN });
+      expect(inputNumber.state.value).to.be(5);
+      expect(inputElement.value).to.be('$ 5 boeing 737');
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
+      expect(inputNumber.state.value).to.be(6);
+      expect(inputElement.value).to.be('$ 6 boeing 737');
+    });
   });
 });
 

@@ -1,6 +1,10 @@
 function noop() {
 }
 
+function defaultParser(input) {
+  return input.replace(/[^\w\.-]*/g, '');
+}
+
 /**
  * When click and hold on a button - the speed of auto changin the value.
  */
@@ -23,6 +27,7 @@ export default {
       onKeyDown: noop,
       onFocus: noop,
       onBlur: noop,
+      parser: defaultParser,
     };
   },
 
@@ -56,7 +61,7 @@ export default {
   },
 
   onChange(e) {
-    const input = this.getValueFromEvent(e).trim().replace(/^[^\w\.-]*|[^\w\.-]*$/g, '');
+    const input = this.props.parser(this.getValueFromEvent(e).trim());
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
   },
