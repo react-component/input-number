@@ -201,13 +201,13 @@ react-native run-ios
         </tr>
         <tr>
           <td>formatter</td>
-          <td>Function</td>
+          <td>(value: number|string): displayValue: string</td>
           <td></td>
           <td>Specifies the format of the value presented</td>
         </tr>
         <tr>
           <td>parser</td>
-          <td>Function</td>
+          <td>(displayValue: string) => value: number</td>
           <td>`input => input.replace(/[^\w\.-]*/g, '')`</td>
           <td>Specifies the value extracted from formatter</td>
         </tr>
