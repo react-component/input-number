@@ -435,8 +435,27 @@ describe('inputNumber', () => {
 
     it('small value and step', () => {
       const Demo = React.createClass({
+        getInitialState() {
+          return {
+            value: 0.000000001,
+          };
+        },
+        onChange(v) {
+          this.setState({
+            value: v,
+          });
+        },
         render() {
-          return <InputNum ref="inputNum" value={0.000000001} step={0.000000001} />;
+          return (
+            <InputNum
+              ref="inputNum"
+              value={this.state.value}
+              step={0.000000001}
+              min={-10}
+              max={10}
+              onChange={this.onChange}
+            />
+          );
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -444,6 +463,13 @@ describe('inputNumber', () => {
       inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
       expect(inputNumber.state.value).to.be(0.000000001);
       expect(inputElement.value).to.be('0.000000001');
+      for (let i = 0; i < 10; i++) {
+        // plus until change precision
+        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      }
+      Simulate.blur(inputElement);
+      expect(inputNumber.state.value).to.be(0.000000011);
+      expect(inputElement.value).to.be('0.000000011');
     });
 
     it('small step with integer value', () => {
