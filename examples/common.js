@@ -168,8 +168,7 @@
 	    upHandler: _react.PropTypes.node,
 	    downHandler: _react.PropTypes.node,
 	    useTouch: _react.PropTypes.bool,
-	    formatter: _react.PropTypes.func,
-	    parser: _react.PropTypes.func
+	    formatter: _react.PropTypes.func
 	  },
 	
 	  mixins: [_mixin2.default],
@@ -279,7 +278,7 @@
 	      inputDisplayValue = this.toPrecisionAsStep(this.state.value);
 	    }
 	
-	    if (inputDisplayValue === undefined) {
+	    if (inputDisplayValue === undefined || inputDisplayValue === null) {
 	      inputDisplayValue = '';
 	    }
 	
@@ -1259,15 +1258,8 @@
 /* 50 */
 /***/ function(module, exports) {
 
-	/*
-	object-assign
-	(c) Sindre Sorhus
-	@license MIT
-	*/
-	
 	'use strict';
 	/* eslint-disable no-unused-vars */
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 	
@@ -1288,7 +1280,7 @@
 			// Detect buggy property enumeration order in older V8 versions.
 	
 			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			var test1 = new String('abc');  // eslint-disable-line
 			test1[5] = 'de';
 			if (Object.getOwnPropertyNames(test1)[0] === '5') {
 				return false;
@@ -1317,7 +1309,7 @@
 			}
 	
 			return true;
-		} catch (err) {
+		} catch (e) {
 			// We don't expect any of the above to throw, but better to be safe.
 			return false;
 		}
@@ -1337,8 +1329,8 @@
 				}
 			}
 	
-			if (getOwnPropertySymbols) {
-				symbols = getOwnPropertySymbols(from);
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
 					if (propIsEnumerable.call(from, symbols[i])) {
 						to[symbols[i]] = from[symbols[i]];
@@ -1745,18 +1737,12 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	var validateFormat = function validateFormat(format) {};
-	
-	if (process.env.NODE_ENV !== 'production') {
-	  validateFormat = function validateFormat(format) {
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (process.env.NODE_ENV !== 'production') {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  };
-	}
-	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  validateFormat(format);
+	  }
 	
 	  if (!condition) {
 	    var error;
@@ -5219,10 +5205,6 @@
 	});
 	function noop() {}
 	
-	function defaultParser(input) {
-	  return input.replace(/[^\w\.-]*/g, '');
-	}
-	
 	/**
 	 * When click and hold on a button - the speed of auto changin the value.
 	 */
@@ -5244,8 +5226,7 @@
 	      onChange: noop,
 	      onKeyDown: noop,
 	      onFocus: noop,
-	      onBlur: noop,
-	      parser: defaultParser
+	      onBlur: noop
 	    };
 	  },
 	  getInitialState: function getInitialState() {
@@ -5275,7 +5256,7 @@
 	    this.stop();
 	  },
 	  onChange: function onChange(e) {
-	    var input = this.props.parser(this.getValueFromEvent(e).trim());
+	    var input = this.getValueFromEvent(e).trim().replace(/^[^\w\.-]*|[^\w\.-]*$/g, '');
 	    this.setState({ inputValue: input });
 	    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
 	  },
@@ -5345,7 +5326,7 @@
 	  getPrecision: function getPrecision(value) {
 	    var valueString = value.toString();
 	    if (valueString.indexOf('e-') >= 0) {
-	      return parseInt(valueString.slice(valueString.indexOf('e-') + 2), 10);
+	      return parseInt(valueString.slice(valueString.indexOf('e-') + 1), 10);
 	    }
 	    var precision = 0;
 	    if (valueString.indexOf('.') >= 0) {
@@ -5391,7 +5372,7 @@
 	
 	  // '1.' '1x' 'xx' '' => are not complete numbers
 	  isNotCompleteNumber: function isNotCompleteNumber(num) {
-	    return isNaN(num) || num === '' || num.toString().indexOf('.') === num.toString().length - 1;
+	    return isNaN(num) || num === '' || num === null || num && num.toString().indexOf('.') === num.toString().length - 1;
 	  },
 	  toNumber: function toNumber(num) {
 	    if (this.isNotCompleteNumber(num)) {
@@ -6778,14 +6759,6 @@
 	    componentDidMount: function componentDidMount() {
 	        this.root = _reactDom2["default"].findDOMNode(this);
 	    },
-	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	        // disabled auto clear active state
-	        if (nextProps.disabled && this.state.active) {
-	            this.setState({
-	                active: false
-	            });
-	        }
-	    },
 	    componentDidUpdate: function componentDidUpdate() {
 	        this.root = _reactDom2["default"].findDOMNode(this);
 	    },
@@ -6882,7 +6855,7 @@
 	            clearTimeout(this.pressOutDelayTimeout);
 	            this.pressOutDelayTimeout = null;
 	        }
-	        if (this.props.fixClickPenetration && !isAllowPress()) {
+	        if (!isAllowPress()) {
 	            return;
 	        }
 	        this._remeasureMetricsOnInit(e);
@@ -6910,7 +6883,8 @@
 	        }
 	    },
 	    touchableHandleResponderRelease: function touchableHandleResponderRelease(e) {
-	        if (!this.touchable.startMouse) {
+	        if (!isAllowPress()) {
+	            this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
 	            return;
 	        }
 	        var touch = extractSingleTouch(e);
@@ -6924,9 +6898,6 @@
 	        this._receiveSignal(Signals.RESPONDER_RELEASE, e);
 	    },
 	    touchableHandleResponderTerminate: function touchableHandleResponderTerminate(e) {
-	        if (!this.touchable.startMouse) {
-	            return;
-	        }
 	        this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
 	    },
 	    checkTouchWithinActive: function checkTouchWithinActive(e) {
@@ -6951,9 +6922,6 @@
 	        return pageX > positionOnGrant.left - pressExpandLeft && pageY > positionOnGrant.top - pressExpandTop && pageX < positionOnGrant.left + positionOnGrant.width + pressExpandRight && pageY < positionOnGrant.top + positionOnGrant.height + pressExpandBottom;
 	    },
 	    touchableHandleResponderMove: function touchableHandleResponderMove(e) {
-	        if (!this.touchable.startMouse) {
-	            return;
-	        }
 	        // Measurement may not have returned yet.
 	        if (!this.touchable.dimensionsOnActivate || this.touchable.touchState === States.NOT_RESPONDER) {
 	            return;
@@ -6983,25 +6951,28 @@
 	            this._receiveSignal(Signals.LEAVE_PRESS_RECT, e);
 	        }
 	    },
-	    callProp: function callProp(name, e) {
-	        if (this.props[name] && !this.props.disabled) {
-	            this.props[name](e);
-	        }
-	    },
 	    touchableHandleActivePressIn: function touchableHandleActivePressIn(e) {
 	        this.setActive(true);
-	        this.callProp('onPressIn', e);
+	        if (this.props.onPressIn) {
+	            this.props.onPressIn(e);
+	        }
 	    },
 	    touchableHandleActivePressOut: function touchableHandleActivePressOut(e) {
 	        this.setActive(false);
-	        this.callProp('onPressOut', e);
+	        if (this.props.onPressOut) {
+	            this.props.onPressOut(e);
+	        }
 	    },
 	    touchableHandlePress: function touchableHandlePress(e) {
-	        this.callProp('onPress', e);
+	        if (this.props.onPress) {
+	            this.props.onPress(e);
+	        }
 	        lastClickTime = Date.now();
 	    },
 	    touchableHandleLongPress: function touchableHandleLongPress(e) {
-	        this.callProp('onLongPress', e);
+	        if (this.props.onLongPress) {
+	            this.props.onLongPress(e);
+	        }
 	    },
 	    setActive: function setActive(active) {
 	        if (this.props.activeClassName || this.props.activeStyle) {
@@ -7121,7 +7092,7 @@
 	
 	        var events = disabled ? undefined : copy(this, ['onTouchStart', 'onTouchMove', 'onTouchEnd', 'onTouchCancel', 'onMouseDown']);
 	        var child = _react2["default"].Children.only(children);
-	        if (!disabled && this.state.active) {
+	        if (this.state.active) {
 	            var _child$props = child.props,
 	                style = _child$props.style,
 	                className = _child$props.className;
