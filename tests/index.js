@@ -361,6 +361,19 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(1);
       expect(inputElement.value).to.be('1');
     });
+
+    it('default value could be null', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" defaultValue={null} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputNumber.state.value).to.be(null);
+      expect(inputElement.value).to.be('');
+    });
   });
 
   describe('decimal', () => {

@@ -141,7 +141,7 @@ const InputNumber = React.createClass({
       inputDisplayValue = this.toPrecisionAsStep(this.state.value);
     }
 
-    if (inputDisplayValue === undefined) {
+    if (inputDisplayValue === undefined || inputDisplayValue === null) {
       inputDisplayValue = '';
     }
 

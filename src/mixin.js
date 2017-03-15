@@ -171,7 +171,8 @@ export default {
     return (
       isNaN(num) ||
       num === '' ||
-      num.toString().indexOf('.') === num.toString().length - 1
+      num === null ||
+      (num && num.toString().indexOf('.') === num.toString().length - 1)
     );
   },
 
