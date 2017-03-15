@@ -168,7 +168,8 @@
 	    upHandler: _react.PropTypes.node,
 	    downHandler: _react.PropTypes.node,
 	    useTouch: _react.PropTypes.bool,
-	    formatter: _react.PropTypes.func
+	    formatter: _react.PropTypes.func,
+	    parser: _react.PropTypes.func
 	  },
 	
 	  mixins: [_mixin2.default],
@@ -5205,6 +5206,10 @@
 	});
 	function noop() {}
 	
+	function defaultParser(input) {
+	  return input.replace(/[^\w\.-]*/g, '');
+	}
+	
 	/**
 	 * When click and hold on a button - the speed of auto changin the value.
 	 */
@@ -5226,7 +5231,8 @@
 	      onChange: noop,
 	      onKeyDown: noop,
 	      onFocus: noop,
-	      onBlur: noop
+	      onBlur: noop,
+	      parser: defaultParser
 	    };
 	  },
 	  getInitialState: function getInitialState() {
@@ -5256,7 +5262,7 @@
 	    this.stop();
 	  },
 	  onChange: function onChange(e) {
-	    var input = this.getValueFromEvent(e).trim().replace(/^[^\w\.-]*|[^\w\.-]*$/g, '');
+	    var input = this.props.parser(this.getValueFromEvent(e).trim());
 	    this.setState({ inputValue: input });
 	    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
 	  },
@@ -5326,7 +5332,7 @@
 	  getPrecision: function getPrecision(value) {
 	    var valueString = value.toString();
 	    if (valueString.indexOf('e-') >= 0) {
-	      return parseInt(valueString.slice(valueString.indexOf('e-') + 1), 10);
+	      return parseInt(valueString.slice(valueString.indexOf('e-') + 2), 10);
 	    }
 	    var precision = 0;
 	    if (valueString.indexOf('.') >= 0) {
