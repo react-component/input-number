@@ -48,11 +48,21 @@ const InputNumber = React.createClass({
     this.componentDidUpdate();
   },
 
+  componentWillUpdate() {
+    this.start = this.refs.input.selectionStart;
+    this.end = this.refs.input.selectionEnd;
+  },
+
   componentDidUpdate() {
     if (this.props.focusOnUpDown &&
       this.state.focused &&
       document.activeElement !== this.refs.input) {
       this.focus();
+    }
+
+    const selectionRange = this.refs.input.setSelectionRange;
+    if (selectionRange && typeof selectionRange === 'function') {
+      this.refs.input.setSelectionRange(this.start, this.end);
     }
   },
 

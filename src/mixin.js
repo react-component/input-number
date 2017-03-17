@@ -2,7 +2,7 @@ function noop() {
 }
 
 function defaultParser(input) {
-  return input.replace(/[^\w\.-]*/g, '');
+  return input.replace(/[^\w\.-]+/g, '');
 }
 
 /**
