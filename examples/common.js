@@ -184,9 +184,18 @@
 	  componentDidMount: function componentDidMount() {
 	    this.componentDidUpdate();
 	  },
+	  componentWillUpdate: function componentWillUpdate() {
+	    this.start = this.refs.input.selectionStart;
+	    this.end = this.refs.input.selectionEnd;
+	  },
 	  componentDidUpdate: function componentDidUpdate() {
 	    if (this.props.focusOnUpDown && this.state.focused && document.activeElement !== this.refs.input) {
 	      this.focus();
+	    }
+	
+	    var selectionRange = this.refs.input.setSelectionRange;
+	    if (selectionRange && typeof selectionRange === 'function') {
+	      this.refs.input.setSelectionRange(this.start, this.end);
 	    }
 	  },
 	  onKeyDown: function onKeyDown(e) {
@@ -5207,7 +5216,7 @@
 	function noop() {}
 	
 	function defaultParser(input) {
-	  return input.replace(/[^\w\.-]*/g, '');
+	  return input.replace(/[^\w\.-]+/g, '');
 	}
 	
 	/**
