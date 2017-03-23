@@ -23,7 +23,7 @@ webpackJsonp([0],[
 	    return {
 	      disabled: false,
 	      readOnly: false,
-	      value: 5
+	      value: 50000
 	    };
 	  },
 	  onChange: function onChange(value) {
@@ -40,8 +40,14 @@ webpackJsonp([0],[
 	      readOnly: !this.state.readOnly
 	    });
 	  },
+	  numberWithCommas: function numberWithCommas(x) {
+	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	  },
 	  format: function format(num) {
-	    return '$ ' + num;
+	    return '$ ' + this.numberWithCommas(num) + ' boeing737';
+	  },
+	  parser: function parser(num) {
+	    return num.toString().split(' ')[1].replace(/,*/g, '');
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -49,15 +55,16 @@ webpackJsonp([0],[
 	      { style: { margin: 10 } },
 	      React.createElement(InputNumber, {
 	        min: -8000,
-	        max: 10000,
+	        max: 10000000,
 	        value: this.state.value,
-	        style: { width: 100 },
+	        style: { width: 200 },
 	        readOnly: this.state.readOnly,
 	        onChange: this.onChange,
 	        disabled: this.state.disabled,
 	        autoFocus: false,
-	        step: 0.5,
-	        formatter: this.format
+	        step: 100,
+	        formatter: this.format,
+	        parser: this.parser
 	      }),
 	      React.createElement(
 	        'p',
