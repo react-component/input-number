@@ -31,6 +31,11 @@ const InputNumber = React.createClass({
     downHandler: PropTypes.node,
     useTouch: PropTypes.bool,
     formatter: PropTypes.func,
+    parser: PropTypes.func,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onMouseOut: PropTypes.func,
   },
 
   mixins: [mixin],
@@ -47,11 +52,21 @@ const InputNumber = React.createClass({
     this.componentDidUpdate();
   },
 
+  componentWillUpdate() {
+    this.start = this.refs.input.selectionStart;
+    this.end = this.refs.input.selectionEnd;
+  },
+
   componentDidUpdate() {
     if (this.props.focusOnUpDown &&
       this.state.focused &&
       document.activeElement !== this.refs.input) {
       this.focus();
+    }
+
+    const selectionRange = this.refs.input.setSelectionRange;
+    if (selectionRange && typeof selectionRange === 'function') {
+      this.refs.input.setSelectionRange(this.start, this.end);
     }
   },
 
@@ -171,7 +186,14 @@ const InputNumber = React.createClass({
 
     // ref for test
     return (
-      <div className={classes} style={props.style}>
+      <div
+        className={classes}
+        style={props.style}
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}
+        onMouseOver={props.onMouseOver}
+        onMouseOut={props.onMouseOut}
+      >
         <div className={`${prefixCls}-handler-wrap`}>
           <InputHandler
             ref="up"
