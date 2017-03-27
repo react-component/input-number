@@ -66,7 +66,7 @@ const InputNumber = React.createClass({
 
     const selectionRange = this.refs.input.setSelectionRange;
     if (selectionRange && typeof selectionRange === 'function' &&
-        this.start !== undefined && this.end !== undefined) {
+        this.start !== undefined && this.end !== undefined && this.start !== this.end) {
       this.refs.input.setSelectionRange(this.start, this.end);
     }
   },
