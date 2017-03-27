@@ -198,7 +198,7 @@
 	    }
 	
 	    var selectionRange = this.refs.input.setSelectionRange;
-	    if (selectionRange && typeof selectionRange === 'function' && this.start !== undefined && this.end !== undefined) {
+	    if (selectionRange && typeof selectionRange === 'function' && this.start !== undefined && this.end !== undefined && this.start !== this.end) {
 	      this.refs.input.setSelectionRange(this.start, this.end);
 	    }
 	  },
@@ -5226,10 +5226,6 @@
 	});
 	function noop() {}
 	
-	function defaultParser(input) {
-	  return input.replace(/[^\w\.-]+/g, '');
-	}
-	
 	/**
 	 * When click and hold on a button - the speed of auto changin the value.
 	 */
@@ -5251,8 +5247,7 @@
 	      onChange: noop,
 	      onKeyDown: noop,
 	      onFocus: noop,
-	      onBlur: noop,
-	      parser: defaultParser
+	      onBlur: noop
 	    };
 	  },
 	  getInitialState: function getInitialState() {
@@ -5282,7 +5277,7 @@
 	    this.stop();
 	  },
 	  onChange: function onChange(e) {
-	    var input = this.props.parser(this.getValueFromEvent(e).trim());
+	    var input = this.getValueFromEvent(e).trim().replace(/^[^\w\.-]*|[^\w\.-]*$/g, '');
 	    this.setState({ inputValue: input });
 	    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
 	  },
@@ -5352,7 +5347,7 @@
 	  getPrecision: function getPrecision(value) {
 	    var valueString = value.toString();
 	    if (valueString.indexOf('e-') >= 0) {
-	      return parseInt(valueString.slice(valueString.indexOf('e-') + 2), 10);
+	      return parseInt(valueString.slice(valueString.indexOf('e-') + 1), 10);
 	    }
 	    var precision = 0;
 	    if (valueString.indexOf('.') >= 0) {
