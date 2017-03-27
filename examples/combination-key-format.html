@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>combination-key-format.js - example - rc-input-number@3.4.5</title>
+  <title>combination-key-format.js - example - rc-input-number@3.3.4</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-input-number@3.4.5</h1>
+      <h1>rc-input-number@3.3.4</h1>
 
       <p>input-number ui component for react(web &amp; react-native)</p>
     </div>
@@ -280,7 +280,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">return</span> {
       disabled: <span class="hljs-literal">false</span>,
       readOnly: <span class="hljs-literal">false</span>,
-      value: <span class="hljs-number">50000</span>,
+      value: <span class="hljs-number">5</span>,
     };
   },
   onChange(value) {
@@ -297,30 +297,23 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       readOnly: !<span class="hljs-keyword">this</span>.state.readOnly,
     });
   },
-  numberWithCommas(x) {
-    <span class="hljs-keyword">return</span> x.toString().replace(<span class="hljs-regexp">/\B(?=(\d{3})+(?!\d))/g</span>, <span class="hljs-string">','</span>);
-  },
   format(num) {
-    <span class="hljs-keyword">return</span> <span class="hljs-string">`$ <span class="hljs-subst">${this.numberWithCommas(num)}</span> boeing737`</span>;
-  },
-  parser(num) {
-    <span class="hljs-keyword">return</span> num.toString().split(<span class="hljs-string">' '</span>)[<span class="hljs-number">1</span>].replace(<span class="hljs-regexp">/,*/g</span>, <span class="hljs-string">''</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`$ <span class="hljs-subst">${num}</span>`</span>;
   },
   render() {
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">10</span> }}&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">InputNumber</span>
           <span class="hljs-attribute">min</span>=<span class="hljs-value">{-8000}</span>
-          <span class="hljs-attribute">max</span>=<span class="hljs-value">{10000000}</span>
+          <span class="hljs-attribute">max</span>=<span class="hljs-value">{10000}</span>
           <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span>
-          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">width:</span> <span class="hljs-attribute">200</span> }}
+          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">width:</span> <span class="hljs-attribute">100</span> }}
           <span class="hljs-attribute">readOnly</span>=<span class="hljs-value">{this.state.readOnly}</span>
           <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onChange}</span>
           <span class="hljs-attribute">disabled</span>=<span class="hljs-value">{this.state.disabled}</span>
           <span class="hljs-attribute">autoFocus</span>=<span class="hljs-value">{false}</span>
-          <span class="hljs-attribute">step</span>=<span class="hljs-value">{100}</span>
+          <span class="hljs-attribute">step</span>=<span class="hljs-value">{0.5}</span>
           <span class="hljs-attribute">formatter</span>=<span class="hljs-value">{this.format}</span>
-          <span class="hljs-attribute">parser</span>=<span class="hljs-value">{this.parser}</span>
         /&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.toggleDisabled}</span>&gt;</span>toggle Disabled<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
