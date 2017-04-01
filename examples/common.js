@@ -193,13 +193,13 @@
 	    this.end = this.refs.input.selectionEnd;
 	  },
 	  componentDidUpdate: function componentDidUpdate() {
-	    if (this.props.focusOnUpDown && this.state.focused && document.activeElement !== this.refs.input) {
-	      this.focus();
-	    }
-	
-	    var selectionRange = this.refs.input.setSelectionRange;
-	    if (selectionRange && typeof selectionRange === 'function' && this.start !== undefined && this.end !== undefined && this.start !== this.end) {
-	      this.refs.input.setSelectionRange(this.start, this.end);
+	    if (this.props.focusOnUpDown && this.state.focused) {
+	      var selectionRange = this.refs.input.setSelectionRange;
+	      if (selectionRange && typeof selectionRange === 'function' && this.start !== undefined && this.end !== undefined && this.start !== this.end) {
+	        this.refs.input.setSelectionRange(this.start, this.end);
+	      } else {
+	        this.focus();
+	      }
 	    }
 	  },
 	  onKeyDown: function onKeyDown(e) {
