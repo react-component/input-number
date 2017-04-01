@@ -58,16 +58,17 @@ const InputNumber = React.createClass({
   },
 
   componentDidUpdate() {
-    if (this.props.focusOnUpDown &&
-      this.state.focused &&
-      document.activeElement !== this.refs.input) {
-      this.focus();
-    }
-
-    const selectionRange = this.refs.input.setSelectionRange;
-    if (selectionRange && typeof selectionRange === 'function' &&
-        this.start !== undefined && this.end !== undefined && this.start !== this.end) {
-      this.refs.input.setSelectionRange(this.start, this.end);
+    if (this.props.focusOnUpDown && this.state.focused) {
+      const selectionRange = this.refs.input.setSelectionRange;
+      if (selectionRange &&
+          typeof selectionRange === 'function' &&
+          this.start !== undefined &&
+          this.end !== undefined &&
+          this.start !== this.end) {
+        this.refs.input.setSelectionRange(this.start, this.end);
+      } else {
+        this.focus();
+      }
     }
   },
 

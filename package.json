@@ -1,6 +1,6 @@
 {
   "name": "rc-input-number",
-  "version": "3.4.7",
+  "version": "3.4.8",
   "description": "input-number ui component for react(web & react-native)",
   "keywords": [
     "react",
