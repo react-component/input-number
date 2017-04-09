@@ -46,9 +46,29 @@ webpackJsonp([3],{
 	    return React.createElement(
 	      'div',
 	      { style: { margin: 10 } },
-	      React.createElement(InputNumber, { defaultValue: 3, id: 'x1' }),
-	      React.createElement(InputNumber, { defaultValue: 4, id: 'x2' }),
-	      React.createElement(InputNumber, { defaultValue: 5, id: 'x3' })
+	      React.createElement(InputNumber, {
+	        min: -8,
+	        max: 10,
+	        value: this.state.value,
+	        style: { width: 100 },
+	        readOnly: this.state.readOnly,
+	        onChange: this.onChange,
+	        disabled: this.state.disabled
+	      }),
+	      React.createElement(
+	        'p',
+	        null,
+	        React.createElement(
+	          'button',
+	          { onClick: this.toggleDisabled },
+	          'toggle Disabled'
+	        ),
+	        React.createElement(
+	          'button',
+	          { onClick: this.toggleReadOnly },
+	          'toggle readOnly'
+	        )
+	      )
 	    );
 	  }
 	});
