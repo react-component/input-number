@@ -6,6 +6,7 @@ const InputNum = require('../index');
 const React = require('react');
 const TestUtils = require('react-addons-test-utils');
 const ReactDOM = require('react-dom');
+const sinon = require('sinon');
 const Simulate = TestUtils.Simulate;
 require('../assets/index.less');
 
@@ -320,6 +321,20 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('');
       expect(onChangeFirstArgument).to.be(undefined);
     });
+
+    it('blur on default input', () => {
+      const onChange = sinon.spy();
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" onChange={onChange} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      Simulate.blur(inputElement);
+      expect(onChange.called).to.be(false);
+    });
   });
 
   describe('default value', () => {
@@ -332,7 +347,6 @@ describe('inputNumber', () => {
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
-      expect(inputNumber.state.value).to.be('');
       expect(inputElement.value).to.be('');
     });
 
@@ -345,7 +359,6 @@ describe('inputNumber', () => {
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
-      expect(inputNumber.state.value).to.be('');
       expect(inputElement.value).to.be('');
     });
 
@@ -512,7 +525,7 @@ describe('inputNumber', () => {
       inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '2' } });
-      expect(inputNumber.state.value).to.be('');
+      expect(inputNumber.state.value).to.be(undefined);
       expect(inputElement.value).to.be('2');
       Simulate.blur(inputElement);
       expect(inputNumber.state.value).to.be(2);

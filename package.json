@@ -1,6 +1,6 @@
 {
   "name": "rc-input-number",
-  "version": "3.4.8",
+  "version": "3.4.9",
   "description": "input-number ui component for react(web & react-native)",
   "keywords": [
     "react",
@@ -48,7 +48,8 @@
     "react-addons-test-utils": "15.3.x",
     "react-dom": "15.3.x",
     "react-native": "0.34.1",
-    "react-native-index-page": "~0.1.0"
+    "react-native-index-page": "~0.1.0",
+    "sinon": "^2.1.0"
   },
   "dependencies": {
     "babel-runtime": "6.x",

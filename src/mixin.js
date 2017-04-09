@@ -22,7 +22,6 @@ export default {
       min: -Infinity,
       step: 1,
       style: {},
-      defaultValue: '',
       onChange: noop,
       onKeyDown: noop,
       onFocus: noop,
@@ -109,7 +108,7 @@ export default {
     const changed = newValue !== this.state.value;
     if (!('value' in this.props)) {
       this.setState({
-        value: v,
+        value: newValue,
         inputValue: this.toPrecisionAsStep(v),
       }, callback);
     } else {
