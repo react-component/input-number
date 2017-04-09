@@ -29,9 +29,19 @@ const Component = React.createClass({
   render() {
     return (
       <div style={{ margin: 10 }}>
-        <InputNumber defaultValue={3} id="x1" />
-        <InputNumber defaultValue={4} id="x2" />
-        <InputNumber defaultValue={5} id="x3" />
+        <InputNumber
+          min={-8}
+          max={10}
+          value={this.state.value}
+          style={{ width: 100 }}
+          readOnly={this.state.readOnly}
+          onChange={this.onChange}
+          disabled={this.state.disabled}
+        />
+        <p>
+          <button onClick={this.toggleDisabled}>toggle Disabled</button>
+          <button onClick={this.toggleReadOnly}>toggle readOnly</button>
+        </p>
       </div>
     );
   },
