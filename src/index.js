@@ -240,6 +240,7 @@ const InputNumber = React.createClass({
             onKeyDown={editable ? this.onKeyDown : noop}
             onKeyUp={editable ? this.onKeyUp : noop}
             autoFocus={props.autoFocus}
+            maxLength={props.maxLength}
             readOnly={props.readOnly}
             disabled={props.disabled}
             max={props.max}
