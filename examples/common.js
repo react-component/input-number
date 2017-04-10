@@ -268,17 +268,20 @@
 	    var upDisabledClass = '';
 	    var downDisabledClass = '';
 	    var value = this.state.value;
-	    if (!isNaN(value)) {
-	      var val = Number(value);
-	      if (val >= props.max) {
+	
+	    if (value) {
+	      if (!isNaN(value)) {
+	        var val = Number(value);
+	        if (val >= props.max) {
+	          upDisabledClass = prefixCls + '-handler-up-disabled';
+	        }
+	        if (val <= props.min) {
+	          downDisabledClass = prefixCls + '-handler-down-disabled';
+	        }
+	      } else {
 	        upDisabledClass = prefixCls + '-handler-up-disabled';
-	      }
-	      if (val <= props.min) {
 	        downDisabledClass = prefixCls + '-handler-down-disabled';
 	      }
-	    } else {
-	      upDisabledClass = prefixCls + '-handler-up-disabled';
-	      downDisabledClass = prefixCls + '-handler-down-disabled';
 	    }
 	
 	    var editable = !props.readOnly && !props.disabled;
@@ -5455,13 +5458,15 @@
 	    if (props.disabled) {
 	      return;
 	    }
-	    var value = this.getCurrentValidValue(this.state.inputValue);
+	    var value = this.getCurrentValidValue(this.state.inputValue) || 0;
 	    if (this.isNotCompleteNumber(value)) {
 	      return;
 	    }
 	    var val = this[type + 'Step'](value, ratio);
-	    if (val > props.max || val < props.min) {
-	      return;
+	    if (val > props.max) {
+	      val = props.max;
+	    } else if (val < props.min) {
+	      val = props.min;
 	    }
 	    this.setValue(val);
 	    this.setState({
