@@ -229,13 +229,15 @@ export default {
     if (props.disabled) {
       return;
     }
-    const value = this.getCurrentValidValue(this.state.inputValue);
+    const value = this.getCurrentValidValue(this.state.inputValue) || 0;
     if (this.isNotCompleteNumber(value)) {
       return;
     }
-    const val = this[`${type}Step`](value, ratio);
-    if (val > props.max || val < props.min) {
-      return;
+    let val = this[`${type}Step`](value, ratio);
+    if (val > props.max) {
+      val = props.max;
+    } else if (val < props.min) {
+      val = props.min;
     }
     this.setValue(val);
     this.setState({

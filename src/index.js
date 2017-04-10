@@ -132,18 +132,20 @@ const InputNumber = React.createClass({
     });
     let upDisabledClass = '';
     let downDisabledClass = '';
-    const value = this.state.value;
-    if (!isNaN(value)) {
-      const val = Number(value);
-      if (val >= props.max) {
+    const { value } = this.state;
+    if (value) {
+      if (!isNaN(value)) {
+        const val = Number(value);
+        if (val >= props.max) {
+          upDisabledClass = `${prefixCls}-handler-up-disabled`;
+        }
+        if (val <= props.min) {
+          downDisabledClass = `${prefixCls}-handler-down-disabled`;
+        }
+      } else {
         upDisabledClass = `${prefixCls}-handler-up-disabled`;
-      }
-      if (val <= props.min) {
         downDisabledClass = `${prefixCls}-handler-down-disabled`;
       }
-    } else {
-      upDisabledClass = `${prefixCls}-handler-up-disabled`;
-      downDisabledClass = `${prefixCls}-handler-down-disabled`;
     }
 
     const editable = !props.readOnly && !props.disabled;

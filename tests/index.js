@@ -124,6 +124,70 @@ describe('inputNumber', () => {
       Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
       expect(inputNumber.state.value).to.be(97);
     });
+
+    it('up button works on empty input', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      expect(inputNumber.state.value).to.be(1);
+    });
+
+    it('down button works on empty input', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      expect(inputNumber.state.value).to.be(-1);
+    });
+
+    it('up button works on empty input with min and max', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" min={6} max={10} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      expect(inputNumber.state.value).to.be(6);
+    });
+
+    it('down button works on empty input with min and max', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" min={6} max={10} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      expect(inputNumber.state.value).to.be(6);
+    });
+
+    it('should not disable up and down buttons', () => {
+      const Demo = React.createClass({
+        render() {
+          return <InputNum ref="inputNum" />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      expect(
+        ReactDOM.findDOMNode(inputNumber.refs.up).className.indexOf('disabled') > 0
+      ).to.be(false);
+      expect(
+        ReactDOM.findDOMNode(inputNumber.refs.down).className.indexOf('disabled') > 0
+      ).to.be(false);
+    });
   });
 
   describe('long press', () => {
