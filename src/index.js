@@ -53,8 +53,14 @@ const InputNumber = React.createClass({
   },
 
   componentWillUpdate() {
-    this.start = this.refs.input.selectionStart;
-    this.end = this.refs.input.selectionEnd;
+    try {
+      this.start = this.refs.input.selectionStart;
+      this.end = this.refs.input.selectionEnd;
+    } catch (e) {
+      // Fix error in Chrome:
+      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
+      // http://stackoverflow.com/q/21177489/3040605
+    }
   },
 
   componentDidUpdate() {
