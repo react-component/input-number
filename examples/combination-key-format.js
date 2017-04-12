@@ -11,49 +11,82 @@ webpackJsonp([0],[
 
 	'use strict';
 	
-	/* eslint no-console:0 */
-	__webpack_require__(2);
-	var InputNumber = __webpack_require__(3);
-	var React = __webpack_require__(47);
-	var ReactDOM = __webpack_require__(130);
+	var _classCallCheck2 = __webpack_require__(2);
 	
-	var Component = React.createClass({
-	  displayName: 'Component',
-	  getInitialState: function getInitialState() {
-	    return {
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(72);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	__webpack_require__(80);
+	
+	var _rcInputNumber = __webpack_require__(81);
+	
+	var _rcInputNumber2 = _interopRequireDefault(_rcInputNumber);
+	
+	var _react = __webpack_require__(92);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(137);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint no-console:0 */
+	var Component = function (_React$Component) {
+	  (0, _inherits3.default)(Component, _React$Component);
+	
+	  function Component() {
+	    var _temp, _this, _ret;
+	
+	    (0, _classCallCheck3.default)(this, Component);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = {
 	      disabled: false,
 	      readOnly: false,
 	      value: 50000
-	    };
-	  },
-	  onChange: function onChange(value) {
-	    console.log('onChange:', value);
-	    this.setState({ value: value });
-	  },
-	  toggleDisabled: function toggleDisabled() {
-	    this.setState({
-	      disabled: !this.state.disabled
-	    });
-	  },
-	  toggleReadOnly: function toggleReadOnly() {
-	    this.setState({
-	      readOnly: !this.state.readOnly
-	    });
-	  },
-	  numberWithCommas: function numberWithCommas(x) {
+	    }, _this.onChange = function (value) {
+	      console.log('onChange:', value);
+	      _this.setState({ value: value });
+	    }, _this.toggleDisabled = function () {
+	      _this.setState({
+	        disabled: !_this.state.disabled
+	      });
+	    }, _this.toggleReadOnly = function () {
+	      _this.setState({
+	        readOnly: !_this.state.readOnly
+	      });
+	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	  }
+	
+	  Component.prototype.numberWithCommas = function numberWithCommas(x) {
 	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-	  },
-	  format: function format(num) {
+	  };
+	
+	  Component.prototype.format = function format(num) {
 	    return '$ ' + this.numberWithCommas(num) + ' boeing737';
-	  },
-	  parser: function parser(num) {
+	  };
+	
+	  Component.prototype.parser = function parser(num) {
 	    return num.toString().split(' ')[1].replace(/,*/g, '');
-	  },
-	  render: function render() {
-	    return React.createElement(
+	  };
+	
+	  Component.prototype.render = function render() {
+	    return _react2.default.createElement(
 	      'div',
 	      { style: { margin: 10 } },
-	      React.createElement(InputNumber, {
+	      _react2.default.createElement(_rcInputNumber2.default, {
 	        min: -8000,
 	        max: 10000000,
 	        value: this.state.value,
@@ -66,25 +99,27 @@ webpackJsonp([0],[
 	        formatter: this.format,
 	        parser: this.parser
 	      }),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'p',
 	        null,
-	        React.createElement(
+	        _react2.default.createElement(
 	          'button',
 	          { onClick: this.toggleDisabled },
 	          'toggle Disabled'
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'button',
 	          { onClick: this.toggleReadOnly },
 	          'toggle readOnly'
 	        )
 	      )
 	    );
-	  }
-	});
+	  };
 	
-	ReactDOM.render(React.createElement(Component, null), document.getElementById('__react-content'));
+	  return Component;
+	}(_react2.default.Component);
+	
+	_reactDom2.default.render(_react2.default.createElement(Component, null), document.getElementById('__react-content'));
 
 /***/ }
 ]);

@@ -3,60 +3,90 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(268);
+	module.exports = __webpack_require__(275);
 
 
 /***/ },
 
-/***/ 268:
+/***/ 275:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	/* eslint no-console:0 */
-	__webpack_require__(2);
-	var InputNumber = __webpack_require__(3);
-	var React = __webpack_require__(47);
-	var ReactDOM = __webpack_require__(130);
+	var _classCallCheck2 = __webpack_require__(2);
 	
-	var Component = React.createClass({
-	  displayName: 'Component',
-	  getInitialState: function getInitialState() {
-	    return {
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(72);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	__webpack_require__(80);
+	
+	var _rcInputNumber = __webpack_require__(81);
+	
+	var _rcInputNumber2 = _interopRequireDefault(_rcInputNumber);
+	
+	var _react = __webpack_require__(92);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(137);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint no-console:0 */
+	var Component = function (_React$Component) {
+	  (0, _inherits3.default)(Component, _React$Component);
+	
+	  function Component() {
+	    var _temp, _this, _ret;
+	
+	    (0, _classCallCheck3.default)(this, Component);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = {
 	      disabled: false,
 	      readOnly: false,
 	      value: 5
-	    };
-	  },
-	  onChange: function onChange(value) {
-	    console.log('onChange:', value);
-	    this.setState({ value: value });
-	  },
-	  toggleDisabled: function toggleDisabled() {
-	    this.setState({
-	      disabled: !this.state.disabled
-	    });
-	  },
-	  toggleReadOnly: function toggleReadOnly() {
-	    this.setState({
-	      readOnly: !this.state.readOnly
-	    });
-	  },
-	  render: function render() {
-	    var upHandler = React.createElement(
+	    }, _this.onChange = function (value) {
+	      console.log('onChange:', value);
+	      _this.setState({ value: value });
+	    }, _this.toggleDisabled = function () {
+	      _this.setState({
+	        disabled: !_this.state.disabled
+	      });
+	    }, _this.toggleReadOnly = function () {
+	      _this.setState({
+	        readOnly: !_this.state.readOnly
+	      });
+	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	  }
+	
+	  Component.prototype.render = function render() {
+	    var upHandler = _react2.default.createElement(
 	      'div',
 	      { style: { color: 'blue' } },
 	      'x'
 	    );
-	    var downHandler = React.createElement(
+	    var downHandler = _react2.default.createElement(
 	      'div',
 	      { style: { color: 'red' } },
 	      'V'
 	    );
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { style: { margin: 10 } },
-	      React.createElement(InputNumber, {
+	      _react2.default.createElement(_rcInputNumber2.default, {
 	        min: -8,
 	        max: 10,
 	        value: this.state.value,
@@ -68,10 +98,12 @@ webpackJsonp([1],{
 	        downHandler: downHandler
 	      })
 	    );
-	  }
-	});
+	  };
 	
-	ReactDOM.render(React.createElement(Component, null), document.getElementById('__react-content'));
+	  return Component;
+	}(_react2.default.Component);
+	
+	_reactDom2.default.render(_react2.default.createElement(Component, null), document.getElementById('__react-content'));
 
 /***/ }
 
