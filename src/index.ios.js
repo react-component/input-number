@@ -1,8 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import mixin from './mixin';
 
-const InputNumber = React.createClass({
+const InputNumber = createReactClass({
   propTypes: {
     styles: PropTypes.object,
     style: PropTypes.object,
