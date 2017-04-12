@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import mixin from './mixin';
 import InputHandler from './InputHandler';
@@ -10,7 +12,7 @@ function preventDefault(e) {
   e.preventDefault();
 }
 
-const InputNumber = React.createClass({
+const InputNumber = createReactClass({
   propTypes: {
     focusOnUpDown: PropTypes.bool,
     onChange: PropTypes.func,

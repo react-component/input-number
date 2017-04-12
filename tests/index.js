@@ -1,14 +1,13 @@
 /* eslint-disable react/no-multi-comp, no-unused-vars */
-require('../assets/index.less');
-const keyCode = require('rc-util/lib/KeyCode');
-const expect = require('expect.js');
-const InputNum = require('../index');
-const React = require('react');
-const TestUtils = require('react-addons-test-utils');
-const ReactDOM = require('react-dom');
-const sinon = require('sinon');
-const Simulate = TestUtils.Simulate;
-require('../assets/index.less');
+import '../assets/index.less';
+import keyCode from 'rc-util/lib/KeyCode';
+import expect from 'expect.js';
+import InputNumber from '../index';
+import React from 'react';
+import { Simulate } from 'react-addons-test-utils';
+import ReactDOM from 'react-dom';
+import sinon from 'sinon';
+import createReactClass from 'create-react-class';
 
 const defaultValue = 98;
 
@@ -18,7 +17,7 @@ describe('inputNumber', () => {
   let onChangeFirstArgument;
   let onChangeCallCount = 0;
 
-  const Component = React.createClass({
+  const Component = createReactClass({
     getInitialState() {
       return {
         min: 1,
@@ -44,7 +43,7 @@ describe('inputNumber', () => {
     render() {
       return (
         <div>
-          <InputNum
+          <InputNumber
             ref="inputNum"
             min={this.state.min}
             max={this.state.max}
@@ -126,9 +125,9 @@ describe('inputNumber', () => {
     });
 
     it('up button works on empty input', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" />;
+          return <InputNumber ref="inputNum" />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -138,9 +137,9 @@ describe('inputNumber', () => {
     });
 
     it('down button works on empty input', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" />;
+          return <InputNumber ref="inputNum" />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -150,9 +149,9 @@ describe('inputNumber', () => {
     });
 
     it('up button works on empty input with min and max', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" min={6} max={10} />;
+          return <InputNumber ref="inputNum" min={6} max={10} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -162,9 +161,9 @@ describe('inputNumber', () => {
     });
 
     it('down button works on empty input with min and max', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" min={6} max={10} />;
+          return <InputNumber ref="inputNum" min={6} max={10} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -174,9 +173,9 @@ describe('inputNumber', () => {
     });
 
     it('should not disable up and down buttons', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" />;
+          return <InputNumber ref="inputNum" />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -271,9 +270,9 @@ describe('inputNumber', () => {
     });
 
     it('controlled component will restore when blur input', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" value={1} />;
+          return <InputNumber ref="inputNum" value={1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -388,9 +387,9 @@ describe('inputNumber', () => {
 
     it('blur on default input', () => {
       const onChange = sinon.spy();
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" onChange={onChange} />;
+          return <InputNumber ref="inputNum" onChange={onChange} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -403,9 +402,9 @@ describe('inputNumber', () => {
 
   describe('default value', () => {
     it('default value should be empty', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" />;
+          return <InputNumber ref="inputNum" />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -415,9 +414,9 @@ describe('inputNumber', () => {
     });
 
     it('default value should be empty when step is decimal', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" step={0.1} />;
+          return <InputNumber ref="inputNum" step={0.1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -427,9 +426,9 @@ describe('inputNumber', () => {
     });
 
     it('default value should be 1', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" defaultValue={1} />;
+          return <InputNumber ref="inputNum" defaultValue={1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -440,9 +439,9 @@ describe('inputNumber', () => {
     });
 
     it('default value could be null', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" defaultValue={null} />;
+          return <InputNumber ref="inputNum" defaultValue={null} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -455,9 +454,9 @@ describe('inputNumber', () => {
 
   describe('decimal', () => {
     it('decimal value', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" step={1} value={2.1} />;
+          return <InputNumber ref="inputNum" step={1} value={2.1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -468,9 +467,9 @@ describe('inputNumber', () => {
     });
 
     it('decimal defaultValue', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" step={1} defaultValue={2.1} />;
+          return <InputNumber ref="inputNum" step={1} defaultValue={2.1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -481,9 +480,9 @@ describe('inputNumber', () => {
     });
 
     it('increase and decrease decimal InputNumber by integer step', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" step={1} defaultValue={2.1} />;
+          return <InputNumber ref="inputNum" step={1} defaultValue={2.1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -498,9 +497,9 @@ describe('inputNumber', () => {
     });
 
     it('decimal step should not display complete precision', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" step={0.01} value={2.1} />;
+          return <InputNumber ref="inputNum" step={0.01} value={2.1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -511,9 +510,9 @@ describe('inputNumber', () => {
     });
 
     it('string step should display complete precision', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" step="1.000" value={2.1} />;
+          return <InputNumber ref="inputNum" step="1.000" value={2.1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -524,7 +523,7 @@ describe('inputNumber', () => {
     });
 
     it('small value and step', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         getInitialState() {
           return {
             value: 0.000000001,
@@ -537,7 +536,7 @@ describe('inputNumber', () => {
         },
         render() {
           return (
-            <InputNum
+            <InputNumber
               ref="inputNum"
               value={this.state.value}
               step={0.000000001}
@@ -563,9 +562,9 @@ describe('inputNumber', () => {
     });
 
     it('small step with integer value', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" value={1} step="0.000000001" />;
+          return <InputNumber ref="inputNum" value={1} step="0.000000001" />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -579,9 +578,9 @@ describe('inputNumber', () => {
   describe('GitHub issues', () => {
     // https://github.com/react-component/input-number/issues/32
     it('issue 32', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return <InputNum ref="inputNum" step={0.1} />;
+          return <InputNumber ref="inputNum" step={0.1} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -599,10 +598,10 @@ describe('inputNumber', () => {
     // https://github.com/react-component/input-number/issues/35
     it('issue 35', () => {
       let num;
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
           return (
-            <InputNum
+            <InputNumber
               ref="inputNum"
               step={0.01}
               defaultValue={2}
@@ -641,10 +640,10 @@ describe('inputNumber', () => {
     // https://github.com/ant-design/ant-design/issues/4229
     it('long press not trigger onChange in uncontrolled component', (done) => {
       let num;
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
           return (
-            <InputNum
+            <InputNumber
               ref="inputNum"
               defaultValue={0}
               onChange={value => { num = value; } }
@@ -679,7 +678,7 @@ describe('inputNumber', () => {
     // https://github.com/ant-design/ant-design/issues/5012
     it('controller InputNumber should be able to input number like 1.00*', () => {
       let num;
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         getInitialState() {
           return { value: 2 };
         },
@@ -688,7 +687,7 @@ describe('inputNumber', () => {
         },
         render() {
           return (
-            <InputNum
+            <InputNumber
               ref="inputNum"
               value={this.state.value}
               onChange={value => { num = value; this.onChange(value); } }
@@ -740,9 +739,9 @@ describe('inputNumber', () => {
 
   describe('formatter', () => {
     it('formatter on default', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return (<InputNum
+          return (<InputNumber
             ref="inputNum"
             step={1}
             value={5}
@@ -759,9 +758,9 @@ describe('inputNumber', () => {
     });
 
     it('formatter on mousedown', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return (<InputNum
+          return (<InputNumber
             ref="inputNum"
             step={1}
             defaultValue={5}
@@ -782,9 +781,9 @@ describe('inputNumber', () => {
     });
 
     it('formatter on touchstart', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return (<InputNum
+          return (<InputNumber
             ref="inputNum"
             step={1}
             defaultValue={5}
@@ -806,9 +805,9 @@ describe('inputNumber', () => {
     });
 
     it('formatter on keydown', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return (<InputNum
+          return (<InputNumber
             ref="inputNum"
             step={1}
             defaultValue={5}
@@ -833,7 +832,7 @@ describe('inputNumber', () => {
       let onChangeFirstArgumentFormat;
       let onChangeCallCountFormat = 0;
 
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         getInitialState() {
           return { value: 5 };
         },
@@ -843,7 +842,7 @@ describe('inputNumber', () => {
           this.setState({ value });
         },
         render() {
-          return (<InputNum
+          return (<InputNumber
             ref="inputNum"
             step={1}
             defaultValue={5}
@@ -866,9 +865,9 @@ describe('inputNumber', () => {
     });
 
     it('formatter and parser', () => {
-      const Demo = React.createClass({
+      const Demo = createReactClass({
         render() {
-          return (<InputNum
+          return (<InputNumber
             ref="inputNum"
             step={1}
             defaultValue={5}
@@ -901,7 +900,7 @@ describe('Mobile inputNumber use TouchEvents', () => {
   let onChangeFirstArgument;
   let onChangeCallCount = 0;
 
-  const Component = React.createClass({
+  const Component = createReactClass({
     getInitialState() {
       return {
         min: 1,
@@ -927,7 +926,7 @@ describe('Mobile inputNumber use TouchEvents', () => {
     render() {
       return (
         <div>
-          <InputNum
+          <InputNumber
             ref="inputNum"
             min={this.state.min}
             max={this.state.max}
