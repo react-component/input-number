@@ -195,7 +195,8 @@ const InputNumber = createReactClass({
       };
     }
     const inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
-
+    const isUpDisabled = !!upDisabledClass || disabled || readOnly;
+    const isDownDisabled = !!downDisabledClass || disabled || readOnly;
     // ref for test
     return (
       <div
@@ -209,10 +210,13 @@ const InputNumber = createReactClass({
         <div className={`${prefixCls}-handler-wrap`}>
           <InputHandler
             ref="up"
-            disabled={!!upDisabledClass || disabled || readOnly}
+            disabled={isUpDisabled}
             prefixCls={prefixCls}
             unselectable="unselectable"
             {...upEvents}
+            role="button"
+            aria-label="Increase Value"
+            aria-disabled={!!isUpDisabled}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
           >
             {this.props.upHandler || <span
@@ -223,10 +227,13 @@ const InputNumber = createReactClass({
           </InputHandler>
           <InputHandler
             ref="down"
-            disabled={!!downDisabledClass || disabled || readOnly}
+            disabled={isDownDisabled}
             prefixCls={prefixCls}
             unselectable="unselectable"
             {...downEvents}
+            role="button"
+            aria-label="Decrease Value"
+            aria-disabled={!!isDownDisabled}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
           >
             {this.props.downHandler || <span
@@ -236,7 +243,13 @@ const InputNumber = createReactClass({
             />}
           </InputHandler>
         </div>
-        <div className={`${prefixCls}-input-wrap`}>
+        <div
+          className={`${prefixCls}-input-wrap`}
+          role="spinbutton"
+          aria-valuemin={props.min}
+          aria-valuemax={props.max}
+          aria-valuenow={value}
+        >
           <input
             type={props.type}
             placeholder={props.placeholder}

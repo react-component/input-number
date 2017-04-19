@@ -126,6 +126,10 @@ const InputNumber = createReactClass({
         <TouchableWithoutFeedback
           onPressIn={(editable && !downDisabledStyle) ? this.onPressInDown : undefined}
           onPressOut={(editable && !downDisabledStyle) ? this.onPressOutDown : undefined}
+          accessible
+          accessibilityLabel="Decrease Value"
+          accessibilityComponentType="button"
+          accessibilityTraits={(editable && !downDisabledStyle) ? 'button' : 'disabled'}
         >
           <View
             ref={component => this._stepDown = component}
@@ -152,6 +156,10 @@ const InputNumber = createReactClass({
         <TouchableWithoutFeedback
           onPressIn={(editable && !upDisabledStyle) ? this.onPressInUp : undefined}
           onPressOut={(editable && !upDisabledStyle) ? this.onPressOutUp : undefined}
+          accessible
+          accessibilityLabel="Increase Value"
+          accessibilityComponentType="button"
+          accessibilityTraits={(editable && !upDisabledStyle) ? 'button' : 'disabled'}
         >
           <View
             ref={component => this._stepUp = component}
