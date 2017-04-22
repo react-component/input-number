@@ -185,7 +185,7 @@ export default {
   // '1.0' '1.00'  => may be a inputing number
   toNumberWhenUserInput(num) {
     // num.length > 16 => prevent input large number will became Infinity
-    if ((/\.0+$/.test(num) || num.length > 16) && this.state.focused) {
+    if ((/\.\d*0$/.test(num) || num.length > 16) && this.state.focused) {
       return num;
     }
     return this.toNumber(num);
