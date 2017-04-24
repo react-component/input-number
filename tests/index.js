@@ -676,7 +676,8 @@ describe('inputNumber', () => {
     });
 
     // https://github.com/ant-design/ant-design/issues/5012
-    it('controller InputNumber should be able to input number like 1.00*', () => {
+    // https://github.com/react-component/input-number/issues/64
+    it('controller InputNumber should be able to input number like 1.00* and 1.10*', () => {
       let num;
       const Demo = createReactClass({
         getInitialState() {
@@ -706,6 +707,13 @@ describe('inputNumber', () => {
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('6');
       expect(num).to.be(6);
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '6.10' } });
+      expect(inputElement.value).to.be('6.10');
+      expect(num).to.be('6.10');
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('6.1');
+      expect(num).to.be(6.1);
     });
 
     it('onChange should not be called when input is not changed', () => {
