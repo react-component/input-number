@@ -1,15 +1,15 @@
 webpackJsonp([3],{
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(277);
+	module.exports = __webpack_require__(284);
 
 
-/***/ },
+/***/ }),
 
-/***/ 277:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 284:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -35,7 +35,7 @@ webpackJsonp([3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(137);
+	var _reactDom = __webpack_require__(136);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -107,7 +107,7 @@ webpackJsonp([3],{
 	
 	_reactDom2.default.render(_react2.default.createElement(Component, null), document.getElementById('__react-content'));
 
-/***/ }
+/***/ })
 
 });
 //# sourceMappingURL=simple.js.map
