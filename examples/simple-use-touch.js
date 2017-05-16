@@ -1,19 +1,23 @@
-webpackJsonp([2],{
+webpackJsonp([4],{
 
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(278);
+	module.exports = __webpack_require__(280);
 
 
 /***/ }),
 
-/***/ 278:
+/***/ 280:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	__webpack_require__(2);
+	
+	var _rcInputNumber = __webpack_require__(3);
+	
+	var _rcInputNumber2 = _interopRequireDefault(_rcInputNumber);
 	
 	var _react = __webpack_require__(5);
 	
@@ -34,8 +38,6 @@ webpackJsonp([2],{
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); } /* eslint no-console:0 */
 	
 	
-	var InputNum = __webpack_require__(3);
-	
 	var Component = function (_React$Component) {
 	  _inherits(Component, _React$Component);
 	
@@ -51,12 +53,10 @@ webpackJsonp([2],{
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = {
 	      disabled: false,
 	      readOnly: false,
-	      value: 8
-	    }, _this.onChange = function (v) {
-	      console.log('onChange:', v);
-	      _this.setState({
-	        value: v
-	      });
+	      value: 5
+	    }, _this.onChange = function (value) {
+	      console.log('onChange:', value);
+	      _this.setState({ value: value });
 	    }, _this.toggleDisabled = function () {
 	      _this.setState({
 	        disabled: !_this.state.disabled
@@ -72,15 +72,15 @@ webpackJsonp([2],{
 	    return _react2.default.createElement(
 	      'div',
 	      { style: { margin: 10 } },
-	      _react2.default.createElement(InputNum, {
+	      _react2.default.createElement(_rcInputNumber2.default, {
 	        min: -8,
 	        max: 10,
-	        step: 0.1,
 	        value: this.state.value,
 	        style: { width: 100 },
 	        readOnly: this.state.readOnly,
 	        onChange: this.onChange,
-	        disabled: this.state.disabled
+	        disabled: this.state.disabled,
+	        useTouch: true
 	      }),
 	      _react2.default.createElement(
 	        'p',
@@ -107,4 +107,4 @@ webpackJsonp([2],{
 /***/ })
 
 });
-//# sourceMappingURL=decimal.js.map
+//# sourceMappingURL=simple-use-touch.js.map
