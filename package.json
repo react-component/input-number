@@ -1,6 +1,6 @@
 {
   "name": "rc-input-number",
-  "version": "3.4.14",
+  "version": "3.4.15",
   "description": "input-number ui component for react(web & react-native)",
   "keywords": [
     "react",
@@ -11,9 +11,11 @@
   ],
   "files": [
     "lib",
+    "es",
     "assets"
   ],
   "main": "lib/index",
+  "module": "es/index",
   "homepage": "https://github.com/react-component/input-number",
   "author": "tsjxyz@gmail.com",
   "repository": {
@@ -29,6 +31,7 @@
   },
   "scripts": {
     "build": "rc-tools run build",
+    "compile": "rc-tools run compile --babel-runtime",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",
     "pub": "rc-tools run pub --babel-runtime",
@@ -42,7 +45,7 @@
   "devDependencies": {
     "expect.js": "~0.3.1",
     "pre-commit": "1.x",
-    "rc-tools": "5.x",
+    "rc-tools": "6.x",
     "rc-util": "^4.0.2",
     "react": "^15.5.0",
     "react-addons-test-utils": "^15.5.0",
@@ -52,7 +55,7 @@
     "sinon": "^2.1.0"
   },
   "dependencies": {
-    "babel-runtime": "6.x",
+    "babel-runtime": "^6.23.0",
     "classnames": "^2.2.0",
     "create-react-class": "^15.5.2",
     "prop-types": "^15.5.7",
