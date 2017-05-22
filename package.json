@@ -36,15 +36,16 @@
     "start": "rc-tools run server",
     "pub": "rc-tools run pub --babel-runtime",
     "lint": "rc-tools run lint",
-    "karma": "rc-tools run karma",
-    "test": "rc-tools run test",
-    "saucelabs": "rc-tools run saucelabs",
-    "chrome-test": "rc-tools run chrome-test",
-    "coverage": "rc-tools run coverage"
+    "karma": "rc-test run karma",
+    "test": "rc-test run test",
+    "saucelabs": "rc-test run saucelabs",
+    "chrome-test": "rc-test run chrome-test",
+    "coverage": "rc-test run coverage"
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
     "pre-commit": "1.x",
+    "rc-test": "^6.0.1",
     "rc-tools": "6.x",
     "rc-util": "^4.0.2",
     "react": "^15.5.0",
