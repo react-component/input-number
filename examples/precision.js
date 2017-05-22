@@ -1,6 +1,6 @@
-webpackJsonp([6],{
+webpackJsonp([3],{
 
-/***/ 132:
+/***/ 135:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46,70 +46,38 @@ var Component = function (_React$Component) {
     }
 
     return _ret = (_temp = (_this = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (_ref = Component.__proto__ || Object.getPrototypeOf(Component)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      disabled: false,
-      readOnly: false,
-      value: 50000
+      precision: 2
     }, _this.onChange = function (value) {
       console.log('onChange:', value);
       _this.setState({ value: value });
-    }, _this.toggleDisabled = function () {
+    }, _this.changeprecision = function (e) {
       _this.setState({
-        disabled: !_this.state.disabled
-      });
-    }, _this.toggleReadOnly = function () {
-      _this.setState({
-        readOnly: !_this.state.readOnly
+        precision: parseInt(e.target.value, 10)
       });
     }, _temp), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(_this, _ret);
   }
 
   __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(Component, [{
-    key: 'numberWithCommas',
-    value: function numberWithCommas(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-  }, {
-    key: 'format',
-    value: function format(num) {
-      return '$ ' + this.numberWithCommas(num) + ' boeing737';
-    }
-  }, {
-    key: 'parser',
-    value: function parser(num) {
-      return num.toString().split(' ')[1].replace(/,*/g, '');
-    }
-  }, {
     key: 'render',
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
         'div',
         { style: { margin: 10 } },
         __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_rc_input_number___default.a, {
-          min: -8000,
-          max: 10000000,
-          value: this.state.value,
-          style: { width: 200 },
-          readOnly: this.state.readOnly,
+          style: { width: 100 },
+          defaultValue: 1,
           onChange: this.onChange,
-          disabled: this.state.disabled,
-          autoFocus: false,
-          step: 100,
-          formatter: this.format,
-          parser: this.parser
+          precision: this.state.precision
         }),
         __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
           'p',
           null,
-          __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
-            'button',
-            { onClick: this.toggleDisabled },
-            'toggle Disabled'
-          ),
-          __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
-            'button',
-            { onClick: this.toggleReadOnly },
-            'toggle readOnly'
-          )
+          'precision:',
+          __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement('input', {
+            type: 'number',
+            onChange: this.changeprecision,
+            value: this.state.precision
+          })
         )
       );
     }
@@ -122,13 +90,13 @@ __WEBPACK_IMPORTED_MODULE_7_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ }),
 
-/***/ 289:
+/***/ 292:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(132);
+module.exports = __webpack_require__(135);
 
 
 /***/ })
 
-},[289]);
-//# sourceMappingURL=combination-key-format.js.map
+},[292]);
+//# sourceMappingURL=precision.js.map
