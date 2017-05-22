@@ -123,6 +123,9 @@ export default {
   },
 
   getPrecision(value) {
+    if ('precision' in this.props) {
+      return this.props.precision;
+    }
     const valueString = value.toString();
     if (valueString.indexOf('e-') >= 0) {
       return parseInt(valueString.slice(valueString.indexOf('e-') + 2), 10);
@@ -137,8 +140,12 @@ export default {
   // step={1.0} value={1.51}
   // press +
   // then value should be 2.51, rather than 2.5
+  // if this.props.precision is undefined
   // https://github.com/react-component/input-number/issues/39
   getMaxPrecision(currentValue, ratio = 1) {
+    if ('precision' in this.props) {
+      return this.props.precision;
+    }
     const { step } = this.props;
     const ratioPrecision = this.getPrecision(ratio);
     const stepPrecision = this.getPrecision(step);
@@ -179,6 +186,9 @@ export default {
     if (this.isNotCompleteNumber(num)) {
       return num;
     }
+    if ('precision' in this.props) {
+      return Number(Number(num).toFixed(this.props.precision));
+    }
     return Number(num);
   },
 
@@ -198,8 +208,8 @@ export default {
     let result;
     if (typeof val === 'number') {
       result =
-        ((precisionFactor * val + precisionFactor * step * rat)
-        / precisionFactor).toFixed(precision);
+        ((precisionFactor * val + precisionFactor * step * rat) /
+        precisionFactor).toFixed(precision);
     } else {
       result = min === -Infinity ? step : min;
     }
@@ -213,8 +223,8 @@ export default {
     let result;
     if (typeof val === 'number') {
       result =
-        ((precisionFactor * val - precisionFactor * step * rat)
-        / precisionFactor).toFixed(precision);
+        ((precisionFactor * val - precisionFactor * step * rat) /
+        precisionFactor).toFixed(precision);
     } else {
       result = min === -Infinity ? -step : min;
     }

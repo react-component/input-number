@@ -496,32 +496,6 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('2.1');
     });
 
-    it('decimal step should not display complete precision', () => {
-      const Demo = createReactClass({
-        render() {
-          return <InputNumber ref="inputNum" step={0.01} value={2.1} />;
-        },
-      });
-      example = ReactDOM.render(<Demo />, container);
-      inputNumber = example.refs.inputNum;
-      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
-      expect(inputNumber.state.value).to.be(2.1);
-      expect(inputElement.value).to.be('2.10');
-    });
-
-    it('string step should display complete precision', () => {
-      const Demo = createReactClass({
-        render() {
-          return <InputNumber ref="inputNum" step="1.000" value={2.1} />;
-        },
-      });
-      example = ReactDOM.render(<Demo />, container);
-      inputNumber = example.refs.inputNum;
-      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
-      expect(inputNumber.state.value).to.be(2.1);
-      expect(inputElement.value).to.be('2.100');
-    });
-
     it('small value and step', () => {
       const Demo = createReactClass({
         getInitialState() {
@@ -742,6 +716,59 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('111111111111111111111');
       Simulate.change(inputElement, { target: { value: '11111111111111111111111111111' } });
       expect(inputElement.value).to.be('11111111111111111111111111111');
+    });
+  });
+
+  describe('precision', () => {
+    it('decimal step should not display complete precision', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" step={0.01} value={2.1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputNumber.state.value).to.be(2.1);
+      expect(inputElement.value).to.be('2.10');
+    });
+
+    it('string step should display complete precision', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" step="1.000" value={2.1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputNumber.state.value).to.be(2.1);
+      expect(inputElement.value).to.be('2.100');
+    });
+
+    it('prop precision is specified', () => {
+      const Demo = createReactClass({
+        onChange(value) {
+          onChangeFirstArgument = value;
+        },
+        render() {
+          return (
+            <InputNumber ref="inputNum" precision={2} defaultValue={2} onChange={this.onChange} />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputElement.value).to.be('2.00');
+      Simulate.change(inputElement, { target: { value: '3.456' } });
+      Simulate.blur(inputElement);
+      expect(onChangeFirstArgument).to.be(3.46);
+      expect(inputElement.value).to.be('3.46');
+      Simulate.change(inputElement, { target: { value: '1' } });
+      Simulate.blur(inputElement);
+      expect(onChangeFirstArgument).to.be(1);
+      expect(inputElement.value).to.be('1.00');
     });
   });
 
