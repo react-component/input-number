@@ -1,6 +1,10 @@
 # History
 ----
 
+## 3.5.0
+
+- Added prop `precision`.
+
 ## 3.4.0
 
 - Added prop `parser`.
