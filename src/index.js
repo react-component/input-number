@@ -38,6 +38,7 @@ const InputNumber = createReactClass({
     onMouseLeave: PropTypes.func,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
+    precision: PropTypes.number,
   },
 
   mixins: [mixin],

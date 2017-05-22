@@ -110,6 +110,12 @@ react-native run-ios
           <td>Specifies the legal number intervals</td>
         </tr>
         <tr>
+          <td>precision</td>
+          <td>Number</td>
+          <td></td>
+          <td>Specifies the precision length of value</td>
+        </tr>
+        <tr>
           <td>disabled</td>
           <td>Boolean</td>
           <td>false</td>
