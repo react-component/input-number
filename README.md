@@ -146,6 +146,12 @@ react-native run-ios
           <td>Specifies the name of an InputNumber(`web only`)</td>
         </tr>
         <tr>
+          <td>id</td>
+          <td>String</td>
+          <td></td>
+          <td>Specifies the id of an InputNumber(`web only`)</td>
+        </tr>
+        <tr>
           <td>value</td>
           <td>Number</td>
           <td></td>
