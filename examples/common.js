@@ -11293,6 +11293,7 @@ var InputNumber = __WEBPACK_IMPORTED_MODULE_4_create_react_class___default()({
           max: props.max,
           min: props.min,
           name: props.name,
+          id: props.id,
           onChange: this.onChange,
           ref: 'input',
           value: inputDisplayValueFormat
