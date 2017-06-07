@@ -15,11 +15,17 @@ const SPEED = 200;
  */
 const DELAY = 600;
 
+/**
+ * Max Safe Integer -- on IE this is not available, so manually set the number in that case.
+ * The reason this is used, instead of Infinity is because numbers above the MSI are unstable
+ */
+const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
+
 export default {
   getDefaultProps() {
     return {
-      max: Infinity,
-      min: -Infinity,
+      max: MAX_SAFE_INTEGER,
+      min: -MAX_SAFE_INTEGER,
       step: 1,
       style: {},
       onChange: noop,
