@@ -609,7 +609,7 @@ describe('inputNumber', () => {
         expect(num).to.be(expectedValue);
         expect(inputNumber.state.value).to.be(expectedValue);
       }
-    });
+    }).timeout(10000);
 
     // https://github.com/ant-design/ant-design/issues/4229
     it('long press not trigger onChange in uncontrolled component', (done) => {
