@@ -172,7 +172,7 @@ export default {
       return num;
     }
     const precision = Math.abs(this.getMaxPrecision(num));
-    if (precision || precision === 0) {
+    if (!isNaN(precision)) {
       return Number(num).toFixed(precision);
     }
     return num.toString();
