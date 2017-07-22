@@ -19,6 +19,7 @@ const InputNumber = createReactClass({
     onKeyDown: PropTypes.func,
     onKeyUp: PropTypes.func,
     prefixCls: PropTypes.string,
+    tabIndex: PropTypes.string,
     disabled: PropTypes.bool,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
@@ -48,6 +49,7 @@ const InputNumber = createReactClass({
       focusOnUpDown: true,
       useTouch: false,
       prefixCls: 'rc-input-number',
+      tabIndex:'0'
     };
   },
 
@@ -256,6 +258,7 @@ const InputNumber = createReactClass({
             placeholder={props.placeholder}
             onClick={props.onClick}
             className={`${prefixCls}-input`}
+            tabIndex={props.tabIndex}
             autoComplete="off"
             onFocus={this.onFocus}
             onBlur={this.onBlur}
