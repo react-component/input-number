@@ -11040,6 +11040,7 @@ var InputNumber = __WEBPACK_IMPORTED_MODULE_4_create_react_class___default()({
     onKeyDown: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.func,
     onKeyUp: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.func,
     prefixCls: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.string,
+    tabIndex: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.string,
     disabled: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.bool,
     onFocus: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.func,
     onBlur: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.func,
@@ -11065,7 +11066,8 @@ var InputNumber = __WEBPACK_IMPORTED_MODULE_4_create_react_class___default()({
     return {
       focusOnUpDown: true,
       useTouch: false,
-      prefixCls: 'rc-input-number'
+      prefixCls: 'rc-input-number',
+      tabIndex: '0'
     };
   },
   componentDidMount: function componentDidMount() {
@@ -11281,6 +11283,7 @@ var InputNumber = __WEBPACK_IMPORTED_MODULE_4_create_react_class___default()({
           placeholder: props.placeholder,
           onClick: props.onClick,
           className: prefixCls + '-input',
+          tabIndex: props.tabIndex,
           autoComplete: 'off',
           onFocus: this.onFocus,
           onBlur: this.onBlur,
@@ -11488,7 +11491,7 @@ var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
       return num;
     }
     var precision = Math.abs(this.getMaxPrecision(num));
-    if (precision || precision === 0) {
+    if (!isNaN(precision)) {
       return Number(num).toFixed(precision);
     }
     return num.toString();
