@@ -49,7 +49,6 @@ const InputNumber = createReactClass({
       focusOnUpDown: true,
       useTouch: false,
       prefixCls: 'rc-input-number',
-      tabIndex: '0',
     };
   },
 
