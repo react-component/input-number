@@ -11066,8 +11066,7 @@ var InputNumber = __WEBPACK_IMPORTED_MODULE_4_create_react_class___default()({
     return {
       focusOnUpDown: true,
       useTouch: false,
-      prefixCls: 'rc-input-number',
-      tabIndex: '0'
+      prefixCls: 'rc-input-number'
     };
   },
   componentDidMount: function componentDidMount() {
