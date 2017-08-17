@@ -1,6 +1,6 @@
 {
   "name": "rc-input-number",
-  "version": "3.6.4",
+  "version": "3.6.5",
   "description": "input-number ui component for react(web & react-native)",
   "keywords": [
     "react",
@@ -12,7 +12,8 @@
   "files": [
     "lib",
     "es",
-    "assets"
+    "assets",
+    "dist"
   ],
   "main": "lib/index",
   "module": "es/index",
@@ -27,9 +28,16 @@
   },
   "licenses": "MIT",
   "config": {
-    "port": 8000
+    "port": 8000,
+    "entry": {
+      "rc-input-number": [
+        "./src/index.js",
+        "./assets/index.less"
+      ]
+    }
   },
   "scripts": {
+    "dist": "rc-tools run dist",
     "build": "rc-tools run build",
     "compile": "rc-tools run compile --babel-runtime",
     "gh-pages": "rc-tools run gh-pages",
@@ -56,7 +64,7 @@
     "sinon": "^2.1.0"
   },
   "dependencies": {
-    "babel-runtime": "^6.23.0",
+    "babel-runtime": "6.x",
     "classnames": "^2.2.0",
     "create-react-class": "^15.5.2",
     "prop-types": "^15.5.7",
