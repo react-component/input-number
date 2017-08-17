@@ -269,6 +269,7 @@ const InputNumber = createReactClass({
             disabled={props.disabled}
             max={props.max}
             min={props.min}
+            step={props.step}
             name={props.name}
             id={props.id}
             onChange={this.onChange}
