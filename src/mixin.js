@@ -272,6 +272,13 @@ export default {
       e.persist();
     }
     this.stop();
+
+    // stop interval when reach min
+    const value = this.getCurrentValidValue(this.state.inputValue);
+    if(Number(this.props.min) === Number(value) ){
+      return
+    }
+
     this.step('down', e, ratio);
     this.autoStepTimer = setTimeout(() => {
       this.down(e, ratio, true);
@@ -283,6 +290,13 @@ export default {
       e.persist();
     }
     this.stop();
+
+    // stop interval when reach max
+    const value = this.getCurrentValidValue(this.state.inputValue);
+    if(Number(this.props.max) === Number(value) ){
+      return
+    }
+
     this.step('up', e, ratio);
     this.autoStepTimer = setTimeout(() => {
       this.up(e, ratio, true);
