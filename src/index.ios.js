@@ -19,7 +19,10 @@ const InputNumber = createReactClass({
     autoFocus: PropTypes.bool,
     disabled: PropTypes.bool,
     step: PropTypes.number,
-    value: PropTypes.number,
+    value: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string // can be string
+    ]),
     defaultValue: PropTypes.number,
     readOnly: PropTypes.bool,
     keyboardType: PropTypes.string,
