@@ -21,7 +21,7 @@ const InputNumber = createReactClass({
     step: PropTypes.number,
     value: PropTypes.oneOfType([
       PropTypes.number,
-      PropTypes.string // can be string
+      PropTypes.string, // can be string
     ]),
     defaultValue: PropTypes.number,
     readOnly: PropTypes.bool,

@@ -275,8 +275,8 @@ export default {
 
     // stop interval when reach min
     const value = this.getCurrentValidValue(this.state.inputValue);
-    if(Number(this.props.min) === Number(value) ){
-      return
+    if (Number(this.props.min) === Number(value)) {
+      return;
     }
 
     this.step('down', e, ratio);
@@ -293,8 +293,8 @@ export default {
 
     // stop interval when reach max
     const value = this.getCurrentValidValue(this.state.inputValue);
-    if(Number(this.props.max) === Number(value) ){
-      return
+    if (Number(this.props.max) === Number(value)) {
+      return;
     }
 
     this.step('up', e, ratio);
