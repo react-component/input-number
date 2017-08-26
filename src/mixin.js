@@ -54,9 +54,11 @@ export default {
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
+      const value = this.state.focused
+        ? nextProps.value : this.getValidValue(nextProps.value);
       this.setState({
-        inputValue: nextProps.value,
-        value: nextProps.value,
+        value,
+        inputValue: value,
       });
     }
   },
@@ -91,21 +93,25 @@ export default {
 
   getCurrentValidValue(value) {
     let val = value;
-    const props = this.props;
     if (val === '') {
       val = '';
     } else if (!this.isNotCompleteNumber(val)) {
-      val = Number(val);
-      if (val < props.min) {
-        val = props.min;
-      }
-      if (val > props.max) {
-        val = props.max;
-      }
+      val = this.getValidValue(val);
     } else {
       val = this.state.value;
     }
     return this.toNumber(val);
+  },
+
+  getValidValue(value) {
+    let val = parseFloat(value, 10);
+    if (val < this.props.min) {
+      val = this.props.min;
+    }
+    if (val > this.props.max) {
+      val = this.props.max;
+    }
+    return val;
   },
 
   setValue(v, callback) {

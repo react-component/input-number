@@ -4,7 +4,7 @@ import keyCode from 'rc-util/lib/KeyCode';
 import expect from 'expect.js';
 import InputNumber from '../index';
 import React from 'react';
-import { Simulate } from 'react-addons-test-utils';
+import { Simulate, findRenderedDOMComponentWithTag } from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import createReactClass from 'create-react-class';
@@ -287,6 +287,34 @@ describe('inputNumber', () => {
       Simulate.blur(inputElement);
       expect(inputNumber.state.value).to.be(1);
       expect(inputElement.value).to.be('1');
+    });
+
+    // Fix https://github.com/ant-design/ant-design/issues/7334
+    it('controlled component will show limited value when input is not focused', () => {
+      class Demo extends React.Component {
+        state = {
+          value: 2,
+        };
+        changeValue = () => {
+          this.setState({ value: '103aa' });
+        }
+        render() {
+          return (
+            <div>
+              <button onClick={this.changeValue}>change value</button>
+              <InputNumber ref="inputNum" min={1} max={10} value={this.state.value} />
+            </div>
+          );
+        }
+      }
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputNumber.state.value).to.be(2);
+      expect(inputElement.value).to.be('2');
+      Simulate.click(findRenderedDOMComponentWithTag(example, 'button'));
+      expect(inputNumber.state.value).to.be(10);
+      expect(inputElement.value).to.be('10');
     });
   });
 
