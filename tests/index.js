@@ -776,32 +776,31 @@ describe('inputNumber', () => {
 
     // https://github.com/ant-design/ant-design/issues/7363
     it('uncontrolled input should trigger onChange always when blur it', () => {
-      let changedValue;
-      let onChangeCallCountFor7363 = 0;
+      const onChange = sinon.spy();
       inputNumber = ReactDOM.render(
         <InputNumber
           min={1}
           max={10}
-          onChange={value => { changedValue = value; onChangeCallCountFor7363++; } }
+          onChange={onChange}
         />
       , container);
       inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '123' } });
-      expect(onChangeCallCountFor7363).to.be(1);
-      expect(changedValue).to.be(123);
+      expect(onChange.callCount).to.be(1);
+      expect(onChange.calledWith(123)).to.be(true);
       Simulate.blur(inputElement);
-      expect(onChangeCallCountFor7363).to.be(2);
-      expect(changedValue).to.be(10);
+      expect(onChange.callCount).to.be(2);
+      expect(onChange.calledWith(10)).to.be(true);
 
       // repeat it, it should works in same way
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '123' } });
-      expect(onChangeCallCountFor7363).to.be(3);
-      expect(changedValue).to.be(123);
+      expect(onChange.callCount).to.be(3);
+      expect(onChange.calledWith(123)).to.be(true);
       Simulate.blur(inputElement);
-      expect(onChangeCallCountFor7363).to.be(4);
-      expect(changedValue).to.be(10);
+      expect(onChange.callCount).to.be(4);
+      expect(onChange.calledWith(10)).to.be(true);
     });
   });
 

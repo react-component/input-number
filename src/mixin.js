@@ -122,7 +122,7 @@ export default {
     // trigger onChange
     const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
     const changed = newValue !== this.state.value ||
-      newValue.toString() !== this.state.inputValue; // https://github.com/ant-design/ant-design/issues/7363
+      (newValue || '').toString() !== this.state.inputValue; // https://github.com/ant-design/ant-design/issues/7363
     if (!('value' in this.props)) {
       this.setState({
         value: newValue,
