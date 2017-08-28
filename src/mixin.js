@@ -105,6 +105,10 @@ export default {
 
   getValidValue(value) {
     let val = parseFloat(value, 10);
+    // https://github.com/ant-design/ant-design/issues/7358
+    if (isNaN(val)) {
+      return value;
+    }
     if (val < this.props.min) {
       val = this.props.min;
     }

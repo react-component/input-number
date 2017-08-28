@@ -316,6 +316,34 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(10);
       expect(inputElement.value).to.be('10');
     });
+
+    // https://github.com/ant-design/ant-design/issues/7358
+    it('controlled component should accept undefined value', () => {
+      class Demo extends React.Component {
+        state = {
+          value: 2,
+        };
+        changeValue = () => {
+          this.setState({ value: undefined });
+        }
+        render() {
+          return (
+            <div>
+              <button onClick={this.changeValue}>change value</button>
+              <InputNumber ref="inputNum" min={1} max={10} value={this.state.value} />
+            </div>
+          );
+        }
+      }
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputNumber.state.value).to.be(2);
+      expect(inputElement.value).to.be('2');
+      Simulate.click(findRenderedDOMComponentWithTag(example, 'button'));
+      expect(inputNumber.state.value).to.be(undefined);
+      expect(inputElement.value).to.be('');
+    });
   });
 
   describe('check value changes with readonly props set to true', () => {
