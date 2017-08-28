@@ -316,6 +316,34 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(10);
       expect(inputElement.value).to.be('10');
     });
+
+    // https://github.com/ant-design/ant-design/issues/7358
+    it('controlled component should accept undefined value', () => {
+      class Demo extends React.Component {
+        state = {
+          value: 2,
+        };
+        changeValue = () => {
+          this.setState({ value: undefined });
+        }
+        render() {
+          return (
+            <div>
+              <button onClick={this.changeValue}>change value</button>
+              <InputNumber ref="inputNum" min={1} max={10} value={this.state.value} />
+            </div>
+          );
+        }
+      }
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      expect(inputNumber.state.value).to.be(2);
+      expect(inputElement.value).to.be('2');
+      Simulate.click(findRenderedDOMComponentWithTag(example, 'button'));
+      expect(inputNumber.state.value).to.be(undefined);
+      expect(inputElement.value).to.be('');
+    });
   });
 
   describe('check value changes with readonly props set to true', () => {
@@ -744,6 +772,35 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('111111111111111111111');
       Simulate.change(inputElement, { target: { value: '11111111111111111111111111111' } });
       expect(inputElement.value).to.be('11111111111111111111111111111');
+    });
+
+    // https://github.com/ant-design/ant-design/issues/7363
+    it('uncontrolled input should trigger onChange always when blur it', () => {
+      const onChange = sinon.spy();
+      inputNumber = ReactDOM.render(
+        <InputNumber
+          min={1}
+          max={10}
+          onChange={onChange}
+        />
+      , container);
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '123' } });
+      expect(onChange.callCount).to.be(1);
+      expect(onChange.calledWith(123)).to.be(true);
+      Simulate.blur(inputElement);
+      expect(onChange.callCount).to.be(2);
+      expect(onChange.calledWith(10)).to.be(true);
+
+      // repeat it, it should works in same way
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '123' } });
+      expect(onChange.callCount).to.be(3);
+      expect(onChange.calledWith(123)).to.be(true);
+      Simulate.blur(inputElement);
+      expect(onChange.callCount).to.be(4);
+      expect(onChange.calledWith(10)).to.be(true);
     });
   });
 

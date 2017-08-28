@@ -105,6 +105,10 @@ export default {
 
   getValidValue(value) {
     let val = parseFloat(value, 10);
+    // https://github.com/ant-design/ant-design/issues/7358
+    if (isNaN(val)) {
+      return value;
+    }
     if (val < this.props.min) {
       val = this.props.min;
     }
@@ -117,7 +121,8 @@ export default {
   setValue(v, callback) {
     // trigger onChange
     const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
-    const changed = newValue !== this.state.value;
+    const changed = newValue !== this.state.value ||
+      `${newValue}` !== `${this.state.inputValue}`; // https://github.com/ant-design/ant-design/issues/7363
     if (!('value' in this.props)) {
       this.setState({
         value: newValue,
