@@ -257,7 +257,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
   }
   </script>
-  <link rel="stylesheet" href="common.css" />
+  <link rel="stylesheet" href="../common.css" />
 </head>
 
 <body>
@@ -271,11 +271,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
     <div class="highlight"><pre><code language="js"><span class="hljs-comment">/* eslint no-console:0 */</span>
 <span class="hljs-keyword">import</span> <span class="hljs-string">'rc-input-number/assets/index.css'</span>;
-<span class="hljs-keyword">const</span> InputNum = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-input-number'</span>);
+<span class="hljs-keyword">import</span> InputNumber <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-input-number'</span>;
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Component</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
   state = {
     disabled: <span class="hljs-literal">false</span>,
     readOnly: <span class="hljs-literal">false</span>,
@@ -300,7 +300,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   render() {
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">10</span> }}&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">InputNum</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">InputNumber</span>
           <span class="hljs-attribute">min</span>=<span class="hljs-value">{-8}</span>
           <span class="hljs-attribute">max</span>=<span class="hljs-value">{10}</span>
           <span class="hljs-attribute">step</span>=<span class="hljs-value">{0.1}</span>
@@ -319,7 +319,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
 }
 
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Component</span>/&gt;</span>, document.getElementById('__react-content'));
+ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span>/&gt;</span>, document.getElementById('__react-content'));
 </span></code></pre></div>
   </div>
   <a href="https://github.com/react-component/input-number">
@@ -329,7 +329,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
          data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
   </a>
   <script>FastClick.attach(document.body);</script>
-  <script src="common.js?nowrap"></script>
+  <script src="../common.js?nowrap"></script>
   <script src="decimal.js?nowrap"></script>
 </body>
 
