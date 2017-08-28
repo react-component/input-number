@@ -24,10 +24,10 @@ class Component extends React.Component {
       readOnly: !this.state.readOnly,
     });
   }
-  numberWithCommas(x) {
+  numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
-  format(num) {
+  format = (num) => {
     return `$ ${this.numberWithCommas(num)} boeing737`;
   }
   parser(num) {

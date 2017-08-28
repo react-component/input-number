@@ -1,6 +1,6 @@
 /* eslint no-console:0 */
 import 'rc-input-number/assets/index.less';
-const InputNum = require('rc-input-number');
+import InputNum from'rc-input-number';
 import React from 'react';
 import ReactDOM from 'react-dom';
 

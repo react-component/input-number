@@ -1,10 +1,10 @@
 /* eslint no-console:0 */
 import 'rc-input-number/assets/index.less';
-const InputNum = require('rc-input-number');
+import InputNumber from 'rc-input-number';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Component extends React.Component {
+class Demo extends React.Component {
   state = {
     disabled: false,
     readOnly: false,
@@ -29,7 +29,7 @@ class Component extends React.Component {
   render() {
     return (
       <div style={{ margin: 10 }}>
-        <InputNum
+        <InputNumber
           min={-8}
           max={10}
           step={0.1}
@@ -48,4 +48,4 @@ class Component extends React.Component {
   }
 }
 
-ReactDOM.render(<Component/>, document.getElementById('__react-content'));
+ReactDOM.render(<Demo/>, document.getElementById('__react-content'));
