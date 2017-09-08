@@ -67,7 +67,7 @@
     "classnames": "^2.2.0",
     "create-react-class": "^15.5.2",
     "prop-types": "^15.5.7",
-    "rc-touchable": "^1.0.0"
+    "rmc-feedback": "^1.0.0"
   },
   "pre-commit": [
     "lint"
