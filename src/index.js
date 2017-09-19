@@ -58,8 +58,8 @@ const InputNumber = createReactClass({
 
   componentWillUpdate() {
     try {
-      this.start = this.refs.input.selectionStart;
-      this.end = this.refs.input.selectionEnd;
+      this.start = this.input.selectionStart;
+      this.end = this.input.selectionEnd;
     } catch (e) {
       // Fix error in Chrome:
       // Failed to read the 'selectionStart' property from 'HTMLInputElement'
@@ -69,13 +69,13 @@ const InputNumber = createReactClass({
 
   componentDidUpdate() {
     if (this.props.focusOnUpDown && this.state.focused) {
-      const selectionRange = this.refs.input.setSelectionRange;
+      const selectionRange = this.input.setSelectionRange;
       if (selectionRange &&
           typeof selectionRange === 'function' &&
           this.start !== undefined &&
           this.end !== undefined &&
           this.start !== this.end) {
-        this.refs.input.setSelectionRange(this.start, this.end);
+        this.input.setSelectionRange(this.start, this.end);
       } else {
         this.focus();
       }
@@ -121,7 +121,7 @@ const InputNumber = createReactClass({
   },
 
   focus() {
-    this.refs.input.focus();
+    this.input.focus();
   },
 
   formatWrapper(num) {
@@ -129,6 +129,10 @@ const InputNumber = createReactClass({
       return this.props.formatter(num);
     }
     return num;
+  },
+
+  saveInput(node) {
+    this.input = node;
   },
 
   render() {
@@ -273,7 +277,7 @@ const InputNumber = createReactClass({
             name={props.name}
             id={props.id}
             onChange={this.onChange}
-            ref="input"
+            ref={this.saveInput}
             value={inputDisplayValueFormat}
           />
         </div>
