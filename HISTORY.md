@@ -1,6 +1,10 @@
 # History
 ----
 
+## 3.7.0
+
+- Replace string refs with function refs.
+
 ## 3.5.0
 
 - Added prop `precision`.
