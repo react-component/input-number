@@ -51,14 +51,15 @@
     "coverage": "rc-test run coverage"
   },
   "devDependencies": {
+    "core-js": "^2.5.1",
     "expect.js": "~0.3.1",
     "pre-commit": "1.x",
     "rc-test": "^6.0.1",
     "rc-tools": "6.x",
     "rc-util": "^4.0.2",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
-    "react-native": "0.34.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-native": "^0.49.2",
     "react-native-index-page": "~0.1.0",
     "sinon": "^2.1.0"
   },

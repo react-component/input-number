@@ -1,8 +1,10 @@
 /* eslint-disable react/no-multi-comp, no-unused-vars */
+import 'core-js/es6/map';
+import 'core-js/es6/set';
 import '../assets/index.less';
 import keyCode from 'rc-util/lib/KeyCode';
 import expect from 'expect.js';
-import InputNumber from '../index';
+import InputNumber from '../src';
 import React from 'react';
 import { Simulate, findRenderedDOMComponentWithTag } from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
