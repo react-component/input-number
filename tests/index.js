@@ -806,7 +806,7 @@ describe('inputNumber', () => {
     });
 
     // https://github.com/ant-design/ant-design/issues/7867
-    it.only('focus should not cut precision of input value', () => {
+    it('focus should not cut precision of input value', () => {
       const Demo = createReactClass({
         getInitialState() {
           return { value: 2 };
