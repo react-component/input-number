@@ -804,6 +804,36 @@ describe('inputNumber', () => {
       expect(onChange.callCount).to.be(4);
       expect(onChange.calledWith(10)).to.be(true);
     });
+
+    // https://github.com/ant-design/ant-design/issues/7867
+    it.only('focus should not cut precision of input value', () => {
+      const Demo = createReactClass({
+        getInitialState() {
+          return { value: 2 };
+        },
+        onBlur(value) {
+          this.setState({ value: 2 });
+        },
+        render() {
+          return (
+            <InputNumber
+              ref="inputNum"
+              value={this.state.value}
+              step={0.1}
+              onBlur={this.onBlur}
+            />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.focus(inputElement);
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('2.0');
+      Simulate.focus(inputElement);
+      expect(inputElement.value).to.be('2.0');
+    });
   });
 
   describe('precision', () => {

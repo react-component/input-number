@@ -58,7 +58,7 @@ export default {
         ? nextProps.value : this.getValidValue(nextProps.value);
       this.setState({
         value,
-        inputValue: value,
+        inputValue: this.toPrecisionAsStep(value),
       });
     }
   },
@@ -183,6 +183,9 @@ export default {
       return num;
     }
     const precision = Math.abs(this.getMaxPrecision(num));
+    if (precision === 0) {
+      return num.toString();
+    }
     if (!isNaN(precision)) {
       return Number(num).toFixed(precision);
     }
