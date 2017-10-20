@@ -834,6 +834,34 @@ describe('inputNumber', () => {
       Simulate.focus(inputElement);
       expect(inputElement.value).to.be('2.0');
     });
+
+    // https://github.com/ant-design/ant-design/issues/7940
+    it('should not format during input', () => {
+      const Demo = createReactClass({
+        getInitialState() {
+          return { value: '' };
+        },
+        onChange(value) {
+          this.setState({ value });
+        },
+        render() {
+          return (
+            <InputNumber
+              ref="inputNum"
+              value={this.state.value}
+              step={0.1}
+              onChange={this.onChange}
+            />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '1' } });
+      expect(inputElement.value).to.be('1');
+    });
   });
 
   describe('precision', () => {
