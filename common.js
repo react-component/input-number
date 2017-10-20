@@ -12432,7 +12432,7 @@ var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
       var value = this.state.focused ? nextProps.value : this.getValidValue(nextProps.value);
       this.setState({
         value: value,
-        inputValue: this.toPrecisionAsStep(value)
+        inputValue: this.inputting ? value : this.toPrecisionAsStep(value)
       });
     }
   },
@@ -12440,6 +12440,9 @@ var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
     this.stop();
   },
   onChange: function onChange(e) {
+    if (this.state.focused) {
+      this.inputting = true;
+    }
     var input = this.props.parser(this.getValueFromEvent(e).trim());
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
@@ -12459,6 +12462,7 @@ var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
       args[_key - 1] = arguments[_key];
     }
 
+    this.inputting = false;
     this.setState({
       focused: false
     });
