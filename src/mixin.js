@@ -58,7 +58,7 @@ export default {
         ? nextProps.value : this.getValidValue(nextProps.value);
       this.setState({
         value,
-        inputValue: this.toPrecisionAsStep(value),
+        inputValue: this.inputting ? value : this.toPrecisionAsStep(value),
       });
     }
   },
@@ -68,6 +68,9 @@ export default {
   },
 
   onChange(e) {
+    if (this.state.focused) {
+      this.inputting = true;
+    }
     const input = this.props.parser(this.getValueFromEvent(e).trim());
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
@@ -81,6 +84,7 @@ export default {
   },
 
   onBlur(e, ...args) {
+    this.inputting = false;
     this.setState({
       focused: false,
     });
