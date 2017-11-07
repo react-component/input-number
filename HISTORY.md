@@ -1,6 +1,10 @@
 # History
 ----
 
+## 4.0.0
+
+- Drop React Native support, please use https://github.com/react-component/m-input-number instead.
+
 ## 3.5.0
 
 - Added prop `precision`.
