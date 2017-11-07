@@ -25,6 +25,7 @@ dist
 assets/**/*.css
 build
 lib
+es
 coverage
 /ios/
 /android/
