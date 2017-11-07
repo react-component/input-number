@@ -1,13 +1,12 @@
 {
   "name": "rc-input-number",
   "version": "4.0.0-alpha.1",
-  "description": "input-number ui component for react(web & react-native)",
+  "description": "React input-number component",
   "keywords": [
     "react",
     "react-component",
     "react-input-number",
-    "input-number",
-    "react-native"
+    "input-number"
   ],
   "files": [
     "lib",
@@ -52,6 +51,7 @@
   },
   "devDependencies": {
     "core-js": "^2.5.1",
+    "create-react-class": "^15.6.2",
     "expect.js": "~0.3.1",
     "pre-commit": "1.x",
     "rc-test": "^6.0.1",
@@ -59,14 +59,11 @@
     "rc-util": "^4.0.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-native": "^0.49.2",
-    "react-native-index-page": "~0.1.0",
     "sinon": "^2.1.0"
   },
   "dependencies": {
     "babel-runtime": "6.x",
     "classnames": "^2.2.0",
-    "create-react-class": "^15.5.2",
     "prop-types": "^15.5.7",
     "rmc-feedback": "^1.0.0"
   },

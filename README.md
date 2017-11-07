@@ -1,7 +1,7 @@
 # rc-input-number
 ---
 
-input number ui component for react (web & react-native)
+input number ui component for react
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
@@ -24,13 +24,8 @@ input number ui component for react (web & react-native)
 [download-url]: https://npmjs.org/package/rc-input-number
 
 ## Screenshots
-- web:
 
-  <img src="http://gtms01.alicdn.com/tps/i1/TB18CIlIpXXXXaxXFXXDa5hRXXX-268-124.png" width="288"/>
-
-- react-native:
-
-  <img src="https://zos.alipayobjects.com/rmsportal/dojvWLzTShEfSAU.png" width="288"/>
+<img src="http://gtms01.alicdn.com/tps/i1/TB18CIlIpXXXXaxXFXXDa5hRXXX-268-124.png" width="288"/>
 
 ## install
 
@@ -57,13 +52,6 @@ npm start
 http://127.0.0.1:8000/examples/
 
 online example: http://react-component.github.io/input-number/examples/
-
-## react-native
-
-```
-./node_modules/rc-tools run react-native-init
-react-native run-ios
-```
 
 ## API
 
@@ -174,30 +162,6 @@ react-native run-ios
           <td>Object</td>
           <td></td>
           <td>root style. such as {width:100}</td>
-        </tr>
-        <tr>
-          <td>styles</td>
-          <td>ReactNative StyleSheet</td>
-          <td></td>
-          <td>component's stylesheet, can use lib/styles</td>
-        </tr>
-        <tr>
-          <td>upStyle</td>
-          <td>Object</td>
-          <td></td>
-          <td>up step wrap style. `react native only`</td>
-        </tr>
-        <tr>
-          <td>downStyle</td>
-          <td>Object</td>
-          <td></td>
-          <td>down step style. `react native only`</td>
-        </tr>
-        <tr>
-          <td>inputStyle</td>
-          <td>Object</td>
-          <td></td>
-          <td>input style. `react native only`</td>
         </tr>
         <tr>
           <td>upHandler</td>
