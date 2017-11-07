@@ -131,13 +131,13 @@ online example: http://react-component.github.io/input-number/examples/
           <td>name</td>
           <td>String</td>
           <td></td>
-          <td>Specifies the name of an InputNumber(`web only`)</td>
+          <td>Specifies the name of an InputNumber</td>
         </tr>
         <tr>
           <td>id</td>
           <td>String</td>
           <td></td>
-          <td>Specifies the id of an InputNumber(`web only`)</td>
+          <td>Specifies the id of an InputNumber</td>
         </tr>
         <tr>
           <td>value</td>
