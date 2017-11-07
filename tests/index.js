@@ -857,7 +857,7 @@ describe('inputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      inputElement = ReactDOM.findDOMNode(inputNumber.refs.input);
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '1' } });
       expect(inputElement.value).to.be('1');
