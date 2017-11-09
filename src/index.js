@@ -451,7 +451,7 @@ export default class InputNumber extends React.Component {
     let upDisabledClass = '';
     let downDisabledClass = '';
     const { value } = this.state;
-    if (value) {
+    if (value || value === 0) {
       if (!isNaN(value)) {
         const val = Number(value);
         if (val >= props.max) {
