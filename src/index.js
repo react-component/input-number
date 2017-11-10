@@ -226,7 +226,6 @@ export default class InputNumber extends React.Component {
 
   getValidValue(value, min = this.props.min, max = this.props.max) {
     let val = parseFloat(value, 10);
-    
     // https://github.com/ant-design/ant-design/issues/7358
     if (isNaN(val)) {
       return value;
