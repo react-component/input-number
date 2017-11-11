@@ -108,7 +108,7 @@ export default class InputNumber extends React.Component {
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       const value = this.state.focused
-        ? nextProps.value : this.getValidValue(nextProps.value);
+        ? nextProps.value : this.getValidValue(nextProps.value, nextProps.min, nextProps.max);
       this.setState({
         value,
         inputValue: this.inputting ? value : this.toPrecisionAsStep(value),
@@ -224,17 +224,17 @@ export default class InputNumber extends React.Component {
     return e.target.value;
   }
 
-  getValidValue(value) {
+  getValidValue(value, min = this.props.min, max = this.props.max) {
     let val = parseFloat(value, 10);
     // https://github.com/ant-design/ant-design/issues/7358
     if (isNaN(val)) {
       return value;
     }
-    if (val < this.props.min) {
-      val = this.props.min;
+    if (val < min) {
+      val = min;
     }
-    if (val > this.props.max) {
-      val = this.props.max;
+    if (val > max) {
+      val = max;
     }
     return val;
   }
