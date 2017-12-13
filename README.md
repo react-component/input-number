@@ -158,6 +158,12 @@ online example: http://react-component.github.io/input-number/examples/
           <td>Called when value of an InputNumber changed</td>
         </tr>
         <tr>
+          <td>onFocus</td>
+          <td>Function</td>
+          <td></td>
+          <td>Called when an element gets focus</td>
+        </tr>
+        <tr>
           <td>style</td>
           <td>Object</td>
           <td></td>
