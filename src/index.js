@@ -383,8 +383,10 @@ export default class InputNumber extends React.Component {
     return this.toNumber(result);
   }
 
-  step(type, e, ratio = 1) {
+  step(type, e, ratio = 1, recursive) {
+    this.stop();
     if (e) {
+      e.persist();
       e.preventDefault();
     }
     const props = this.props;
@@ -396,6 +398,7 @@ export default class InputNumber extends React.Component {
       return;
     }
     let val = this[`${type}Step`](value, ratio);
+    const outOfRange = val > props.max || val < props.min;
     if (val > props.max) {
       val = props.max;
     } else if (val < props.min) {
@@ -405,6 +408,12 @@ export default class InputNumber extends React.Component {
     this.setState({
       focused: true,
     });
+    if (outOfRange) {
+      return;
+    }
+    this.autoStepTimer = setTimeout(() => {
+      this[type](e, ratio, true);
+    }, recursive ? SPEED : DELAY);
   }
 
   stop = () => {
@@ -414,25 +423,11 @@ export default class InputNumber extends React.Component {
   }
 
   down = (e, ratio, recursive) => {
-    if (e.persist) {
-      e.persist();
-    }
-    this.stop();
-    this.step('down', e, ratio);
-    this.autoStepTimer = setTimeout(() => {
-      this.down(e, ratio, true);
-    }, recursive ? SPEED : DELAY);
+    this.step('down', e, ratio, recursive);
   }
 
   up = (e, ratio, recursive) => {
-    if (e.persist) {
-      e.persist();
-    }
-    this.stop();
-    this.step('up', e, ratio);
-    this.autoStepTimer = setTimeout(() => {
-      this.up(e, ratio, true);
-    }, recursive ? SPEED : DELAY);
+    this.step('up', e, ratio, recursive);
   }
 
   saveInput = (node) => {
