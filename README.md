@@ -116,6 +116,12 @@ online example: http://react-component.github.io/input-number/examples/
           <td>whether focus input when click up or down button</td>
         </tr>
         <tr>
+          <td>required</td>
+          <td>Boolean</td>
+          <td>false</td>
+          <td>Specifies that an InputNumber is required</td>
+        </tr>
+        <tr>
           <td>autoFocus</td>
           <td>Boolean</td>
           <td>false</td>

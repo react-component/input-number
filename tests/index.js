@@ -864,6 +864,33 @@ describe('inputNumber', () => {
     });
   });
 
+  describe(`required prop`, () => {
+    it(`should add required attr to the input tag when get passed as true`, () => {
+      ReactDOM.render(<InputNumber id="required-input-test" required />, container);
+      const inputTag = container.querySelector('#required-input-test');
+      expect(
+        inputTag.getAttribute(`required`)
+      ).not.to.be(null);
+    });
+
+    it(`should not add required attr to the input as default props when not being supplied`, () => {
+      ReactDOM.render(<InputNumber id="required-input-test" />, container);
+      const inputTag = container.querySelector('#required-input-test');
+      expect(
+        inputTag.getAttribute(`required`)
+      ).to.be(null);
+    });
+
+    it(`should not add required attr to the input tag when get passed as false`, () => {
+      ReactDOM.render(<InputNumber id="required-input-test" required={false} />, container);
+      const inputTag = container.querySelector('#required-input-test');
+      expect(
+        inputTag.getAttribute(`required`)
+      ).to.be(null);
+    });
+  });
+
+
   describe('precision', () => {
     it('decimal step should not display complete precision', () => {
       const Demo = createReactClass({

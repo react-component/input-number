@@ -67,6 +67,7 @@ export default class InputNumber extends React.Component {
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     precision: PropTypes.number,
+    required: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -81,6 +82,7 @@ export default class InputNumber extends React.Component {
     onFocus: noop,
     onBlur: noop,
     parser: defaultParser,
+    required: false,
   }
 
   constructor(props) {
@@ -556,6 +558,7 @@ export default class InputNumber extends React.Component {
           aria-valuenow={value}
         >
           <input
+            required={props.required}
             type={props.type}
             placeholder={props.placeholder}
             onClick={props.onClick}
