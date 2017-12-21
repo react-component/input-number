@@ -862,6 +862,13 @@ describe('inputNumber', () => {
       Simulate.change(inputElement, { target: { value: '1' } });
       expect(inputElement.value).to.be('1');
     });
+
+    // https://github.com/ant-design/ant-design/issues/8196
+    it('Allow inputing 。', () => {
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '8。1' } });
+      expect(inputElement.value).to.be('8.1');
+    });
   });
 
   describe(`required prop`, () => {

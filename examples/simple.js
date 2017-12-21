@@ -30,10 +30,8 @@ class Component extends React.Component {
         <InputNumber
           min={-8}
           max={10}
-          value={this.state.value}
           style={{ width: 100 }}
           readOnly={this.state.readOnly}
-          onChange={this.onChange}
           disabled={this.state.disabled}
         />
         <p>

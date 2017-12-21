@@ -176,7 +176,7 @@ export default class InputNumber extends React.Component {
     if (this.state.focused) {
       this.inputting = true;
     }
-    const input = this.props.parser(this.getValueFromEvent(e).trim());
+    const input = this.props.parser(this.getValueFromEvent(e));
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
   }
@@ -223,7 +223,9 @@ export default class InputNumber extends React.Component {
   }
 
   getValueFromEvent(e) {
-    return e.target.value;
+    // optimize for chinese input expierence
+    // https://github.com/ant-design/ant-design/issues/8196
+    return e.target.value.trim().replace(/。/g, '.');
   }
 
   getValidValue(value, min = this.props.min, max = this.props.max) {
