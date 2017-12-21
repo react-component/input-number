@@ -72,10 +72,8 @@ var Component = function (_React$Component) {
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
         min: -8,
         max: 10,
-        value: this.state.value,
         style: { width: 100 },
         readOnly: this.state.readOnly,
-        onChange: this.onChange,
         disabled: this.state.disabled
       }),
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(

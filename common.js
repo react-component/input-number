@@ -683,7 +683,9 @@ var InputNumber = function (_React$Component) {
   };
 
   InputNumber.prototype.getValueFromEvent = function getValueFromEvent(e) {
-    return e.target.value;
+    // optimize for chinese input expierence
+    // https://github.com/ant-design/ant-design/issues/8196
+    return e.target.value.trim().replace(/。/g, '.');
   };
 
   InputNumber.prototype.getValidValue = function getValidValue(value) {
@@ -1026,6 +1028,7 @@ var InputNumber = function (_React$Component) {
           'aria-valuenow': value
         },
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('input', {
+          required: props.required,
           type: props.type,
           placeholder: props.placeholder,
           onClick: props.onClick,
@@ -1082,7 +1085,8 @@ InputNumber.propTypes = {
   onMouseLeave: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   onMouseOver: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   onMouseOut: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
-  precision: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.number
+  precision: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.number,
+  required: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.bool
 };
 InputNumber.defaultProps = {
   focusOnUpDown: true,
@@ -1095,7 +1099,8 @@ InputNumber.defaultProps = {
   onKeyDown: noop,
   onFocus: noop,
   onBlur: noop,
-  parser: defaultParser
+  parser: defaultParser,
+  required: false
 };
 
 var _initialiseProps = function _initialiseProps() {
@@ -1139,7 +1144,7 @@ var _initialiseProps = function _initialiseProps() {
     if (_this3.state.focused) {
       _this3.inputting = true;
     }
-    var input = _this3.props.parser(_this3.getValueFromEvent(e).trim());
+    var input = _this3.props.parser(_this3.getValueFromEvent(e));
     _this3.setState({ inputValue: input });
     _this3.props.onChange(_this3.toNumberWhenUserInput(input)); // valid number or invalid string
   };
