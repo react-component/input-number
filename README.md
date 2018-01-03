@@ -199,6 +199,12 @@ online example: http://react-component.github.io/input-number/examples/
           <td>`input => input.replace(/[^\w\.-]*/g, '')`</td>
           <td>Specifies the value extracted from formatter</td>
         </tr>
+        <tr>
+          <td>pattern</td>
+          <td>string</td>
+          <td></td>
+          <td>Specifies a regex pattern to be added to the input number element - useful for forcing iOS to open the number pad instead of the normal keyboard (supply a regex of "\d*" to do this) or form validation</td>
+        </tr>
     </tbody>
 </table>
 

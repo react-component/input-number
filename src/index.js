@@ -68,6 +68,7 @@ export default class InputNumber extends React.Component {
     onMouseOut: PropTypes.func,
     precision: PropTypes.number,
     required: PropTypes.bool,
+    pattern: PropTypes.string,
   }
 
   static defaultProps = {
@@ -583,6 +584,7 @@ export default class InputNumber extends React.Component {
             onChange={this.onChange}
             ref={this.saveInput}
             value={inputDisplayValueFormat}
+            pattern={props.pattern}
           />
         </div>
       </div>
