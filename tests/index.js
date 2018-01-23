@@ -897,6 +897,23 @@ describe('inputNumber', () => {
     });
   });
 
+  describe('Pattern prop', () => {
+    it(`should render with a pattern attribute if the pattern prop is supplied`, () => {
+      ReactDOM.render(<InputNumber id="pattern-input-test" pattern="\d*" />, container);
+      const patternAttribute = container
+        .querySelector('#pattern-input-test')
+        .getAttribute(`pattern`);
+      expect(patternAttribute).to.equal('\\d*');
+    });
+
+    it(`should render with no pattern attribute if the pattern prop is not supplied`, () => {
+      ReactDOM.render(<InputNumber id="pattern-input-test" />, container);
+      const patternAttribute = container
+        .querySelector('#pattern-input-test')
+        .getAttribute(`pattern`);
+      expect(patternAttribute).to.be(null);
+    });
+  });
 
   describe('precision', () => {
     it('decimal step should not display complete precision', () => {
