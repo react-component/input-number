@@ -61,55 +61,6 @@
 /******/ 		return module.exports;
 /******/ 	}
 /******/
-/******/ 	// This file contains only the entry chunk.
-/******/ 	// The chunk loading function for additional chunks
-/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
-/******/ 		var installedChunkData = installedChunks[chunkId];
-/******/ 		if(installedChunkData === 0) {
-/******/ 			return new Promise(function(resolve) { resolve(); });
-/******/ 		}
-/******/
-/******/ 		// a Promise means "currently loading".
-/******/ 		if(installedChunkData) {
-/******/ 			return installedChunkData[2];
-/******/ 		}
-/******/
-/******/ 		// setup Promise in chunk cache
-/******/ 		var promise = new Promise(function(resolve, reject) {
-/******/ 			installedChunkData = installedChunks[chunkId] = [resolve, reject];
-/******/ 		});
-/******/ 		installedChunkData[2] = promise;
-/******/
-/******/ 		// start chunk loading
-/******/ 		var head = document.getElementsByTagName('head')[0];
-/******/ 		var script = document.createElement('script');
-/******/ 		script.type = 'text/javascript';
-/******/ 		script.charset = 'utf-8';
-/******/ 		script.async = true;
-/******/ 		script.timeout = 120000;
-/******/
-/******/ 		if (__webpack_require__.nc) {
-/******/ 			script.setAttribute("nonce", __webpack_require__.nc);
-/******/ 		}
-/******/ 		script.src = __webpack_require__.p + "" + chunkId + ".js";
-/******/ 		var timeout = setTimeout(onScriptComplete, 120000);
-/******/ 		script.onerror = script.onload = onScriptComplete;
-/******/ 		function onScriptComplete() {
-/******/ 			// avoid mem leaks in IE.
-/******/ 			script.onerror = script.onload = null;
-/******/ 			clearTimeout(timeout);
-/******/ 			var chunk = installedChunks[chunkId];
-/******/ 			if(chunk !== 0) {
-/******/ 				if(chunk) {
-/******/ 					chunk[1](new Error('Loading chunk ' + chunkId + ' failed.'));
-/******/ 				}
-/******/ 				installedChunks[chunkId] = undefined;
-/******/ 			}
-/******/ 		};
-/******/ 		head.appendChild(script);
-/******/
-/******/ 		return promise;
-/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -648,7 +599,7 @@ var InputNumber = function (_React$Component) {
   InputNumber.prototype.componentDidUpdate = function componentDidUpdate() {
     if (this.props.focusOnUpDown && this.state.focused) {
       var selectionRange = this.input.setSelectionRange;
-      if (selectionRange && typeof selectionRange === 'function' && this.start !== undefined && this.end !== undefined && this.start !== this.end) {
+      if (selectionRange && typeof selectionRange === 'function' && this.start !== undefined && this.end !== undefined) {
         this.input.setSelectionRange(this.start, this.end);
       } else {
         this.focus();
@@ -1050,7 +1001,8 @@ var InputNumber = function (_React$Component) {
           id: props.id,
           onChange: this.onChange,
           ref: this.saveInput,
-          value: inputDisplayValueFormat
+          value: inputDisplayValueFormat,
+          pattern: props.pattern
         })
       )
     );
@@ -1086,7 +1038,8 @@ InputNumber.propTypes = {
   onMouseOver: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   onMouseOut: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   precision: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.number,
-  required: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.bool
+  required: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.bool,
+  pattern: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.string
 };
 InputNumber.defaultProps = {
   focusOnUpDown: true,
@@ -5635,9 +5588,11 @@ var TouchFeedback = function (_React$Component) {
             if (this.props[eventType]) {
                 this.props[eventType](ev);
             }
-            this.setState({
-                active: isActive
-            });
+            if (isActive !== this.state.active) {
+                this.setState({
+                    active: isActive
+                });
+            }
         }
     }, {
         key: 'render',
