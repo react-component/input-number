@@ -136,8 +136,7 @@ export default class InputNumber extends React.Component {
       if (selectionRange &&
           typeof selectionRange === 'function' &&
           this.start !== undefined &&
-          this.end !== undefined &&
-          this.start !== this.end) {
+          this.end !== undefined) {
         this.input.setSelectionRange(this.start, this.end);
       } else {
         this.focus();
