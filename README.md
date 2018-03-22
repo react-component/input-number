@@ -1,5 +1,4 @@
 # rc-input-number
-
 ---
 
 input number ui component for react
@@ -35,10 +34,10 @@ input number ui component for react
 ## Usage
 
 ```js
-var InputNumber = require("rc-input-number");
-var React = require("react");
-var ReactDOM = require("react-dom");
-ReactDOM.render(<InputNumber defaultValue={19} />, container);
+var InputNumber = require('rc-input-number');
+var React = require('react');
+var ReactDOM = require('react-dom');
+ReactDOM.render(<InputNumber defaultValue={19}/>, container);
 ```
 
 ## Development
@@ -216,7 +215,6 @@ online example: http://react-component.github.io/input-number/examples/
 </table>
 
 ## Keyboard Navigation
-
 * When you hit the <kbd>⬆</kbd> or <kbd>⬇</kbd> key, the input value will be increased or decreased by `step`
 * With the <kbd>Shift</kbd> key (<kbd>Shift+⬆</kbd>, <kbd>Shift+⬇</kbd>), the input value will be changed by `10 * step`
 * With the <kbd>Ctrl</kbd> or <kbd>⌘</kbd> key (<kbd>Ctrl+⬆</kbd> or <kbd>⌘+⬆</kbd> or <kbd>Ctrl+⬇</kbd> or <kbd>⌘+⬇</kbd> ), the input value will be changed by `0.1 * step`
