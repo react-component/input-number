@@ -1123,6 +1123,18 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('$ 6 boeing 737');
     });
   });
+
+  describe('inputClassName prop', () => {
+    it(`should render with a custom className for input if it is supplied`, () => {
+      ReactDOM.render(
+        <InputNumber id="pattern-input-test" inputClassName="custom-class" />,
+        container
+      );
+      expect(container
+        .querySelector('#pattern-input-test')
+        .className.indexOf('custom-class') > 0).to.be(true);
+    });
+  });
 });
 
 describe('Mobile inputNumber use TouchEvents', () => {
