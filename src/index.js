@@ -435,11 +435,11 @@ export default class InputNumber extends React.Component {
   }
 
   saveUp = (node) => {
-    this.up = node;
+    this.upHandler = node;
   }
 
   saveDown = (node) => {
-    this.down = node;
+    this.downHandler = node;
   }
 
   saveInput = (node) => {
