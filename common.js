@@ -727,6 +727,10 @@ var InputNumber = function (_React$Component) {
     this.input.focus();
   };
 
+  InputNumber.prototype.blur = function blur() {
+    this.input.blur();
+  };
+
   InputNumber.prototype.formatWrapper = function formatWrapper(num) {
     if (this.props.formatter) {
       return this.props.formatter(num);
