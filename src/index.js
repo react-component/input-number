@@ -307,6 +307,10 @@ export default class InputNumber extends React.Component {
     this.input.focus();
   }
 
+  blur() {
+    this.input.blur();
+  }
+
   formatWrapper(num) {
     if (this.props.formatter) {
       return this.props.formatter(num);
