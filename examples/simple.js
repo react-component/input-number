@@ -31,6 +31,8 @@ class Component extends React.Component {
           min={-8}
           max={10}
           style={{ width: 100 }}
+          value={this.state.value}
+          onChange={this.onChange}
           readOnly={this.state.readOnly}
           disabled={this.state.disabled}
         />
