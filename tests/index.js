@@ -412,6 +412,18 @@ describe('inputNumber', () => {
       expect(onChangeFirstArgument).to.be(-98);
     });
 
+    // https://github.com/ant-design/ant-design/issues/9439
+    it('input negative zero', () => {
+      example.setState({ min: -100 });
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '-0' } });
+      expect(inputElement.value).to.be('-0');
+      expect(onChangeFirstArgument).to.be(0);
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('0');
+      expect(onChangeFirstArgument).to.be(0);
+    });
+
     it('input decimal number with integer step', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '1.2' } });
