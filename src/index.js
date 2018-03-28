@@ -131,6 +131,11 @@ export default class InputNumber extends React.Component {
   }
 
   componentDidUpdate() {
+    // pressingUpOrDown is true means that someone just click up or down button
+    // https://github.com/ant-design/ant-design/issues/9204
+    if (!this.pressingUpOrDown) {
+      return;
+    }
     if (this.props.focusOnUpDown && this.state.focused) {
       const selectionRange = this.input.setSelectionRange;
       if (selectionRange &&
@@ -141,6 +146,7 @@ export default class InputNumber extends React.Component {
       } else {
         this.focus();
       }
+      this.pressingUpOrDown = false;
     }
   }
 
@@ -431,10 +437,12 @@ export default class InputNumber extends React.Component {
   }
 
   down = (e, ratio, recursive) => {
+    this.pressingUpOrDown = true;
     this.step('down', e, ratio, recursive);
   }
 
   up = (e, ratio, recursive) => {
+    this.pressingUpOrDown = true;
     this.step('up', e, ratio, recursive);
   }
 
