@@ -452,6 +452,14 @@ export default class InputNumber extends React.Component {
     this.step('up', e, ratio, recursive);
   }
 
+  saveUp = (node) => {
+    this.upHandler = node;
+  }
+
+  saveDown = (node) => {
+    this.downHandler = node;
+  }
+
   saveInput = (node) => {
     this.input = node;
   }
@@ -536,7 +544,7 @@ export default class InputNumber extends React.Component {
       >
         <div className={`${prefixCls}-handler-wrap`}>
           <InputHandler
-            ref="up"
+            ref={this.saveUp}
             disabled={isUpDisabled}
             prefixCls={prefixCls}
             unselectable="unselectable"
@@ -553,7 +561,7 @@ export default class InputNumber extends React.Component {
             />}
           </InputHandler>
           <InputHandler
-            ref="down"
+            ref={this.saveDown}
             disabled={isDownDisabled}
             prefixCls={prefixCls}
             unselectable="unselectable"
