@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import isNegativeZero from 'is-negative-zero';
 import InputHandler from './InputHandler';
-
+import isNumber from 'is-number';
 function noop() {
 }
 
@@ -183,7 +183,11 @@ export default class InputNumber extends React.Component {
     if (this.state.focused) {
       this.inputting = true;
     }
-    const input = this.props.parser(this.getValueFromEvent(e));
+    const value = this.getValueFromEvent(e);
+    if (!isNumber(value) && value !== '') {
+      return;
+    }
+    const input = this.props.parser(value);
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
   }
