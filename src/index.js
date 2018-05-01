@@ -47,7 +47,7 @@ export default class InputNumber extends React.Component {
     onKeyDown: PropTypes.func,
     onKeyUp: PropTypes.func,
     prefixCls: PropTypes.string,
-    tabIndex: PropTypes.string,
+    tabIndex: PropTypes.number,
     disabled: PropTypes.bool,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
