@@ -117,12 +117,12 @@ describe('inputNumber', () => {
 
   describe('clickable', () => {
     it('up button works', () => {
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       expect(inputNumber.state.value).to.be(99);
     });
 
     it('down button works', () => {
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       expect(inputNumber.state.value).to.be(97);
     });
 
@@ -134,7 +134,7 @@ describe('inputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       expect(inputNumber.state.value).to.be(1);
     });
 
@@ -146,7 +146,7 @@ describe('inputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       expect(inputNumber.state.value).to.be(-1);
     });
 
@@ -158,7 +158,7 @@ describe('inputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       expect(inputNumber.state.value).to.be(6);
     });
 
@@ -170,7 +170,7 @@ describe('inputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       expect(inputNumber.state.value).to.be(6);
     });
 
@@ -183,17 +183,17 @@ describe('inputNumber', () => {
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       expect(
-        ReactDOM.findDOMNode(inputNumber.refs.up).className.indexOf('disabled') > 0
+        ReactDOM.findDOMNode(inputNumber.upHandler).className.indexOf('disabled') > 0
       ).to.be(false);
       expect(
-        ReactDOM.findDOMNode(inputNumber.refs.down).className.indexOf('disabled') > 0
+        ReactDOM.findDOMNode(inputNumber.downHandler).className.indexOf('disabled') > 0
       ).to.be(false);
     });
   });
 
   describe('long press', () => {
     it('up button works', (done) => {
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       setTimeout(() => {
         expect(inputNumber.state.value).to.be(99);
         setTimeout(() => {
@@ -204,7 +204,7 @@ describe('inputNumber', () => {
     });
 
     it('down button works', (done) => {
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       setTimeout(() => {
         expect(inputNumber.state.value).to.be(97);
         setTimeout(() => {
@@ -218,14 +218,14 @@ describe('inputNumber', () => {
   describe('check props works', () => {
     it('max', () => {
       for (let i = 0; i < 3; i++) {
-        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       }
       expect(inputNumber.state.value).to.be(101);
     });
 
     it('min', () => {
       for (let i = 0; i < 100; i++) {
-        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       }
       expect(inputNumber.state.value).to.be(1);
     });
@@ -248,7 +248,7 @@ describe('inputNumber', () => {
     it('step', () => {
       example.setState({ step: 5 });
       for (let i = 0; i < 3; i++) {
-        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       }
       expect(inputNumber.state.value).to.be(defaultValue - 3 * 5);
     });
@@ -258,7 +258,7 @@ describe('inputNumber', () => {
       example.setState({ step: 5 });
       example.triggerBoolean('readOnly');
       for (let i = 0; i < 3; i++) {
-        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       }
       expect(inputNumber.state.value).to.be(defaultValue);
     });
@@ -266,7 +266,7 @@ describe('inputNumber', () => {
     it('decimal step', () => {
       example.setState({ step: 0.1 });
       for (let i = 0; i < 3; i++) {
-        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       }
       expect(inputNumber.state.value).to.be(defaultValue - 3 * 0.1);
     });
@@ -558,10 +558,10 @@ describe('inputNumber', () => {
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       expect(inputNumber.state.value).to.be(3.1);
       expect(inputElement.value).to.be('3.1');
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       expect(inputNumber.state.value).to.be(2.1);
       expect(inputElement.value).to.be('2.1');
     });
@@ -598,7 +598,7 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('0.000000001');
       for (let i = 0; i < 10; i++) {
         // plus until change precision
-        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+        Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       }
       Simulate.blur(inputElement);
       expect(inputNumber.state.value).to.be(0.000000011);
@@ -698,7 +698,7 @@ describe('inputNumber', () => {
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
 
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       setTimeout(() => {
         expect(num).to.be(1);
         setTimeout(() => {
@@ -1015,10 +1015,10 @@ describe('inputNumber', () => {
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
 
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('$ 6');
-      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.refs.down));
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.downHandler));
       expect(inputNumber.state.value).to.be(5);
       expect(inputElement.value).to.be('$ 5');
     });
@@ -1039,10 +1039,10 @@ describe('inputNumber', () => {
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
 
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.upHandler));
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('6 ¥');
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.down));
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.downHandler));
       expect(inputNumber.state.value).to.be(5);
       expect(inputElement.value).to.be('5 ¥');
     });
@@ -1130,7 +1130,7 @@ describe('inputNumber', () => {
       Simulate.keyDown(inputElement, { keyCode: keyCode.DOWN });
       expect(inputNumber.state.value).to.be(5);
       expect(inputElement.value).to.be('$ 5 boeing 737');
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.upHandler));
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('$ 6 boeing 737');
     });
@@ -1204,12 +1204,12 @@ describe('Mobile inputNumber use TouchEvents', () => {
 
   describe('touchable', () => {
     it('up button works', () => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.up));
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.upHandler));
       expect(inputNumber.state.value).to.be(99);
     });
 
     it('down button works', () => {
-      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.refs.down));
+      Simulate.touchStart(ReactDOM.findDOMNode(inputNumber.downHandler));
       expect(inputNumber.state.value).to.be(97);
     });
   });
