@@ -5423,22 +5423,12 @@ var InputHandler = function (_Component) {
     var _props = this.props,
         prefixCls = _props.prefixCls,
         disabled = _props.disabled,
-        onTouchStart = _props.onTouchStart,
-        onTouchEnd = _props.onTouchEnd,
-        onMouseDown = _props.onMouseDown,
-        onMouseUp = _props.onMouseUp,
-        onMouseLeave = _props.onMouseLeave,
-        otherProps = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default()(_props, ['prefixCls', 'disabled', 'onTouchStart', 'onTouchEnd', 'onMouseDown', 'onMouseUp', 'onMouseLeave']);
+        otherProps = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default()(_props, ['prefixCls', 'disabled']);
 
     return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
       __WEBPACK_IMPORTED_MODULE_6_rmc_feedback__["a" /* default */],
       {
         disabled: disabled,
-        onTouchStart: onTouchStart,
-        onTouchEnd: onTouchEnd,
-        onMouseDown: onMouseDown,
-        onMouseUp: onMouseUp,
-        onMouseLeave: onMouseLeave,
         activeClassName: prefixCls + '-handler-active'
       },
       __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('span', otherProps)
@@ -5516,7 +5506,6 @@ exports.default = function (obj, keys) {
 
 
 
-var touchSupported = typeof window !== 'undefined' && 'ontouchstart' in window;
 
 var TouchFeedback = function (_React$Component) {
     __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(TouchFeedback, _React$Component);
@@ -5543,15 +5532,9 @@ var TouchFeedback = function (_React$Component) {
         };
         _this.onMouseDown = function (e) {
             // pc simulate mobile
-            if (_this.props.onTouchStart) {
-                _this.triggerEvent('TouchStart', true, e);
-            }
             _this.triggerEvent('MouseDown', true, e);
         };
         _this.onMouseUp = function (e) {
-            if (_this.props.onTouchEnd) {
-                _this.triggerEvent('TouchEnd', false, e);
-            }
             _this.triggerEvent('MouseUp', false, e);
         };
         _this.onMouseLeave = function (e) {
@@ -5573,8 +5556,10 @@ var TouchFeedback = function (_React$Component) {
         key: 'triggerEvent',
         value: function triggerEvent(type, isActive, ev) {
             var eventType = 'on' + type;
-            if (this.props[eventType]) {
-                this.props[eventType](ev);
+            var children = this.props.children;
+
+            if (children.props[eventType]) {
+                children.props[eventType](ev);
             }
             if (isActive !== this.state.active) {
                 this.setState({
