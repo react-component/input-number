@@ -5,17 +5,11 @@ import Touchable from 'rmc-feedback';
 class InputHandler extends Component {
   render() {
     const {
-      prefixCls, disabled, onTouchStart, onTouchEnd,
-      onMouseDown, onMouseUp, onMouseLeave, ...otherProps,
+      prefixCls, disabled, ...otherProps,
     } = this.props;
     return (
       <Touchable
         disabled={disabled}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-        onMouseDown={onMouseDown}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseLeave}
         activeClassName={`${prefixCls}-handler-active`}
       >
         <span {...otherProps} />
