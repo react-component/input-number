@@ -70,6 +70,7 @@ export default class InputNumber extends React.Component {
     precision: PropTypes.number,
     required: PropTypes.bool,
     pattern: PropTypes.string,
+    inputClassName: PropTypes.string,
   }
 
   static defaultProps = {
@@ -473,6 +474,9 @@ export default class InputNumber extends React.Component {
       [`${prefixCls}-disabled`]: disabled,
       [`${prefixCls}-focused`]: this.state.focused,
     });
+    const inputClasses = classNames(`${prefixCls}-input`, {
+      [props.inputClassName]: !!props.inputClassName,
+    });
     let upDisabledClass = '';
     let downDisabledClass = '';
     const { value } = this.state;
@@ -590,7 +594,7 @@ export default class InputNumber extends React.Component {
             type={props.type}
             placeholder={props.placeholder}
             onClick={props.onClick}
-            className={`${prefixCls}-input`}
+            className={inputClasses}
             tabIndex={props.tabIndex}
             autoComplete="off"
             onFocus={this.onFocus}
