@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "./node_modules/rc-tools/lib/eslintrc"
+  ]
+}
