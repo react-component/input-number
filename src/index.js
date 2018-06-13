@@ -190,7 +190,13 @@ export default class InputNumber extends React.Component {
     }
     const input = this.props.parser(this.getValueFromEvent(e));
     this.setState({ inputValue: input });
-    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
+    const evt = {
+      target: {
+        name: this.props.name,
+        value: this.toNumberWhenUserInput(input)
+      }
+    };
+    this.props.onChange(evt); // valid number or invalid string
   }
 
   onFocus = (...args) => {
