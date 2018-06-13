@@ -12,6 +12,11 @@ class App extends React.Component {
           defaultValue={1000}
           formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         />
+        <InputNumber
+          defaultValue={100}  
+          formatter={value => `${value}%`}
+          parser={value => value.replace('%', '')}
+        />
       </div>
     );
   }
