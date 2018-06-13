@@ -1,14 +1,14 @@
-webpackJsonp([6],{
+webpackJsonp([4],{
 
-/***/ 123:
+/***/ 127:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(124);
+module.exports = __webpack_require__(128);
 
 
 /***/ }),
 
-/***/ 124:
+/***/ 128:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35,70 +35,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var Component = function (_React$Component) {
-  __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(Component, _React$Component);
+var App = function (_React$Component) {
+  __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(App, _React$Component);
 
-  function Component() {
-    var _temp, _this, _ret;
+  function App() {
+    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, App);
 
-    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, Component);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = {
-      disabled: false,
-      readOnly: false,
-      value: 5
-    }, _this.onChange = function (value) {
-      console.log('onChange:', value);
-      _this.setState({ value: value });
-    }, _this.toggleDisabled = function () {
-      _this.setState({
-        disabled: !_this.state.disabled
-      });
-    }, _this.toggleReadOnly = function () {
-      _this.setState({
-        readOnly: !_this.state.readOnly
-      });
-    }, _temp), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(_this, _ret);
+    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _React$Component.apply(this, arguments));
   }
 
-  Component.prototype.render = function render() {
-    var upHandler = __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-      'div',
-      { style: { color: 'blue' } },
-      'x'
-    );
-    var downHandler = __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-      'div',
-      { style: { color: 'red' } },
-      'V'
-    );
+  App.prototype.render = function render() {
     return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
       'div',
       { style: { margin: 10 } },
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
-        min: -8,
-        max: 10,
-        value: this.state.value,
-        style: { width: 100 },
-        readOnly: this.state.readOnly,
-        onChange: this.onChange,
-        disabled: this.state.disabled,
-        upHandler: upHandler,
-        downHandler: downHandler
+        defaultValue: 1000,
+        formatter: function formatter(value) {
+          return ('$ ' + value).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+      }),
+      __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+        defaultValue: 100,
+        formatter: function formatter(value) {
+          return value + '%';
+        },
+        parser: function parser(value) {
+          return value.replace('%', '');
+        }
       })
     );
   };
 
-  return Component;
+  return App;
 }(__WEBPACK_IMPORTED_MODULE_5_react___default.a.Component);
 
-__WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(Component, null), document.getElementById('__react-content'));
+__WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(App, null), document.getElementById('__react-content'));
 
 /***/ })
 
-},[123]);
-//# sourceMappingURL=custom.js.map
+},[127]);
+//# sourceMappingURL=formatter.js.map
