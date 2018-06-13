@@ -137,18 +137,23 @@ export default class InputNumber extends React.Component {
     if (!this.pressingUpOrDown) {
       return;
     }
+
     if (this.props.focusOnUpDown && this.state.focused) {
       const selectionRange = this.input.setSelectionRange;
       if (selectionRange &&
-          typeof selectionRange === 'function' &&
-          this.start !== undefined &&
-          this.end !== undefined) {
+        typeof selectionRange === 'function' &&
+        this.start !== this.end &&
+        this.start !== undefined &&
+        this.end !== undefined
+      ) {
         this.input.setSelectionRange(this.start, this.end);
-      } else {
-        this.focus();
       }
-      this.pressingUpOrDown = false;
+      if (document.activeElement !== this.input) {
+        this.input.focus();
+      }
     }
+
+    this.pressingUpOrDown = false;
   }
 
   componentWillUnmount() {
