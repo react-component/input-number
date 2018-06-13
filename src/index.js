@@ -132,8 +132,9 @@ export default class InputNumber extends React.Component {
   }
 
   componentDidUpdate() {
-    // pressingUpOrDown is true means that someone just click up or down button
     // https://github.com/ant-design/ant-design/issues/9204
+    this.fixCaret();
+    // pressingUpOrDown is true means that someone just click up or down button
     if (!this.pressingUpOrDown) {
       return;
     }
@@ -312,6 +313,25 @@ export default class InputNumber extends React.Component {
   getPrecisionFactor(currentValue, ratio = 1) {
     const precision = this.getMaxPrecision(currentValue, ratio);
     return Math.pow(10, precision);
+  }
+
+  fixCaret() {
+    let start;
+    let end;
+    try {
+      start = this.input.selectionStart;
+      end = this.input.selectionEnd;
+    } catch (e) {
+      // Fix error in Chrome:
+      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
+      // http://stackoverflow.com/q/21177489/3040605
+    }
+    if (start === undefined || end === undefined || !this.input || !this.input.value) {
+      return;
+    }
+    if (start !== this.start && end !== this.end && end === this.input.value.length) {
+      this.input.setSelectionRange(this.start, this.end);
+    }
   }
 
   focus() {
