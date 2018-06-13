@@ -137,7 +137,6 @@ export default class InputNumber extends React.Component {
     if (!this.pressingUpOrDown) {
       return;
     }
-
     if (this.props.focusOnUpDown && this.state.focused) {
       const selectionRange = this.input.setSelectionRange;
       if (selectionRange &&
@@ -149,7 +148,7 @@ export default class InputNumber extends React.Component {
         this.input.setSelectionRange(this.start, this.end);
       }
       if (document.activeElement !== this.input) {
-        this.input.focus();
+        this.focus();
       }
     }
 
