@@ -491,6 +491,16 @@ export default class InputNumber extends React.Component {
       }
     }
 
+    const dataOrAriaAttributeProps = {};
+    for (const key in props) {
+      if (
+        props.hasOwnProperty(key) &&
+        (key.substr(0, 5) === 'data-' || key.substr(0, 5) === 'aria-' || key === 'role')
+      ) {
+        dataOrAriaAttributeProps[key] = props[key];
+      }
+    }
+
     const editable = !props.readOnly && !props.disabled;
 
     // focus state, show input value
@@ -610,6 +620,7 @@ export default class InputNumber extends React.Component {
             ref={this.saveInput}
             value={inputDisplayValueFormat}
             pattern={props.pattern}
+            {...dataOrAriaAttributeProps}
           />
         </div>
       </div>

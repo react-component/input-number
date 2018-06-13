@@ -1135,6 +1135,53 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('$ 6 boeing 737');
     });
   });
+
+  describe('aria and data props', () => {
+    it('passes data-* attributes', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" value={1} data-test="test-id" data-id="12345"/>;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputElement.getAttribute('data-test')).to.be('test-id');
+      expect(inputElement.getAttribute('data-id')).to.be('12345');
+    });
+
+    it('passes aria-* attributes', () => {
+      const Demo = createReactClass({
+        render() {
+          return (
+            <InputNumber
+              ref="inputNum"
+              value={1}
+              aria-labelledby="test-id"
+              aria-label="some-label"
+            />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputElement.getAttribute('aria-labelledby')).to.be('test-id');
+      expect(inputElement.getAttribute('aria-label')).to.be('some-label');
+    });
+
+    it('passes role attribute', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" value={1} role="searchbox"/>;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputElement.getAttribute('role')).to.be('searchbox');
+    });
+  });
 });
 
 describe('Mobile inputNumber use TouchEvents', () => {
