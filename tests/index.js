@@ -18,6 +18,8 @@ describe('inputNumber', () => {
   document.body.appendChild(container);
   let onChangeFirstArgument;
   let onChangeCallCount = 0;
+  let onFocusCallCount = 0;
+  let onBlurCallCount = 0;
 
   const Component = createReactClass({
     getInitialState() {
@@ -36,6 +38,12 @@ describe('inputNumber', () => {
       onChangeFirstArgument = value;
       onChangeCallCount += 1;
       this.setState({ value });
+    },
+    onFocus() {
+      onFocusCallCount += 1;
+    },
+    onBlur() {
+      onBlurCallCount += 1;
     },
     triggerBoolean(propName) {
       const prop = {};
@@ -56,6 +64,8 @@ describe('inputNumber', () => {
             autoFocus={this.state.autoFocus}
             readOnly={this.state.readOnly}
             name={this.state.name}
+            onFocus={this.onFocus}
+            onBlur={this.onBlur}
           />
         </div>
       );
@@ -70,11 +80,15 @@ describe('inputNumber', () => {
     inputNumber = example.refs.inputNum;
     inputElement = ReactDOM.findDOMNode(inputNumber.input);
     onChangeCallCount = 0;
+    onFocusCallCount = 0;
+    onBlurCallCount = 0;
   });
 
   afterEach(() => {
     ReactDOM.unmountComponentAtNode(container);
     onChangeCallCount = 0;
+    onFocusCallCount = 0;
+    onBlurCallCount = 0;
   });
 
   describe('keyboard works', () => {
@@ -880,6 +894,16 @@ describe('inputNumber', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '8。1' } });
       expect(inputElement.value).to.be('8.1');
+    });
+
+    it('focus input when click up/down button ', () => {
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
+      expect(ReactDOM.findDOMNode(inputNumber).className.indexOf('focused') > 0).to.be(true);
+      expect(document.activeElement).to.be(inputElement);
+      expect(onFocusCallCount).to.be(1);
+      Simulate.blur(inputElement);
+      expect(onBlurCallCount).to.be(1);
+      expect(ReactDOM.findDOMNode(inputNumber).className.indexOf('focused') > 0).to.be(false);
     });
   });
 
