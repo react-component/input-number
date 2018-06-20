@@ -188,6 +188,9 @@ export default class InputNumber extends React.Component {
     if (this.state.focused) {
       this.inputting = true;
     }
+    if (this.props.formatter) {
+      this.lastTimeLen = e.target.value.length;
+    }
     const input = this.props.parser(this.getValueFromEvent(e));
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
@@ -330,7 +333,11 @@ export default class InputNumber extends React.Component {
       return;
     }
     if (start !== this.start && end !== this.end && end === this.input.value.length) {
-      this.input.setSelectionRange(this.start, this.end);
+      let deviation = 0;
+      if (this.props.formatter) {
+        deviation = this.input.value.length - (this.lastTimeLen || 0);
+      }
+      this.input.setSelectionRange(this.start + deviation, this.end + deviation);
     }
   }
 
