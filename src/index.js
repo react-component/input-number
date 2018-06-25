@@ -344,7 +344,9 @@ export default class InputNumber extends React.Component {
         && this.input.value
         && inputValue
         && this.input.value[this.input.value.length - 1] === inputValue[inputValue.length - 1]) {
-      this.input.focus();
+      if (this.state.focused && document.activeElement !== this.input) {
+        this.focus();
+      }
       delete this.inputAtLastChar;
       return;
     }
