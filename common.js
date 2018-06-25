@@ -508,6 +508,10 @@ var InputNumber = function (_React$Component) {
     try {
       this.start = this.input.selectionStart;
       this.end = this.input.selectionEnd;
+      // If user input after last character
+      if (this.start === this.end && this.end === this.input.value.length) {
+        this.inputAtLastChar = true;
+      }
     } catch (e) {
       // Fix error in Chrome:
       // Failed to read the 'selectionStart' property from 'HTMLInputElement'
@@ -652,6 +656,8 @@ var InputNumber = function (_React$Component) {
   };
 
   InputNumber.prototype.fixCaret = function fixCaret() {
+    var inputValue = this.state.inputValue;
+
     var start = void 0;
     var end = void 0;
     try {
@@ -663,6 +669,16 @@ var InputNumber = function (_React$Component) {
       // http://stackoverflow.com/q/21177489/3040605
     }
     if (start === undefined || end === undefined || !this.input || !this.input.value) {
+      return;
+    }
+    // https://github.com/react-component/input-number/issues/98
+    // https://github.com/ant-design/ant-design/issues/9204
+    // https://github.com/ant-design/ant-design/issues/9826
+    // https://github.com/ant-design/ant-design/issues/11022
+    // https://github.com/ant-design/ant-design/issues/10722
+    if (this.inputAtLastChar && this.input.value && inputValue && this.input.value[this.input.value.length - 1] === inputValue[inputValue.length - 1]) {
+      this.input.focus();
+      delete this.inputAtLastChar;
       return;
     }
     if (start !== this.start && end !== this.end && end === this.input.value.length) {

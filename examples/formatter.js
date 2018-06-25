@@ -62,6 +62,12 @@ var App = function (_React$Component) {
         parser: function parser(value) {
           return value.replace('%', '');
         }
+      }),
+      __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+        style: { width: 100 },
+        formatter: function formatter(value) {
+          return ('' + value).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
       })
     );
   };
