@@ -677,7 +677,9 @@ var InputNumber = function (_React$Component) {
     // https://github.com/ant-design/ant-design/issues/11022
     // https://github.com/ant-design/ant-design/issues/10722
     if (this.inputAtLastChar && this.input.value && inputValue && this.input.value[this.input.value.length - 1] === inputValue[inputValue.length - 1]) {
-      this.input.focus();
+      if (this.state.focused && document.activeElement !== this.input) {
+        this.focus();
+      }
       delete this.inputAtLastChar;
       return;
     }
