@@ -67,6 +67,7 @@ export default class InputNumber extends React.Component {
     onMouseLeave: PropTypes.func,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
+    onMouseUp: PropTypes.func,
     precision: PropTypes.number,
     required: PropTypes.bool,
     pattern: PropTypes.string,
@@ -121,9 +122,11 @@ export default class InputNumber extends React.Component {
   }
 
   componentWillUpdate() {
+    /*
     try {
       this.start = this.input.selectionStart;
       this.end = this.input.selectionEnd;
+
       // If user input after last character
       if (this.start === this.end
           && this.end === this.input.value.length) {
@@ -134,16 +137,51 @@ export default class InputNumber extends React.Component {
       // Failed to read the 'selectionStart' property from 'HTMLInputElement'
       // http://stackoverflow.com/q/21177489/3040605
     }
+    */
   }
 
   componentDidUpdate() {
+    // Restore cursor
+    try {
+      console.log('【恢复】', this.cursorBefore, this.cursorAfter);
+
+      const restore = (str, after) => {
+        if (str === undefined) return false;
+
+        const index = this.input.value.indexOf(str);
+        if (index >= 0) {
+          const pos = index + (after ? str.length : 0);
+          this.input.setSelectionRange(pos, pos);
+
+          return true;
+        }
+        return false;
+      };
+
+
+      if (
+        // Check end match first and then start match
+        !restore(this.cursorAfter, false) &&
+        !restore(this.cursorBefore, true)
+      ) {
+        // If not match any of then, let's just keep the position
+        console.log('>>>', this.cursorStart);
+        this.input.setSelectionRange(this.cursorStart, this.cursorStart);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
     // https://github.com/ant-design/ant-design/issues/9204
+    /*
     this.fixCaret();
+    */
     // pressingUpOrDown is true means that someone just click up or down button
     if (!this.pressingUpOrDown) {
       return;
     }
     if (this.props.focusOnUpDown && this.state.focused) {
+      /*
       const selectionRange = this.input.setSelectionRange;
       if (selectionRange &&
         typeof selectionRange === 'function' &&
@@ -153,6 +191,7 @@ export default class InputNumber extends React.Component {
       ) {
         this.input.setSelectionRange(this.start, this.end);
       }
+      */
       if (document.activeElement !== this.input) {
         this.focus();
       }
@@ -166,6 +205,8 @@ export default class InputNumber extends React.Component {
   }
 
   onKeyDown = (e, ...args) => {
+    const { onKeyDown } = this.props;
+
     if (e.keyCode === 38) {
       const ratio = this.getRatio(e);
       this.up(e, ratio);
@@ -175,15 +216,21 @@ export default class InputNumber extends React.Component {
       this.down(e, ratio);
       this.stop();
     }
-    const { onKeyDown } = this.props;
+
+    // Trigger user key down
     if (onKeyDown) {
       onKeyDown(e, ...args);
     }
   }
 
   onKeyUp = (e, ...args) => {
-    this.stop();
     const { onKeyUp } = this.props;
+
+    this.stop();
+
+    this.recordCursorPosition();
+
+    // Trigger user key up
     if (onKeyUp) {
       onKeyUp(e, ...args);
     }
@@ -197,6 +244,16 @@ export default class InputNumber extends React.Component {
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
   }
+
+  onMouseUp = (...args) => {
+    const { onMouseUp } = this.props;
+
+    this.recordCursorPosition();
+
+    if (onMouseUp) {
+      onMouseUp(...args);
+    }
+  };
 
   onFocus = (...args) => {
     this.setState({
@@ -320,6 +377,37 @@ export default class InputNumber extends React.Component {
     return Math.pow(10, precision);
   }
 
+  getInputDisplayValue = () => {
+    const { focused, inputValue, value } = this.state;
+    let inputDisplayValue;
+    if (focused) {
+      inputDisplayValue = inputValue;
+    } else {
+      inputDisplayValue = this.toPrecisionAsStep(value);
+    }
+
+    if (inputDisplayValue === undefined || inputDisplayValue === null) {
+      inputDisplayValue = '';
+    }
+
+    return inputDisplayValue;
+  };
+
+  recordCursorPosition = () => {
+    // Record position
+    try {
+      this.cursorStart = this.input.selectionStart;
+      this.cursorEnd = this.input.selectionEnd;
+      this.cursorBefore = this.input.value.substring(0, this.cursorStart);
+      this.cursorAfter = this.input.value.substring(this.cursorStart);
+      console.log('【记录】', this.cursorBefore, this.cursorAfter, this.cursorStart, this.cursorEnd);
+    } catch (e) {
+      // TODO: remove me
+      console.error(e);
+    }
+  };
+
+  /*
   fixCaret() {
     const { inputValue } = this.state;
     let start;
@@ -354,9 +442,11 @@ export default class InputNumber extends React.Component {
       this.input.setSelectionRange(this.start, this.end);
     }
   }
+  */
 
   focus() {
     this.input.focus();
+    this.recordCursorPosition();
   }
 
   blur() {
@@ -550,16 +640,7 @@ export default class InputNumber extends React.Component {
 
     // focus state, show input value
     // unfocus state, show valid value
-    let inputDisplayValue;
-    if (this.state.focused) {
-      inputDisplayValue = this.state.inputValue;
-    } else {
-      inputDisplayValue = this.toPrecisionAsStep(this.state.value);
-    }
-
-    if (inputDisplayValue === undefined || inputDisplayValue === null) {
-      inputDisplayValue = '';
-    }
+    const inputDisplayValue = this.getInputDisplayValue();
 
     let upEvents;
     let downEvents;
@@ -645,6 +726,7 @@ export default class InputNumber extends React.Component {
             type={props.type}
             placeholder={props.placeholder}
             onClick={props.onClick}
+            onMouseUp={this.onMouseUp}
             className={`${prefixCls}-input`}
             tabIndex={props.tabIndex}
             autoComplete="off"
