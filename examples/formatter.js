@@ -18,6 +18,10 @@ function getSum(str) {
 }
 
 class App extends React.Component {
+  state = {
+    value: 1000,
+  };
+
   render() {
     return (
       <div style={{ margin: 10 }}>
@@ -36,6 +40,15 @@ class App extends React.Component {
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
           }
         />
+
+        <div>
+          <h1>In Control</h1>
+          <InputNumber
+            value={this.state.value}
+            onChange={(value) => { this.setState({ value }); }}
+            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          />
+        </div>
 
         <div>
           <h1>Strange Format</h1>
