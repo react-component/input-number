@@ -402,10 +402,10 @@ export default class InputNumber extends React.Component {
       this.currentValue = this.input.value;
       this.cursorBefore = this.input.value.substring(0, this.cursorStart);
       this.cursorAfter = this.input.value.substring(this.cursorEnd);
-      console.log('REC >', this.cursorBefore, this.cursorAfter, this.cursorStart);
     } catch (e) {
-      // TODO: remove me
-      console.error(e);
+      // Fix error in Chrome:
+      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
+      // http://stackoverflow.com/q/21177489/3040605
     }
   };
 
