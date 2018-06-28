@@ -4,6 +4,19 @@ import InputNumber from 'rc-input-number';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+function getSum(str) {
+  let total = 0;
+  str.split('').forEach((c) => {
+    const num = Number(c);
+
+    if (!isNaN(num)) {
+      total += num;
+    }
+  });
+
+  return total;
+}
+
 class App extends React.Component {
   render() {
     return (
@@ -23,6 +36,15 @@ class App extends React.Component {
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
           }
         />
+
+        <div>
+          <h1>Strange Format</h1>
+          <InputNumber
+            defaultValue={1000}
+            formatter={value => `$ ${value} - ${getSum(value)}`}
+            parser={value => (value.match(/^\$ ([\d\.]*) .*$/) || [])[1]}
+          />
+        </div>
       </div>
     );
   }

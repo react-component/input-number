@@ -148,7 +148,7 @@ export default class InputNumber extends React.Component {
 
         const len = str.length;
 
-        for (let start = 1; start <= len; start += 1) {
+        for (let start = 1; start < len; start += 1) {
           const partStr = str.substring(start, len);
           if (restoreByAfter(partStr)) {
             return true;
@@ -166,7 +166,13 @@ export default class InputNumber extends React.Component {
       ) {
         // If not match any of then, let's just keep the position
         // TODO: Logic should not reach here, need check if happens
-        this.fixCaret(this.cursorStart, this.cursorStart);
+        let pos = this.cursorStart + 1;
+        if (this.lastKeyCode === KeyCode.BACKSPACE) {
+          pos = this.cursorStart - 1;
+        } else if (this.lastKeyCode === KeyCode.DELETE) {
+          pos = this.cursorStart;
+        }
+        this.fixCaret(pos, pos);
       } else if (this.currentValue === this.input.value) {
         // Handle some special key code
         switch (this.lastKeyCode) {
