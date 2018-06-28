@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import isNegativeZero from 'is-negative-zero';
+import KeyCode from 'rc-util/lib/KeyCode';
 import InputHandler from './InputHandler';
 
 function noop() {
@@ -143,34 +144,86 @@ export default class InputNumber extends React.Component {
   componentDidUpdate() {
     // Restore cursor
     try {
-      console.log('【恢复】', this.cursorBefore, this.cursorAfter);
-
-      const restore = (str, after) => {
+      const restore = (str, layAfter) => {
         if (str === undefined) return false;
 
-        const index = this.input.value.indexOf(str);
-        if (index >= 0) {
-          const pos = index + (after ? str.length : 0);
-          this.input.setSelectionRange(pos, pos);
+        const fullStr = this.input.value;
+        const index = layAfter ? fullStr.indexOf(str) : fullStr.lastIndexOf(str);
+
+        if (index === -1) return false;
+
+        if (
+          (layAfter && index === 0) ||
+          (!layAfter && (index + str.length) === fullStr.length)
+        ) {
+          const pos = index + (layAfter ? str.length : 0);
+
+          console.log('【调整】', `"${fullStr}"`, '>>>', layAfter, `"${str}"`, pos);
+          this.fixCaret(pos, pos);
 
           return true;
         }
         return false;
       };
 
+      const partRestore = (str, layAfter) => {
+        if (str === undefined) return false;
+
+        const len = str.length;
+
+        if (layAfter) {
+          for (let end = len; end > 0; end -= 1) {
+            const partStr = str.substring(0, end);
+            console.log('【遍历 - 前】', layAfter, '-', end, `"${partStr}"`);
+            if (restore(partStr, layAfter)) {
+              return true;
+            }
+          }
+        } else {
+          for (let start = 1; start <= len; start += 1) {
+            const partStr = str.substring(start, len);
+            console.log('【遍历 - 后】', layAfter, '-', start, `"${partStr}"`);
+            if (restore(partStr, layAfter)) {
+              return true;
+            }
+          }
+        }
+
+        return false;
+      };
 
       if (
         // Check end match first and then start match
         !restore(this.cursorAfter, false) &&
-        !restore(this.cursorBefore, true)
+        !restore(this.cursorBefore, true) &&
+        // If not match full str, try to match part of str
+        !partRestore(this.cursorAfter, false) &&
+        !partRestore(this.cursorBefore, true)
       ) {
         // If not match any of then, let's just keep the position
-        console.log('>>>', this.cursorStart);
-        this.input.setSelectionRange(this.cursorStart, this.cursorStart);
+        console.warn('【未匹配】');
+        this.fixCaret(this.cursorStart, this.cursorStart);
+      } else if (this.currentValue === this.input.value) {
+        // Handle some special key code
+        switch (this.lastKeyCode) {
+          case KeyCode.BACKSPACE:
+            this.fixCaret(this.cursorStart - 1, this.cursorStart - 1);
+            break;
+          case KeyCode.DELETE:
+            this.fixCaret(this.cursorStart + 1, this.cursorStart + 1);
+            break;
+          default:
+            // Do nothing
+        }
       }
     } catch (e) {
       console.error(e);
+      // Do nothing
     }
+
+    // Reset last key
+    this.lastKeyCode = null;
+    console.warn('did done!');
 
     // https://github.com/ant-design/ant-design/issues/9204
     /*
@@ -207,17 +260,18 @@ export default class InputNumber extends React.Component {
   onKeyDown = (e, ...args) => {
     const { onKeyDown } = this.props;
 
-    if (e.keyCode === 38) {
+    if (e.keyCode === KeyCode.UP) {
       const ratio = this.getRatio(e);
       this.up(e, ratio);
       this.stop();
-    } else if (e.keyCode === 40) {
+    } else if (e.keyCode === KeyCode.DOWN) {
       const ratio = this.getRatio(e);
       this.down(e, ratio);
       this.stop();
     }
 
     // Trigger user key down
+    this.lastKeyCode = e.keyCode;
     if (onKeyDown) {
       onKeyDown(e, ...args);
     }
@@ -398,14 +452,34 @@ export default class InputNumber extends React.Component {
     try {
       this.cursorStart = this.input.selectionStart;
       this.cursorEnd = this.input.selectionEnd;
+      this.currentValue = this.input.value;
       this.cursorBefore = this.input.value.substring(0, this.cursorStart);
-      this.cursorAfter = this.input.value.substring(this.cursorStart);
-      console.log('【记录】', this.cursorBefore, this.cursorAfter, this.cursorStart, this.cursorEnd);
+      this.cursorAfter = this.input.value.substring(this.cursorEnd);
+      console.log('REC >', this.cursorBefore, this.cursorAfter, this.cursorStart);
     } catch (e) {
       // TODO: remove me
       console.error(e);
     }
   };
+
+  fixCaret(start, end) {
+    if (start === undefined || end === undefined || !this.input || !this.input.value) {
+      return;
+    }
+
+    try {
+      const currentStart = this.input.selectionStart;
+      const currentEnd = this.input.selectionEnd;
+
+      if (start !== currentStart || end !== currentEnd) {
+        this.input.setSelectionRange(start, end);
+      }
+    } catch (e) {
+      // Fix error in Chrome:
+      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
+      // http://stackoverflow.com/q/21177489/3040605
+    }
+  }
 
   /*
   fixCaret() {
