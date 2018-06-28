@@ -122,25 +122,6 @@ export default class InputNumber extends React.Component {
     }
   }
 
-  componentWillUpdate() {
-    /*
-    try {
-      this.start = this.input.selectionStart;
-      this.end = this.input.selectionEnd;
-
-      // If user input after last character
-      if (this.start === this.end
-          && this.end === this.input.value.length) {
-        this.inputAtLastChar = true;
-      }
-    } catch (e) {
-      // Fix error in Chrome:
-      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
-      // http://stackoverflow.com/q/21177489/3040605
-    }
-    */
-  }
-
   componentDidUpdate() {
     // Restore cursor
     try {
@@ -155,7 +136,6 @@ export default class InputNumber extends React.Component {
         if (index === -1) return false;
 
         if (index + str.length === fullStr.length) {
-          console.log('【向后对齐】', `"${str}"/"${fullStr}"`, index);
           this.fixCaret(index, index);
 
           return true;
@@ -170,7 +150,6 @@ export default class InputNumber extends React.Component {
 
         for (let start = 1; start <= len; start += 1) {
           const partStr = str.substring(start, len);
-          console.log('【部分向后遍历】', `"${partStr}"`, start);
           if (restoreByAfter(partStr)) {
             return true;
           }
@@ -186,7 +165,7 @@ export default class InputNumber extends React.Component {
         !partRestoreByAfter(this.cursorAfter)
       ) {
         // If not match any of then, let's just keep the position
-        console.warn('【未匹配】');
+        // TODO: Logic should not reach here, need check if happens
         this.fixCaret(this.cursorStart, this.cursorStart);
       } else if (this.currentValue === this.input.value) {
         // Handle some special key code
@@ -202,34 +181,17 @@ export default class InputNumber extends React.Component {
         }
       }
     } catch (e) {
-      console.error(e);
       // Do nothing
     }
 
     // Reset last key
     this.lastKeyCode = null;
-    console.warn('did done!');
 
-    // https://github.com/ant-design/ant-design/issues/9204
-    /*
-    this.fixCaret();
-    */
     // pressingUpOrDown is true means that someone just click up or down button
     if (!this.pressingUpOrDown) {
       return;
     }
     if (this.props.focusOnUpDown && this.state.focused) {
-      /*
-      const selectionRange = this.input.setSelectionRange;
-      if (selectionRange &&
-        typeof selectionRange === 'function' &&
-        this.start !== this.end &&
-        this.start !== undefined &&
-        this.end !== undefined
-      ) {
-        this.input.setSelectionRange(this.start, this.end);
-      }
-      */
       if (document.activeElement !== this.input) {
         this.focus();
       }
@@ -465,43 +427,6 @@ export default class InputNumber extends React.Component {
       // http://stackoverflow.com/q/21177489/3040605
     }
   }
-
-  /*
-  fixCaret() {
-    const { inputValue } = this.state;
-    let start;
-    let end;
-    try {
-      start = this.input.selectionStart;
-      end = this.input.selectionEnd;
-    } catch (e) {
-      // Fix error in Chrome:
-      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
-      // http://stackoverflow.com/q/21177489/3040605
-    }
-    if (start === undefined || end === undefined || !this.input || !this.input.value) {
-      return;
-    }
-    // https://github.com/react-component/input-number/issues/98
-    // https://github.com/ant-design/ant-design/issues/9204
-    // https://github.com/ant-design/ant-design/issues/9826
-    // https://github.com/ant-design/ant-design/issues/11022
-    // https://github.com/ant-design/ant-design/issues/10722
-    if (this.inputAtLastChar
-        && this.input.value
-        && inputValue
-        && this.input.value[this.input.value.length - 1] === inputValue[inputValue.length - 1]) {
-      if (this.state.focused && document.activeElement !== this.input) {
-        this.focus();
-      }
-      delete this.inputAtLastChar;
-      return;
-    }
-    if (start !== this.start && end !== this.end && end === this.input.value.length) {
-      this.input.setSelectionRange(this.start, this.end);
-    }
-  }
-  */
 
   focus() {
     this.input.focus();
