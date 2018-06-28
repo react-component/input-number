@@ -144,48 +144,35 @@ export default class InputNumber extends React.Component {
   componentDidUpdate() {
     // Restore cursor
     try {
-      const restore = (str, layAfter) => {
+      // In most cases, the string after cursor is stable.
+      // We can move the cursor before it
+      const restoreByAfter = (str) => {
         if (str === undefined) return false;
 
         const fullStr = this.input.value;
-        const index = layAfter ? fullStr.indexOf(str) : fullStr.lastIndexOf(str);
+        const index = fullStr.lastIndexOf(str);
 
         if (index === -1) return false;
 
-        if (
-          (layAfter && index === 0) ||
-          (!layAfter && (index + str.length) === fullStr.length)
-        ) {
-          const pos = index + (layAfter ? str.length : 0);
-
-          console.log('【调整】', `"${fullStr}"`, '>>>', layAfter, `"${str}"`, pos);
-          this.fixCaret(pos, pos);
+        if (index + str.length === fullStr.length) {
+          console.log('【向后对齐】', `"${str}"/"${fullStr}"`, index);
+          this.fixCaret(index, index);
 
           return true;
         }
         return false;
       };
 
-      const partRestore = (str, layAfter) => {
+      const partRestoreByAfter = (str) => {
         if (str === undefined) return false;
 
         const len = str.length;
 
-        if (layAfter) {
-          for (let end = len; end > 0; end -= 1) {
-            const partStr = str.substring(0, end);
-            console.log('【遍历 - 前】', layAfter, '-', end, `"${partStr}"`);
-            if (restore(partStr, layAfter)) {
-              return true;
-            }
-          }
-        } else {
-          for (let start = 1; start <= len; start += 1) {
-            const partStr = str.substring(start, len);
-            console.log('【遍历 - 后】', layAfter, '-', start, `"${partStr}"`);
-            if (restore(partStr, layAfter)) {
-              return true;
-            }
+        for (let start = 1; start <= len; start += 1) {
+          const partStr = str.substring(start, len);
+          console.log('【部分向后遍历】', `"${partStr}"`, start);
+          if (restoreByAfter(partStr)) {
+            return true;
           }
         }
 
@@ -194,11 +181,9 @@ export default class InputNumber extends React.Component {
 
       if (
         // Check end match first and then start match
-        !restore(this.cursorAfter, false) &&
-        !restore(this.cursorBefore, true) &&
+        !restoreByAfter(this.cursorAfter) &&
         // If not match full str, try to match part of str
-        !partRestore(this.cursorAfter, false) &&
-        !partRestore(this.cursorBefore, true)
+        !partRestoreByAfter(this.cursorAfter)
       ) {
         // If not match any of then, let's just keep the position
         console.warn('【未匹配】');
