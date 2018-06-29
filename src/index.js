@@ -125,65 +125,67 @@ export default class InputNumber extends React.Component {
   componentDidUpdate() {
     // Restore cursor
     try {
-      // In most cases, the string after cursor is stable.
-      // We can move the cursor before it
-      const restoreByAfter = (str) => {
-        if (str === undefined) return false;
+      if (this.cursorStart !== undefined) {
+        // In most cases, the string after cursor is stable.
+        // We can move the cursor before it
+        const restoreByAfter = (str) => {
+          if (str === undefined) return false;
 
-        const fullStr = this.input.value;
-        const index = fullStr.lastIndexOf(str);
+          const fullStr = this.input.value;
+          const index = fullStr.lastIndexOf(str);
 
-        if (index === -1) return false;
+          if (index === -1) return false;
 
-        if (index + str.length === fullStr.length) {
-          this.fixCaret(index, index);
+          if (index + str.length === fullStr.length) {
+            this.fixCaret(index, index);
 
-          return true;
-        }
-        return false;
-      };
-
-      const partRestoreByAfter = (str) => {
-        if (str === undefined) return false;
-
-        const len = str.length;
-
-        for (let start = 1; start < len; start += 1) {
-          const partStr = str.substring(start, len);
-          if (restoreByAfter(partStr)) {
             return true;
           }
-        }
+          return false;
+        };
 
-        return false;
-      };
+        const partRestoreByAfter = (str) => {
+          if (str === undefined) return false;
 
-      if (
-        // Check end match first and then start match
-        !restoreByAfter(this.cursorAfter) &&
-        // If not match full str, try to match part of str
-        !partRestoreByAfter(this.cursorAfter)
-      ) {
-        // If not match any of then, let's just keep the position
-        // TODO: Logic should not reach here, need check if happens
-        let pos = this.cursorStart + 1;
-        if (this.lastKeyCode === KeyCode.BACKSPACE) {
-          pos = this.cursorStart - 1;
-        } else if (this.lastKeyCode === KeyCode.DELETE) {
-          pos = this.cursorStart;
-        }
-        this.fixCaret(pos, pos);
-      } else if (this.currentValue === this.input.value) {
-        // Handle some special key code
-        switch (this.lastKeyCode) {
-          case KeyCode.BACKSPACE:
-            this.fixCaret(this.cursorStart - 1, this.cursorStart - 1);
-            break;
-          case KeyCode.DELETE:
-            this.fixCaret(this.cursorStart + 1, this.cursorStart + 1);
-            break;
-          default:
+          const len = str.length;
+
+          for (let start = 1; start < len; start += 1) {
+            const partStr = str.substring(start, len);
+            if (restoreByAfter(partStr)) {
+              return true;
+            }
+          }
+
+          return false;
+        };
+
+        if (
+          // Check end match first and then start match
+          !restoreByAfter(this.cursorAfter) &&
+          // If not match full str, try to match part of str
+          !partRestoreByAfter(this.cursorAfter)
+        ) {
+          // If not match any of then, let's just keep the position
+          // TODO: Logic should not reach here, need check if happens
+          let pos = this.cursorStart + 1;
+          if (this.lastKeyCode === KeyCode.BACKSPACE) {
+            pos = this.cursorStart - 1;
+          } else if (this.lastKeyCode === KeyCode.DELETE) {
+            pos = this.cursorStart;
+          }
+          this.fixCaret(pos, pos);
+        } else if (this.currentValue === this.input.value) {
+          // Handle some special key code
+          switch (this.lastKeyCode) {
+            case KeyCode.BACKSPACE:
+              this.fixCaret(this.cursorStart - 1, this.cursorStart - 1);
+              break;
+            case KeyCode.DELETE:
+              this.fixCaret(this.cursorStart + 1, this.cursorStart + 1);
+              break;
+            default:
             // Do nothing
+          }
         }
       }
     } catch (e) {
