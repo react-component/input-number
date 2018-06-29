@@ -128,42 +128,12 @@ export default class InputNumber extends React.Component {
       if (this.cursorStart !== undefined) {
         // In most cases, the string after cursor is stable.
         // We can move the cursor before it
-        const restoreByAfter = (str) => {
-          if (str === undefined) return false;
-
-          const fullStr = this.input.value;
-          const index = fullStr.lastIndexOf(str);
-
-          if (index === -1) return false;
-
-          if (index + str.length === fullStr.length) {
-            this.fixCaret(index, index);
-
-            return true;
-          }
-          return false;
-        };
-
-        const partRestoreByAfter = (str) => {
-          if (str === undefined) return false;
-
-          const len = str.length;
-
-          for (let start = 1; start < len; start += 1) {
-            const partStr = str.substring(start, len);
-            if (restoreByAfter(partStr)) {
-              return true;
-            }
-          }
-
-          return false;
-        };
 
         if (
           // Check end match first and then start match
-          !restoreByAfter(this.cursorAfter) &&
+          !this.restoreByAfter(this.cursorAfter) &&
           // If not match full str, try to match part of str
-          !partRestoreByAfter(this.cursorAfter)
+          !this.partRestoreByAfter(this.cursorAfter)
         ) {
           // If not match any of then, let's just keep the position
           // TODO: Logic should not reach here, need check if happens
@@ -435,6 +405,37 @@ export default class InputNumber extends React.Component {
       // http://stackoverflow.com/q/21177489/3040605
     }
   }
+
+  restoreByAfter = (str) => {
+    if (str === undefined) return false;
+
+    const fullStr = this.input.value;
+    const index = fullStr.lastIndexOf(str);
+
+    if (index === -1) return false;
+
+    if (index + str.length === fullStr.length) {
+      this.fixCaret(index, index);
+
+      return true;
+    }
+    return false;
+  };
+
+  partRestoreByAfter = (str) => {
+    if (str === undefined) return false;
+
+    const len = str.length;
+
+    for (let start = 1; start < len; start += 1) {
+      const partStr = str.substring(start, len);
+      if (this.restoreByAfter(partStr)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 
   focus() {
     this.input.focus();
