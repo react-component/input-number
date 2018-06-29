@@ -125,6 +125,9 @@ export default class InputNumber extends React.Component {
   componentDidUpdate() {
     // Restore cursor
     try {
+      // Firefox set the input cursor after it get focused.
+      // This caused that if an input didn't init with the selection,
+      // set will cause cursor not correct when first focus.
       if (this.cursorStart !== undefined) {
         // In most cases, the string after cursor is stable.
         // We can move the cursor before it
