@@ -197,6 +197,7 @@ export default class InputNumber extends React.Component {
     }
 
     // Trigger user key down
+    this.recordCursorPosition();
     this.lastKeyCode = e.keyCode;
     if (onKeyDown) {
       onKeyDown(e, ...args);
