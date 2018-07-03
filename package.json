@@ -56,7 +56,6 @@
     "pre-commit": "1.x",
     "rc-test": "^6.0.1",
     "rc-tools": "^7.0.2",
-    "rc-util": "^4.0.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "sinon": "^2.1.0"
@@ -66,7 +65,8 @@
     "classnames": "^2.2.0",
     "is-negative-zero": "^2.0.0",
     "prop-types": "^15.5.7",
-    "rmc-feedback": "^2.0.0"
+    "rmc-feedback": "^2.0.0",
+    "rc-util": "^4.5.1"
   },
   "pre-commit": [
     "lint"
