@@ -133,8 +133,6 @@ export default class InputNumber extends React.Component {
         // We can move the cursor before it
 
         if (
-          // Check end match first and then start match
-          !this.restoreByAfter(this.cursorAfter) &&
           // If not match full str, try to match part of str
           !this.partRestoreByAfter(this.cursorAfter)
         ) {
@@ -428,16 +426,15 @@ export default class InputNumber extends React.Component {
   partRestoreByAfter = (str) => {
     if (str === undefined) return false;
 
-    const len = str.length;
+    // For loop from full str to the str with last char to map. e.g. 123
+    // -> 123
+    // -> 23
+    // -> 3
+    return Array.prototype.some.call(str, (_, start) => {
+      const partStr = str.substring(start);
 
-    for (let start = 1; start < len; start += 1) {
-      const partStr = str.substring(start, len);
-      if (this.restoreByAfter(partStr)) {
-        return true;
-      }
-    }
-
-    return false;
+      return this.restoreByAfter(partStr);
+    });
   };
 
   focus() {
