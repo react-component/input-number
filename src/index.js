@@ -128,7 +128,8 @@ export default class InputNumber extends React.Component {
       // Firefox set the input cursor after it get focused.
       // This caused that if an input didn't init with the selection,
       // set will cause cursor not correct when first focus.
-      if (this.cursorStart !== undefined) {
+      // Safari will focus input if set selection. We need skip this.
+      if (this.cursorStart !== undefined && this.state.focused) {
         // In most cases, the string after cursor is stable.
         // We can move the cursor before it
 
@@ -139,7 +140,11 @@ export default class InputNumber extends React.Component {
           // If not match any of then, let's just keep the position
           // TODO: Logic should not reach here, need check if happens
           let pos = this.cursorStart + 1;
-          if (this.lastKeyCode === KeyCode.BACKSPACE) {
+
+          // If not have last string, just position to the end
+          if (!this.cursorAfter) {
+            pos = this.input.value.length;
+          } else if (this.lastKeyCode === KeyCode.BACKSPACE) {
             pos = this.cursorStart - 1;
           } else if (this.lastKeyCode === KeyCode.DELETE) {
             pos = this.cursorStart;
