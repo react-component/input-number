@@ -1,4 +1,4 @@
-# rc-input-number
+﻿# rc-input-number
 ---
 
 input number ui component for react
@@ -204,6 +204,12 @@ online example: http://react-component.github.io/input-number/examples/
           <td>string</td>
           <td></td>
           <td>Specifies a regex pattern to be added to the input number element - useful for forcing iOS to open the number pad instead of the normal keyboard (supply a regex of "\d*" to do this) or form validation</td>
+        </tr>
+	<tr>
+          <td>separator</td>
+          <td>string</td>
+          <td></td>
+          <td>Specifies the decimal separator</td>
         </tr>
     </tbody>
 </table>
