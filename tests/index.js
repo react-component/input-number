@@ -905,6 +905,50 @@ describe('inputNumber', () => {
       expect(onBlurCallCount).to.be(1);
       expect(ReactDOM.findDOMNode(inputNumber).className.indexOf('focused') > 0).to.be(false);
     });
+
+    // https://github.com/ant-design/ant-design/issues/11574
+    it('should trigger onChange when max or min change', () => {
+      const onChange = sinon.spy();
+      class Demo extends Component {
+        state = {
+          value: 10,
+          min: 0,
+          max: 20,
+        }
+        setMax(max) {
+          this.setState({ max });
+        }
+        setMin(min) {
+          this.setState({ min });
+        }
+        setValue(value) {
+          this.setState({ value });
+        }
+        render() {
+          return (
+            <InputNumber
+              ref="inputNum"
+              value={this.state.value}
+              onChange={onChange}
+              max={this.state.max}
+              min={this.state.min}
+            />
+          );
+        }
+      }
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      example.setMin(11);
+      expect(inputElement.value).to.be('11');
+      expect(onChange.calledWith(11)).to.be(true);
+
+      example.setValue(15);
+
+      example.setMax(14);
+      expect(inputElement.value).to.be('14');
+      expect(onChange.calledWith(14)).to.be(true);
+    });
   });
 
   describe(`required prop`, () => {
