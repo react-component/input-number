@@ -72,7 +72,7 @@ export default class InputNumber extends React.Component {
     precision: PropTypes.number,
     required: PropTypes.bool,
     pattern: PropTypes.string,
-    separator: PropTypes.string,
+    decimalSeparator: PropTypes.string,
   }
 
   static defaultProps = {
@@ -299,8 +299,8 @@ export default class InputNumber extends React.Component {
     // https://github.com/ant-design/ant-design/issues/8196
     let value = e.target.value.trim().replace(/。/g, '.');
 
-    if ('separator' in this.props) {
-      value = value.replace(this.props.separator, '.');
+    if ('decimalSeparator' in this.props) {
+      value = value.replace(this.props.decimalSeparator, '.');
     }
 
     return value;
@@ -684,10 +684,10 @@ export default class InputNumber extends React.Component {
     }
 
     let inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
-    if ('separator' in this.props) {
+    if ('decimalSeparator' in this.props) {
       inputDisplayValueFormat = inputDisplayValueFormat
         .toString()
-        .replace('.', this.props.separator);
+        .replace('.', this.props.decimalSeparator);
     }
     const isUpDisabled = !!upDisabledClass || disabled || readOnly;
     const isDownDisabled = !!downDisabledClass || disabled || readOnly;

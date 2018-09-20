@@ -635,7 +635,7 @@ describe('inputNumber', () => {
     it('custom decimal separator', () => {
       const Demo = createReactClass({
         render() {
-          return <InputNumber ref="inputNum" separator="," />;
+          return <InputNumber ref="inputNum" decimalSeparator="," />;
         },
       });
       example = ReactDOM.render(<Demo />, container);

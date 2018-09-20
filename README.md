@@ -206,7 +206,7 @@ online example: http://react-component.github.io/input-number/examples/
           <td>Specifies a regex pattern to be added to the input number element - useful for forcing iOS to open the number pad instead of the normal keyboard (supply a regex of "\d*" to do this) or form validation</td>
         </tr>
         <tr>
-          <td>separator</td>
+          <td>decimalSeparator</td>
           <td>string</td>
           <td></td>
           <td>Specifies the decimal separator</td>
