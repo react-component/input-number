@@ -631,6 +631,22 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(1);
       expect(inputElement.value).to.be('1.000000000');
     });
+
+    it('custom decimal separator', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" decimalSeparator="," />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '1,1' } });
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('1,1');
+      expect(inputNumber.state.value).to.be(1.1);
+    });
   });
 
   describe('GitHub issues', () => {

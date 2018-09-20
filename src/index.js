@@ -72,6 +72,7 @@ export default class InputNumber extends React.Component {
     precision: PropTypes.number,
     required: PropTypes.bool,
     pattern: PropTypes.string,
+    decimalSeparator: PropTypes.string,
   }
 
   static defaultProps = {
@@ -296,7 +297,13 @@ export default class InputNumber extends React.Component {
   getValueFromEvent(e) {
     // optimize for chinese input expierence
     // https://github.com/ant-design/ant-design/issues/8196
-    return e.target.value.trim().replace(/。/g, '.');
+    let value = e.target.value.trim().replace(/。/g, '.');
+
+    if ('decimalSeparator' in this.props) {
+      value = value.replace(this.props.decimalSeparator, '.');
+    }
+
+    return value;
   }
 
   getValidValue(value, min = this.props.min, max = this.props.max) {
@@ -675,7 +682,13 @@ export default class InputNumber extends React.Component {
         onMouseLeave: this.stop,
       };
     }
-    const inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
+
+    let inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
+    if ('decimalSeparator' in this.props) {
+      inputDisplayValueFormat = inputDisplayValueFormat
+        .toString()
+        .replace('.', this.props.decimalSeparator);
+    }
     const isUpDisabled = !!upDisabledClass || disabled || readOnly;
     const isDownDisabled = !!downDisabledClass || disabled || readOnly;
     // ref for test
