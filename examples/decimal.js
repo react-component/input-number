@@ -1,14 +1,14 @@
 webpackJsonp([5],{
 
-/***/ 126:
+/***/ 118:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(127);
+module.exports = __webpack_require__(119);
 
 
 /***/ }),
 
-/***/ 127:
+/***/ 119:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56,6 +56,8 @@ var Demo = function (_React$Component) {
       _this.setState({
         value: v
       });
+    }, _this.onBlur = function (v) {
+      console.log('onBlur:', v);
     }, _this.toggleDisabled = function () {
       _this.setState({
         disabled: !_this.state.disabled
@@ -79,6 +81,7 @@ var Demo = function (_React$Component) {
         style: { width: 100 },
         readOnly: this.state.readOnly,
         onChange: this.onChange,
+        onBlur: this.onBlur,
         disabled: this.state.disabled
       }),
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
@@ -105,5 +108,5 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ })
 
-},[126]);
+},[118]);
 //# sourceMappingURL=decimal.js.map
