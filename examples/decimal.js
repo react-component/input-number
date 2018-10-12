@@ -16,9 +16,6 @@ class Demo extends React.Component {
       value: v,
     });
   }
-  onBlur = (v) => {
-    console.log('onBlur:', v);
-  };
   toggleDisabled = () => {
     this.setState({
       disabled: !this.state.disabled,
@@ -40,7 +37,6 @@ class Demo extends React.Component {
           style={{ width: 100 }}
           readOnly={this.state.readOnly}
           onChange={this.onChange}
-          onBlur={this.onBlur}
           disabled={this.state.disabled}
         />
         <p>
