@@ -56,8 +56,6 @@ var Demo = function (_React$Component) {
       _this.setState({
         value: v
       });
-    }, _this.onBlur = function (v) {
-      console.log('onBlur:', v);
     }, _this.toggleDisabled = function () {
       _this.setState({
         disabled: !_this.state.disabled
@@ -81,7 +79,6 @@ var Demo = function (_React$Component) {
         style: { width: 100 },
         readOnly: this.state.readOnly,
         onChange: this.onChange,
-        onBlur: this.onBlur,
         disabled: this.state.disabled
       }),
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(

@@ -1147,14 +1147,21 @@ var _initialiseProps = function _initialiseProps() {
     (_props4 = _this3.props).onFocus.apply(_props4, arguments);
   };
 
-  this.onBlur = function () {
+  this.onBlur = function (e) {
+    for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+      args[_key3 - 1] = arguments[_key3];
+    }
+
     _this3.inputting = false;
     _this3.setState({
       focused: false
     });
     var value = _this3.getCurrentValidValue(_this3.state.inputValue);
+    e.persist(); // fix https://github.com/react-component/input-number/issues/51
     _this3.setValue(value, function () {
-      _this3.props.onBlur(_this3.state.value);
+      var _props5;
+
+      (_props5 = _this3.props).onBlur.apply(_props5, [e].concat(args));
     });
   };
 
