@@ -744,10 +744,12 @@ export default class InputNumber extends React.Component {
           aria-valuemax={props.max}
           aria-valuenow={value}
         >
+{
+
           <input
             required={props.required}
             type={props.type}
-            placeholder={props.placeholder}
+            placeholder={props.placeholder} // eslint-disable-line react/no-unknown-property
             onClick={props.onClick}
             onMouseUp={this.onMouseUp}
             className={`${prefixCls}-input`}
