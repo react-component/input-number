@@ -647,7 +647,8 @@ export default class InputNumber extends React.Component {
     for (const key in props) {
       if (
         props.hasOwnProperty(key) &&
-        (key.substr(0, 5) === 'data-' || key.substr(0, 5) === 'aria-' || key === 'role' || key === 'autocomplete')
+        (key.substr(0, 5) === 'data-' || key.substr(0, 5) === 'aria-' ||
+         key === 'role' || key === 'autocomplete')
       ) {
         dataOrAriaAttributeProps[key] = props[key];
       }
@@ -744,17 +745,15 @@ export default class InputNumber extends React.Component {
           aria-valuemax={props.max}
           aria-valuenow={value}
         >
-{
-
           <input
             required={props.required}
             type={props.type}
-            placeholder={props.placeholder} // eslint-disable-line react/no-unknown-property
+            placeholder={props.placeholder}
             onClick={props.onClick}
             onMouseUp={this.onMouseUp}
             className={`${prefixCls}-input`}
             tabIndex={props.tabIndex}
-            autocomplete="off"
+            autocomplete="off" // eslint-disable-line react/no-unknown-property
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             onKeyDown={editable ? this.onKeyDown : noop}
