@@ -203,6 +203,27 @@ describe('inputNumber', () => {
         ReactDOM.findDOMNode(inputNumber.downHandler).className.indexOf('disabled') > 0
       ).to.be(false);
     });
+
+    it('should record current properties upon mouse up', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref={"inputNum"} value={123} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+
+      inputNumber = example.refs.inputNum;
+      const inputField = ReactDOM.findDOMNode(inputNumber.input);
+
+      expect(inputNumber.currentValue).to.be(undefined);
+      expect(inputNumber.cursorStart).to.be(undefined);
+      expect(inputNumber.cursorEnd).to.be(undefined);
+      Simulate.mouseUp(inputField);
+
+      expect(inputNumber.cursorStart).to.be(3);
+      expect(inputNumber.cursorEnd).to.be(3);
+      expect(inputNumber.currentValue).to.be('123');
+    });
   });
 
   describe('long press', () => {
@@ -313,7 +334,7 @@ describe('inputNumber', () => {
         };
         changeValue = () => {
           this.setState({ value: '103aa' });
-        }
+        };
         render() {
           return (
             <div>
@@ -341,7 +362,7 @@ describe('inputNumber', () => {
         };
         changeValue = () => {
           this.setState({ value: undefined });
-        }
+        };
         render() {
           return (
             <div>
@@ -930,7 +951,7 @@ describe('inputNumber', () => {
           value: 10,
           min: 0,
           max: 20,
-        }
+        };
         setMax(max) {
           this.setState({ max });
         }
