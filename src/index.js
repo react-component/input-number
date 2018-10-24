@@ -147,7 +147,7 @@ export default class InputNumber extends React.Component {
 
         if (
           // If not match full str, try to match part of str
-          !this.partRestoreByAfter(this.cursorAfter)
+          !this.partRestoreByAfter(this.cursorAfter) && this.state.value !== this.props.value
         ) {
           // If not match any of then, let's just keep the position
           // TODO: Logic should not reach here, need check if happens
@@ -533,7 +533,7 @@ export default class InputNumber extends React.Component {
     if (typeof val === 'number') {
       result =
         ((precisionFactor * val + precisionFactor * step * rat) /
-        precisionFactor).toFixed(precision);
+          precisionFactor).toFixed(precision);
     } else {
       result = min === -Infinity ? step : min;
     }
@@ -548,7 +548,7 @@ export default class InputNumber extends React.Component {
     if (typeof val === 'number') {
       result =
         ((precisionFactor * val - precisionFactor * step * rat) /
-        precisionFactor).toFixed(precision);
+          precisionFactor).toFixed(precision);
     } else {
       result = min === -Infinity ? -step : min;
     }
