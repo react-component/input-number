@@ -73,6 +73,7 @@ export default class InputNumber extends React.Component {
     required: PropTypes.bool,
     pattern: PropTypes.string,
     decimalSeparator: PropTypes.string,
+    autoRounding: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -88,6 +89,7 @@ export default class InputNumber extends React.Component {
     onBlur: noop,
     parser: defaultParser,
     required: false,
+    autoRounding: true,
   }
 
   constructor(props) {
@@ -507,10 +509,17 @@ export default class InputNumber extends React.Component {
   }
 
   toNumber(num) {
+    const { precision, autoRounding } = this.props;
+
     if (this.isNotCompleteNumber(num)) {
       return num;
     }
     if ('precision' in this.props) {
+      if (!autoRounding) {
+        const pow = Math.pow(10, precision);
+
+        return parseInt(Number(num) * pow, 10) / pow;
+      }
       return Number(Number(num).toFixed(this.props.precision));
     }
     return Number(num);

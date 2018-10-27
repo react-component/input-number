@@ -381,6 +381,47 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(undefined);
       expect(inputElement.value).to.be('');
     });
+
+    // https://github.com/ant-design/ant-design/issues/12813
+    it('autoRounding', () => {
+      class Demo extends React.Component {
+        state = {
+          value: 1,
+        };
+
+        onChange = value => {
+          let val = value;
+
+          if (value > 10) {
+            val = 10;
+          }
+
+          this.setState({ value: val });
+        }
+
+        render() {
+          const { value } = this.state;
+
+          return (
+              <InputNumber
+                value={value}
+                precision={2}
+                onChange={this.onChange}
+                autoRounding={false}
+                ref="inputNum"
+              />
+          );
+        }
+      }
+
+      example = ReactDOM.render(<Demo />, container);
+
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.change(inputElement, { target: { value: '1.089' } });
+      expect(inputNumber.state.value).to.be(1.08);
+      expect(inputElement.value).to.be('1.08');
+    });
   });
 
   describe('check value changes with readonly props set to true', () => {
