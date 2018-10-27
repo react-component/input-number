@@ -211,6 +211,12 @@ online example: http://react-component.github.io/input-number/examples/
           <td></td>
           <td>Specifies the decimal separator</td>
         </tr>
+        <tr>
+          <td>autoRounding</td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>If false, the result won't rounding. e.g. precision = 2, 1.089 => 1.08, not 1.09</td>
+        </tr>
     </tbody>
 </table>
 
