@@ -974,6 +974,10 @@ describe('inputNumber', () => {
           min: 0,
           max: 20,
         };
+        onChange = (value) => {
+          this.setValue(value);
+          onChange(value);
+        }
         setMax(max) {
           this.setState({ max });
         }
@@ -988,7 +992,7 @@ describe('inputNumber', () => {
             <InputNumber
               ref="inputNum"
               value={this.state.value}
-              onChange={onChange}
+              onChange={this.onChange}
               max={this.state.max}
               min={this.state.min}
             />

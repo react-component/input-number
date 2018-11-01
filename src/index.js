@@ -114,7 +114,7 @@ export default class InputNumber extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if ('value' in nextProps) {
+    if ('value' in nextProps && nextProps.value !== this.props.value) {
       const value = this.state.focused
         ? nextProps.value : this.getValidValue(nextProps.value, nextProps.min, nextProps.max);
       this.setState({
