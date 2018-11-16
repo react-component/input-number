@@ -7,6 +7,7 @@ input number ui component for react
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![david-dm deps][david-dm-image]][david-dm-url]
+[![devDependencies Status](https://david-dm.org/react-component/input-number/dev-status.svg)](https://david-dm.org/react-component/input-number?type=dev)
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
 
