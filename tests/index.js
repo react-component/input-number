@@ -1012,6 +1012,38 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('14');
       expect(onChange.calledWith(14)).to.be(true);
     });
+
+    // https://github.com/react-component/input-number/issues/120
+    it('should not reset value when parent rerenders with the same `value` prop', () => {
+      class Demo extends React.Component {
+        state = { value: 40 };
+
+        onChange = () => {
+          this.forceUpdate();
+        };
+
+        render() {
+          return (
+            <InputNumber
+              ref="inputNum"
+              value={this.state.value}
+              onChange={this.onChange}
+            />
+          );
+        }
+      }
+
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '401' } });
+
+      // Demo rerenders and the `value` prop is still 40, but the user input should
+      // be retained
+      expect(inputElement.value).to.be('401');
+    });
   });
 
   describe(`required prop`, () => {
