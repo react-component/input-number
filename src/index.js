@@ -276,7 +276,7 @@ export default class InputNumber extends React.Component {
     let val = value;
     if (val === '') {
       val = '';
-    } else if (this.isNotCompleteNumber(val)) {
+    } else if (!this.isNotCompleteNumber(parseFloat(val, 10))) {
       val = this.getValidValue(val);
     } else {
       val = this.state.value;
@@ -628,6 +628,7 @@ export default class InputNumber extends React.Component {
     let upDisabledClass = '';
     let downDisabledClass = '';
     const { value } = this.state;
+    console.log('')
     if (value || value === 0) {
       if (!isNaN(value)) {
         const val = Number(value);
