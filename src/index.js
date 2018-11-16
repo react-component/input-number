@@ -276,7 +276,7 @@ export default class InputNumber extends React.Component {
     let val = value;
     if (val === '') {
       val = '';
-    } else if (!this.isNotCompleteNumber(val)) {
+    } else if (this.isNotCompleteNumber(val)) {
       val = this.getValidValue(val);
     } else {
       val = this.state.value;
