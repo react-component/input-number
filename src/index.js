@@ -88,6 +88,7 @@ export default class InputNumber extends React.Component {
     onBlur: noop,
     parser: defaultParser,
     required: false,
+    autoComplete: 'off',
   }
 
   constructor(props) {
@@ -618,7 +619,7 @@ export default class InputNumber extends React.Component {
 
   render() {
     const props = { ...this.props };
-    const { prefixCls, disabled, readOnly, useTouch } = props;
+    const { prefixCls, disabled, readOnly, useTouch, autoComplete } = props;
     const classes = classNames({
       [prefixCls]: true,
       [props.className]: !!props.className,
@@ -647,8 +648,11 @@ export default class InputNumber extends React.Component {
     for (const key in props) {
       if (
         props.hasOwnProperty(key) &&
-        (key.substr(0, 5) === 'data-' || key.substr(0, 5) === 'aria-' ||
-         key === 'role' || key === 'autocomplete')
+        (
+          key.substr(0, 5) === 'data-' ||
+          key.substr(0, 5) === 'aria-' ||
+          key === 'role'
+        )
       ) {
         dataOrAriaAttributeProps[key] = props[key];
       }
@@ -753,7 +757,7 @@ export default class InputNumber extends React.Component {
             onMouseUp={this.onMouseUp}
             className={`${prefixCls}-input`}
             tabIndex={props.tabIndex}
-            autocomplete="off" // eslint-disable-line react/no-unknown-property
+            autoComplete={autoComplete}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             onKeyDown={editable ? this.onKeyDown : noop}
