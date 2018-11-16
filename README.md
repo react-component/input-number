@@ -6,7 +6,7 @@ input number ui component for react
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
-[![gemnasium deps][gemnasium-image]][gemnasium-url]
+[![david-dm deps][david-dm-image]][david-dm-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
 
@@ -16,8 +16,8 @@ input number ui component for react
 [travis-url]: https://travis-ci.org/react-component/input-number
 [coveralls-image]: https://img.shields.io/coveralls/react-component/input-number.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/react-component/input-number?branch=master
-[gemnasium-image]: http://img.shields.io/gemnasium/react-component/input-number.svg?style=flat-square
-[gemnasium-url]: https://gemnasium.com/react-component/input-number
+[david-dm-image]: https://david-dm.org/react-component/input-number/status.svg
+[david-dm-url]: https://gemnasium.com/react-component/input-number
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
 [download-image]: https://img.shields.io/npm/dm/rc-input-number.svg?style=flat-square
