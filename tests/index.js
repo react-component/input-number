@@ -424,6 +424,7 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('2');
       expect(onChangeFirstArgument).to.be(2);
     });
+
     it('input invalid decimal point with max number', () => {
       example.setState({ max: 10 });
       Simulate.focus(inputElement);
@@ -433,7 +434,8 @@ describe('inputNumber', () => {
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('10');
       expect(onChangeFirstArgument).to.be(10);
-    });    
+    });
+
     it('input invalid decimal point with min number', () => {
       example.setState({ min: 5 });
       Simulate.focus(inputElement);
