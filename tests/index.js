@@ -445,7 +445,7 @@ describe('inputNumber', () => {
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('5');
       expect(onChangeFirstArgument).to.be(5);
-    });        
+    });
 
     it('input negative symbol', () => {
       example.setState({ min: -100 });
