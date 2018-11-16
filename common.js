@@ -497,7 +497,7 @@ var InputNumber = function (_React$Component) {
   };
 
   InputNumber.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-    if ('value' in nextProps) {
+    if ('value' in nextProps && nextProps.value !== this.props.value) {
       var value = this.state.focused ? nextProps.value : this.getValidValue(nextProps.value, nextProps.min, nextProps.max);
       this.setState({
         value: value,
