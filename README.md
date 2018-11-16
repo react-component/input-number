@@ -17,7 +17,7 @@ input number ui component for react
 [coveralls-image]: https://img.shields.io/coveralls/react-component/input-number.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/react-component/input-number?branch=master
 [david-dm-image]: https://david-dm.org/react-component/input-number/status.svg
-[david-dm-url]: https://gemnasium.com/react-component/input-number
+[david-dm-url]: https://david-dm.org/react-component/input-number
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
 [download-image]: https://img.shields.io/npm/dm/rc-input-number.svg?style=flat-square
