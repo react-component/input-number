@@ -424,6 +424,26 @@ describe('inputNumber', () => {
       expect(inputElement.value).to.be('2');
       expect(onChangeFirstArgument).to.be(2);
     });
+    it('input invalid decimal point with max number', () => {
+      example.setState({ max: 10 });
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '15.' } });
+      expect(inputElement.value).to.be('15.');
+      expect(onChangeFirstArgument).to.be('15.');
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('10');
+      expect(onChangeFirstArgument).to.be(10);
+    });    
+    it('input invalid decimal point with min number', () => {
+      example.setState({ min: 5 });
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '3.' } });
+      expect(inputElement.value).to.be('3.');
+      expect(onChangeFirstArgument).to.be('3.');
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('5');
+      expect(onChangeFirstArgument).to.be(5);
+    });        
 
     it('input negative symbol', () => {
       example.setState({ min: -100 });
