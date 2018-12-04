@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import isNegativeZero from 'is-negative-zero';
 import KeyCode from 'rc-util/lib/KeyCode';
 import InputHandler from './InputHandler';
+import omit from 'omit.js';
 
 function noop() {
 }
@@ -618,8 +619,11 @@ export default class InputNumber extends React.Component {
   }
 
   render() {
-    const props = { ...this.props };
-    const { prefixCls, disabled, readOnly, useTouch, autoComplete } = props;
+    const props = omit(this.props, [
+      'focusOnUpDown',
+      'parser',
+    ]);
+    const { prefixCls, disabled, readOnly, useTouch, autoComplete, ...rest } = props;
     const classes = classNames({
       [prefixCls]: true,
       [props.className]: !!props.className,
@@ -750,6 +754,7 @@ export default class InputNumber extends React.Component {
           aria-valuenow={value}
         >
           <input
+            {...rest}
             required={props.required}
             type={props.type}
             placeholder={props.placeholder}
