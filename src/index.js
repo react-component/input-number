@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import isNegativeZero from 'is-negative-zero';
 import KeyCode from 'rc-util/lib/KeyCode';
 import InputHandler from './InputHandler';
-import omit from 'omit.js';
 
 function noop() {
 }
@@ -705,6 +704,7 @@ export default class InputNumber extends React.Component {
       <div
         className={classes}
         style={props.style}
+        title={props.title}
         onMouseEnter={props.onMouseEnter}
         onMouseLeave={props.onMouseLeave}
         onMouseOver={props.onMouseOver}
@@ -754,12 +754,6 @@ export default class InputNumber extends React.Component {
           aria-valuenow={value}
         >
           <input
-            {...omit(rest, [
-              'focusOnUpDown',
-              'parser',
-              'upHandler',
-              'downHandler',
-            ])}
             required={props.required}
             type={props.type}
             placeholder={props.placeholder}
