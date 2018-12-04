@@ -619,11 +619,11 @@ export default class InputNumber extends React.Component {
   }
 
   render() {
-    const props = omit(this.props, [
-      'focusOnUpDown',
-      'parser',
-    ]);
-    const { prefixCls, disabled, readOnly, useTouch, autoComplete, ...rest } = props;
+    const props = { ...this.props };
+    const {
+      prefixCls, disabled, readOnly, useTouch, autoComplete,
+      upHandler, downHandler, ...rest,
+    } = props;
     const classes = classNames({
       [prefixCls]: true,
       [props.className]: !!props.className,
@@ -722,7 +722,7 @@ export default class InputNumber extends React.Component {
             aria-disabled={!!isUpDisabled}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
           >
-            {this.props.upHandler || <span
+            {upHandler || <span
               unselectable="unselectable"
               className={`${prefixCls}-handler-up-inner`}
               onClick={preventDefault}
@@ -739,7 +739,7 @@ export default class InputNumber extends React.Component {
             aria-disabled={!!isDownDisabled}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
           >
-            {this.props.downHandler || <span
+            {downHandler || <span
               unselectable="unselectable"
               className={`${prefixCls}-handler-down-inner`}
               onClick={preventDefault}
@@ -754,7 +754,12 @@ export default class InputNumber extends React.Component {
           aria-valuenow={value}
         >
           <input
-            {...rest}
+            {...omit(rest, [
+              'focusOnUpDown',
+              'parser',
+              'upHandler',
+              'downHandler',
+            ])}
             required={props.required}
             type={props.type}
             placeholder={props.placeholder}
