@@ -423,7 +423,7 @@ export default class InputNumber extends React.Component {
       const currentEnd = this.input.selectionEnd;
 
       if (start !== currentStart || end !== currentEnd) {
-        this.input.setSelectionRange(start, end);
+        this.input.setSelectionRange(currentStart, currentEnd);
       }
     } catch (e) {
       // Fix error in Chrome:
