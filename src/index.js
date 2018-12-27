@@ -4,17 +4,16 @@ import classNames from 'classnames';
 import isNegativeZero from 'is-negative-zero';
 import KeyCode from 'rc-util/lib/KeyCode';
 import InputHandler from './InputHandler';
-
-function noop() {
-}
-
-function preventDefault(e) {
-  e.preventDefault();
-}
-
-function defaultParser(input) {
-  return input.replace(/[^\w\.-]+/g, '');
-}
+import { polyfill } from 'react-lifecycles-compat';
+import {
+  noop,
+  preventDefault,
+  defaultParser,
+  getValidValue,
+  isNotCompleteNumber,
+  toPrecisionAsStep,
+  getMaxPrecision,
+} from './util';
 
 /**
  * When click and hold on a button - the speed of auto changin the value.
@@ -32,7 +31,10 @@ const DELAY = 600;
  */
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
-export default class InputNumber extends React.Component {
+let recordMax = MAX_SAFE_INTEGER;
+let recordMin = -MAX_SAFE_INTEGER;
+
+class InputNumber extends React.Component {
   static propTypes = {
     value: PropTypes.oneOfType([
       PropTypes.number,
@@ -94,45 +96,20 @@ export default class InputNumber extends React.Component {
   constructor(props) {
     super(props);
 
-    let value;
-    if ('value' in props) {
-      value = props.value;
-    } else {
-      value = props.defaultValue;
-    }
+    const { defaultValue, step, precision, autoFocus } = props;
+
+    let value = 'value' in props ? props.value : defaultValue;
     value = this.toNumber(value);
 
     this.state = {
-      inputValue: this.toPrecisionAsStep(value),
+      inputValue: toPrecisionAsStep(value, step, precision),
       value,
-      focused: props.autoFocus,
+      focused: autoFocus,
     };
   }
 
   componentDidMount() {
     this.componentDidUpdate();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if ('value' in nextProps && nextProps.value !== this.props.value) {
-      const value = this.state.focused
-        ? nextProps.value : this.getValidValue(nextProps.value, nextProps.min, nextProps.max);
-      this.setState({
-        value,
-        inputValue: this.inputting ? value : this.toPrecisionAsStep(value),
-      });
-    }
-
-    // Trigger onChange when max or min change
-    // https://github.com/ant-design/ant-design/issues/11574
-    const nextValue = 'value' in nextProps ? nextProps.value : this.state.value;
-    const { onChange, max, min } = this.props;
-    if ('max' in nextProps && nextProps.max !== max && nextValue > nextProps.max && onChange) {
-      onChange(nextProps.max);
-    }
-    if ('min' in nextProps && nextProps.min !== min && nextValue < nextProps.min && onChange) {
-      onChange(nextProps.min);
-    }
   }
 
   componentDidUpdate() {
@@ -236,9 +213,6 @@ export default class InputNumber extends React.Component {
   }
 
   onChange = (e) => {
-    if (this.state.focused) {
-      this.inputting = true;
-    }
     const input = this.props.parser(this.getValueFromEvent(e));
     this.setState({ inputValue: input });
     this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
@@ -252,7 +226,7 @@ export default class InputNumber extends React.Component {
     if (onMouseUp) {
       onMouseUp(...args);
     }
-  };
+  }
 
   onFocus = (...args) => {
     this.setState({
@@ -262,7 +236,6 @@ export default class InputNumber extends React.Component {
   }
 
   onBlur = (e, ...args) => {
-    this.inputting = false;
     this.setState({
       focused: false,
     });
@@ -273,12 +246,57 @@ export default class InputNumber extends React.Component {
     });
   }
 
+  static getDerivedStateFromProps(nextProps, state) {
+    const { onChange, step, precision, max, min } = nextProps;
+    let newState = {};
+
+    if ('value' in nextProps && nextProps.value !== state.value) {
+      const value = state.focused ?
+        nextProps.value : getValidValue(nextProps.value, min, max);
+
+      newState = {
+        value,
+        inputValue: state.focused ? value : toPrecisionAsStep(value, step, precision),
+      };
+    }
+
+    // Trigger onChange when max or min change
+    // https://github.com/ant-design/ant-design/issues/11574
+    const nextValue = 'value' in nextProps ? nextProps.value : state.value;
+
+    if (
+      'max' in nextProps &&
+      max !== recordMax &&
+      nextValue > max &&
+      onChange
+    ) {
+      recordMax = max;
+      newState.value = getValidValue(nextProps.value, min, max);
+      onChange(max);
+    }
+
+    if (
+      'min' in nextProps &&
+      min !== recordMin &&
+      nextValue < min &&
+      onChange
+    ) {
+      recordMin = min;
+      newState.value = getValidValue(nextProps.value, min, max);
+      onChange(min);
+    }
+
+    return newState;
+  }
+
   getCurrentValidValue(value) {
     let val = value;
+    const { min, max } = this.props;
+
     if (val === '') {
       val = '';
-    } else if (!this.isNotCompleteNumber(parseFloat(val, 10))) {
-      val = this.getValidValue(val);
+    } else if (!isNotCompleteNumber(parseFloat(val, 10))) {
+      val = getValidValue(val, min, max);
     } else {
       val = this.state.value;
     }
@@ -307,35 +325,21 @@ export default class InputNumber extends React.Component {
     return value;
   }
 
-  getValidValue(value, min = this.props.min, max = this.props.max) {
-    let val = parseFloat(value, 10);
-    // https://github.com/ant-design/ant-design/issues/7358
-    if (isNaN(val)) {
-      return value;
-    }
-    if (val < min) {
-      val = min;
-    }
-    if (val > max) {
-      val = max;
-    }
-    return val;
-  }
-
   setValue(v, callback) {
     // trigger onChange
-    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
+    const newValue = isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
+    const { step, precision } = this.props;
     const changed = newValue !== this.state.value ||
       `${newValue}` !== `${this.state.inputValue}`; // https://github.com/ant-design/ant-design/issues/7363
     if (!('value' in this.props)) {
       this.setState({
         value: newValue,
-        inputValue: this.toPrecisionAsStep(v),
+        inputValue: toPrecisionAsStep(v, step, precision),
       }, callback);
     } else {
       // always set input value same as value
       this.setState({
-        inputValue: this.toPrecisionAsStep(this.state.value),
+        inputValue: toPrecisionAsStep(this.state.value, step, precision),
       }, callback);
     }
     if (changed) {
@@ -343,52 +347,20 @@ export default class InputNumber extends React.Component {
     }
   }
 
-  getPrecision(value) {
-    if ('precision' in this.props) {
-      return this.props.precision;
-    }
-    const valueString = value.toString();
-    if (valueString.indexOf('e-') >= 0) {
-      return parseInt(valueString.slice(valueString.indexOf('e-') + 2), 10);
-    }
-    let precision = 0;
-    if (valueString.indexOf('.') >= 0) {
-      precision = valueString.length - valueString.indexOf('.') - 1;
-    }
-    return precision;
-  }
-
-  // step={1.0} value={1.51}
-  // press +
-  // then value should be 2.51, rather than 2.5
-  // if this.props.precision is undefined
-  // https://github.com/react-component/input-number/issues/39
-  getMaxPrecision(currentValue, ratio = 1) {
-    if ('precision' in this.props) {
-      return this.props.precision;
-    }
-    const { step } = this.props;
-    const ratioPrecision = this.getPrecision(ratio);
-    const stepPrecision = this.getPrecision(step);
-    const currentValuePrecision = this.getPrecision(currentValue);
-    if (!currentValue) {
-      return ratioPrecision + stepPrecision;
-    }
-    return Math.max(currentValuePrecision, ratioPrecision + stepPrecision);
-  }
-
   getPrecisionFactor(currentValue, ratio = 1) {
-    const precision = this.getMaxPrecision(currentValue, ratio);
-    return Math.pow(10, precision);
+    const { step, precision } = this.props;
+
+    return Math.pow(10, getMaxPrecision({ currentValue, ratio, step, precision }));
   }
 
   getInputDisplayValue = () => {
     const { focused, inputValue, value } = this.state;
+    const { step, precision } = this.props;
     let inputDisplayValue;
     if (focused) {
       inputDisplayValue = inputValue;
     } else {
-      inputDisplayValue = this.toPrecisionAsStep(value);
+      inputDisplayValue = toPrecisionAsStep(value, step, precision);
     }
 
     if (inputDisplayValue === undefined || inputDisplayValue === null) {
@@ -396,7 +368,7 @@ export default class InputNumber extends React.Component {
     }
 
     return inputDisplayValue;
-  };
+  }
 
   recordCursorPosition = () => {
     // Record position
@@ -411,7 +383,7 @@ export default class InputNumber extends React.Component {
       // Failed to read the 'selectionStart' property from 'HTMLInputElement'
       // http://stackoverflow.com/q/21177489/3040605
     }
-  };
+  }
 
   fixCaret(start, end) {
     if (start === undefined || end === undefined || !this.input || !this.input.value) {
@@ -446,7 +418,7 @@ export default class InputNumber extends React.Component {
       return true;
     }
     return false;
-  };
+  }
 
   partRestoreByAfter = (str) => {
     if (str === undefined) return false;
@@ -460,7 +432,7 @@ export default class InputNumber extends React.Component {
 
       return this.restoreByAfter(partStr);
     });
-  };
+  }
 
   focus() {
     this.input.focus();
@@ -483,32 +455,8 @@ export default class InputNumber extends React.Component {
     return num;
   }
 
-  toPrecisionAsStep(num) {
-    if (this.isNotCompleteNumber(num) || num === '') {
-      return num;
-    }
-    const precision = Math.abs(this.getMaxPrecision(num));
-    if (precision === 0) {
-      return num.toString();
-    }
-    if (!isNaN(precision)) {
-      return Number(num).toFixed(precision);
-    }
-    return num.toString();
-  }
-
-  // '1.' '1x' 'xx' '' => are not complete numbers
-  isNotCompleteNumber(num) {
-    return (
-      isNaN(num) ||
-      num === '' ||
-      num === null ||
-      (num && num.toString().indexOf('.') === num.toString().length - 1)
-    );
-  }
-
   toNumber(num) {
-    if (this.isNotCompleteNumber(num)) {
+    if (isNotCompleteNumber(num)) {
       return num;
     }
     if ('precision' in this.props) {
@@ -527,14 +475,19 @@ export default class InputNumber extends React.Component {
   }
 
   upStep(val, rat) {
-    const { step, min } = this.props;
+    const { step, min, precision } = this.props;
     const precisionFactor = this.getPrecisionFactor(val, rat);
-    const precision = Math.abs(this.getMaxPrecision(val, rat));
+    const newPrecision = Math.abs(getMaxPrecision({
+      currentValue: val,
+      ratio: rat,
+      step,
+      precision,
+    }));
     let result;
     if (typeof val === 'number') {
       result =
         ((precisionFactor * val + precisionFactor * step * rat) /
-        precisionFactor).toFixed(precision);
+          precisionFactor).toFixed(newPrecision);
     } else {
       result = min === -Infinity ? step : min;
     }
@@ -542,14 +495,19 @@ export default class InputNumber extends React.Component {
   }
 
   downStep(val, rat) {
-    const { step, min } = this.props;
+    const { step, min, precision } = this.props;
     const precisionFactor = this.getPrecisionFactor(val, rat);
-    const precision = Math.abs(this.getMaxPrecision(val, rat));
+    const newPrecision = Math.abs(getMaxPrecision({
+      currentValue: val,
+      ratio: rat,
+      step,
+      precision,
+    }));
     let result;
     if (typeof val === 'number') {
       result =
         ((precisionFactor * val - precisionFactor * step * rat) /
-        precisionFactor).toFixed(precision);
+          precisionFactor).toFixed(newPrecision);
     } else {
       result = min === -Infinity ? -step : min;
     }
@@ -567,7 +525,7 @@ export default class InputNumber extends React.Component {
       return;
     }
     const value = this.getCurrentValidValue(this.state.inputValue) || 0;
-    if (this.isNotCompleteNumber(value)) {
+    if (isNotCompleteNumber(value)) {
       return;
     }
     let val = this[`${type}Step`](value, ratio);
@@ -786,3 +744,7 @@ export default class InputNumber extends React.Component {
     );
   }
 }
+
+polyfill(InputNumber);
+
+export default InputNumber;
