@@ -412,7 +412,7 @@ describe('inputNumber', () => {
       expect(onChangeFirstArgument).to.be('xx');
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('');
-      expect(onChangeFirstArgument).to.be(undefined);
+      expect(onChangeFirstArgument).to.be(null);
     });
 
     it('input invalid string with number', () => {
@@ -455,7 +455,7 @@ describe('inputNumber', () => {
       expect(onChangeFirstArgument).to.be('-');
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('');
-      expect(onChangeFirstArgument).to.be(undefined);
+      expect(onChangeFirstArgument).to.be(null);
     });
 
     it('input negative number', () => {
@@ -509,10 +509,10 @@ describe('inputNumber', () => {
       expect(onChangeFirstArgument).to.be('');
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('');
-      expect(onChangeFirstArgument).to.be(undefined);
+      expect(onChangeFirstArgument).to.be(null);
     });
 
-    it('blur on default input', () => {
+    it.only('blur on default input', () => {
       const onChange = sinon.spy();
       const Demo = createReactClass({
         render() {
@@ -846,7 +846,7 @@ describe('inputNumber', () => {
       expect(onChangeFirstArgument).to.be('');
       Simulate.blur(inputElement);
       expect(onChangeCallCount).to.be(3);
-      expect(onChangeFirstArgument).to.be(undefined);
+      expect(onChangeFirstArgument).to.be(null);
       Simulate.focus(inputElement);
       Simulate.blur(inputElement);
       expect(onChangeCallCount).to.be(3);
