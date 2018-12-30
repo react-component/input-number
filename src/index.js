@@ -336,9 +336,10 @@ export default class InputNumber extends React.Component {
 
   setValue(v, callback) {
     // trigger onChange
-    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? undefined : parseFloat(v, 10);
-    const changed = newValue !== this.state.value ||
-      `${newValue}` !== `${this.state.inputValue}`; // https://github.com/ant-design/ant-design/issues/7363
+    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? null : parseFloat(v, 10);
+    const { value = null, inputValue = null } = this.state;
+    // https://github.com/ant-design/ant-design/issues/7363
+    const changed = newValue !== value || `${newValue}` !== `${inputValue}`;
     if (!('value' in this.props)) {
       this.setState({
         value: newValue,
