@@ -127,10 +127,20 @@ export default class InputNumber extends React.Component {
     // https://github.com/ant-design/ant-design/issues/11574
     const nextValue = 'value' in nextProps ? nextProps.value : this.state.value;
     const { onChange, max, min } = this.props;
-    if ('max' in nextProps && nextProps.max !== max && nextValue > nextProps.max && onChange) {
+    // ref: null < 20 === true
+    // https://github.com/ant-design/ant-design/issues/14277
+    if ('max' in nextProps &&
+      nextProps.max !== max &&
+      nextValue &&
+      nextValue > nextProps.max &&
+      onChange) {
       onChange(nextProps.max);
     }
-    if ('min' in nextProps && nextProps.min !== min && nextValue < nextProps.min && onChange) {
+    if ('min' in nextProps &&
+      nextProps.min !== min &&
+      nextValue &&
+      nextValue < nextProps.min &&
+      onChange) {
       onChange(nextProps.min);
     }
   }
