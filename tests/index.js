@@ -176,6 +176,18 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(6);
     });
 
+    it('up button works null input with min and max', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" value={null} min={6} max={10} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      Simulate.mouseDown(ReactDOM.findDOMNode(inputNumber.upHandler));
+      expect(inputNumber.state.value).to.be(null);
+    });
+
     it('down button works on empty input with min and max', () => {
       const Demo = createReactClass({
         render() {
