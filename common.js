@@ -396,7 +396,7 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 /* 6 */
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.6.2' };
+var core = module.exports = { version: '2.6.3' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -468,6 +468,10 @@ var DELAY = 600;
  * The reason this is used, instead of Infinity is because numbers above the MSI are unstable
  */
 var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
+
+var isValidProps = function isValidProps(value) {
+  return value !== undefined && value !== null;
+};
 
 var InputNumber = function (_React$Component) {
   __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(InputNumber, _React$Component);
@@ -618,7 +622,7 @@ var InputNumber = function (_React$Component) {
     // https://github.com/ant-design/ant-design/issues/8196
     var value = e.target.value.trim().replace(/。/g, '.');
 
-    if ('decimalSeparator' in this.props) {
+    if (isValidProps(this.props.decimalSeparator)) {
       value = value.replace(this.props.decimalSeparator, '.');
     }
 
@@ -664,7 +668,7 @@ var InputNumber = function (_React$Component) {
   };
 
   InputNumber.prototype.getPrecision = function getPrecision(value) {
-    if ('precision' in this.props) {
+    if (isValidProps(this.props.precision)) {
       return this.props.precision;
     }
     var valueString = value.toString();
@@ -688,7 +692,7 @@ var InputNumber = function (_React$Component) {
   InputNumber.prototype.getMaxPrecision = function getMaxPrecision(currentValue) {
     var ratio = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
-    if ('precision' in this.props) {
+    if (isValidProps(this.props.precision)) {
       return this.props.precision;
     }
     var step = this.props.step;
@@ -774,7 +778,7 @@ var InputNumber = function (_React$Component) {
     if (this.isNotCompleteNumber(num)) {
       return num;
     }
-    if ('precision' in this.props) {
+    if (isValidProps(this.props.precision)) {
       return Number(Number(num).toFixed(this.props.precision));
     }
     return Number(num);
@@ -933,7 +937,7 @@ var InputNumber = function (_React$Component) {
     }
 
     var inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
-    if ('decimalSeparator' in this.props) {
+    if (isValidProps(this.props.decimalSeparator)) {
       inputDisplayValueFormat = inputDisplayValueFormat.toString().replace('.', this.props.decimalSeparator);
     }
     var isUpDisabled = !!upDisabledClass || disabled || readOnly;
