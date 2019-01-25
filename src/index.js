@@ -32,6 +32,8 @@ const DELAY = 600;
  */
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
+const isValidProps = value => value !== undefined && value !== null;
+
 export default class InputNumber extends React.Component {
   static propTypes = {
     value: PropTypes.oneOfType([
@@ -310,7 +312,7 @@ export default class InputNumber extends React.Component {
     // https://github.com/ant-design/ant-design/issues/8196
     let value = e.target.value.trim().replace(/。/g, '.');
 
-    if ('decimalSeparator' in this.props) {
+    if (isValidProps(this.props.decimalSeparator)) {
       value = value.replace(this.props.decimalSeparator, '.');
     }
 
@@ -354,7 +356,7 @@ export default class InputNumber extends React.Component {
   }
 
   getPrecision(value) {
-    if ('precision' in this.props) {
+    if (isValidProps(this.props.precision)) {
       return this.props.precision;
     }
     const valueString = value.toString();
@@ -374,7 +376,7 @@ export default class InputNumber extends React.Component {
   // if this.props.precision is undefined
   // https://github.com/react-component/input-number/issues/39
   getMaxPrecision(currentValue, ratio = 1) {
-    if ('precision' in this.props) {
+    if (isValidProps(this.props.precision)) {
       return this.props.precision;
     }
     const { step } = this.props;
@@ -521,7 +523,7 @@ export default class InputNumber extends React.Component {
     if (this.isNotCompleteNumber(num)) {
       return num;
     }
-    if ('precision' in this.props) {
+    if (isValidProps(this.props.precision)) {
       return Number(Number(num).toFixed(this.props.precision));
     }
     return Number(num);
@@ -702,7 +704,7 @@ export default class InputNumber extends React.Component {
     }
 
     let inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
-    if ('decimalSeparator' in this.props) {
+    if (isValidProps(this.props.decimalSeparator)) {
       inputDisplayValueFormat = inputDisplayValueFormat
         .toString()
         .replace('.', this.props.decimalSeparator);
