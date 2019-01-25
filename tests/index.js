@@ -524,7 +524,7 @@ describe('inputNumber', () => {
       expect(onChangeFirstArgument).to.be(null);
     });
 
-    it.only('blur on default input', () => {
+    it('blur on default input', () => {
       const onChange = sinon.spy();
       const Demo = createReactClass({
         render() {
