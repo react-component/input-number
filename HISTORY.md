@@ -1,6 +1,10 @@
 # History
 ----
 
+## 4.4.0
+
+- `onChange` will return `null` instead `undefined` when it is empty.
+
 ## 4.0.0
 
 - Drop React Native support, please use https://github.com/react-component/m-input-number instead.
