@@ -9,10 +9,11 @@
   display: inline-block;
   vertical-align: middle;
   border: 1px solid #D9D9D9;
-  border-radius: 5px;
+  border-radius: 4px;
+  transition: all .3s;
 
   &-focused {
-    border-color: #40a9ff;
+    border-color: #1890ff;
     box-shadow: 0 0 0 2px rgba(24,144,255,.2);
   }
 
@@ -36,10 +37,10 @@
   }
 
   &:hover {
-    border-color: #23c0fa;
+    border-color: #1890ff;
 
     .@{inputNumberPrefixCls}-handler-up, .@{inputNumberPrefixCls}-handler-wrap {
-      border-color: #23c0fa;
+      border-color: #1890ff;
     }
   }
 
@@ -66,8 +67,9 @@
     transition: all 0.3s ease;
     color: #666666;
     border: 0;
-    border-radius: 5px;
+    border-radius: 4px;
     padding: 0;
+    transition: all .3s;
   }
 
   &-handler-wrap {
@@ -75,11 +77,14 @@
     border-left: 1px solid #D9D9D9;
     width: 20px;
     height: 100%;
+    transition: all .3s;
   }
 
   &-handler-up {
     border-bottom: 1px solid #D9D9D9;
     padding-top: 1px;
+    transition: all .3s;
+
     &-inner {
       &:after {
         content: '+';
@@ -88,6 +93,8 @@
   }
 
   &-handler-down {
+    transition: all .3s;
+
     &-inner {
       &:after {
         content: '-';
