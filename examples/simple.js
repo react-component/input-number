@@ -11,7 +11,7 @@ class Component extends React.Component {
     value: 5,
   };
   onChange = (value) => {
-    console.log('onChange:', value);
+    console.log('onChange:', value, typeof value);
     this.setState({ value });
   }
   toggleDisabled = () => {

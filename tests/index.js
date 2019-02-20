@@ -420,8 +420,8 @@ describe('inputNumber', () => {
     it('input invalid number', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: 'xx' } });
-      expect(inputElement.value).to.be('xx');
-      expect(onChangeFirstArgument).to.be('xx');
+      expect(inputElement.value).to.be('');
+      expect(onChangeFirstArgument).to.be('');
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('');
       expect(onChangeFirstArgument).to.be(undefined);
@@ -430,8 +430,8 @@ describe('inputNumber', () => {
     it('input invalid string with number', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '2x' } });
-      expect(inputElement.value).to.be('2x');
-      expect(onChangeFirstArgument).to.be('2x');
+      expect(inputElement.value).to.be('2');
+      expect(onChangeFirstArgument).to.be(2);
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('2');
       expect(onChangeFirstArgument).to.be(2);

@@ -316,6 +316,9 @@ export default class InputNumber extends React.Component {
       value = value.replace(this.props.decimalSeparator, '.');
     }
 
+    // forbid invaid chars
+    value = value.replace(/[^\d.\-]/gi, '');
+
     return value;
   }
 
