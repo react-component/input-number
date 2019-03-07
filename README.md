@@ -171,6 +171,12 @@ online example: http://react-component.github.io/input-number/examples/
           <td>Called when value of an InputNumber changed</td>
         </tr>
         <tr>
+          <td>onPressEnter</td>
+          <td>Function</td>
+          <td></td>
+          <td>The callback function that is triggered when Enter key is pressed.</td>
+        </tr>
+        <tr>
           <td>onFocus</td>
           <td>Function</td>
           <td></td>

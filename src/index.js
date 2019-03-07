@@ -46,6 +46,7 @@ export default class InputNumber extends React.Component {
     focusOnUpDown: PropTypes.bool,
     autoFocus: PropTypes.bool,
     onChange: PropTypes.func,
+    onPressEnter: PropTypes.func,
     onKeyDown: PropTypes.func,
     onKeyUp: PropTypes.func,
     prefixCls: PropTypes.string,
@@ -85,6 +86,7 @@ export default class InputNumber extends React.Component {
     style: {},
     onChange: noop,
     onKeyDown: noop,
+    onPressEnter: noop,
     onFocus: noop,
     onBlur: noop,
     parser: defaultParser,
@@ -224,7 +226,7 @@ export default class InputNumber extends React.Component {
   }
 
   onKeyDown = (e, ...args) => {
-    const { onKeyDown } = this.props;
+    const { onKeyDown, onPressEnter } = this.props;
 
     if (e.keyCode === KeyCode.UP) {
       const ratio = this.getRatio(e);
@@ -234,6 +236,8 @@ export default class InputNumber extends React.Component {
       const ratio = this.getRatio(e);
       this.down(e, ratio);
       this.stop();
+    } else if (e.keyCode === KeyCode.ENTER && onPressEnter) {
+      onPressEnter(e);
     }
 
     // Trigger user key down

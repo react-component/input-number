@@ -539,6 +539,20 @@ describe('InputNumber', () => {
       Simulate.blur(inputElement);
       expect(onChange.called).to.be(false);
     });
+
+    it('pressEnter works', () => {
+      const onPressEnter = sinon.spy();
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" onPressEnter={onPressEnter} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.keyDown(inputElement, { keyCode: keyCode.ENTER });
+      expect(onPressEnter.called).to.be(true);
+    });
   });
 
   describe('default value', () => {
