@@ -118,9 +118,17 @@ export default class InputNumber extends React.Component {
     if ('value' in nextProps && nextProps.value !== this.props.value) {
       const value = this.state.focused
         ? nextProps.value : this.getValidValue(nextProps.value, nextProps.min, nextProps.max);
+      let nextInputValue;
+      if (this.pressingUpOrDown) {
+        nextInputValue = value;
+      } else if (this.inputting) {
+        nextInputValue = this.rawInput;
+      } else {
+        nextInputValue = this.toPrecisionAsStep(value);
+      }
       this.setState({
         value,
-        inputValue: this.inputting ? this.rawInput : this.toPrecisionAsStep(value),
+        inputValue: nextInputValue,
       });
     }
 
