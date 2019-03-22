@@ -121,7 +121,7 @@ export default class InputNumber extends React.Component {
         ? nextProps.value : this.getValidValue(nextProps.value, nextProps.min, nextProps.max);
       this.setState({
         value,
-        inputValue: this.inputting ? this.enteredInput : this.toPrecisionAsStep(value),
+        inputValue: this.inputting ? this.rawInput : this.toPrecisionAsStep(value),
       });
     }
 
@@ -255,9 +255,9 @@ export default class InputNumber extends React.Component {
     if (this.state.focused) {
       this.inputting = true;
     }
-    this.enteredInput = this.props.parser(this.getValueFromEvent(e));
-    this.setState({ inputValue: this.enteredInput });
-    onChange(this.toNumberWhenUserInput(this.enteredInput)); // valid number or invalid string
+    this.rawInput = this.props.parser(this.getValueFromEvent(e));
+    this.setState({ inputValue: this.rawInput });
+    onChange(this.toNumber(this.rawInput)); // valid number or invalid string
   }
 
   onMouseUp = (...args) => {
@@ -525,22 +525,13 @@ export default class InputNumber extends React.Component {
   }
 
   toNumber(num) {
-    if (this.isNotCompleteNumber(num)) {
+    if (this.isNotCompleteNumber(num) || (num.length > 16 && this.state.focused)) {
       return num;
     }
     if (isValidProps(this.props.precision)) {
       return Number(Number(num).toFixed(this.props.precision));
     }
     return Number(num);
-  }
-
-  // '1.0' '1.00'  => may be a inputing number
-  toNumberWhenUserInput(num) {
-    // num.length > 16 => prevent input large number will became Infinity
-    if (num.length > 16 && this.state.focused) {
-      return num;
-    }
-    return this.toNumber(num);
   }
 
   upStep(val, rat) {
