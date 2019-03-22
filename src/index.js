@@ -121,7 +121,7 @@ export default class InputNumber extends React.Component {
         ? nextProps.value : this.getValidValue(nextProps.value, nextProps.min, nextProps.max);
       this.setState({
         value,
-        inputValue: this.inputting ? value : this.toPrecisionAsStep(value),
+        inputValue: this.inputting ? this.enteredInput : this.toPrecisionAsStep(value),
       });
     }
 
@@ -248,12 +248,16 @@ export default class InputNumber extends React.Component {
   }
 
   onChange = (e) => {
+    const {
+      onChange,
+    } = this.props;
+
     if (this.state.focused) {
       this.inputting = true;
     }
-    const input = this.props.parser(this.getValueFromEvent(e));
-    this.setState({ inputValue: input });
-    this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
+    this.enteredInput = this.props.parser(this.getValueFromEvent(e));
+    this.setState({ inputValue: this.enteredInput });
+    onChange(this.toNumberWhenUserInput(this.enteredInput)); // valid number or invalid string
   }
 
   onMouseUp = (...args) => {
@@ -533,7 +537,7 @@ export default class InputNumber extends React.Component {
   // '1.0' '1.00'  => may be a inputing number
   toNumberWhenUserInput(num) {
     // num.length > 16 => prevent input large number will became Infinity
-    if ((/\.\d*0$/.test(num) || num.length > 16) && this.state.focused) {
+    if (num.length > 16 && this.state.focused) {
       return num;
     }
     return this.toNumber(num);

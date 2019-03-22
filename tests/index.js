@@ -832,14 +832,14 @@ describe('inputNumber', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '6.0' } });
       expect(inputElement.value).to.be('6.0');
-      expect(num).to.be('6.0');
+      expect(num).to.be(6);
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('6');
       expect(num).to.be(6);
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '6.10' } });
       expect(inputElement.value).to.be('6.10');
-      expect(num).to.be('6.10');
+      expect(num).to.be(6.1);
       Simulate.blur(inputElement);
       expect(inputElement.value).to.be('6.1');
       expect(num).to.be(6.1);
