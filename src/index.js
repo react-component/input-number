@@ -533,32 +533,22 @@ export default class InputNumber extends React.Component {
   }
 
   upStep(val, rat) {
-    const { step, min } = this.props;
+    const { step } = this.props;
     const precisionFactor = this.getPrecisionFactor(val, rat);
     const precision = Math.abs(this.getMaxPrecision(val, rat));
-    let result;
-    if (typeof val === 'number') {
-      result =
-        ((precisionFactor * val + precisionFactor * step * rat) /
-        precisionFactor).toFixed(precision);
-    } else {
-      result = min === -Infinity ? step : min;
-    }
+    const result =
+    ((precisionFactor * val + precisionFactor * step * rat) /
+    precisionFactor).toFixed(precision);
     return this.toNumber(result);
   }
 
   downStep(val, rat) {
-    const { step, min } = this.props;
+    const { step } = this.props;
     const precisionFactor = this.getPrecisionFactor(val, rat);
     const precision = Math.abs(this.getMaxPrecision(val, rat));
-    let result;
-    if (typeof val === 'number') {
-      result =
-        ((precisionFactor * val - precisionFactor * step * rat) /
-        precisionFactor).toFixed(precision);
-    } else {
-      result = min === -Infinity ? -step : min;
-    }
+    const result =
+    ((precisionFactor * val - precisionFactor * step * rat) /
+    precisionFactor).toFixed(precision);
     return this.toNumber(result);
   }
 
