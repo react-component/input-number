@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import isNegativeZero from 'is-negative-zero';
 import KeyCode from 'rc-util/lib/KeyCode';
 import InputHandler from './InputHandler';
 
@@ -491,9 +490,6 @@ export default class InputNumber extends React.Component {
   formatWrapper(num) {
     // http://2ality.com/2012/03/signedzero.html
     // https://github.com/ant-design/ant-design/issues/9439
-    if (isNegativeZero(num)) {
-      return '-0';
-    }
     if (this.props.formatter) {
       return this.props.formatter(num);
     }
