@@ -487,6 +487,7 @@ var InputNumber = function (_React$Component) {
       value = props.defaultValue;
     }
     value = _this.toNumber(value);
+    value = _this.getValidValue(value);
 
     _this.state = {
       inputValue: _this.toPrecisionAsStep(value),
