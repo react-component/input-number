@@ -589,6 +589,56 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(null);
       expect(inputElement.value).to.be('');
     });
+
+    it('default value shouldn\'t higher than max', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" min={0} max={10} defaultValue={13} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(10);
+    });
+
+    it('default value shouldn\'t lower than min', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" min={0} max={10} defaultValue={-1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(0);
+    });
+  });
+
+  describe('value', () => {
+    it('value shouldn\'t higher than max', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" min={0} max={10} value={13} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(10);
+    });
+
+    it('value shouldn\'t lower than max', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" min={0} max={10} value={-1} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(0);
+    });
   });
 
   describe('decimal', () => {
