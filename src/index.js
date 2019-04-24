@@ -102,6 +102,7 @@ export default class InputNumber extends React.Component {
       value = props.defaultValue;
     }
     value = this.toNumber(value);
+    value = this.getValidValue(value);
 
     this.state = {
       inputValue: this.toPrecisionAsStep(value),
