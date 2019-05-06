@@ -1198,6 +1198,14 @@ describe('inputNumber', () => {
       Simulate.blur(inputElement);
       expect(onChangeFirstArgument).to.be(3.46);
       expect(inputElement.value).to.be('3.46');
+      Simulate.change(inputElement, { target: { value: '3.465' } });
+      Simulate.blur(inputElement);
+      expect(onChangeFirstArgument).to.be(3.47);
+      expect(inputElement.value).to.be('3.47');
+      Simulate.change(inputElement, { target: { value: '3.455' } });
+      Simulate.blur(inputElement);
+      expect(onChangeFirstArgument).to.be(3.46);
+      expect(inputElement.value).to.be('3.46');
       Simulate.change(inputElement, { target: { value: '1' } });
       Simulate.blur(inputElement);
       expect(onChangeFirstArgument).to.be(1);
