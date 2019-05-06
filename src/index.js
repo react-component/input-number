@@ -559,7 +559,8 @@ export default class InputNumber extends React.Component {
       return num;
     }
     if (isValidProps(this.props.precision)) {
-      return Number(Number(num).toFixed(this.props.precision));
+      return Math.round(num * Math.pow(10, this.props.precision)) /
+             Math.pow(10, this.props.precision);
     }
     return Number(num);
   }
