@@ -628,7 +628,7 @@ describe('inputNumber', () => {
       expect(inputNumber.state.value).to.be(10);
     });
 
-    it('value shouldn\'t lower than max', () => {
+    it('value shouldn\'t lower than min', () => {
       const Demo = createReactClass({
         render() {
           return <InputNumber ref="inputNum" min={0} max={10} value={-1} />;
