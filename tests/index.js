@@ -1203,6 +1203,25 @@ describe('inputNumber', () => {
       expect(onChangeFirstArgument).to.be(1);
       expect(inputElement.value).to.be('1.00');
     });
+
+    it('should not trigger onChange when blur InputNumber with precision', () => {
+      const Demo = createReactClass({
+        onChange(value) {
+          onChangeCallCount += 1;
+        },
+        render() {
+          return (
+            <InputNumber ref="inputNum" precision={2} defaultValue={2} onChange={this.onChange} />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.focus(inputElement);
+      Simulate.blur(inputElement);
+      expect(onChangeCallCount).to.be(0);
+    });
   });
 
   describe('formatter', () => {
