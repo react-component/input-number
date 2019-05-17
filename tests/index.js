@@ -629,6 +629,18 @@ describe('InputNumber', () => {
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
       expect(inputNumber.state.value).to.be(0);
     });
+
+    it('default value can be a string greater than 16 characters', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" max={10} defaultValue={'-3.637978807091713e-12'} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(-3.637978807091713e-12);
+    });
   });
 
   describe('value', () => {
@@ -654,6 +666,18 @@ describe('InputNumber', () => {
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
       expect(inputNumber.state.value).to.be(0);
+    });
+
+    it('value can be a string greater than 16 characters', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" max={10} value={'-3.637978807091713e-12'} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(-3.637978807091713e-12);
     });
   });
 

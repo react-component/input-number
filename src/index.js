@@ -553,8 +553,9 @@ export default class InputNumber extends React.Component {
   }
 
   toNumber(num) {
+    const focused = this.state ? this.state.focused : this.props.autoFocus;
     // num.length > 16 => This is to prevent input of large numbers
-    const numberIsTooLarge = num && num.length > 16 && this.state.focused;
+    const numberIsTooLarge = num && num.length > 16 && focused;
     if (this.isNotCompleteNumber(num) || numberIsTooLarge) {
       return num;
     }
