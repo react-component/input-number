@@ -655,6 +655,8 @@ var InputNumber = function (_React$Component) {
 
   InputNumber.prototype.setValue = function setValue(v, callback) {
     // trigger onChange
+    var precision = this.props.precision;
+
     var newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? null : parseFloat(v, 10);
     var _state = this.state,
         _state$value = _state.value,
@@ -662,8 +664,10 @@ var InputNumber = function (_React$Component) {
         _state$inputValue = _state.inputValue,
         inputValue = _state$inputValue === undefined ? null : _state$inputValue;
     // https://github.com/ant-design/ant-design/issues/7363
+    // https://github.com/ant-design/ant-design/issues/16622
 
-    var changed = newValue !== value || '' + newValue !== '' + inputValue;
+    var newValueInString = typeof newValue === 'number' ? newValue.toFixed(precision) : '' + newValue;
+    var changed = newValue !== value || newValueInString !== '' + inputValue;
     if (!('value' in this.props)) {
       this.setState({
         value: newValue,
