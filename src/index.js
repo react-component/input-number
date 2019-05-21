@@ -101,14 +101,15 @@ export default class InputNumber extends React.Component {
     } else {
       value = props.defaultValue;
     }
-    value = this.toNumber(value);
-    value = this.getValidValue(value);
 
     this.state = {
       inputValue: this.toPrecisionAsStep(value),
       value,
       focused: props.autoFocus,
     };
+
+    value = this.toNumber(value);
+    value = this.getValidValue(value);
   }
 
   componentDidMount() {
