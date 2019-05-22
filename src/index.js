@@ -101,6 +101,8 @@ export default class InputNumber extends React.Component {
     } else {
       value = props.defaultValue;
     }
+    this.state = {};
+
     value = this.toNumber(value);
     value = this.getValidValue(value);
 
