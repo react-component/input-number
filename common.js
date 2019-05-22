@@ -486,6 +486,8 @@ var InputNumber = function (_React$Component) {
     } else {
       value = props.defaultValue;
     }
+    _this.state = {};
+
     value = _this.toNumber(value);
     value = _this.getValidValue(value);
 
