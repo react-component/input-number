@@ -516,9 +516,6 @@ export default class InputNumber extends React.Component {
       return num;
     }
     const precision = Math.abs(this.getMaxPrecision(num));
-    if (precision === 0) {
-      return num.toString();
-    }
     if (!isNaN(precision)) {
       return Number(num).toFixed(precision);
     }
