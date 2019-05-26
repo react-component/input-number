@@ -710,12 +710,13 @@ var InputNumber = function (_React$Component) {
 
   InputNumber.prototype.getMaxPrecision = function getMaxPrecision(currentValue) {
     var ratio = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+    var _props2 = this.props,
+        precision = _props2.precision,
+        step = _props2.step;
 
-    if (isValidProps(this.props.precision)) {
-      return this.props.precision;
+    if (isValidProps(precision)) {
+      return precision;
     }
-    var step = this.props.step;
-
     var ratioPrecision = this.getPrecision(ratio);
     var stepPrecision = this.getPrecision(step);
     var currentValuePrecision = this.getPrecision(currentValue);
@@ -774,9 +775,6 @@ var InputNumber = function (_React$Component) {
       return num;
     }
     var precision = Math.abs(this.getMaxPrecision(num));
-    if (precision === 0) {
-      return num.toString();
-    }
     if (!isNaN(precision)) {
       return Number(num).toFixed(precision);
     }
@@ -1151,12 +1149,12 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.onFocus = function () {
-    var _props2;
+    var _props3;
 
     _this3.setState({
       focused: true
     });
-    (_props2 = _this3.props).onFocus.apply(_props2, arguments);
+    (_props3 = _this3.props).onFocus.apply(_props3, arguments);
   };
 
   this.onBlur = function (e) {
@@ -1171,9 +1169,9 @@ var _initialiseProps = function _initialiseProps() {
     var value = _this3.getCurrentValidValue(_this3.state.inputValue);
     e.persist(); // fix https://github.com/react-component/input-number/issues/51
     _this3.setValue(value, function () {
-      var _props3;
+      var _props4;
 
-      (_props3 = _this3.props).onBlur.apply(_props3, [e].concat(args));
+      (_props4 = _this3.props).onBlur.apply(_props4, [e].concat(args));
     });
   };
 
