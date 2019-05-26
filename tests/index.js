@@ -6,14 +6,16 @@ import keyCode from 'rc-util/lib/KeyCode';
 import expect from 'expect.js';
 import InputNumber from '../src';
 import React from 'react';
-import { Simulate, findRenderedDOMComponentWithTag } from 'react-dom/test-utils';
+import {
+  Simulate, findRenderedDOMComponentWithTag, scryRenderedDOMComponentsWithTag,
+} from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import createReactClass from 'create-react-class';
 
 const defaultValue = 98;
 
-describe('inputNumber', () => {
+describe('InputNumber', () => {
   const container = document.createElement('div');
   document.body.appendChild(container);
   let onChangeFirstArgument;
@@ -1105,6 +1107,34 @@ describe('inputNumber', () => {
       // Demo rerenders and the `value` prop is still 40, but the user input should
       // be retained
       expect(inputElement.value).to.be('401');
+    });
+
+    // https://github.com/ant-design/ant-design/issues/16710
+    it('should use correct precision when change it to 0', () => {
+      class Demo extends React.Component {
+        state = {
+          precision: 2,
+        };
+        onPrecisionChange = (precision) => {
+          this.setState({ precision });
+        };
+        render() {
+          const { precision } = this.state;
+          return (
+            <div>
+              <InputNumber onChange={this.onPrecisionChange} />
+              <InputNumber precision={precision} defaultValue={1.23} />
+            </div>
+          );
+        }
+      }
+      example = ReactDOM.render(<Demo />, container);
+      const [precisionInput, numberInput] = scryRenderedDOMComponentsWithTag(example, 'input');
+      expect(numberInput.value).to.be('1.23');
+      Simulate.focus(precisionInput);
+      Simulate.change(precisionInput, { target: { value: '0' } });
+      Simulate.blur(precisionInput);
+      expect(numberInput.value).to.be('1');
     });
   });
 
