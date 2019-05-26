@@ -45,4 +45,4 @@ class Component extends React.Component {
   }
 }
 
-ReactDOM.render(<Component/>, document.getElementById('__react-content'));
+ReactDOM.render(<Component />, document.getElementById('__react-content'));

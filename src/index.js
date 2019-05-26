@@ -395,10 +395,10 @@ export default class InputNumber extends React.Component {
   // if this.props.precision is undefined
   // https://github.com/react-component/input-number/issues/39
   getMaxPrecision(currentValue, ratio = 1) {
-    if (isValidProps(this.props.precision)) {
-      return this.props.precision;
+    const { precision, step } = this.props;
+    if (isValidProps(precision)) {
+      return precision;
     }
-    const { step } = this.props;
     const ratioPrecision = this.getPrecision(ratio);
     const stepPrecision = this.getPrecision(step);
     const currentValuePrecision = this.getPrecision(currentValue);
