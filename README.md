@@ -69,6 +69,12 @@ online example: http://react-component.github.io/input-number/examples/
     </thead>
     <tbody>
         <tr>
+          <td>prefixCls</td>
+          <td>string</td>
+          <td>rc-input-number</td>
+          <td>Specifies the class prefix</td>
+        </tr>
+        <tr>
           <td>min</td>
           <td>Number</td>
           <td></td>
