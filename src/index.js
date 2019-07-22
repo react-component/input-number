@@ -274,15 +274,22 @@ export default class InputNumber extends React.Component {
   }
 
   onBlur = (e, ...args) => {
+    const { onBlur } = this.props;
     this.inputting = false;
     this.setState({
       focused: false,
     });
     const value = this.getCurrentValidValue(this.state.inputValue);
-    e.persist();  // fix https://github.com/react-component/input-number/issues/51
-    this.setValue(value, () => {
-      this.props.onBlur(e, ...args);
-    });
+    e.persist(); // fix https://github.com/react-component/input-number/issues/51
+    const newValue = this.setValue(value);
+
+    if (onBlur) {
+      const originValue = this.input.value;
+      const inputValue = this.getInputDisplayValue({ focus: false, value: newValue });
+      this.input.value = inputValue;
+      onBlur(e, ...args);
+      this.input.value = originValue;
+    }
   }
 
   getCurrentValidValue(value) {
@@ -353,6 +360,8 @@ export default class InputNumber extends React.Component {
     if (changed) {
       this.props.onChange(newValue);
     }
+
+    return newValue;
   }
 
   getPrecision(value) {
@@ -394,8 +403,8 @@ export default class InputNumber extends React.Component {
     return Math.pow(10, precision);
   }
 
-  getInputDisplayValue = () => {
-    const { focused, inputValue, value } = this.state;
+  getInputDisplayValue = (state) => {
+    const { focused, inputValue, value } = state || this.state;
     let inputDisplayValue;
     if (focused) {
       inputDisplayValue = inputValue;
@@ -407,7 +416,14 @@ export default class InputNumber extends React.Component {
       inputDisplayValue = '';
     }
 
-    return inputDisplayValue;
+    let inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
+    if (isValidProps(this.props.decimalSeparator)) {
+      inputDisplayValueFormat = inputDisplayValueFormat
+        .toString()
+        .replace('.', this.props.decimalSeparator);
+    }
+
+    return inputDisplayValueFormat;
   };
 
   recordCursorPosition = () => {
@@ -703,12 +719,6 @@ export default class InputNumber extends React.Component {
       };
     }
 
-    let inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
-    if (isValidProps(this.props.decimalSeparator)) {
-      inputDisplayValueFormat = inputDisplayValueFormat
-        .toString()
-        .replace('.', this.props.decimalSeparator);
-    }
     const isUpDisabled = !!upDisabledClass || disabled || readOnly;
     const isDownDisabled = !!downDisabledClass || disabled || readOnly;
     // ref for test
@@ -789,7 +799,7 @@ export default class InputNumber extends React.Component {
             id={props.id}
             onChange={this.onChange}
             ref={this.saveInput}
-            value={inputDisplayValueFormat}
+            value={inputDisplayValue}
             pattern={props.pattern}
             {...dataOrAriaAttributeProps}
           />
