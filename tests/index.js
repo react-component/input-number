@@ -1534,4 +1534,29 @@ describe('Mobile inputNumber use TouchEvents', () => {
       expect(inputNumber.state.value).to.be(97);
     });
   });
+
+  // https://github.com/ant-design/ant-design/issues/17593
+  it('onBlur should be sync', () => {
+    const Demo = createReactClass({
+      render() {
+        return (
+          <InputNumber
+            onBlur={({ target: { value } }) => {
+              expect(value).to.be('1');
+            }}
+            precision={0}
+            ref="inputNum"
+          />
+        );
+      },
+    });
+    example = ReactDOM.render(<Demo />, container);
+    inputNumber = example.refs.inputNum;
+    inputElement = ReactDOM.findDOMNode(inputNumber.input);
+    Simulate.focus(inputElement);
+    inputElement.value = '1.2';
+    Simulate.change(inputElement);
+    Simulate.blur(inputElement);
+    expect(inputElement.value).to.be('1');
+  });
 });
