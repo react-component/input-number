@@ -103,12 +103,14 @@ export default class InputNumber extends React.Component {
     } else {
       value = props.defaultValue;
     }
-    const validValue = this.getValidValue(this.toNumber(value));
-
     this.state = {
+      focused: props.autoFocus,
+    };
+    const validValue = this.getValidValue(this.toNumber(value));
+    this.state = {
+      ...this.state,
       inputValue: this.toPrecisionAsStep(validValue),
       value: validValue,
-      focused: props.autoFocus,
     };
   }
 
@@ -552,15 +554,15 @@ export default class InputNumber extends React.Component {
   }
 
   toNumber(num) {
-    const focused = this.state ? this.state.focused : this.props.autoFocus;
+    const { precision } = this.props;
+    const { focused } = this.state;
     // num.length > 16 => This is to prevent input of large numbers
     const numberIsTooLarge = num && num.length > 16 && focused;
     if (this.isNotCompleteNumber(num) || numberIsTooLarge) {
       return num;
     }
-    if (isValidProps(this.props.precision)) {
-      return Math.round(num * Math.pow(10, this.props.precision)) /
-             Math.pow(10, this.props.precision);
+    if (isValidProps(precision)) {
+      return Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision);
     }
     return Number(num);
   }
