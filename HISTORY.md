@@ -1,6 +1,11 @@
 # History
 ----
 
+## 4.5.0
+
+- Fix React lifecycle warning.
+- Add `onPressEnter`.
+
 ## 4.4.0
 
 - `onChange` will return `null` instead `undefined` when it is empty.
