@@ -116,47 +116,49 @@ export default class InputNumber extends React.Component {
     this.componentDidUpdate();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if ('value' in nextProps && nextProps.value !== this.props.value) {
-      const value = this.state.focused
-        ? nextProps.value : this.getValidValue(nextProps.value, nextProps.min, nextProps.max);
-      let nextInputValue;
-      if (this.pressingUpOrDown) {
-        nextInputValue = value;
-      } else if (this.inputting) {
-        nextInputValue = this.rawInput;
-      } else {
-        nextInputValue = this.toPrecisionAsStep(value);
+  componentDidUpdate(prevProps) {
+    const { value, onChange, max, min } = this.props;
+    const { focused } = this.state;
+
+    // Don't trigger in componentDidMount
+    if (prevProps) {
+      if (prevProps.value !== value) {
+        const validValue = focused ? value : this.getValidValue(value);
+        let nextInputValue;
+        if (this.pressingUpOrDown) {
+          nextInputValue = validValue;
+        } else if (this.inputting) {
+          nextInputValue = this.rawInput;
+        } else {
+          nextInputValue = this.toPrecisionAsStep(validValue);
+        }
+        this.setState({ // eslint-disable-line
+          value: validValue,
+          inputValue: nextInputValue,
+        });
       }
-      this.setState({
-        value,
-        inputValue: nextInputValue,
-      });
+
+      // Trigger onChange when max or min change
+      // https://github.com/ant-design/ant-design/issues/11574
+      const nextValue = 'value' in this.props ? value : this.state.value;
+      // ref: null < 20 === true
+      // https://github.com/ant-design/ant-design/issues/14277
+      if ('max' in this.props &&
+        prevProps.max !== max &&
+        typeof nextValue === 'number' &&
+        nextValue > max &&
+        onChange) {
+        onChange(max);
+      }
+      if ('min' in this.props &&
+        prevProps.min !== min &&
+        typeof nextValue === 'number' &&
+        nextValue < min &&
+        onChange) {
+        onChange(min);
+      }
     }
 
-    // Trigger onChange when max or min change
-    // https://github.com/ant-design/ant-design/issues/11574
-    const nextValue = 'value' in nextProps ? nextProps.value : this.state.value;
-    const { onChange, max, min } = this.props;
-    // ref: null < 20 === true
-    // https://github.com/ant-design/ant-design/issues/14277
-    if ('max' in nextProps &&
-      nextProps.max !== max &&
-      typeof nextValue === 'number' &&
-      nextValue > nextProps.max &&
-      onChange) {
-      onChange(nextProps.max);
-    }
-    if ('min' in nextProps &&
-      nextProps.min !== min &&
-      typeof nextValue === 'number' &&
-      nextValue < nextProps.min &&
-      onChange) {
-      onChange(nextProps.min);
-    }
-  }
-
-  componentDidUpdate() {
     // Restore cursor
     try {
       // Firefox set the input cursor after it get focused.
