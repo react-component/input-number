@@ -33,6 +33,8 @@ const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
 const isValidProps = value => value !== undefined && value !== null;
 
+const isPlainNaN = value => value !== value
+
 export default class InputNumber extends React.Component {
   static propTypes = {
     value: PropTypes.oneOfType([
@@ -124,7 +126,7 @@ export default class InputNumber extends React.Component {
 
     // Don't trigger in componentDidMount
     if (prevProps) {
-      if (prevProps.value !== value && !isNaN(prevProps.value) && !isNaN(value)) {
+      if (prevProps.value !== value && !isPlainNaN(prevProps.value) && !isPlainNaN(value)) {
         const validValue = focused ? value : this.getValidValue(value);
         let nextInputValue;
         if (this.pressingUpOrDown) {
