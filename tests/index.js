@@ -12,6 +12,7 @@ import {
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import createReactClass from 'create-react-class';
+import * as helpers from '../src/helpers';
 
 const defaultValue = 98;
 
@@ -1604,5 +1605,19 @@ describe('Mobile inputNumber use TouchEvents', () => {
     Simulate.change(inputElement);
     Simulate.blur(inputElement);
     expect(inputElement.value).to.be('1');
+  });
+});
+
+describe('helpers', () => {
+  describe('getClassString', () => {
+    it('returns a string containing a single class with the appropriate prefix', () => {
+      expect(helpers.getClassString('prefix', '-suffix')).to.be('prefix-suffix');
+      expect(helpers.getClassString('prefix', '')).to.be('prefix');
+      expect(helpers.getClassString('', '-suffix')).to.be('-suffix');
+    });
+    it('returns a string containing multiple classes, each prefixed appropriately', () => {
+      expect(helpers.getClassString('pref1 pref2', '-suffix')).to.be('pref1-suffix pref2-suffix');
+      expect(helpers.getClassString('pref1    pref2', '-suff')).to.be('pref1-suff pref2-suff');
+    });
   });
 });

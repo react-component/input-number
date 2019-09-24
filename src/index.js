@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import InputHandler from './InputHandler';
+import { getClasses, getClassString } from './helpers';
 
 function noop() {
 }
@@ -654,12 +655,14 @@ export default class InputNumber extends React.Component {
       prefixCls, disabled, readOnly, useTouch, autoComplete,
       upHandler, downHandler, ...rest,
     } = props;
-    const classes = classNames({
-      [prefixCls]: true,
+
+    const clsMap = {
       [props.className]: !!props.className,
-      [`${prefixCls}-disabled`]: disabled,
-      [`${prefixCls}-focused`]: this.state.focused,
-    });
+    };
+    getClasses(prefixCls).forEach((cls) => { clsMap[cls] = true; });
+    getClasses(prefixCls, '-disabled').forEach((cls) => { clsMap[cls] = disabled; });
+    getClasses(prefixCls, '-focused').forEach((cls) => { clsMap[cls] = this.state.focused; });
+    const classes = classNames(clsMap);
     let upDisabledClass = '';
     let downDisabledClass = '';
     const { value } = this.state;
@@ -667,14 +670,14 @@ export default class InputNumber extends React.Component {
       if (!isNaN(value)) {
         const val = Number(value);
         if (val >= props.max) {
-          upDisabledClass = `${prefixCls}-handler-up-disabled`;
+          upDisabledClass = getClassString(prefixCls, '-handler-up-disabled');
         }
         if (val <= props.min) {
-          downDisabledClass = `${prefixCls}-handler-down-disabled`;
+          downDisabledClass = getClassString(prefixCls, '-handler-down-disabled');
         }
       } else {
-        upDisabledClass = `${prefixCls}-handler-up-disabled`;
-        downDisabledClass = `${prefixCls}-handler-down-disabled`;
+        upDisabledClass = getClassString(prefixCls, '-handler-up-disabled');
+        downDisabledClass = getClassString(prefixCls, '-handler-down-disabled');
       }
     }
 
@@ -724,6 +727,11 @@ export default class InputNumber extends React.Component {
 
     const isUpDisabled = !!upDisabledClass || disabled || readOnly;
     const isDownDisabled = !!downDisabledClass || disabled || readOnly;
+
+    const handlerCls = getClassString(prefixCls, '-handler');
+    const upHandlerCls = getClassString(prefixCls, '-handler-up');
+    const downHandlerCls = getClassString(prefixCls, '-handler-down');
+
     // ref for test
     return (
       <div
@@ -735,7 +743,7 @@ export default class InputNumber extends React.Component {
         onMouseOver={props.onMouseOver}
         onMouseOut={props.onMouseOut}
       >
-        <div className={`${prefixCls}-handler-wrap`}>
+        <div className={getClassString(prefixCls, '-handler-wrap')}>
           <InputHandler
             ref={this.saveUp}
             disabled={isUpDisabled}
@@ -745,11 +753,11 @@ export default class InputNumber extends React.Component {
             role="button"
             aria-label="Increase Value"
             aria-disabled={!!isUpDisabled}
-            className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
+            className={`${handlerCls} ${upHandlerCls} ${upDisabledClass}`}
           >
             {upHandler || <span
               unselectable="unselectable"
-              className={`${prefixCls}-handler-up-inner`}
+              className={getClassString(prefixCls, '-handler-up-inner')}
               onClick={preventDefault}
             />}
           </InputHandler>
@@ -762,17 +770,17 @@ export default class InputNumber extends React.Component {
             role="button"
             aria-label="Decrease Value"
             aria-disabled={!!isDownDisabled}
-            className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
+            className={`${handlerCls} ${downHandlerCls} ${downDisabledClass}`}
           >
             {downHandler || <span
               unselectable="unselectable"
-              className={`${prefixCls}-handler-down-inner`}
+              className={getClassString(prefixCls, '-handler-down-inner')}
               onClick={preventDefault}
             />}
           </InputHandler>
         </div>
         <div
-          className={`${prefixCls}-input-wrap`}
+          className={getClassString(prefixCls, '-input-wrap')}
           role="spinbutton"
           aria-valuemin={props.min}
           aria-valuemax={props.max}
@@ -784,7 +792,7 @@ export default class InputNumber extends React.Component {
             placeholder={props.placeholder}
             onClick={props.onClick}
             onMouseUp={this.onMouseUp}
-            className={`${prefixCls}-input`}
+            className={getClassString(prefixCls, '-input')}
             tabIndex={props.tabIndex}
             autoComplete={autoComplete}
             onFocus={this.onFocus}

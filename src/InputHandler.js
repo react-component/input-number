@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Touchable from 'rmc-feedback';
+import { getClassString } from './helpers';
 
 class InputHandler extends Component {
   render() {
@@ -10,7 +11,7 @@ class InputHandler extends Component {
     return (
       <Touchable
         disabled={disabled}
-        activeClassName={`${prefixCls}-handler-active`}
+        activeClassName={getClassString(prefixCls, '-handler-active')}
       >
         <span {...otherProps} />
       </Touchable>
