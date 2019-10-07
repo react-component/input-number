@@ -799,6 +799,7 @@ export default class InputNumber extends React.Component {
             min={props.min}
             step={props.step}
             name={props.name}
+            title={props.title}
             id={props.id}
             onChange={this.onChange}
             ref={this.saveInput}
