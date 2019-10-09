@@ -773,12 +773,12 @@ export default class InputNumber extends React.Component {
         </div>
         <div
           className={`${prefixCls}-input-wrap`}
-          role="spinbutton"
-          aria-valuemin={props.min}
-          aria-valuemax={props.max}
-          aria-valuenow={value}
         >
           <input
+            role="spinbutton"
+            aria-valuemin={props.min}
+            aria-valuemax={props.max}
+            aria-valuenow={value}
             required={props.required}
             type={props.type}
             placeholder={props.placeholder}
