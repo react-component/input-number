@@ -28,6 +28,7 @@ class Component extends React.Component {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
+          aria-label="Simple use touch number input example"
           min={-8}
           max={10}
           value={this.state.value}
