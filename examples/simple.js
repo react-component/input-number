@@ -28,6 +28,7 @@ class Component extends React.Component {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
+          aria-label="Simple number input example"
           min={-8}
           max={10}
           style={{ width: 100 }}

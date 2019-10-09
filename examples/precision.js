@@ -21,6 +21,7 @@ class Component extends React.Component {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
+          aria-label="Number input example to demonstration custom precision value"
           style={{ width: 100 }}
           defaultValue={1}
           onChange={this.onChange}

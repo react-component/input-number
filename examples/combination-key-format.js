@@ -37,6 +37,7 @@ class Component extends React.Component {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
+          aria-label="Number input example that demonstrates combination key format"
           min={-8000}
           max={10000000}
           value={this.state.value}

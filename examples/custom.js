@@ -30,6 +30,7 @@ class Component extends React.Component {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
+          aria-label="Number input example that demonstrates custom styling"
           min={-8}
           max={10}
           value={this.state.value}

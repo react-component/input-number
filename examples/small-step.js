@@ -18,6 +18,7 @@ class Component extends React.Component {
     return (
       <div style={{ margin: 10 }}>
         <InputNum
+          aria-label="Number input example of very small increments"
           min={-10}
           max={10}
           step={0.000000001}
