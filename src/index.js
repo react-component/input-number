@@ -1,3 +1,4 @@
+/* eslint-disable no-self-compare */
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -33,7 +34,7 @@ const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
 const isValidProps = value => value !== undefined && value !== null;
 
-const isPlainNaN = value => value !== value
+const isSame = Object.is || ((a, b) => a === b || (a !== a && b !== b));
 
 export default class InputNumber extends React.Component {
   static propTypes = {
@@ -126,7 +127,7 @@ export default class InputNumber extends React.Component {
 
     // Don't trigger in componentDidMount
     if (prevProps) {
-      if (prevProps.value !== value && !isPlainNaN(prevProps.value) && !isPlainNaN(value)) {
+      if (!isSame(prevProps.value, value)) {
         const validValue = focused ? value : this.getValidValue(value);
         let nextInputValue;
         if (this.pressingUpOrDown) {
