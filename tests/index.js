@@ -679,6 +679,84 @@ describe('InputNumber', () => {
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
       expect(inputNumber.state.value).to.be(-3.637978807091713e-12);
     });
+
+    it('value can be changed when dynamic setting max', () => {
+      const Demo = createReactClass({
+        getInitialState() {
+          return {
+            max: 10,
+            value: 11,
+          };
+        },
+        onChange(value) {
+          this.setState({ value });
+        },
+        changeMax() {
+          this.setState({
+            value: 11,
+            max: 20,
+          });
+        },
+        render() {
+          return (
+            <div>
+              <InputNumber
+                ref="inputNum"
+                max={this.state.max}
+                onChange={this.onChange}
+                value={this.state.value}
+              />
+              <button onClick={this.changeMax}>change max</button>
+            </div>
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(10);
+      Simulate.click(findRenderedDOMComponentWithTag(example, 'button'));
+      expect(inputNumber.state.value).to.be(11);
+    });
+
+    it('value can be changed when dynamic setting min', () => {
+      const Demo = createReactClass({
+        getInitialState() {
+          return {
+            min: 10,
+            value: 9,
+          };
+        },
+        onChange(value) {
+          this.setState({ value });
+        },
+        changeMax() {
+          this.setState({
+            value: 9,
+            min: 0,
+          });
+        },
+        render() {
+          return (
+            <div>
+              <InputNumber
+                ref="inputNum"
+                min={this.state.min}
+                onChange={this.onChange}
+                value={this.state.value}
+              />
+              <button onClick={this.changeMax}>change min</button>
+            </div>
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(10);
+      Simulate.click(findRenderedDOMComponentWithTag(example, 'button'));
+      expect(inputNumber.state.value).to.be(9);
+    });
   });
 
   describe('decimal', () => {
