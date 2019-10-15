@@ -72,12 +72,14 @@ var App = function (_React$Component) {
       'div',
       { style: { margin: 10 } },
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+        'aria-label': 'Controlled number input demonstrating a custom currency format',
         defaultValue: 1000,
         formatter: function formatter(value) {
           return ('$ ' + value).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
       }),
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+        'aria-label': 'Controlled number input demonstrating a custom percentage format',
         defaultValue: 100,
         formatter: function formatter(value) {
           return value + '%';
@@ -87,6 +89,7 @@ var App = function (_React$Component) {
         }
       }),
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+        'aria-label': 'Controlled number input demonstrating a custom format to add commas',
         style: { width: 100 },
         formatter: function formatter(value) {
           return ('' + value).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -101,6 +104,7 @@ var App = function (_React$Component) {
           'In Control'
         ),
         __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+          'aria-label': 'Controlled number input demonstrating a custom format',
           value: this.state.value,
           onChange: function onChange(value) {
             _this2.setState({ value: value });
@@ -119,6 +123,7 @@ var App = function (_React$Component) {
           'Strange Format'
         ),
         __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+          'aria-label': 'Number input example demonstrating a strange custom format',
           defaultValue: 1000,
           formatter: function formatter(value) {
             return '$ ' + value + ' - ' + getSum(value);

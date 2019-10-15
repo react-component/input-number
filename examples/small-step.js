@@ -62,6 +62,7 @@ var Component = function (_React$Component) {
       'div',
       { style: { margin: 10 } },
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+        'aria-label': 'Number input example of very small increments',
         min: -10,
         max: 10,
         step: 0.000000001,

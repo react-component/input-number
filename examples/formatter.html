@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>formatter.js - example - rc-input-number@4.5.0</title>
+  <title>formatter.js - example - rc-input-number@4.5.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-input-number@4.5.0</h1>
+      <h1>rc-input-number@4.5.1</h1>
 
       <p>React input-number component</p>
     </div>
@@ -297,15 +297,18 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">10</span> }}&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">InputNumber</span>
+          <span class="hljs-attribute">aria-label</span>=<span class="hljs-value">"Controlled number input demonstrating a custom currency format"</span>
           <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{1000}</span>
           <span class="hljs-attribute">formatter</span>=<span class="hljs-value">{value</span> =&gt;</span> `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         /&gt;
         <span class="hljs-tag">&lt;<span class="hljs-title">InputNumber</span>
+          <span class="hljs-attribute">aria-label</span>=<span class="hljs-value">"Controlled number input demonstrating a custom percentage format"</span>
           <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{100}</span>
           <span class="hljs-attribute">formatter</span>=<span class="hljs-value">{value</span> =&gt;</span> `${value}%`}
           parser={value =&gt; value.replace('%', '')}
         /&gt;
         <span class="hljs-tag">&lt;<span class="hljs-title">InputNumber</span>
+          <span class="hljs-attribute">aria-label</span>=<span class="hljs-value">"Controlled number input demonstrating a custom format to add commas"</span>
           <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">width:</span> <span class="hljs-attribute">100</span> }}
           <span class="hljs-attribute">formatter</span>=<span class="hljs-value">{value</span> =&gt;</span>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -315,6 +318,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>In Control<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">InputNumber</span>
+            <span class="hljs-attribute">aria-label</span>=<span class="hljs-value">"Controlled number input demonstrating a custom format"</span>
             <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span>
             <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{(value)</span> =&gt;</span> { this.setState({ value }); }}
             formatter={value =&gt; `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -324,6 +328,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>Strange Format<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">InputNumber</span>
+            <span class="hljs-attribute">aria-label</span>=<span class="hljs-value">"Number input example demonstrating a strange custom format"</span>
             <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{1000}</span>
             <span class="hljs-attribute">formatter</span>=<span class="hljs-value">{value</span> =&gt;</span> `$ ${value} - ${getSum(value)}`}
             parser={value =&gt; (value.match(/^\$ ([\d\.]*) .*$/) || [])[1]}

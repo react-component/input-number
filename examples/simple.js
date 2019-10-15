@@ -70,6 +70,7 @@ var Component = function (_React$Component) {
       'div',
       { style: { margin: 10 } },
       __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_rc_input_number__["a" /* default */], {
+        'aria-label': 'Simple number input example',
         min: -8,
         max: 10,
         style: { width: 100 },
