@@ -50,7 +50,7 @@
     "coverage": "rc-test run coverage"
   },
   "devDependencies": {
-    "core-js": "^2.5.1",
+    "core-js": "^3.4.4",
     "create-react-class": "^15.6.2",
     "expect.js": "~0.3.1",
     "pre-commit": "1.x",
