@@ -919,6 +919,36 @@ describe('InputNumber', () => {
       Simulate.change(inputElement, { target: { value: 'foo' } });
     });
 
+
+    // https://github.com/react-component/input-number/issues/222
+    it('issue 222', () => {
+      const Demo = createReactClass({
+        getInitialState() {
+          return {
+            value: 1,
+            max: NaN,
+          };
+        },
+        onChange(value) {
+          this.setState({ value });
+        },
+        render() {
+          return (<InputNumber
+            ref="inputNum"
+            step={1}
+            max={this.state.max}
+            value={this.state.value}
+            onChange={this.onChange}
+          />);
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: 'foo' } });
+    });
+
     // https://github.com/react-component/input-number/issues/35
     it('issue 35', () => {
       let num;

@@ -128,7 +128,9 @@ export default class InputNumber extends React.Component {
 
     // Don't trigger in componentDidMount
     if (prevProps) {
-      if (!isEqual(prevProps.value, value) || prevProps.max !== max || prevProps.min !== min) {
+      if (!isEqual(prevProps.value, value) ||
+        !isEqual(prevProps.max, max) ||
+        !isEqual(prevProps.min, min)) {
         const validValue = focused ? value : this.getValidValue(value);
         let nextInputValue;
         if (this.pressingUpOrDown) {
