@@ -58,7 +58,7 @@
     "rc-tools": "^7.0.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "sinon": "^7.4.2"
+    "sinon": "^8.0.1"
   },
   "dependencies": {
     "babel-runtime": "6.x",
