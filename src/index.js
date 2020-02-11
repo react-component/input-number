@@ -499,7 +499,8 @@ export default class InputNumber extends React.Component {
     if (index === -1) return false;
 
     const prevCursorPos = this.cursorBefore.length;
-    if (this.lastKeyCode === KeyCode.DELETE && this.cursorBefore.charAt(prevCursorPos - 1) === str[0]) {
+    if (this.lastKeyCode === KeyCode.DELETE &&
+      this.cursorBefore.charAt(prevCursorPos - 1) === str[0]) {
       this.fixCaret(prevCursorPos, prevCursorPos);
       return true;
     }

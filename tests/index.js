@@ -1312,7 +1312,12 @@ describe('InputNumber', () => {
 
     // https://github.com/react-component/input-number/issues/235
     describe('cursor position', () => {
-      const setUpCursorTest = (value, changedValue, keyCode, selectionStart, selectionEnd) => {
+      const setUpCursorTest = (
+        initialValue,
+        changedValue,
+        keyCodeValue,
+        selectionStart,
+        selectionEnd) => {
         class Demo extends React.Component {
           onChange = (value) => {
             this.setState({ value });
@@ -1322,7 +1327,7 @@ describe('InputNumber', () => {
             return (
               <InputNumber
                 ref="inputNum"
-                value={value}
+                value={initialValue}
                 onChange={this.onChange}
               />
             );
@@ -1334,8 +1339,8 @@ describe('InputNumber', () => {
         inputNumber.input.selectionEnd = selectionEnd || selectionStart;
         inputElement = ReactDOM.findDOMNode(inputNumber.input);
         Simulate.focus(inputElement);
-        Simulate.keyDown(inputElement, { keyCode });
-        Simulate.change(inputElement, { target: { value: changedValue }});
+        Simulate.keyDown(inputElement, { keyCode: keyCodeValue });
+        Simulate.change(inputElement, { target: { value: changedValue } });
       };
 
       it('should be maintained on delete with identical consecutive digits', () => {
@@ -1361,18 +1366,21 @@ describe('InputNumber', () => {
       it('should be at the start of selection on delete with identical consecutive digits', () => {
         setUpCursorTest(99999, '999', keyCode.DELETE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
-       });
+      });
 
+      // eslint-disable-next-line max-len
       it('should be at the start of selection on delete with unidentical consecutive digits', () => {
         setUpCursorTest(12345, '145', keyCode.DELETE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
-       });
+      });
 
+      // eslint-disable-next-line max-len
       it('should be at the start of selection on backspace with identical consecutive digits', () => {
         setUpCursorTest(99999, '999', keyCode.BACKSPACE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
       });
 
+      // eslint-disable-next-line max-len
       it('should be at the start of selection on backspace with unidentical consecutive digits', () => {
         setUpCursorTest(12345, '145', keyCode.BACKSPACE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
@@ -1388,11 +1396,13 @@ describe('InputNumber', () => {
         expect(inputNumber.input.selectionStart).to.be(4);
       });
 
+      // eslint-disable-next-line max-len
       it('should be one step later than the start of selection on new digit with identical consecutive digits', () => {
         setUpCursorTest(99999, '9999', keyCode.NINE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(2);
       });
 
+      // eslint-disable-next-line max-len
       it('should be one step laterthan the start of selection on new digit with unidentical consecutive digits', () => {
         setUpCursorTest(12345, '1945', keyCode.NINE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(2);
