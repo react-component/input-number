@@ -1368,20 +1368,17 @@ describe('InputNumber', () => {
         expect(inputNumber.input.selectionStart).to.be(1);
       });
 
-      // eslint-disable-next-line max-len
-      it('should be at the start of selection on delete with unidentical consecutive digits', () => {
+      it('should be at the start of selection on delete with unidentical consecutive digits', () => { // eslint-disable-line
         setUpCursorTest(12345, '145', keyCode.DELETE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
       });
 
-      // eslint-disable-next-line max-len
-      it('should be at the start of selection on backspace with identical consecutive digits', () => {
+      it('should be at the start of selection on backspace with identical consecutive digits', () => { // eslint-disable-line
         setUpCursorTest(99999, '999', keyCode.BACKSPACE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
       });
 
-      // eslint-disable-next-line max-len
-      it('should be at the start of selection on backspace with unidentical consecutive digits', () => {
+      it('should be at the start of selection on backspace with unidentical consecutive digits', () => { // eslint-disable-line
         setUpCursorTest(12345, '145', keyCode.BACKSPACE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
       });
@@ -1396,14 +1393,12 @@ describe('InputNumber', () => {
         expect(inputNumber.input.selectionStart).to.be(4);
       });
 
-      // eslint-disable-next-line max-len
-      it('should be one step later than the start of selection on new digit with identical consecutive digits', () => {
+      it('should be one step later than the start of selection on new digit with identical consecutive digits', () => { // eslint-disable-line
         setUpCursorTest(99999, '9999', keyCode.NINE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(2);
       });
 
-      // eslint-disable-next-line max-len
-      it('should be one step laterthan the start of selection on new digit with unidentical consecutive digits', () => {
+      it('should be one step laterthan the start of selection on new digit with unidentical consecutive digits', () => { // eslint-disable-line
         setUpCursorTest(12345, '1945', keyCode.NINE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(2);
       });
