@@ -1309,6 +1309,100 @@ describe('InputNumber', () => {
       Simulate.blur(precisionInput);
       expect(numberInput.value).to.be('1');
     });
+
+    // https://github.com/react-component/input-number/issues/235
+    describe('cursor position', () => {
+      const setUpCursorTest = (
+        initialValue,
+        changedValue,
+        keyCodeValue,
+        selectionStart,
+        selectionEnd) => {
+        class Demo extends React.Component {
+          onChange = (value) => {
+            this.setState({ value });
+          };
+
+          render() {
+            return (
+              <InputNumber
+                ref="inputNum"
+                value={initialValue}
+                onChange={this.onChange}
+              />
+            );
+          }
+        }
+        example = ReactDOM.render(<Demo />, container);
+        inputNumber = example.refs.inputNum;
+        inputNumber.input.selectionStart = selectionStart;
+        inputNumber.input.selectionEnd = selectionEnd || selectionStart;
+        inputElement = ReactDOM.findDOMNode(inputNumber.input);
+        Simulate.focus(inputElement);
+        Simulate.keyDown(inputElement, { keyCode: keyCodeValue });
+        Simulate.change(inputElement, { target: { value: changedValue } });
+      };
+
+      it('should be maintained on delete with identical consecutive digits', () => {
+        setUpCursorTest(99999, '9999', keyCode.DELETE, 3);
+        expect(inputNumber.input.selectionStart).to.be(3);
+      });
+
+      it('should be maintained on delete with unidentical consecutive digits', () => {
+        setUpCursorTest(12345, '1235', keyCode.DELETE, 3);
+        expect(inputNumber.input.selectionStart).to.be(3);
+      });
+
+      it('should be one step earlier on backspace with identical consecutive digits', () => {
+        setUpCursorTest(99999, '9999', keyCode.BACKSPACE, 3);
+        expect(inputNumber.input.selectionStart).to.be(2);
+      });
+
+      it('should be one step earlier on backspace with unidentical consecutive digits', () => {
+        setUpCursorTest(12345, '1245', keyCode.BACKSPACE, 3);
+        expect(inputNumber.input.selectionStart).to.be(2);
+      });
+
+      it('should be at the start of selection on delete with identical consecutive digits', () => {
+        setUpCursorTest(99999, '999', keyCode.DELETE, 1, 3);
+        expect(inputNumber.input.selectionStart).to.be(1);
+      });
+
+      it('should be at the start of selection on delete with unidentical consecutive digits', () => { // eslint-disable-line
+        setUpCursorTest(12345, '145', keyCode.DELETE, 1, 3);
+        expect(inputNumber.input.selectionStart).to.be(1);
+      });
+
+      it('should be at the start of selection on backspace with identical consecutive digits', () => { // eslint-disable-line
+        setUpCursorTest(99999, '999', keyCode.BACKSPACE, 1, 3);
+        expect(inputNumber.input.selectionStart).to.be(1);
+      });
+
+      it('should be at the start of selection on backspace with unidentical consecutive digits', () => { // eslint-disable-line
+        setUpCursorTest(12345, '145', keyCode.BACKSPACE, 1, 3);
+        expect(inputNumber.input.selectionStart).to.be(1);
+      });
+
+      it('should be one step later on new digit with identical consecutive digits', () => {
+        setUpCursorTest(99999, '999999', keyCode.NINE, 3);
+        expect(inputNumber.input.selectionStart).to.be(4);
+      });
+
+      it('should be one step later on new digit with unidentical consecutive digits', () => {
+        setUpCursorTest(12345, '123945', keyCode.NINE, 3);
+        expect(inputNumber.input.selectionStart).to.be(4);
+      });
+
+      it('should be one step later than the start of selection on new digit with identical consecutive digits', () => { // eslint-disable-line
+        setUpCursorTest(99999, '9999', keyCode.NINE, 1, 3);
+        expect(inputNumber.input.selectionStart).to.be(2);
+      });
+
+      it('should be one step laterthan the start of selection on new digit with unidentical consecutive digits', () => { // eslint-disable-line
+        setUpCursorTest(12345, '1945', keyCode.NINE, 1, 3);
+        expect(inputNumber.input.selectionStart).to.be(2);
+      });
+    });
   });
 
   describe(`required prop`, () => {
