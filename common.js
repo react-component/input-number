@@ -1252,6 +1252,12 @@ var _initialiseProps = function _initialiseProps() {
 
     if (index === -1) return false;
 
+    var prevCursorPos = _this3.cursorBefore.length;
+    if (_this3.lastKeyCode === __WEBPACK_IMPORTED_MODULE_8_rc_util_es_KeyCode__["a" /* default */].DELETE && _this3.cursorBefore.charAt(prevCursorPos - 1) === str[0]) {
+      _this3.fixCaret(prevCursorPos, prevCursorPos);
+      return true;
+    }
+
     if (index + str.length === fullStr.length) {
       _this3.fixCaret(index, index);
 
