@@ -298,21 +298,20 @@ export default class InputNumber extends React.Component {
     this.props.onFocus(...args);
   }
 
-  onBlur = (e, ...args) => {
+  onBlur = (...args) => {
     const { onBlur } = this.props;
     this.inputting = false;
     this.setState({
       focused: false,
     });
     const value = this.getCurrentValidValue(this.state.inputValue);
-    e.persist(); // fix https://github.com/react-component/input-number/issues/51
     const newValue = this.setValue(value);
 
     if (onBlur) {
       const originValue = this.input.value;
       const inputValue = this.getInputDisplayValue({ focus: false, value: newValue });
       this.input.value = inputValue;
-      onBlur(e, ...args);
+      onBlur(...args);
       this.input.value = originValue;
     }
   }
