@@ -1034,6 +1034,7 @@ var InputNumber = function (_React$Component) {
           min: props.min,
           step: props.step,
           name: props.name,
+          title: props.title,
           id: props.id,
           onChange: this.onChange,
           ref: this.saveInput,
@@ -1180,11 +1181,7 @@ var _initialiseProps = function _initialiseProps() {
     (_props4 = _this3.props).onFocus.apply(_props4, arguments);
   };
 
-  this.onBlur = function (e) {
-    for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-      args[_key3 - 1] = arguments[_key3];
-    }
-
+  this.onBlur = function () {
     var onBlur = _this3.props.onBlur;
 
     _this3.inputting = false;
@@ -1192,14 +1189,13 @@ var _initialiseProps = function _initialiseProps() {
       focused: false
     });
     var value = _this3.getCurrentValidValue(_this3.state.inputValue);
-    e.persist(); // fix https://github.com/react-component/input-number/issues/51
     var newValue = _this3.setValue(value);
 
     if (onBlur) {
       var originValue = _this3.input.value;
       var inputValue = _this3.getInputDisplayValue({ focus: false, value: newValue });
       _this3.input.value = inputValue;
-      onBlur.apply(undefined, [e].concat(args));
+      onBlur.apply(undefined, arguments);
       _this3.input.value = originValue;
     }
   };
