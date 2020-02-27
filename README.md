@@ -224,6 +224,12 @@ online example: http://react-component.github.io/input-number/examples/
           <td></td>
           <td>Specifies the decimal separator</td>
         </tr>
+        <tr>
+          <td>inputMode</td>
+          <td>string</td>
+          <td></td>
+          <td>Specifies the inputmode of input</td>
+        </tr>
     </tbody>
 </table>
 
