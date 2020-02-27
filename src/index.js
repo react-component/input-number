@@ -79,6 +79,7 @@ export default class InputNumber extends React.Component {
     required: PropTypes.bool,
     pattern: PropTypes.string,
     decimalSeparator: PropTypes.string,
+    inputMode: PropTypes.string,
   }
 
   static defaultProps = {
@@ -817,6 +818,7 @@ export default class InputNumber extends React.Component {
             ref={this.saveInput}
             value={inputDisplayValue}
             pattern={props.pattern}
+            inputMode={props.inputMode}
             {...dataOrAriaAttributeProps}
           />
         </div>
