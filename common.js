@@ -1039,7 +1039,8 @@ var InputNumber = function (_React$Component) {
           onChange: this.onChange,
           ref: this.saveInput,
           value: inputDisplayValue,
-          pattern: props.pattern
+          pattern: props.pattern,
+          inputMode: props.inputMode
         }, dataOrAriaAttributeProps))
       )
     );
@@ -1079,7 +1080,8 @@ InputNumber.propTypes = {
   precision: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.number,
   required: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.bool,
   pattern: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.string,
-  decimalSeparator: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.string
+  decimalSeparator: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.string,
+  inputMode: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.string
 };
 InputNumber.defaultProps = {
   focusOnUpDown: true,
