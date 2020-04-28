@@ -536,6 +536,10 @@ export default class InputNumber extends React.Component {
     this.input.blur();
   }
 
+  select() {
+    this.input.select();
+  }
+
   formatWrapper(num) {
     // http://2ality.com/2012/03/signedzero.html
     // https://github.com/ant-design/ant-design/issues/9439
