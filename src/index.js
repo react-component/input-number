@@ -1,8 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
-import InputHandler from './InputHandler';
 
 function noop() {
 }
@@ -38,50 +37,6 @@ const isEqual = (oldValue, newValue) => newValue === oldValue ||
 isNaN(newValue) && isNaN(oldValue));
 
 export default class InputNumber extends React.Component {
-  static propTypes = {
-    value: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-    ]),
-    defaultValue: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-    ]),
-    focusOnUpDown: PropTypes.bool,
-    autoFocus: PropTypes.bool,
-    onChange: PropTypes.func,
-    onPressEnter: PropTypes.func,
-    onKeyDown: PropTypes.func,
-    onKeyUp: PropTypes.func,
-    prefixCls: PropTypes.string,
-    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    disabled: PropTypes.bool,
-    onFocus: PropTypes.func,
-    onBlur: PropTypes.func,
-    readOnly: PropTypes.bool,
-    max: PropTypes.number,
-    min: PropTypes.number,
-    step: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-    ]),
-    upHandler: PropTypes.node,
-    downHandler: PropTypes.node,
-    useTouch: PropTypes.bool,
-    formatter: PropTypes.func,
-    parser: PropTypes.func,
-    onMouseEnter: PropTypes.func,
-    onMouseLeave: PropTypes.func,
-    onMouseOver: PropTypes.func,
-    onMouseOut: PropTypes.func,
-    onMouseUp: PropTypes.func,
-    precision: PropTypes.number,
-    required: PropTypes.bool,
-    pattern: PropTypes.string,
-    decimalSeparator: PropTypes.string,
-    inputMode: PropTypes.string,
-  }
-
   static defaultProps = {
     focusOnUpDown: true,
     useTouch: false,
@@ -653,14 +608,6 @@ export default class InputNumber extends React.Component {
     this.step('up', e, ratio, recursive);
   }
 
-  saveUp = (node) => {
-    this.upHandler = node;
-  }
-
-  saveDown = (node) => {
-    this.downHandler = node;
-  }
-
   saveInput = (node) => {
     this.input = node;
   }
@@ -671,8 +618,7 @@ export default class InputNumber extends React.Component {
       prefixCls, disabled, readOnly, useTouch, autoComplete,
       upHandler, downHandler, ...rest,
     } = props;
-    const classes = classNames({
-      [prefixCls]: true,
+    const classes = classNames(prefixCls, {
       [props.className]: !!props.className,
       [`${prefixCls}-disabled`]: disabled,
       [`${prefixCls}-focused`]: this.state.focused,
@@ -753,10 +699,7 @@ export default class InputNumber extends React.Component {
         onMouseOut={props.onMouseOut}
       >
         <div className={`${prefixCls}-handler-wrap`}>
-          <InputHandler
-            ref={this.saveUp}
-            disabled={isUpDisabled}
-            prefixCls={prefixCls}
+          <span
             unselectable="unselectable"
             {...upEvents}
             role="button"
@@ -764,16 +707,17 @@ export default class InputNumber extends React.Component {
             aria-disabled={!!isUpDisabled}
             className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
           >
-            {upHandler || <span
-              unselectable="unselectable"
-              className={`${prefixCls}-handler-up-inner`}
-              onClick={preventDefault}
-            />}
-          </InputHandler>
-          <InputHandler
-            ref={this.saveDown}
-            disabled={isDownDisabled}
-            prefixCls={prefixCls}
+            {
+              upHandler || (
+                <span
+                  unselectable="unselectable"
+                  className={`${prefixCls}-handler-up-inner`}
+                  onClick={preventDefault}
+                />
+              )
+            }
+          </span>
+          <span
             unselectable="unselectable"
             {...downEvents}
             role="button"
@@ -781,12 +725,16 @@ export default class InputNumber extends React.Component {
             aria-disabled={!!isDownDisabled}
             className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
           >
-            {downHandler || <span
-              unselectable="unselectable"
-              className={`${prefixCls}-handler-down-inner`}
-              onClick={preventDefault}
-            />}
-          </InputHandler>
+            {
+              downHandler || (
+                <span
+                  unselectable="unselectable"
+                  className={`${prefixCls}-handler-down-inner`}
+                  onClick={preventDefault}
+                />
+              )
+            }
+          </span>
         </div>
         <div
           className={`${prefixCls}-input-wrap`}
