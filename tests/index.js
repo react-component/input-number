@@ -136,12 +136,16 @@ describe('InputNumber', () => {
 
   describe('clickable', () => {
     it('up button works', () => {
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(99);
     });
 
     it('down button works', () => {
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
       expect(inputNumber.state.value).to.be(97);
     });
 
@@ -153,7 +157,9 @@ describe('InputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(1);
     });
 
@@ -165,7 +171,9 @@ describe('InputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
       expect(inputNumber.state.value).to.be(-1);
     });
 
@@ -177,7 +185,9 @@ describe('InputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(6);
     });
 
@@ -189,7 +199,9 @@ describe('InputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(null);
     });
 
@@ -201,7 +213,9 @@ describe('InputNumber', () => {
       });
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
       expect(inputNumber.state.value).to.be(6);
     });
 
@@ -214,10 +228,12 @@ describe('InputNumber', () => {
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       expect(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up').className.indexOf('disabled') > 0
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up')
+          .className.indexOf('disabled') > 0
       ).to.be(false);
       expect(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down').className.indexOf('disabled') > 0
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down')
+          .className.indexOf('disabled') > 0
       ).to.be(false);
     });
 
@@ -245,7 +261,9 @@ describe('InputNumber', () => {
 
   describe('long press', () => {
     it('up button works', (done) => {
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       setTimeout(() => {
         expect(inputNumber.state.value).to.be(99);
         setTimeout(() => {
@@ -256,7 +274,9 @@ describe('InputNumber', () => {
     });
 
     it('down button works', (done) => {
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
       setTimeout(() => {
         expect(inputNumber.state.value).to.be(97);
         setTimeout(() => {
@@ -270,14 +290,18 @@ describe('InputNumber', () => {
   describe('check props works', () => {
     it('max', () => {
       for (let i = 0; i < 3; i++) {
-        Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+        Simulate.mouseDown(
+          findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+        );
       }
       expect(inputNumber.state.value).to.be(101);
     });
 
     it('min', () => {
       for (let i = 0; i < 100; i++) {
-        Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+        Simulate.mouseDown(
+          findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+        );
       }
       expect(inputNumber.state.value).to.be(1);
     });
@@ -300,7 +324,9 @@ describe('InputNumber', () => {
     it('step', () => {
       example.setState({ step: 5 });
       for (let i = 0; i < 3; i++) {
-        Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+        Simulate.mouseDown(
+          findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+        );
       }
       expect(inputNumber.state.value).to.be(defaultValue - 3 * 5);
     });
@@ -310,7 +336,9 @@ describe('InputNumber', () => {
       example.setState({ step: 5 });
       example.triggerBoolean('readOnly');
       for (let i = 0; i < 3; i++) {
-        Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+        Simulate.mouseDown(
+          findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+        );
       }
       expect(inputNumber.state.value).to.be(defaultValue);
     });
@@ -318,7 +346,9 @@ describe('InputNumber', () => {
     it('decimal step', () => {
       example.setState({ step: 0.1 });
       for (let i = 0; i < 3; i++) {
-        Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+        Simulate.mouseDown(
+          findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+        );
       }
       expect(inputNumber.state.value).to.be(defaultValue - 3 * 0.1);
     });
@@ -798,10 +828,14 @@ describe('InputNumber', () => {
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(3.1);
       expect(inputElement.value).to.be('3.1');
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
       expect(inputNumber.state.value).to.be(2.1);
       expect(inputElement.value).to.be('2.1');
     });
@@ -838,7 +872,9 @@ describe('InputNumber', () => {
       expect(inputElement.value).to.be('0.000000001');
       for (let i = 0; i < 10; i++) {
         // plus until change precision
-        Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+        Simulate.mouseDown(
+          findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+        );
       }
       Simulate.blur(inputElement);
       expect(inputNumber.state.value).to.be(0.000000011);
@@ -1010,7 +1046,9 @@ describe('InputNumber', () => {
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
 
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       setTimeout(() => {
         expect(num).to.be(1);
         setTimeout(() => {
@@ -1195,7 +1233,9 @@ describe('InputNumber', () => {
     });
 
     it('focus input when click up/down button ', () => {
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(ReactDOM.findDOMNode(inputNumber).className.indexOf('focused') > 0).to.be(true);
       expect(document.activeElement).to.be(inputElement);
       expect(onFocusCallCount).to.be(1);
@@ -1566,10 +1606,14 @@ describe('InputNumber', () => {
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
 
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('$ 6');
-      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
       expect(inputNumber.state.value).to.be(5);
       expect(inputElement.value).to.be('$ 5');
     });
@@ -1590,10 +1634,14 @@ describe('InputNumber', () => {
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
 
-      Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.touchStart(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('6 ¥');
-      Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+      Simulate.touchStart(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
       expect(inputNumber.state.value).to.be(5);
       expect(inputElement.value).to.be('5 ¥');
     });
@@ -1681,7 +1729,9 @@ describe('InputNumber', () => {
       Simulate.keyDown(inputElement, { keyCode: keyCode.DOWN });
       expect(inputNumber.state.value).to.be(5);
       expect(inputElement.value).to.be('$ 5 boeing 737');
-      Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.touchStart(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('$ 6 boeing 737');
     });
@@ -1691,7 +1741,14 @@ describe('InputNumber', () => {
     it('passes data-* attributes', () => {
       const Demo = createReactClass({
         render() {
-          return <InputNumber ref="inputNum" value={1} data-test="test-id" data-id="12345"/>;
+          return (
+            <InputNumber
+              ref="inputNum"
+              value={1}
+              data-test="test-id"
+              data-id="12345"
+            />
+          );
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -1802,12 +1859,16 @@ describe('Mobile inputNumber use TouchEvents', () => {
 
   describe('touchable', () => {
     it('up button works', () => {
-      Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      Simulate.touchStart(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
       expect(inputNumber.state.value).to.be(99);
     });
 
     it('down button works', () => {
-      Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
+      Simulate.touchStart(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
       expect(inputNumber.state.value).to.be(97);
     });
   });
