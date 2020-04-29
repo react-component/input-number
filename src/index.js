@@ -613,90 +613,78 @@ export default class InputNumber extends React.Component {
   }
 
   render() {
-    const props = { ...this.props };
     const {
       prefixCls, disabled, readOnly, useTouch, autoComplete,
-      upHandler, downHandler, ...rest,
-    } = props;
+      upHandler, downHandler, className, max, min,
+      style, title, onMouseEnter, onMouseLeave, onMouseOver, onMouseOut,
+      required, onClick, tabIndex, type, placeholder, id, inputMode, pattern,
+      step, maxLength, autoFocus,
+      ...rest,
+    } = this.props;
+    const { value, focused } = this.state;
     const classes = classNames(prefixCls, {
-      [props.className]: !!props.className,
+      [className]: !!className,
       [`${prefixCls}-disabled`]: disabled,
-      [`${prefixCls}-focused`]: this.state.focused,
+      [`${prefixCls}-focused`]: focused,
     });
-    let upDisabledClass = '';
-    let downDisabledClass = '';
-    const { value } = this.state;
-    if (value || value === 0) {
-      if (!isNaN(value)) {
-        const val = Number(value);
-        if (val >= props.max) {
-          upDisabledClass = `${prefixCls}-handler-up-disabled`;
-        }
-        if (val <= props.min) {
-          downDisabledClass = `${prefixCls}-handler-down-disabled`;
-        }
-      } else {
-        upDisabledClass = `${prefixCls}-handler-up-disabled`;
-        downDisabledClass = `${prefixCls}-handler-down-disabled`;
-      }
-    }
 
     const dataOrAriaAttributeProps = {};
-    for (const key in props) {
+    for (const key in rest) {
       if (
-        props.hasOwnProperty(key) &&
+        rest.hasOwnProperty(key) &&
         (
           key.substr(0, 5) === 'data-' ||
           key.substr(0, 5) === 'aria-' ||
           key === 'role'
         )
       ) {
-        dataOrAriaAttributeProps[key] = props[key];
+        dataOrAriaAttributeProps[key] = rest[key];
       }
     }
 
-    const editable = !props.readOnly && !props.disabled;
+    const editable = !readOnly && !disabled;
 
     // focus state, show input value
     // unfocus state, show valid value
     const inputDisplayValue = this.getInputDisplayValue();
 
-    let upEvents;
-    let downEvents;
-    if (useTouch) {
-      upEvents = {
-        onTouchStart: (editable && !upDisabledClass) ? this.up : noop,
-        onTouchEnd: this.stop,
-      };
-      downEvents = {
-        onTouchStart: (editable && !downDisabledClass) ? this.down : noop,
-        onTouchEnd: this.stop,
-      };
-    } else {
-      upEvents = {
-        onMouseDown: (editable && !upDisabledClass) ? this.up : noop,
-        onMouseUp: this.stop,
-        onMouseLeave: this.stop,
-      };
-      downEvents = {
-        onMouseDown: (editable && !downDisabledClass) ? this.down : noop,
-        onMouseUp: this.stop,
-        onMouseLeave: this.stop,
-      };
-    }
+    const upDisabled = (value || value === 0) && (isNaN(value) || Number(value) >= max);
+    const downDisabled = (value || value === 0) && (isNaN(value) || Number(value) <= min);
+    const isUpDisabled = upDisabled || disabled || readOnly;
+    const isDownDisabled = downDisabled || disabled || readOnly;
+    const upClassName = classNames(`${prefixCls}-handler`, `${prefixCls}-handler-up`, {
+      [`${prefixCls}-handler-up-disabled`]: isUpDisabled,
+    });
+    const downClassName = classNames(`${prefixCls}-handler`, `${prefixCls}-handler-down`, {
+      [`${prefixCls}-handler-down-disabled`]: isDownDisabled,
+    });
 
-    const isUpDisabled = !!upDisabledClass || disabled || readOnly;
-    const isDownDisabled = !!downDisabledClass || disabled || readOnly;
-    // ref for test
+    const upEvents = useTouch ? {
+      onTouchStart: isUpDisabled ? noop : this.up,
+      onTouchEnd: this.stop,
+    } : {
+      onMouseDown: isUpDisabled ? noop : this.up,
+      onMouseUp: this.stop,
+      onMouseLeave: this.stop,
+    };
+    const downEvents = useTouch ? {
+      onTouchStart: isDownDisabled ? noop : this.down,
+      onTouchEnd: this.stop,
+    } : {
+      onMouseDown: isDownDisabled ? noop : this.down,
+      onMouseUp: this.stop,
+      onMouseLeave: this.stop,
+    };
+
     return (
       <div
         className={classes}
-        style={props.style}
-        title={props.title}
-        onMouseEnter={props.onMouseEnter}
-        onMouseLeave={props.onMouseLeave}
-        onMouseOver={props.onMouseOver}
-        onMouseOut={props.onMouseOut}
+        style={style}
+        title={title}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut}
       >
         <div className={`${prefixCls}-handler-wrap`}>
           <span
@@ -704,8 +692,8 @@ export default class InputNumber extends React.Component {
             {...upEvents}
             role="button"
             aria-label="Increase Value"
-            aria-disabled={!!isUpDisabled}
-            className={`${prefixCls}-handler ${prefixCls}-handler-up ${upDisabledClass}`}
+            aria-disabled={isUpDisabled}
+            className={upClassName}
           >
             {
               upHandler || (
@@ -722,8 +710,8 @@ export default class InputNumber extends React.Component {
             {...downEvents}
             role="button"
             aria-label="Decrease Value"
-            aria-disabled={!!isDownDisabled}
-            className={`${prefixCls}-handler ${prefixCls}-handler-down ${downDisabledClass}`}
+            aria-disabled={isDownDisabled}
+            className={downClassName}
           >
             {
               downHandler || (
@@ -736,41 +724,39 @@ export default class InputNumber extends React.Component {
             }
           </span>
         </div>
-        <div
-          className={`${prefixCls}-input-wrap`}
-        >
+        <div className={`${prefixCls}-input-wrap`}>
           <input
             role="spinbutton"
-            aria-valuemin={props.min}
-            aria-valuemax={props.max}
+            aria-valuemin={min}
+            aria-valuemax={max}
             aria-valuenow={value}
-            required={props.required}
-            type={props.type}
-            placeholder={props.placeholder}
-            onClick={props.onClick}
+            required={required}
+            type={type}
+            placeholder={placeholder}
+            onClick={onClick}
             onMouseUp={this.onMouseUp}
             className={`${prefixCls}-input`}
-            tabIndex={props.tabIndex}
+            tabIndex={tabIndex}
             autoComplete={autoComplete}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             onKeyDown={editable ? this.onKeyDown : noop}
             onKeyUp={editable ? this.onKeyUp : noop}
-            autoFocus={props.autoFocus}
-            maxLength={props.maxLength}
-            readOnly={props.readOnly}
-            disabled={props.disabled}
-            max={props.max}
-            min={props.min}
-            step={props.step}
-            name={props.name}
-            title={props.title}
-            id={props.id}
+            autoFocus={autoFocus}
+            maxLength={maxLength}
+            readOnly={readOnly}
+            disabled={disabled}
+            max={max}
+            min={min}
+            step={step}
+            name={name}
+            title={title}
+            id={id}
             onChange={this.onChange}
             ref={this.saveInput}
             value={inputDisplayValue}
-            pattern={props.pattern}
-            inputMode={props.inputMode}
+            pattern={pattern}
+            inputMode={inputMode}
             {...dataOrAriaAttributeProps}
           />
         </div>
