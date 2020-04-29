@@ -1,6 +1,6 @@
 {
   "name": "rc-input-number",
-  "version": "4.5.7",
+  "version": "4.6.0",
   "description": "React input-number component",
   "keywords": [
     "react",
@@ -63,8 +63,6 @@
   "dependencies": {
     "babel-runtime": "6.x",
     "classnames": "^2.2.0",
-    "prop-types": "^15.5.7",
-    "rmc-feedback": "^2.0.0",
     "rc-util": "^4.5.1"
   },
   "pre-commit": [
