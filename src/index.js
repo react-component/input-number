@@ -324,7 +324,8 @@ export default class InputNumber extends React.Component {
   setValue(v, callback) {
     // trigger onChange
     const { precision } = this.props;
-    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? null : parseFloat(v, 10);
+    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? null
+      : this.getFullNum(parseFloat(v, 10));
     const { value = null, inputValue = null } = this.state;
     // https://github.com/ant-design/ant-design/issues/7363
     // https://github.com/ant-design/ant-design/issues/16622
@@ -347,6 +348,17 @@ export default class InputNumber extends React.Component {
     }
 
     return newValue;
+  }
+
+  getFullNum(num) {
+    if (isNaN(num)) {
+      return num;
+    }
+    const str = String(num);
+    if (!/e/i.test(str)) {
+      return num;
+    }
+    return (num).toFixed(18).replace(/\.?0+$/, '');
   }
 
   getPrecision(value) {
