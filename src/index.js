@@ -358,7 +358,7 @@ export default class InputNumber extends React.Component {
     if (!/e/i.test(str)) {
       return num;
     }
-    return (num).toFixed(18).replace(/\.?0+$/, '');
+    return Number((num).toFixed(18).replace(/\.?0+$/, ''));
   }
 
   getPrecision(value) {
