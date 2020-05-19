@@ -713,6 +713,32 @@ describe('InputNumber', () => {
       expect(inputNumber.state.value).to.be(-3.637978807091713e-12);
     });
 
+    it('value decimal over six decimal not be scientific notation', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" precision={7} step={0.0000001} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
+      expect(inputElement.value).to.be('0.0000001');
+      expect(inputElement.value).not.to.be('1e-7');
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
+      expect(inputElement.value).to.be('0.0000002');
+      expect(inputElement.value).not.to.be('2e-7');
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
+      );
+      expect(inputElement.value).to.be('0.0000001');
+      expect(inputElement.value).not.to.be('1e-7');
+    });
+
     it('value can be changed when dynamic setting max', () => {
       const Demo = createReactClass({
         getInitialState() {
