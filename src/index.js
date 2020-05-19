@@ -766,7 +766,7 @@ export default class InputNumber extends React.Component {
             id={id}
             onChange={this.onChange}
             ref={this.saveInput}
-            value={inputDisplayValue}
+            value={this.getFullNum(inputDisplayValue)}
             pattern={pattern}
             inputMode={inputMode}
             {...dataOrAriaAttributeProps}
