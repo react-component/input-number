@@ -354,8 +354,7 @@ export default class InputNumber extends React.Component {
     if (isNaN(num)) {
       return num;
     }
-    const str = String(num);
-    if (!/e/i.test(str)) {
+    if (!/e/i.test(String(num))) {
       return num;
     }
     return (num).toFixed(18).replace(/\.?0+$/, '');
@@ -658,7 +657,7 @@ export default class InputNumber extends React.Component {
 
     // focus state, show input value
     // unfocus state, show valid value
-    const inputDisplayValue = this.getInputDisplayValue();
+    const inputDisplayValue = this.getFullNum(this.getInputDisplayValue());
 
     const upDisabled = (value || value === 0) && (isNaN(value) || Number(value) >= max);
     const downDisabled = (value || value === 0) && (isNaN(value) || Number(value) <= min);
@@ -766,7 +765,7 @@ export default class InputNumber extends React.Component {
             id={id}
             onChange={this.onChange}
             ref={this.saveInput}
-            value={this.getFullNum(inputDisplayValue)}
+            value={inputDisplayValue}
             pattern={pattern}
             inputMode={inputMode}
             {...dataOrAriaAttributeProps}
