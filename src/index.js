@@ -325,7 +325,7 @@ export default class InputNumber extends React.Component {
     // trigger onChange
     const { precision } = this.props;
     const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? null
-      : this.getFullNum(parseFloat(v, 10));
+      : parseFloat(v, 10);
     const { value = null, inputValue = null } = this.state;
     // https://github.com/ant-design/ant-design/issues/7363
     // https://github.com/ant-design/ant-design/issues/16622
@@ -358,7 +358,7 @@ export default class InputNumber extends React.Component {
     if (!/e/i.test(str)) {
       return num;
     }
-    return Number((num).toFixed(18).replace(/\.?0+$/, ''));
+    return (num).toFixed(18).replace(/\.?0+$/, '');
   }
 
   getPrecision(value) {
