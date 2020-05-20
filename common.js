@@ -682,6 +682,16 @@ var InputNumber = function (_React$Component) {
     return newValue;
   };
 
+  InputNumber.prototype.getFullNum = function getFullNum(num) {
+    if (isNaN(num)) {
+      return num;
+    }
+    if (!/e/i.test(String(num))) {
+      return num;
+    }
+    return num.toFixed(18).replace(/\.?0+$/, '');
+  };
+
   InputNumber.prototype.getPrecision = function getPrecision(value) {
     if (isValidProps(this.props.precision)) {
       return this.props.precision;
@@ -890,7 +900,8 @@ var InputNumber = function (_React$Component) {
         step = _props3.step,
         maxLength = _props3.maxLength,
         autoFocus = _props3.autoFocus,
-        rest = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default()(_props3, ['prefixCls', 'disabled', 'readOnly', 'useTouch', 'autoComplete', 'upHandler', 'downHandler', 'className', 'max', 'min', 'style', 'title', 'onMouseEnter', 'onMouseLeave', 'onMouseOver', 'onMouseOut', 'required', 'onClick', 'tabIndex', 'type', 'placeholder', 'id', 'inputMode', 'pattern', 'step', 'maxLength', 'autoFocus']);
+        name = _props3.name,
+        rest = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default()(_props3, ['prefixCls', 'disabled', 'readOnly', 'useTouch', 'autoComplete', 'upHandler', 'downHandler', 'className', 'max', 'min', 'style', 'title', 'onMouseEnter', 'onMouseLeave', 'onMouseOver', 'onMouseOut', 'required', 'onClick', 'tabIndex', 'type', 'placeholder', 'id', 'inputMode', 'pattern', 'step', 'maxLength', 'autoFocus', 'name']);
 
     var _state2 = this.state,
         value = _state2.value,
@@ -1137,7 +1148,7 @@ var _initialiseProps = function _initialiseProps() {
 
     if (onBlur) {
       var originValue = _this3.input.value;
-      var inputValue = _this3.getInputDisplayValue({ focus: false, value: newValue });
+      var inputValue = Number(_this3.getInputDisplayValue({ focus: false, value: newValue }));
       _this3.input.value = inputValue;
       onBlur.apply(undefined, arguments);
       _this3.input.value = originValue;
@@ -1166,7 +1177,7 @@ var _initialiseProps = function _initialiseProps() {
       inputDisplayValueFormat = inputDisplayValueFormat.toString().replace('.', _this3.props.decimalSeparator);
     }
 
-    return inputDisplayValueFormat;
+    return _this3.getFullNum(inputDisplayValueFormat);
   };
 
   this.recordCursorPosition = function () {
