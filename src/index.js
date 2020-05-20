@@ -265,7 +265,7 @@ export default class InputNumber extends React.Component {
 
     if (onBlur) {
       const originValue = this.input.value;
-      const inputValue = this.getInputDisplayValue({ focus: false, value: newValue });
+      const inputValue = Number(this.getInputDisplayValue({ focus: false, value: newValue }));
       this.input.value = inputValue;
       onBlur(...args);
       this.input.value = originValue;
@@ -324,7 +324,8 @@ export default class InputNumber extends React.Component {
   setValue(v, callback) {
     // trigger onChange
     const { precision } = this.props;
-    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? null : parseFloat(v, 10);
+    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? null
+      : parseFloat(v, 10);
     const { value = null, inputValue = null } = this.state;
     // https://github.com/ant-design/ant-design/issues/7363
     // https://github.com/ant-design/ant-design/issues/16622
@@ -347,6 +348,16 @@ export default class InputNumber extends React.Component {
     }
 
     return newValue;
+  }
+
+  getFullNum(num) {
+    if (isNaN(num)) {
+      return num;
+    }
+    if (!/e/i.test(String(num))) {
+      return num;
+    }
+    return (num).toFixed(18).replace(/\.?0+$/, '');
   }
 
   getPrecision(value) {
@@ -408,7 +419,7 @@ export default class InputNumber extends React.Component {
         .replace('.', this.props.decimalSeparator);
     }
 
-    return inputDisplayValueFormat;
+    return this.getFullNum(inputDisplayValueFormat);
   };
 
   recordCursorPosition = () => {
