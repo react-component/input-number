@@ -265,7 +265,7 @@ export default class InputNumber extends React.Component {
 
     if (onBlur) {
       const originValue = this.input.value;
-      const inputValue = this.getInputDisplayValue({ focus: false, value: newValue });
+      const inputValue = Number(this.getInputDisplayValue({ focus: false, value: newValue }));
       this.input.value = inputValue;
       onBlur(...args);
       this.input.value = originValue;
@@ -419,7 +419,7 @@ export default class InputNumber extends React.Component {
         .replace('.', this.props.decimalSeparator);
     }
 
-    return inputDisplayValueFormat;
+    return this.getFullNum(inputDisplayValueFormat);
   };
 
   recordCursorPosition = () => {
@@ -657,7 +657,7 @@ export default class InputNumber extends React.Component {
 
     // focus state, show input value
     // unfocus state, show valid value
-    const inputDisplayValue = this.getFullNum(this.getInputDisplayValue());
+    const inputDisplayValue = this.getInputDisplayValue();
 
     const upDisabled = (value || value === 0) && (isNaN(value) || Number(value) >= max);
     const downDisabled = (value || value === 0) && (isNaN(value) || Number(value) <= min);
