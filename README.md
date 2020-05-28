@@ -26,7 +26,7 @@ Input number control.
 
 ## Screenshots
 
-<img src="http://gtms01.alicdn.com/tps/i1/TB18CIlIpXXXXaxXFXXDa5hRXXX-268-124.png" width="288"/>
+<img src="https://user-images.githubusercontent.com/507615/83162463-61414a80-a13c-11ea-9420-971f8697d490.png" width="288"/>
 
 ## Install
 
