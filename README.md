@@ -1,7 +1,7 @@
 # rc-input-number
 ---
 
-input number ui component for react
+Input number control.
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
@@ -28,17 +28,16 @@ input number ui component for react
 
 <img src="http://gtms01.alicdn.com/tps/i1/TB18CIlIpXXXXaxXFXXDa5hRXXX-268-124.png" width="288"/>
 
-## install
+## Install
 
 [![rc-input-number](https://nodei.co/npm/rc-input-number.png)](https://npmjs.org/package/rc-input-number)
 
 ## Usage
 
 ```js
-var InputNumber = require('rc-input-number');
-var React = require('react');
-var ReactDOM = require('react-dom');
-ReactDOM.render(<InputNumber defaultValue={19}/>, container);
+import InputNumber from 'rc-input-number';
+
+export default () => <InputNumber defaultValue={10} />;
 ```
 
 ## Development

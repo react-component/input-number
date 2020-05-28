@@ -11,7 +11,7 @@ function preventDefault(e) {
 }
 
 function defaultParser(input) {
-  return input.replace(/[^\w\.-]+/g, '');
+  return input.replace(/[^\w.-]+/g, '');
 }
 
 /**
@@ -630,7 +630,7 @@ export default class InputNumber extends React.Component {
       style, title, onMouseEnter, onMouseLeave, onMouseOver, onMouseOut,
       required, onClick, tabIndex, type, placeholder, id, inputMode, pattern,
       step, maxLength, autoFocus, name,
-      ...rest,
+      ...rest
     } = this.props;
     const { value, focused } = this.state;
     const classes = classNames(prefixCls, {
@@ -640,18 +640,15 @@ export default class InputNumber extends React.Component {
     });
 
     const dataOrAriaAttributeProps = {};
-    for (const key in rest) {
+    Object.keys(rest).forEach(key => {
       if (
-        rest.hasOwnProperty(key) &&
-        (
-          key.substr(0, 5) === 'data-' ||
-          key.substr(0, 5) === 'aria-' ||
-          key === 'role'
-        )
+        key.substr(0, 5) === 'data-' ||
+        key.substr(0, 5) === 'aria-' ||
+        key === 'role'
       ) {
         dataOrAriaAttributeProps[key] = rest[key];
       }
-    }
+    })
 
     const editable = !readOnly && !disabled;
 
@@ -696,6 +693,8 @@ export default class InputNumber extends React.Component {
         onMouseLeave={onMouseLeave}
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
+        onFocus={() => null}
+        onBlur={() => null}
       >
         <div className={`${prefixCls}-handler-wrap`}>
           <span

@@ -60,7 +60,7 @@ class App extends React.Component {
             aria-label="Number input example demonstrating a strange custom format"
             defaultValue={1000}
             formatter={value => `$ ${value} - ${getSum(value)}`}
-            parser={value => (value.match(/^\$ ([\d\.]*) .*$/) || [])[1]}
+            parser={value => (value.match(/^\$ ([\d.]*) .*$/) || [])[1]}
           />
         </div>
       </div>

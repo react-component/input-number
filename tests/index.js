@@ -1,10 +1,8 @@
-/* eslint-disable react/no-multi-comp, no-unused-vars */
+/* eslint-disable react/no-multi-comp, no-unused-vars, react/no-unused-state */
 import 'core-js/es6/map';
 import 'core-js/es6/set';
-import '../assets/index.less';
 import keyCode from 'rc-util/lib/KeyCode';
 import expect from 'expect.js';
-import InputNumber from '../src';
 import React from 'react';
 import {
   Simulate,
@@ -15,6 +13,8 @@ import {
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import createReactClass from 'create-react-class';
+import InputNumber from '../src';
+import '../assets/index.less';
 
 const defaultValue = 98;
 
@@ -240,7 +240,7 @@ describe('InputNumber', () => {
     it('should record current properties upon mouse up', () => {
       const Demo = createReactClass({
         render() {
-          return <InputNumber ref={"inputNum"} value={123} />;
+          return <InputNumber ref="inputNum" value={123} />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -666,7 +666,7 @@ describe('InputNumber', () => {
     it('default value can be a string greater than 16 characters', () => {
       const Demo = createReactClass({
         render() {
-          return <InputNumber ref="inputNum" max={10} defaultValue={'-3.637978807091713e-12'} />;
+          return <InputNumber ref="inputNum" max={10} defaultValue="-3.637978807091713e-12" />;
         },
       });
       example = ReactDOM.render(<Demo />, container);
@@ -704,7 +704,7 @@ describe('InputNumber', () => {
     it('value can be a string greater than 16 characters', () => {
       const Demo = createReactClass({
         render() {
-          return <InputNumber ref="inputNum" max={10} value={'-3.637978807091713e-12'} />;
+          return <InputNumber ref="inputNum" max={10} value="-3.637978807091713e-12" />;
         },
       });
       example = ReactDOM.render(<Demo />, container);

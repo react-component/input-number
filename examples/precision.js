@@ -23,7 +23,7 @@ class Component extends React.Component {
         <InputNumber
           aria-label="Number input example to demonstration custom precision value"
           style={{ width: 100 }}
-          defaultValue={1}
+          value={this.state.value}
           onChange={this.onChange}
           precision={this.state.precision}
         />

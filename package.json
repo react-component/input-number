@@ -38,10 +38,10 @@
   "scripts": {
     "dist": "rc-tools run dist",
     "build": "rc-tools run build",
-    "compile": "rc-tools run compile --babel-runtime",
+    "compile": "rc-tools run compile",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",
-    "pub": "rc-tools run pub --babel-runtime",
+    "pub": "rc-tools run pub",
     "lint": "rc-tools run lint",
     "karma": "rc-test run karma",
     "test": "rc-test run test",
@@ -55,13 +55,12 @@
     "expect.js": "~0.3.1",
     "pre-commit": "1.x",
     "rc-test": "^6.0.1",
-    "rc-tools": "^7.0.2",
+    "rc-tools": "8.x",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "sinon": "^9.0.1"
   },
   "dependencies": {
-    "babel-runtime": "6.x",
     "classnames": "^2.2.0",
     "rc-util": "^4.5.1"
   },
