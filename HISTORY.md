@@ -1,6 +1,10 @@
 # History
 ----
 
+## 5.0.0
+
+- Upgrade `rc-util` to `5.x`.
+
 ## 4.5.0
 
 - Fix React lifecycle warning.
