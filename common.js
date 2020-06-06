@@ -607,7 +607,7 @@ var InputNumber = function (_React$Component) {
       if (!/e/i.test(String(num))) {
         return num;
       }
-      return num.toFixed(18).replace(/\.?0+$/, '');
+      return Number(num).toFixed(18).replace(/\.?0+$/, '');
     }
   }, {
     key: 'getPrecision',
@@ -966,7 +966,7 @@ var InputNumber = function (_React$Component) {
             id: id,
             onChange: this.onChange,
             ref: this.saveInput,
-            value: inputDisplayValue,
+            value: this.getFullNum(inputDisplayValue),
             pattern: pattern,
             inputMode: inputMode
           }, dataOrAriaAttributeProps))
@@ -1119,7 +1119,7 @@ var _initialiseProps = function _initialiseProps() {
       inputDisplayValueFormat = inputDisplayValueFormat.toString().replace('.', _this3.props.decimalSeparator);
     }
 
-    return _this3.getFullNum(inputDisplayValueFormat);
+    return inputDisplayValueFormat;
   };
 
   this.recordCursorPosition = function () {
