@@ -30,3 +30,4 @@ coverage
 /ios/
 /android/
 yarn.lock
+package-lock.json

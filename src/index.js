@@ -355,7 +355,7 @@ export default class InputNumber extends React.Component {
     if (!/e/i.test(String(num))) {
       return num;
     }
-    return (num).toFixed(18).replace(/\.?0+$/, '');
+    return Number(num).toFixed(18).replace(/\.?0+$/, '');
   }
 
   getPrecision(value) {
@@ -417,7 +417,7 @@ export default class InputNumber extends React.Component {
         .replace('.', this.props.decimalSeparator);
     }
 
-    return this.getFullNum(inputDisplayValueFormat);
+    return inputDisplayValueFormat;
   };
 
   recordCursorPosition = () => {
@@ -764,7 +764,7 @@ export default class InputNumber extends React.Component {
             id={id}
             onChange={this.onChange}
             ref={this.saveInput}
-            value={inputDisplayValue}
+            value={this.getFullNum(inputDisplayValue)}
             pattern={pattern}
             inputMode={inputMode}
             {...dataOrAriaAttributeProps}

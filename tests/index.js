@@ -739,6 +739,21 @@ describe('InputNumber', () => {
       expect(inputElement.value).not.to.be('1e-7');
     });
 
+    it('value can be changed when the input number is really big', () => {
+      const Demo = createReactClass({
+        render() {
+          return <InputNumber ref="inputNum" value={1e24} />;
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.mouseDown(
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
+      );
+      expect(inputElement.value).to.be('1e+24');
+    });
+
     it('value can be changed when dynamic setting max', () => {
       const Demo = createReactClass({
         getInitialState() {
