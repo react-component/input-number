@@ -41,6 +41,7 @@ export default class InputNumber extends React.Component {
     focusOnUpDown: true,
     useTouch: false,
     prefixCls: 'rc-input-number',
+    max: MAX_SAFE_INTEGER,
     min: -MAX_SAFE_INTEGER,
     step: 1,
     style: {},
