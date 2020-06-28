@@ -739,7 +739,7 @@ describe('InputNumber', () => {
       expect(inputElement.value).not.to.be('1e-7');
     });
 
-    it('value can be changed when the input number is really big', () => {
+    it('value should be max safe integer when it exceeds max safe integer', () => {
       const Demo = createReactClass({
         render() {
           return <InputNumber ref="inputNum" value={1e24} />;
@@ -751,7 +751,7 @@ describe('InputNumber', () => {
       Simulate.mouseDown(
         findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
       );
-      expect(inputElement.value).to.be('1e+24');
+      expect(inputElement.value).to.be((Math.pow(2, 53) - 1).toString());
     });
 
     it('value can be changed when dynamic setting max', () => {
