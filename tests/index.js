@@ -1287,16 +1287,13 @@ describe('InputNumber', () => {
 
     // https://github.com/ant-design/ant-design/issues/25614
     it("focus value should be '' when clear the input", () => {
+      const onBlur = sinon.spy();
+      let targetValue;
       const Demo = createReactClass({
         getInitialState() {
           return {
             value: 1
           }
-        },
-        onBlur(e) {
-          this.setState({
-            value: e.target.value
-          })
         },
         render() {
           return (
@@ -1305,7 +1302,7 @@ describe('InputNumber', () => {
                 ref="inputNum"
                 min={1}
                 max={10}
-                onBlur={this.onBlur}
+                onBlur={(e) => { targetValue = e.target.value }}
                 value={this.state.value}
               />
             </div>
@@ -1319,7 +1316,7 @@ describe('InputNumber', () => {
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '' } });
       Simulate.blur(inputElement);
-      expect(inputNumber.state.value).to.be('');
+      expect(targetValue).to.be('');
     });
 
     // https://github.com/ant-design/ant-design/issues/11574
