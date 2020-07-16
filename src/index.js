@@ -264,8 +264,8 @@ export default class InputNumber extends React.Component {
 
     if (onBlur) {
       const originValue = this.input.value;
-      const displayvalue = this.getInputDisplayValue({ focus: false, value: newValue });
-      this.input.value = displayvalue ? Number(displayvalue) : displayvalue;
+      const displayValue = this.getInputDisplayValue({ focus: false, value: newValue });
+      this.input.value = displayValue ? Number(displayValue) : displayValue;
       onBlur(...args);
       this.input.value = originValue;
     }
