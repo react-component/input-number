@@ -1286,7 +1286,7 @@ describe('InputNumber', () => {
     });
 
     // https://github.com/ant-design/ant-design/issues/25614
-    it('focus value should be \'\' when clear the input', () => {
+    it("focus value should be '' when clear the input", () => {
       const Demo = createReactClass({
         getInitialState() {
           return {
