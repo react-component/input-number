@@ -1091,8 +1091,8 @@ var _initialiseProps = function _initialiseProps() {
 
     if (onBlur) {
       var originValue = _this3.input.value;
-      var inputValue = Number(_this3.getInputDisplayValue({ focus: false, value: newValue }));
-      _this3.input.value = inputValue;
+      var displayValue = _this3.getInputDisplayValue({ focus: false, value: newValue });
+      _this3.input.value = displayValue ? Number(displayValue) : displayValue;
       onBlur.apply(undefined, arguments);
       _this3.input.value = originValue;
     }
