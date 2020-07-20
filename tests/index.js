@@ -1285,6 +1285,40 @@ describe('InputNumber', () => {
       expect(ReactDOM.findDOMNode(inputNumber).className.indexOf('focused') > 0).to.be(false);
     });
 
+    // https://github.com/ant-design/ant-design/issues/25614
+    it("focus value should be '' when clear the input", () => {
+      const onBlur = sinon.spy();
+      let targetValue;
+      const Demo = createReactClass({
+        getInitialState() {
+          return {
+            value: 1
+          }
+        },
+        render() {
+          return (
+            <div>
+              <InputNumber 
+                ref="inputNum"
+                min={1}
+                max={10}
+                onBlur={(e) => { targetValue = e.target.value }}
+                value={this.state.value}
+              />
+            </div>
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      expect(inputNumber.state.value).to.be(1);
+      Simulate.focus(inputElement);
+      Simulate.change(inputElement, { target: { value: '' } });
+      Simulate.blur(inputElement);
+      expect(targetValue).to.be('');
+    });
+
     // https://github.com/ant-design/ant-design/issues/11574
     it('should trigger onChange when max or min change', () => {
       const onChange = sinon.spy();
