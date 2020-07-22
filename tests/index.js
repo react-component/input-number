@@ -1812,6 +1812,28 @@ describe('InputNumber', () => {
     });
   });
 
+  describe('onPaste props', () => {
+    it ('passes onPaste event handler', () => {
+      const onPaste = sinon.spy();
+      const Demo = createReactClass({
+        render() {
+          return (
+            <InputNumber
+              value={1}
+              ref="inputNum"
+              onPaste={onPaste}
+            />
+          );
+        },
+      });
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.paste(inputElement);
+      expect(onPaste.called).to.be(true);
+    });
+  });
+
   describe('aria and data props', () => {
     it('passes data-* attributes', () => {
       const Demo = createReactClass({

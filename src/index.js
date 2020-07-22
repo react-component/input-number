@@ -630,7 +630,7 @@ export default class InputNumber extends React.Component {
       upHandler, downHandler, className, max, min,
       style, title, onMouseEnter, onMouseLeave, onMouseOver, onMouseOut,
       required, onClick, tabIndex, type, placeholder, id, inputMode, pattern,
-      step, maxLength, autoFocus, name,
+      step, maxLength, autoFocus, name, onPaste,
       ...rest
     } = this.props;
     const { value, focused } = this.state;
@@ -744,6 +744,7 @@ export default class InputNumber extends React.Component {
             required={required}
             type={type}
             placeholder={placeholder}
+            onPaste={onPaste}
             onClick={onClick}
             onMouseUp={this.onMouseUp}
             className={`${prefixCls}-input`}
