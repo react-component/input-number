@@ -53,6 +53,7 @@ export default class InputNumber extends React.Component {
     parser: defaultParser,
     required: false,
     autoComplete: 'off',
+    type: 'number',
   }
 
   constructor(props) {
