@@ -1,19 +1,20 @@
 /* eslint no-console:0 */
-import 'rc-input-number/assets/index.less';
-import InputNum from'rc-input-number';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import InputNum from '../src';
+import '../assets/index.less';
 
 class Component extends React.Component {
   state = {
     value: 0.000000001,
   };
-  onChange = (v) => {
+
+  onChange = v => {
     console.log('onChange:', v);
     this.setState({
       value: v,
     });
-  }
+  };
+
   render() {
     return (
       <div style={{ margin: 10 }}>
@@ -31,4 +32,4 @@ class Component extends React.Component {
   }
 }
 
-ReactDOM.render(<Component/>, document.getElementById('__react-content'));
+export default Component;

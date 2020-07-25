@@ -1,15 +1,14 @@
 /* eslint no-console:0 */
-import 'rc-input-number/assets/index.less';
-import InputNumber from 'rc-input-number';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import InputNumber from '../src';
+import '../assets/index.less';
 
 function getSum(str) {
   let total = 0;
-  str.split('').forEach((c) => {
+  str.split('').forEach(c => {
     const num = Number(c);
 
-    if (!isNaN(num)) {
+    if (!Number.isNaN(num)) {
       total += num;
     }
   });
@@ -39,9 +38,7 @@ class App extends React.Component {
         <InputNumber
           aria-label="Controlled number input demonstrating a custom format to add commas"
           style={{ width: 100 }}
-          formatter={value =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          }
+          formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         />
 
         <div>
@@ -49,7 +46,9 @@ class App extends React.Component {
           <InputNumber
             aria-label="Controlled number input demonstrating a custom format"
             value={this.state.value}
-            onChange={(value) => { this.setState({ value }); }}
+            onChange={value => {
+              this.setState({ value });
+            }}
             formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           />
         </div>
@@ -68,4 +67,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('__react-content'));
+export default App;
