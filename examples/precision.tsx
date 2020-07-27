@@ -1,22 +1,24 @@
 /* eslint no-console:0 */
-import 'rc-input-number/assets/index.less';
-import InputNumber from 'rc-input-number';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import InputNumber from '../src';
+import '../assets/index.less';
 
 class Component extends React.Component {
   state = {
     precision: 2,
   };
-  onChange = (value) => {
+
+  onChange = value => {
     console.log('onChange:', value);
     this.setState({ value });
-  }
-  changeprecision = (e) => {
+  };
+
+  changeprecision = e => {
     this.setState({
       precision: parseInt(e.target.value, 10),
     });
-  }
+  };
+
   render() {
     return (
       <div style={{ margin: 10 }}>
@@ -29,15 +31,11 @@ class Component extends React.Component {
         />
         <p>
           precision:
-          <input
-            type="number"
-            onChange={this.changeprecision}
-            value={this.state.precision}
-          />
+          <input type="number" onChange={this.changeprecision} value={this.state.precision} />
         </p>
       </div>
     );
   }
 }
 
-ReactDOM.render(<Component/>, document.getElementById('__react-content'));
+export default Component;

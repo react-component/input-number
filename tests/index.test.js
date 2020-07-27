@@ -1,9 +1,7 @@
 /* eslint-disable react/no-multi-comp, no-unused-vars, react/no-unused-state */
-import 'core-js/es6/map';
-import 'core-js/es6/set';
+import React from 'react';
 import keyCode from 'rc-util/lib/KeyCode';
 import expect from 'expect.js';
-import React from 'react';
 import {
   Simulate,
   findRenderedDOMComponentWithTag,
@@ -12,7 +10,6 @@ import {
 } from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
 import sinon from 'sinon';
-import createReactClass from 'create-react-class';
 import InputNumber from '../src';
 import '../assets/index.less';
 
@@ -26,35 +23,38 @@ describe('InputNumber', () => {
   let onFocusCallCount = 0;
   let onBlurCallCount = 0;
 
-  const Component = createReactClass({
-    getInitialState() {
-      return {
-        min: 1,
-        max: 200,
-        value: defaultValue,
-        step: 1,
-        disabled: false,
-        autoFocus: false,
-        readOnly: false,
-        name: 'inputNumber',
-      };
-    },
-    onChange(value) {
+  class Component extends React.Component {
+    state = {
+      min: 1,
+      max: 200,
+      value: defaultValue,
+      step: 1,
+      disabled: false,
+      autoFocus: false,
+      readOnly: false,
+      name: 'inputNumber',
+    };
+
+    onChange = value => {
       onChangeFirstArgument = value;
       onChangeCallCount += 1;
       this.setState({ value });
-    },
-    onFocus() {
+    };
+
+    onFocus = () => {
       onFocusCallCount += 1;
-    },
-    onBlur() {
+    };
+
+    onBlur = () => {
       onBlurCallCount += 1;
-    },
-    triggerBoolean(propName) {
+    };
+
+    triggerBoolean = propName => {
       const prop = {};
       prop[propName] = !this.state[propName];
       this.setState(prop);
-    },
+    };
+
     render() {
       return (
         <div>
@@ -74,8 +74,8 @@ describe('InputNumber', () => {
           />
         </div>
       );
-    },
-  });
+    }
+  }
 
   let inputNumber;
   let example;
@@ -113,22 +113,26 @@ describe('InputNumber', () => {
 
     it('combination keys works', () => {
       Simulate.keyDown(inputElement, {
-        keyCode: keyCode.DOWN, shiftKey: true,
+        keyCode: keyCode.DOWN,
+        shiftKey: true,
       });
       expect(inputNumber.state.value).to.be(88);
 
       Simulate.keyDown(inputElement, {
-        keyCode: keyCode.UP, ctrlKey: true,
+        keyCode: keyCode.UP,
+        ctrlKey: true,
       });
       expect(inputNumber.state.value).to.be(88.1);
 
       Simulate.keyDown(inputElement, {
-        keyCode: keyCode.UP, shiftKey: true,
+        keyCode: keyCode.UP,
+        shiftKey: true,
       });
       expect(inputNumber.state.value).to.be(98.1);
 
       Simulate.keyDown(inputElement, {
-        keyCode: keyCode.DOWN, ctrlKey: true,
+        keyCode: keyCode.DOWN,
+        ctrlKey: true,
       });
       expect(inputNumber.state.value).to.be(98);
     });
@@ -136,9 +140,7 @@ describe('InputNumber', () => {
 
   describe('clickable', () => {
     it('up button works', () => {
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(99);
     });
 
@@ -150,25 +152,23 @@ describe('InputNumber', () => {
     });
 
     it('up button works on empty input', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(1);
     });
 
     it('down button works on empty input', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       Simulate.mouseDown(
@@ -178,39 +178,35 @@ describe('InputNumber', () => {
     });
 
     it('up button works on empty input with min and max', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" min={6} max={10} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(6);
     });
 
     it('up button works null input with min and max', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" value={null} min={6} max={10} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(null);
     });
 
     it('down button works on empty input with min and max', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" min={6} max={10} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       Simulate.mouseDown(
@@ -220,29 +216,32 @@ describe('InputNumber', () => {
     });
 
     it('should not disable up and down buttons', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       expect(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up')
-          .className.indexOf('disabled') > 0
+        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up').className.indexOf(
+          'disabled',
+        ) > 0,
       ).to.be(false);
       expect(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down')
-          .className.indexOf('disabled') > 0
+        findRenderedDOMComponentWithClass(
+          example,
+          'rc-input-number-handler-down',
+        ).className.indexOf('disabled') > 0,
       ).to.be(false);
     });
 
     it('should record current properties upon mouse up', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" value={123} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
 
       inputNumber = example.refs.inputNum;
@@ -253,17 +252,15 @@ describe('InputNumber', () => {
       expect(inputNumber.cursorEnd).to.be(undefined);
       Simulate.mouseUp(inputField);
 
-      expect(inputNumber.cursorStart).to.be(3);
-      expect(inputNumber.cursorEnd).to.be(3);
+      expect(inputNumber.cursorStart).to.be(0);
+      expect(inputNumber.cursorEnd).to.be(0);
       expect(inputNumber.currentValue).to.be('123');
     });
   });
 
   describe('long press', () => {
-    it('up button works', (done) => {
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+    it('up button works', done => {
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       setTimeout(() => {
         expect(inputNumber.state.value).to.be(99);
         setTimeout(() => {
@@ -273,7 +270,7 @@ describe('InputNumber', () => {
       }, 500);
     });
 
-    it('down button works', (done) => {
+    it('down button works', done => {
       Simulate.mouseDown(
         findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
       );
@@ -289,7 +286,7 @@ describe('InputNumber', () => {
 
   describe('check props works', () => {
     it('max', () => {
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i += 1) {
         Simulate.mouseDown(
           findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
         );
@@ -298,7 +295,7 @@ describe('InputNumber', () => {
     });
 
     it('min', () => {
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i += 1) {
         Simulate.mouseDown(
           findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
         );
@@ -323,7 +320,7 @@ describe('InputNumber', () => {
 
     it('step', () => {
       example.setState({ step: 5 });
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i += 1) {
         Simulate.mouseDown(
           findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
         );
@@ -335,7 +332,7 @@ describe('InputNumber', () => {
       // testing in read only.
       example.setState({ step: 5 });
       example.triggerBoolean('readOnly');
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i += 1) {
         Simulate.mouseDown(
           findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
         );
@@ -345,7 +342,7 @@ describe('InputNumber', () => {
 
     it('decimal step', () => {
       example.setState({ step: 0.1 });
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i += 1) {
         Simulate.mouseDown(
           findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'),
         );
@@ -354,11 +351,11 @@ describe('InputNumber', () => {
     });
 
     it('controlled component will restore when blur input', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" value={1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -379,13 +376,17 @@ describe('InputNumber', () => {
         state = {
           value: 2,
         };
+
         changeValue = () => {
           this.setState({ value: '103aa' });
         };
+
         render() {
           return (
             <div>
-              <button onClick={this.changeValue}>change value</button>
+              <button type="button" onClick={this.changeValue}>
+                change value
+              </button>
               <InputNumber ref="inputNum" min={1} max={10} value={this.state.value} />
             </div>
           );
@@ -407,13 +408,17 @@ describe('InputNumber', () => {
         state = {
           value: 2,
         };
+
         changeValue = () => {
           this.setState({ value: undefined });
         };
+
         render() {
           return (
             <div>
-              <button onClick={this.changeValue}>change value</button>
+              <button type="button" onClick={this.changeValue}>
+                change value
+              </button>
               <InputNumber ref="inputNum" min={1} max={10} value={this.state.value} />
             </div>
           );
@@ -561,11 +566,11 @@ describe('InputNumber', () => {
 
     it('blur on default input', () => {
       const onChange = sinon.spy();
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" onChange={onChange} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -575,11 +580,11 @@ describe('InputNumber', () => {
 
     it('pressEnter works', () => {
       const onPressEnter = sinon.spy();
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" onPressEnter={onPressEnter} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -590,11 +595,11 @@ describe('InputNumber', () => {
 
   describe('default value', () => {
     it('default value should be empty', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -602,11 +607,11 @@ describe('InputNumber', () => {
     });
 
     it('default value should be empty when step is decimal', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" step={0.1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -614,11 +619,11 @@ describe('InputNumber', () => {
     });
 
     it('default value should be 1', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" defaultValue={1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -627,11 +632,11 @@ describe('InputNumber', () => {
     });
 
     it('default value could be null', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" defaultValue={null} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -639,24 +644,24 @@ describe('InputNumber', () => {
       expect(inputElement.value).to.be('');
     });
 
-    it('default value shouldn\'t higher than max', () => {
-      const Demo = createReactClass({
+    it("default value shouldn't higher than max", () => {
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" min={0} max={10} defaultValue={13} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
       expect(inputNumber.state.value).to.be(10);
     });
 
-    it('default value shouldn\'t lower than min', () => {
-      const Demo = createReactClass({
+    it("default value shouldn't lower than min", () => {
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" min={0} max={10} defaultValue={-1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -664,11 +669,11 @@ describe('InputNumber', () => {
     });
 
     it('default value can be a string greater than 16 characters', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" max={10} defaultValue="-3.637978807091713e-12" />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -677,24 +682,24 @@ describe('InputNumber', () => {
   });
 
   describe('value', () => {
-    it('value shouldn\'t higher than max', () => {
-      const Demo = createReactClass({
+    it("value shouldn't higher than max", () => {
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" min={0} max={10} value={13} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
       expect(inputNumber.state.value).to.be(10);
     });
 
-    it('value shouldn\'t lower than min', () => {
-      const Demo = createReactClass({
+    it("value shouldn't lower than min", () => {
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" min={0} max={10} value={-1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -702,11 +707,11 @@ describe('InputNumber', () => {
     });
 
     it('value can be a string greater than 16 characters', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" max={10} value="-3.637978807091713e-12" />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -714,22 +719,18 @@ describe('InputNumber', () => {
     });
 
     it('value decimal over six decimal not be scientific notation', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" precision={7} step={0.0000001} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputElement.value).to.be('0.0000001');
       expect(inputElement.value).not.to.be('1e-7');
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputElement.value).to.be('0.0000002');
       expect(inputElement.value).not.to.be('2e-7');
       Simulate.mouseDown(
@@ -740,37 +741,36 @@ describe('InputNumber', () => {
     });
 
     it('value should be max safe integer when it exceeds max safe integer', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" value={1e24} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
-      expect(inputElement.value).to.be((Math.pow(2, 53) - 1).toString());
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+      expect(inputElement.value).to.be((2 ** 53 - 1).toString());
     });
 
     it('value can be changed when dynamic setting max', () => {
-      const Demo = createReactClass({
-        getInitialState() {
-          return {
-            max: 10,
-            value: 11,
-          };
-        },
-        onChange(value) {
+      class Demo extends React.Component {
+        state = {
+          max: 10,
+          value: 11,
+        };
+
+        onChange = value => {
           this.setState({ value });
-        },
-        changeMax() {
+        };
+
+        changeMax = () => {
           this.setState({
             value: 11,
             max: 20,
           });
-        },
+        };
+
         render() {
           return (
             <div>
@@ -780,11 +780,13 @@ describe('InputNumber', () => {
                 onChange={this.onChange}
                 value={this.state.value}
               />
-              <button onClick={this.changeMax}>change max</button>
+              <button type="button" onClick={this.changeMax}>
+                change max
+              </button>
             </div>
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -794,22 +796,23 @@ describe('InputNumber', () => {
     });
 
     it('value can be changed when dynamic setting min', () => {
-      const Demo = createReactClass({
-        getInitialState() {
-          return {
-            min: 10,
-            value: 9,
-          };
-        },
-        onChange(value) {
+      class Demo extends React.Component {
+        state = {
+          min: 10,
+          value: 9,
+        };
+
+        onChange = value => {
           this.setState({ value });
-        },
-        changeMax() {
+        };
+
+        changeMax = () => {
           this.setState({
             value: 9,
             min: 0,
           });
-        },
+        };
+
         render() {
           return (
             <div>
@@ -819,11 +822,13 @@ describe('InputNumber', () => {
                 onChange={this.onChange}
                 value={this.state.value}
               />
-              <button onClick={this.changeMax}>change min</button>
+              <button type="button" onClick={this.changeMax}>
+                change min
+              </button>
             </div>
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -835,11 +840,11 @@ describe('InputNumber', () => {
 
   describe('decimal', () => {
     it('decimal value', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" step={1} value={2.1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -848,11 +853,11 @@ describe('InputNumber', () => {
     });
 
     it('decimal defaultValue', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" step={1} defaultValue={2.1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -861,17 +866,15 @@ describe('InputNumber', () => {
     });
 
     it('increase and decrease decimal InputNumber by integer step', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" step={1} defaultValue={2.1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(3.1);
       expect(inputElement.value).to.be('3.1');
       Simulate.mouseDown(
@@ -882,17 +885,17 @@ describe('InputNumber', () => {
     });
 
     it('small value and step', () => {
-      const Demo = createReactClass({
-        getInitialState() {
-          return {
-            value: 0.000000001,
-          };
-        },
-        onChange(v) {
+      class Demo extends React.Component {
+        state = {
+          value: 0.000000001,
+        };
+
+        onChange = v => {
           this.setState({
             value: v,
           });
-        },
+        };
+
         render() {
           return (
             <InputNumber
@@ -904,14 +907,14 @@ describe('InputNumber', () => {
               onChange={this.onChange}
             />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
       expect(inputNumber.state.value).to.be(0.000000001);
       expect(inputElement.value).to.be('0.000000001');
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i += 1) {
         // plus until change precision
         Simulate.mouseDown(
           findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
@@ -923,11 +926,11 @@ describe('InputNumber', () => {
     });
 
     it('small step with integer value', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" value={1} step="0.000000001" />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -936,11 +939,11 @@ describe('InputNumber', () => {
     });
 
     it('custom decimal separator', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" decimalSeparator="," />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -955,11 +958,11 @@ describe('InputNumber', () => {
   describe('GitHub issues', () => {
     // https://github.com/react-component/input-number/issues/32
     it('issue 32', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" step={0.1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -974,24 +977,26 @@ describe('InputNumber', () => {
 
     // https://github.com/react-component/input-number/issues/197
     it('issue 197', () => {
-      const Demo = createReactClass({
-        getInitialState() {
-          return {
-            value: NaN,
-          };
-        },
-        onChange(value) {
+      class Demo extends React.Component {
+        state = {
+          value: NaN,
+        };
+
+        onChange = value => {
           this.setState({ value });
-        },
+        };
+
         render() {
-          return (<InputNumber
-            ref="inputNum"
-            step={1}
-            value={this.state.value}
-            onChange={this.onChange}
-          />);
-        },
-      });
+          return (
+            <InputNumber
+              ref="inputNum"
+              step={1}
+              value={this.state.value}
+              onChange={this.onChange}
+            />
+          );
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1001,26 +1006,28 @@ describe('InputNumber', () => {
 
     // https://github.com/react-component/input-number/issues/222
     it('issue 222', () => {
-      const Demo = createReactClass({
-        getInitialState() {
-          return {
-            value: 1,
-            max: NaN,
-          };
-        },
-        onChange(value) {
+      class Demo extends React.Component {
+        state = {
+          value: 1,
+          max: NaN,
+        };
+
+        onChange = value => {
           this.setState({ value });
-        },
+        };
+
         render() {
-          return (<InputNumber
-            ref="inputNum"
-            step={1}
-            max={this.state.max}
-            value={this.state.value}
-            onChange={this.onChange}
-          />);
-        },
-      });
+          return (
+            <InputNumber
+              ref="inputNum"
+              step={1}
+              max={this.state.max}
+              value={this.state.value}
+              onChange={this.onChange}
+            />
+          );
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1031,23 +1038,25 @@ describe('InputNumber', () => {
     // https://github.com/react-component/input-number/issues/35
     it('issue 35', () => {
       let num;
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return (
             <InputNumber
               ref="inputNum"
               step={0.01}
               defaultValue={2}
-              onChange={value => { num = value; } }
+              onChange={value => {
+                num = value;
+              }}
             />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
 
-      for (let i = 1; i <= 400; i++) {
+      for (let i = 1; i <= 400; i += 1) {
         Simulate.keyDown(inputElement, {
           keyCode: keyCode.DOWN,
         });
@@ -1058,7 +1067,7 @@ describe('InputNumber', () => {
         expect(num).to.be(expectedValue);
       }
 
-      for (let i = 1; i <= 300; i++) {
+      for (let i = 1; i <= 300; i += 1) {
         Simulate.keyDown(inputElement, {
           keyCode: keyCode.UP,
         });
@@ -1068,28 +1077,28 @@ describe('InputNumber', () => {
         expect(num).to.be(expectedValue);
         expect(inputNumber.state.value).to.be(expectedValue);
       }
-    }).timeout(10000);
+    });
 
     // https://github.com/ant-design/ant-design/issues/4229
-    it('long press not trigger onChange in uncontrolled component', (done) => {
+    it('long press not trigger onChange in uncontrolled component', done => {
       let num;
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return (
             <InputNumber
               ref="inputNum"
               defaultValue={0}
-              onChange={value => { num = value; } }
+              onChange={value => {
+                num = value;
+              }}
             />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
 
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       setTimeout(() => {
         expect(num).to.be(1);
         setTimeout(() => {
@@ -1114,23 +1123,28 @@ describe('InputNumber', () => {
     // https://github.com/react-component/input-number/issues/64
     it('controller InputNumber should be able to input number like 1.00* and 1.10*', () => {
       let num;
-      const Demo = createReactClass({
-        getInitialState() {
-          return { value: 2 };
-        },
-        onChange(value) {
+      class Demo extends React.Component {
+        state = {
+          value: 2,
+        };
+
+        onChange = value => {
           this.setState({ value });
-        },
+        };
+
         render() {
           return (
             <InputNumber
               ref="inputNum"
               value={this.state.value}
-              onChange={value => { num = value; this.onChange(value); } }
+              onChange={value => {
+                num = value;
+                this.onChange(value);
+              }}
             />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1183,12 +1197,9 @@ describe('InputNumber', () => {
     it('uncontrolled input should trigger onChange always when blur it', () => {
       const onChange = sinon.spy();
       inputNumber = ReactDOM.render(
-        <InputNumber
-          min={1}
-          max={10}
-          onChange={onChange}
-        />
-      , container);
+        <InputNumber min={1} max={10} onChange={onChange} />,
+        container,
+      );
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
       Simulate.focus(inputElement);
       Simulate.change(inputElement, { target: { value: '123' } });
@@ -1210,24 +1221,21 @@ describe('InputNumber', () => {
 
     // https://github.com/ant-design/ant-design/issues/7867
     it('focus should not cut precision of input value', () => {
-      const Demo = createReactClass({
-        getInitialState() {
-          return { value: 2 };
-        },
-        onBlur(value) {
+      class Demo extends React.Component {
+        state = {
+          value: 2,
+        };
+
+        onBlur = () => {
           this.setState({ value: 2 });
-        },
+        };
+
         render() {
           return (
-            <InputNumber
-              ref="inputNum"
-              value={this.state.value}
-              step={0.1}
-              onBlur={this.onBlur}
-            />
+            <InputNumber ref="inputNum" value={this.state.value} step={0.1} onBlur={this.onBlur} />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1240,13 +1248,15 @@ describe('InputNumber', () => {
 
     // https://github.com/ant-design/ant-design/issues/7940
     it('should not format during input', () => {
-      const Demo = createReactClass({
-        getInitialState() {
-          return { value: '' };
-        },
-        onChange(value) {
+      class Demo extends React.Component {
+        state = {
+          value: '',
+        };
+
+        onChange = value => {
           this.setState({ value });
-        },
+        };
+
         render() {
           return (
             <InputNumber
@@ -1256,8 +1266,8 @@ describe('InputNumber', () => {
               onChange={this.onChange}
             />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1274,9 +1284,7 @@ describe('InputNumber', () => {
     });
 
     it('focus input when click up/down button ', () => {
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(ReactDOM.findDOMNode(inputNumber).className.indexOf('focused') > 0).to.be(true);
       expect(document.activeElement).to.be(inputElement);
       expect(onFocusCallCount).to.be(1);
@@ -1287,28 +1295,28 @@ describe('InputNumber', () => {
 
     // https://github.com/ant-design/ant-design/issues/25614
     it("focus value should be '' when clear the input", () => {
-      const onBlur = sinon.spy();
       let targetValue;
-      const Demo = createReactClass({
-        getInitialState() {
-          return {
-            value: 1
-          }
-        },
+      class Demo extends React.Component {
+        state = {
+          value: 1,
+        };
+
         render() {
           return (
             <div>
-              <InputNumber 
+              <InputNumber
                 ref="inputNum"
                 min={1}
                 max={10}
-                onBlur={(e) => { targetValue = e.target.value }}
+                onBlur={e => {
+                  targetValue = e.target.value;
+                }}
                 value={this.state.value}
               />
             </div>
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1328,19 +1336,24 @@ describe('InputNumber', () => {
           min: 0,
           max: 20,
         };
-        onChange = (value) => {
+
+        onChange = value => {
           this.setValue(value);
           onChange(value);
-        }
+        };
+
         setMax(max) {
           this.setState({ max });
         }
+
         setMin(min) {
           this.setState({ min });
         }
+
         setValue(value) {
           this.setState({ value });
         }
+
         render() {
           return (
             <InputNumber
@@ -1377,13 +1390,7 @@ describe('InputNumber', () => {
         };
 
         render() {
-          return (
-            <InputNumber
-              ref="inputNum"
-              value={this.state.value}
-              onChange={this.onChange}
-            />
-          );
+          return <InputNumber ref="inputNum" value={this.state.value} onChange={this.onChange} />;
         }
       }
 
@@ -1405,9 +1412,11 @@ describe('InputNumber', () => {
         state = {
           precision: 2,
         };
-        onPrecisionChange = (precision) => {
+
+        onPrecisionChange = precision => {
           this.setState({ precision });
         };
+
         render() {
           const { precision } = this.state;
           return (
@@ -1434,20 +1443,15 @@ describe('InputNumber', () => {
         changedValue,
         keyCodeValue,
         selectionStart,
-        selectionEnd) => {
+        selectionEnd,
+      ) => {
         class Demo extends React.Component {
-          onChange = (value) => {
+          onChange = value => {
             this.setState({ value });
           };
 
           render() {
-            return (
-              <InputNumber
-                ref="inputNum"
-                value={initialValue}
-                onChange={this.onChange}
-              />
-            );
+            return <InputNumber ref="inputNum" value={initialValue} onChange={this.onChange} />;
           }
         }
         example = ReactDOM.render(<Demo />, container);
@@ -1485,17 +1489,20 @@ describe('InputNumber', () => {
         expect(inputNumber.input.selectionStart).to.be(1);
       });
 
-      it('should be at the start of selection on delete with unidentical consecutive digits', () => { // eslint-disable-line
+      it('should be at the start of selection on delete with unidentical consecutive digits', () => {
+        // eslint-disable-line
         setUpCursorTest(12345, '145', keyCode.DELETE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
       });
 
-      it('should be at the start of selection on backspace with identical consecutive digits', () => { // eslint-disable-line
+      it('should be at the start of selection on backspace with identical consecutive digits', () => {
+        // eslint-disable-line
         setUpCursorTest(99999, '999', keyCode.BACKSPACE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
       });
 
-      it('should be at the start of selection on backspace with unidentical consecutive digits', () => { // eslint-disable-line
+      it('should be at the start of selection on backspace with unidentical consecutive digits', () => {
+        // eslint-disable-line
         setUpCursorTest(12345, '145', keyCode.BACKSPACE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(1);
       });
@@ -1510,12 +1517,14 @@ describe('InputNumber', () => {
         expect(inputNumber.input.selectionStart).to.be(4);
       });
 
-      it('should be one step later than the start of selection on new digit with identical consecutive digits', () => { // eslint-disable-line
+      it('should be one step later than the start of selection on new digit with identical consecutive digits', () => {
+        // eslint-disable-line
         setUpCursorTest(99999, '9999', keyCode.NINE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(2);
       });
 
-      it('should be one step laterthan the start of selection on new digit with unidentical consecutive digits', () => { // eslint-disable-line
+      it('should be one step laterthan the start of selection on new digit with unidentical consecutive digits', () => {
+        // eslint-disable-line
         setUpCursorTest(12345, '1945', keyCode.NINE, 1, 3);
         expect(inputNumber.input.selectionStart).to.be(2);
       });
@@ -1526,25 +1535,19 @@ describe('InputNumber', () => {
     it(`should add required attr to the input tag when get passed as true`, () => {
       ReactDOM.render(<InputNumber id="required-input-test" required />, container);
       const inputTag = container.querySelector('#required-input-test');
-      expect(
-        inputTag.getAttribute(`required`)
-      ).not.to.be(null);
+      expect(inputTag.getAttribute(`required`)).not.to.be(null);
     });
 
     it(`should not add required attr to the input as default props when not being supplied`, () => {
       ReactDOM.render(<InputNumber id="required-input-test" />, container);
       const inputTag = container.querySelector('#required-input-test');
-      expect(
-        inputTag.getAttribute(`required`)
-      ).to.be(null);
+      expect(inputTag.getAttribute(`required`)).to.be(null);
     });
 
     it(`should not add required attr to the input tag when get passed as false`, () => {
       ReactDOM.render(<InputNumber id="required-input-test" required={false} />, container);
       const inputTag = container.querySelector('#required-input-test');
-      expect(
-        inputTag.getAttribute(`required`)
-      ).to.be(null);
+      expect(inputTag.getAttribute(`required`)).to.be(null);
     });
   });
 
@@ -1568,11 +1571,11 @@ describe('InputNumber', () => {
 
   describe('precision', () => {
     it('decimal step should not display complete precision', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" step={0.01} value={2.1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1581,11 +1584,11 @@ describe('InputNumber', () => {
     });
 
     it('string step should display complete precision', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return <InputNumber ref="inputNum" step="1.000" value={2.1} />;
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1594,16 +1597,17 @@ describe('InputNumber', () => {
     });
 
     it('prop precision is specified', () => {
-      const Demo = createReactClass({
-        onChange(value) {
+      class Demo extends React.Component {
+        onChange = value => {
           onChangeFirstArgument = value;
-        },
+        };
+
         render() {
           return (
             <InputNumber ref="inputNum" precision={2} defaultValue={2} onChange={this.onChange} />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1627,16 +1631,17 @@ describe('InputNumber', () => {
     });
 
     it('should not trigger onChange when blur InputNumber with precision', () => {
-      const Demo = createReactClass({
-        onChange(value) {
+      class Demo extends React.Component {
+        onChange = () => {
           onChangeCallCount += 1;
-        },
+        };
+
         render() {
           return (
             <InputNumber ref="inputNum" precision={2} defaultValue={2} onChange={this.onChange} />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1648,16 +1653,11 @@ describe('InputNumber', () => {
 
   describe('formatter', () => {
     it('formatter on default', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
-          return (<InputNumber
-            ref="inputNum"
-            step={1}
-            value={5}
-            formatter={num => `$ ${num}`}
-          />);
-        },
-      });
+          return <InputNumber ref="inputNum" step={1} value={5} formatter={num => `$ ${num}`} />;
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1667,23 +1667,18 @@ describe('InputNumber', () => {
     });
 
     it('formatter on mousedown', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
-          return (<InputNumber
-            ref="inputNum"
-            step={1}
-            defaultValue={5}
-            formatter={num => `$ ${num}`}
-          />);
-        },
-      });
+          return (
+            <InputNumber ref="inputNum" sep={1} defaultValue={5} formatter={num => `$ ${num}`} />
+          );
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
 
-      Simulate.mouseDown(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('$ 6');
       Simulate.mouseDown(
@@ -1694,24 +1689,24 @@ describe('InputNumber', () => {
     });
 
     it('formatter on touchstart', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
-          return (<InputNumber
-            ref="inputNum"
-            step={1}
-            defaultValue={5}
-            useTouch
-            formatter={num => `${num} ¥`}
-          />);
-        },
-      });
+          return (
+            <InputNumber
+              ref="inputNum"
+              step={1}
+              defaultValue={5}
+              useTouch
+              formatter={num => `${num} ¥`}
+            />
+          );
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
 
-      Simulate.touchStart(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('6 ¥');
       Simulate.touchStart(
@@ -1722,16 +1717,13 @@ describe('InputNumber', () => {
     });
 
     it('formatter on keydown', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
-          return (<InputNumber
-            ref="inputNum"
-            step={1}
-            defaultValue={5}
-            formatter={num => `$ ${num} ¥`}
-          />);
-        },
-      });
+          return (
+            <InputNumber ref="inputNum" sep={1} defaultValue={5} formatter={num => `$ ${num} ¥`} />
+          );
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1747,27 +1739,29 @@ describe('InputNumber', () => {
 
     it('formatter on direct input', () => {
       let onChangeFirstArgumentFormat;
-      let onChangeCallCountFormat = 0;
 
-      const Demo = createReactClass({
-        getInitialState() {
-          return { value: 5 };
-        },
-        onChange(value) {
+      class Demo extends React.Component {
+        state = {
+          value: 5,
+        };
+
+        onChange = value => {
           onChangeFirstArgumentFormat = value;
-          onChangeCallCountFormat += 1;
           this.setState({ value });
-        },
+        };
+
         render() {
-          return (<InputNumber
-            ref="inputNum"
-            step={1}
-            defaultValue={5}
-            formatter={num => `$ ${num}`}
-            onChange={this.onChange}
-          />);
-        },
-      });
+          return (
+            <InputNumber
+              ref="inputNum"
+              step={1}
+              defaultValue={5}
+              formatter={num => `$ ${num}`}
+              onChange={this.onChange}
+            />
+          );
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1782,18 +1776,20 @@ describe('InputNumber', () => {
     });
 
     it('formatter and parser', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
-          return (<InputNumber
-            ref="inputNum"
-            step={1}
-            defaultValue={5}
-            useTouch
-            formatter={num => `$ ${num} boeing 737`}
-            parser={num => num.toString().split(' ')[1]}
-          />);
-        },
-      });
+          return (
+            <InputNumber
+              ref="inputNum"
+              step={1}
+              defaultValue={5}
+              useTouch
+              formatter={num => `$ ${num} boeing 737`}
+              parser={num => num.toString().split(' ')[1]}
+            />
+          );
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1804,28 +1800,20 @@ describe('InputNumber', () => {
       Simulate.keyDown(inputElement, { keyCode: keyCode.DOWN });
       expect(inputNumber.state.value).to.be(5);
       expect(inputElement.value).to.be('$ 5 boeing 737');
-      Simulate.touchStart(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(6);
       expect(inputElement.value).to.be('$ 6 boeing 737');
     });
   });
 
   describe('onPaste props', () => {
-    it ('passes onPaste event handler', () => {
+    it('passes onPaste event handler', () => {
       const onPaste = sinon.spy();
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
-          return (
-            <InputNumber
-              value={1}
-              ref="inputNum"
-              onPaste={onPaste}
-            />
-          );
-        },
-      });
+          return <InputNumber value={1} ref="inputNum" onPaste={onPaste} />;
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1836,18 +1824,11 @@ describe('InputNumber', () => {
 
   describe('aria and data props', () => {
     it('passes data-* attributes', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
-          return (
-            <InputNumber
-              ref="inputNum"
-              value={1}
-              data-test="test-id"
-              data-id="12345"
-            />
-          );
-        },
-      });
+          return <InputNumber ref="inputNum" value={1} data-test="test-id" data-id="12345" />;
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1856,7 +1837,7 @@ describe('InputNumber', () => {
     });
 
     it('passes aria-* attributes', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
           return (
             <InputNumber
@@ -1866,8 +1847,8 @@ describe('InputNumber', () => {
               aria-label="some-label"
             />
           );
-        },
-      });
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1876,11 +1857,11 @@ describe('InputNumber', () => {
     });
 
     it('passes role attribute', () => {
-      const Demo = createReactClass({
+      class Demo extends React.Component {
         render() {
-          return <InputNumber ref="inputNum" value={1} role="searchbox"/>;
-        },
-      });
+          return <InputNumber ref="inputNum" value={1} role="searchbox" />;
+        }
+      }
       example = ReactDOM.render(<Demo />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
@@ -1892,32 +1873,29 @@ describe('InputNumber', () => {
 describe('Mobile inputNumber use TouchEvents', () => {
   const container = document.createElement('div');
   document.body.appendChild(container);
-  let onChangeFirstArgument;
-  let onChangeCallCount = 0;
 
-  const Component = createReactClass({
-    getInitialState() {
-      return {
-        min: 1,
-        max: 200,
-        value: defaultValue,
-        step: 1,
-        disabled: false,
-        autoFocus: false,
-        readOnly: false,
-        name: 'inputNumber',
-      };
-    },
-    onChange(value) {
-      onChangeFirstArgument = value;
-      onChangeCallCount += 1;
+  class Component extends React.Component {
+    state = {
+      min: 1,
+      max: 200,
+      value: defaultValue,
+      step: 1,
+      disabled: false,
+      autoFocus: false,
+      readOnly: false,
+      name: 'inputNumber',
+    };
+
+    onChange = value => {
       this.setState({ value });
-    },
-    triggerBoolean(propName) {
+    };
+
+    triggerBoolean = propName => {
       const prop = {};
       prop[propName] = !this.state[propName];
       this.setState(prop);
-    },
+    };
+
     render() {
       return (
         <div>
@@ -1936,8 +1914,8 @@ describe('Mobile inputNumber use TouchEvents', () => {
           />
         </div>
       );
-    },
-  });
+    }
+  }
 
   let inputNumber;
   let example;
@@ -1946,19 +1924,15 @@ describe('Mobile inputNumber use TouchEvents', () => {
     example = ReactDOM.render(<Component />, container);
     inputNumber = example.refs.inputNum;
     inputElement = ReactDOM.findDOMNode(inputNumber.input);
-    onChangeCallCount = 0;
   });
 
   afterEach(() => {
     ReactDOM.unmountComponentAtNode(container);
-    onChangeCallCount = 0;
   });
 
   describe('touchable', () => {
     it('up button works', () => {
-      Simulate.touchStart(
-        findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'),
-      );
+      Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
       expect(inputNumber.state.value).to.be(99);
     });
 
@@ -1972,7 +1946,7 @@ describe('Mobile inputNumber use TouchEvents', () => {
 
   // https://github.com/ant-design/ant-design/issues/17593
   it('onBlur should be sync', () => {
-    const Demo = createReactClass({
+    class Demo extends React.Component {
       render() {
         return (
           <InputNumber
@@ -1983,8 +1957,8 @@ describe('Mobile inputNumber use TouchEvents', () => {
             ref="inputNum"
           />
         );
-      },
-    });
+      }
+    }
     example = ReactDOM.render(<Demo />, container);
     inputNumber = example.refs.inputNum;
     inputElement = ReactDOM.findDOMNode(inputNumber.input);

@@ -1,8 +1,7 @@
 /* eslint no-console:0 */
-import 'rc-input-number/assets/index.less';
-import InputNumber from 'rc-input-number';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import InputNumber from '../src';
+import '../assets/index.less';
 
 class Component extends React.Component {
   state = {
@@ -10,29 +9,39 @@ class Component extends React.Component {
     readOnly: false,
     value: 50000,
   };
-  onChange = (value) => {
+
+  onChange = value => {
     console.log('onChange:', value);
     this.setState({ value });
-  }
+  };
+
   toggleDisabled = () => {
     this.setState({
       disabled: !this.state.disabled,
     });
-  }
+  };
+
   toggleReadOnly = () => {
     this.setState({
       readOnly: !this.state.readOnly,
     });
-  }
-  numberWithCommas = (x) => {
+  };
+
+  numberWithCommas = x => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
-  format = (num) => {
+  };
+
+  format = num => {
     return `$ ${this.numberWithCommas(num)} boeing737`;
-  }
-  parser(num) {
-    return num.toString().split(' ')[1].replace(/,*/g, '');
-  }
+  };
+
+  parser = num => {
+    return num
+      .toString()
+      .split(' ')[1]
+      .replace(/,*/g, '');
+  };
+
   render() {
     return (
       <div style={{ margin: 10 }}>
@@ -51,12 +60,16 @@ class Component extends React.Component {
           parser={this.parser}
         />
         <p>
-          <button onClick={this.toggleDisabled}>toggle Disabled</button>
-          <button onClick={this.toggleReadOnly}>toggle readOnly</button>
+          <button type="button" onClick={this.toggleDisabled}>
+            toggle Disabled
+          </button>
+          <button type="button" onClick={this.toggleReadOnly}>
+            toggle readOnly
+          </button>
         </p>
       </div>
     );
   }
 }
 
-ReactDOM.render(<Component/>, document.getElementById('__react-content'));
+export default Component;

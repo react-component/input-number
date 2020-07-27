@@ -1,8 +1,7 @@
 /* eslint no-console:0 */
-import 'rc-input-number/assets/index.less';
-import InputNumber from 'rc-input-number';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import InputNumber from '../src';
+import '../assets/index.less';
 
 class Component extends React.Component {
   state = {
@@ -10,25 +9,31 @@ class Component extends React.Component {
     readOnly: false,
     value: 5,
   };
-  onChange = (value) => {
+
+  onChange = value => {
     console.log('onChange:', value);
     this.setState({ value });
-  }
+  };
+
   toggleDisabled = () => {
     this.setState({
       disabled: !this.state.disabled,
     });
-  }
+  };
+
   toggleReadOnly = () => {
     this.setState({
       readOnly: !this.state.readOnly,
     });
-  }
+  };
+
   render() {
+    const upHandler = <div style={{ color: 'blue' }}>x</div>;
+    const downHandler = <div style={{ color: 'red' }}>V</div>;
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
-          aria-label="Simple use touch number input example"
+          aria-label="Number input example that demonstrates custom styling"
           min={-8}
           max={10}
           value={this.state.value}
@@ -36,15 +41,12 @@ class Component extends React.Component {
           readOnly={this.state.readOnly}
           onChange={this.onChange}
           disabled={this.state.disabled}
-          useTouch
+          upHandler={upHandler}
+          downHandler={downHandler}
         />
-        <p>
-          <button onClick={this.toggleDisabled}>toggle Disabled</button>
-          <button onClick={this.toggleReadOnly}>toggle readOnly</button>
-        </p>
       </div>
     );
   }
 }
 
-ReactDOM.render(<Component/>, document.getElementById('__react-content'));
+export default Component;

@@ -2,17 +2,17 @@
 import React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
+import { InputNumberProps, InputNumberState } from './interface';
 
-function noop() {
-}
+function noop() {}
 
 function preventDefault(e) {
   e.preventDefault();
 }
 
-function defaultParser(input) {
+const defaultParser = (input: string) => {
   return input.replace(/[^\w.-]+/g, '');
-}
+};
 
 /**
  * When click and hold on a button - the speed of auto changin the value.
@@ -28,15 +28,18 @@ const DELAY = 600;
  * Max Safe Integer -- on IE this is not available, so manually set the number in that case.
  * The reason this is used, instead of Infinity is because numbers above the MSI are unstable
  */
-const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
+const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 2 ** 53 - 1;
 
 const isValidProps = value => value !== undefined && value !== null;
 
-const isEqual = (oldValue, newValue) => newValue === oldValue ||
-(typeof newValue === 'number' && typeof oldValue === 'number' &&
-isNaN(newValue) && isNaN(oldValue));
+const isEqual = (oldValue, newValue) =>
+  newValue === oldValue ||
+  (typeof newValue === 'number' &&
+    typeof oldValue === 'number' &&
+    isNaN(newValue) &&
+    isNaN(oldValue));
 
-export default class InputNumber extends React.Component {
+class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumberState> {
   static defaultProps = {
     focusOnUpDown: true,
     useTouch: false,
@@ -53,15 +56,34 @@ export default class InputNumber extends React.Component {
     parser: defaultParser,
     required: false,
     autoComplete: 'off',
-  }
+  };
 
-  constructor(props) {
+  pressingUpOrDown;
+
+  inputting;
+
+  rawInput;
+
+  cursorStart;
+
+  cursorAfter;
+
+  input;
+
+  lastKeyCode;
+
+  currentValue: number;
+
+  cursorEnd;
+
+  cursorBefore;
+
+  autoStepTimer;
+
+  constructor(props: InputNumberProps) {
     super(props);
-
-    let value;
-    if ('value' in props) {
-      value = props.value;
-    } else {
+    let { value } = props;
+    if (value === undefined) {
       value = props.defaultValue;
     }
     this.state = {
@@ -76,7 +98,7 @@ export default class InputNumber extends React.Component {
   }
 
   componentDidMount() {
-    this.componentDidUpdate();
+    this.componentDidUpdate(null);
   }
 
   componentDidUpdate(prevProps) {
@@ -85,9 +107,11 @@ export default class InputNumber extends React.Component {
 
     // Don't trigger in componentDidMount
     if (prevProps) {
-      if (!isEqual(prevProps.value, value) ||
+      if (
+        !isEqual(prevProps.value, value) ||
         !isEqual(prevProps.max, max) ||
-        !isEqual(prevProps.min, min)) {
+        !isEqual(prevProps.min, min)
+      ) {
         const validValue = focused ? value : this.getValidValue(value);
         let nextInputValue;
         if (this.pressingUpOrDown) {
@@ -97,7 +121,8 @@ export default class InputNumber extends React.Component {
         } else {
           nextInputValue = this.toPrecisionAsStep(validValue);
         }
-        this.setState({ // eslint-disable-line
+        this.setState({
+          // eslint-disable-line
           value: validValue,
           inputValue: nextInputValue,
         });
@@ -108,18 +133,22 @@ export default class InputNumber extends React.Component {
       const nextValue = 'value' in this.props ? value : this.state.value;
       // ref: null < 20 === true
       // https://github.com/ant-design/ant-design/issues/14277
-      if ('max' in this.props &&
+      if (
+        'max' in this.props &&
         prevProps.max !== max &&
         typeof nextValue === 'number' &&
         nextValue > max &&
-        onChange) {
+        onChange
+      ) {
         onChange(max);
       }
-      if ('min' in this.props &&
+      if (
+        'min' in this.props &&
         prevProps.min !== min &&
         typeof nextValue === 'number' &&
         nextValue < min &&
-        onChange) {
+        onChange
+      ) {
         onChange(min);
       }
     }
@@ -136,7 +165,8 @@ export default class InputNumber extends React.Component {
 
         if (
           // If not match full str, try to match part of str
-          !this.partRestoreByAfter(this.cursorAfter) && this.state.value !== this.props.value
+          !this.partRestoreByAfter(this.cursorAfter) &&
+          this.state.value !== this.props.value
         ) {
           // If not match any of then, let's just keep the position
           // TODO: Logic should not reach here, need check if happens
@@ -192,11 +222,11 @@ export default class InputNumber extends React.Component {
 
     if (e.keyCode === KeyCode.UP) {
       const ratio = this.getRatio(e);
-      this.up(e, ratio);
+      this.up(e, ratio, null);
       this.stop();
     } else if (e.keyCode === KeyCode.DOWN) {
       const ratio = this.getRatio(e);
-      this.down(e, ratio);
+      this.down(e, ratio, null);
       this.stop();
     } else if (e.keyCode === KeyCode.ENTER && onPressEnter) {
       onPressEnter(e);
@@ -208,7 +238,7 @@ export default class InputNumber extends React.Component {
     if (onKeyDown) {
       onKeyDown(e, ...args);
     }
-  }
+  };
 
   onKeyUp = (e, ...args) => {
     const { onKeyUp } = this.props;
@@ -221,12 +251,10 @@ export default class InputNumber extends React.Component {
     if (onKeyUp) {
       onKeyUp(e, ...args);
     }
-  }
+  };
 
-  onChange = (e) => {
-    const {
-      onChange,
-    } = this.props;
+  onChange = e => {
+    const { onChange } = this.props;
 
     if (this.state.focused) {
       this.inputting = true;
@@ -234,7 +262,7 @@ export default class InputNumber extends React.Component {
     this.rawInput = this.props.parser(this.getValueFromEvent(e));
     this.setState({ inputValue: this.rawInput });
     onChange(this.toNumber(this.rawInput)); // valid number or invalid string
-  }
+  };
 
   onMouseUp = (...args) => {
     const { onMouseUp } = this.props;
@@ -251,7 +279,7 @@ export default class InputNumber extends React.Component {
       focused: true,
     });
     this.props.onFocus(...args);
-  }
+  };
 
   onBlur = (...args) => {
     const { onBlur } = this.props;
@@ -260,7 +288,7 @@ export default class InputNumber extends React.Component {
       focused: false,
     });
     const value = this.getCurrentValidValue(this.state.inputValue);
-    const newValue = this.setValue(value);
+    const newValue = this.setValue(value, noop);
 
     if (onBlur) {
       const originValue = this.input.value;
@@ -269,13 +297,13 @@ export default class InputNumber extends React.Component {
       onBlur(...args);
       this.input.value = originValue;
     }
-  }
+  };
 
   getCurrentValidValue(value) {
     let val = value;
     if (val === '') {
       val = '';
-    } else if (!this.isNotCompleteNumber(parseFloat(val, 10))) {
+    } else if (!this.isNotCompleteNumber(parseFloat(val))) {
       val = this.getValidValue(val);
     } else {
       val = this.state.value;
@@ -283,7 +311,7 @@ export default class InputNumber extends React.Component {
     return this.toNumber(val);
   }
 
-  getRatio(e) {
+  getRatio = e => {
     let ratio = 1;
     if (e.metaKey || e.ctrlKey) {
       ratio = 0.1;
@@ -291,7 +319,7 @@ export default class InputNumber extends React.Component {
       ratio = 10;
     }
     return ratio;
-  }
+  };
 
   getValueFromEvent(e) {
     // optimize for chinese input expierence
@@ -306,7 +334,7 @@ export default class InputNumber extends React.Component {
   }
 
   getValidValue(value, min = this.props.min, max = this.props.max) {
-    let val = parseFloat(value, 10);
+    let val = parseFloat(value);
     // https://github.com/ant-design/ant-design/issues/7358
     if (isNaN(val)) {
       return value;
@@ -323,24 +351,31 @@ export default class InputNumber extends React.Component {
   setValue(v, callback) {
     // trigger onChange
     const { precision } = this.props;
-    const newValue = this.isNotCompleteNumber(parseFloat(v, 10)) ? null
-      : parseFloat(v, 10);
-    const { value = null, inputValue = null } = this.state;
+    const newValue = this.isNotCompleteNumber(parseFloat(v)) ? null : parseFloat(v);
+    const { value = null } = this.state;
+    let { inputValue = null } = this.state;
     // https://github.com/ant-design/ant-design/issues/7363
     // https://github.com/ant-design/ant-design/issues/16622
-    const newValueInString = typeof newValue === 'number'
-      ? newValue.toFixed(precision) : `${newValue}`;
+    const newValueInString =
+      typeof newValue === 'number' ? newValue.toFixed(precision) : `${newValue}`;
     const changed = newValue !== value || newValueInString !== `${inputValue}`;
     if (!('value' in this.props)) {
-      this.setState({
-        value: newValue,
-        inputValue: this.toPrecisionAsStep(v),
-      }, callback);
+      this.setState(
+        {
+          value: newValue,
+          inputValue: this.toPrecisionAsStep(v),
+        },
+        callback,
+      );
     } else {
       // always set input value same as value
-      this.setState({
-        inputValue: this.toPrecisionAsStep(this.state.value),
-      }, callback);
+      inputValue = this.toPrecisionAsStep(this.state.value);
+      this.setState(
+        {
+          inputValue,
+        },
+        callback,
+      );
     }
     if (changed) {
       this.props.onChange(newValue);
@@ -349,21 +384,23 @@ export default class InputNumber extends React.Component {
     return newValue;
   }
 
-  getFullNum(num) {
+  getFullNum = num => {
     if (isNaN(num)) {
       return num;
     }
     if (!/e/i.test(String(num))) {
       return num;
     }
-    return Number(num).toFixed(18).replace(/\.?0+$/, '');
-  }
+    return Number(num)
+      .toFixed(18)
+      .replace(/\.?0+$/, '');
+  };
 
-  getPrecision(value) {
+  getPrecision = value => {
     if (isValidProps(this.props.precision)) {
       return this.props.precision;
     }
-    const valueString = value.toString();
+    const valueString = String(value);
     if (valueString.indexOf('e-') >= 0) {
       return parseInt(valueString.slice(valueString.indexOf('e-') + 2), 10);
     }
@@ -372,7 +409,7 @@ export default class InputNumber extends React.Component {
       precision = valueString.length - valueString.indexOf('.') - 1;
     }
     return precision;
-  }
+  };
 
   // step={1.0} value={1.51}
   // press +
@@ -395,10 +432,10 @@ export default class InputNumber extends React.Component {
 
   getPrecisionFactor(currentValue, ratio = 1) {
     const precision = this.getMaxPrecision(currentValue, ratio);
-    return Math.pow(10, precision);
+    return 10 ** precision;
   }
 
-  getInputDisplayValue = (state) => {
+  getInputDisplayValue = state => {
     const { focused, inputValue, value } = state || this.state;
     let inputDisplayValue;
     if (focused) {
@@ -436,26 +473,7 @@ export default class InputNumber extends React.Component {
     }
   };
 
-  fixCaret(start, end) {
-    if (start === undefined || end === undefined || !this.input || !this.input.value) {
-      return;
-    }
-
-    try {
-      const currentStart = this.input.selectionStart;
-      const currentEnd = this.input.selectionEnd;
-
-      if (start !== currentStart || end !== currentEnd) {
-        this.input.setSelectionRange(start, end);
-      }
-    } catch (e) {
-      // Fix error in Chrome:
-      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
-      // http://stackoverflow.com/q/21177489/3040605
-    }
-  }
-
-  restoreByAfter = (str) => {
+  restoreByAfter = str => {
     if (str === undefined) return false;
 
     const fullStr = this.input.value;
@@ -464,8 +482,10 @@ export default class InputNumber extends React.Component {
     if (index === -1) return false;
 
     const prevCursorPos = this.cursorBefore.length;
-    if (this.lastKeyCode === KeyCode.DELETE &&
-      this.cursorBefore.charAt(prevCursorPos - 1) === str[0]) {
+    if (
+      this.lastKeyCode === KeyCode.DELETE &&
+      this.cursorBefore.charAt(prevCursorPos - 1) === str[0]
+    ) {
       this.fixCaret(prevCursorPos, prevCursorPos);
       return true;
     }
@@ -478,7 +498,7 @@ export default class InputNumber extends React.Component {
     return false;
   };
 
-  partRestoreByAfter = (str) => {
+  partRestoreByAfter = str => {
     if (str === undefined) return false;
 
     // For loop from full str to the str with last char to map. e.g. 123
@@ -526,14 +546,14 @@ export default class InputNumber extends React.Component {
   }
 
   // '1.' '1x' 'xx' '' => are not complete numbers
-  isNotCompleteNumber(num) {
+  isNotCompleteNumber = num => {
     return (
       isNaN(num) ||
       num === '' ||
       num === null ||
       (num && num.toString().indexOf('.') === num.toString().length - 1)
     );
-  }
+  };
 
   toNumber(num) {
     const { precision } = this.props;
@@ -544,7 +564,7 @@ export default class InputNumber extends React.Component {
       return num;
     }
     if (isValidProps(precision)) {
-      return Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision);
+      return Math.round(num * 10 ** precision) / 10 ** precision;
     }
     return Number(num);
   }
@@ -553,9 +573,10 @@ export default class InputNumber extends React.Component {
     const { step } = this.props;
     const precisionFactor = this.getPrecisionFactor(val, rat);
     const precision = Math.abs(this.getMaxPrecision(val, rat));
-    const result =
-    ((precisionFactor * val + precisionFactor * step * rat) /
-    precisionFactor).toFixed(precision);
+    const result = (
+      (precisionFactor * val + precisionFactor * (step as number) * rat) /
+      precisionFactor
+    ).toFixed(precision);
     return this.toNumber(result);
   }
 
@@ -563,9 +584,10 @@ export default class InputNumber extends React.Component {
     const { step } = this.props;
     const precisionFactor = this.getPrecisionFactor(val, rat);
     const precision = Math.abs(this.getMaxPrecision(val, rat));
-    const result =
-    ((precisionFactor * val - precisionFactor * step * rat) /
-    precisionFactor).toFixed(precision);
+    const result = (
+      (precisionFactor * val - precisionFactor * (step as number) * rat) /
+      precisionFactor
+    ).toFixed(precision);
     return this.toNumber(result);
   }
 
@@ -575,7 +597,7 @@ export default class InputNumber extends React.Component {
       e.persist();
       e.preventDefault();
     }
-    const props = this.props;
+    const { props } = this;
     if (props.disabled) {
       return;
     }
@@ -590,47 +612,96 @@ export default class InputNumber extends React.Component {
     } else if (val < props.min) {
       val = props.min;
     }
-    this.setValue(val);
-    this.setState({
-      focused: true,
-    }, () => {
-      this.pressingUpOrDown = false;
-    });
+    this.setValue(val, null);
+    this.setState(
+      {
+        focused: true,
+      },
+      () => {
+        this.pressingUpOrDown = false;
+      },
+    );
     if (outOfRange) {
       return;
     }
-    this.autoStepTimer = setTimeout(() => {
-      this[type](e, ratio, true);
-    }, recursive ? SPEED : DELAY);
+    this.autoStepTimer = setTimeout(
+      () => {
+        this[type](e, ratio, true);
+      },
+      recursive ? SPEED : DELAY,
+    );
   }
 
   stop = () => {
     if (this.autoStepTimer) {
       clearTimeout(this.autoStepTimer);
     }
-  }
+  };
 
   down = (e, ratio, recursive) => {
     this.pressingUpOrDown = true;
     this.step('down', e, ratio, recursive);
-  }
+  };
 
   up = (e, ratio, recursive) => {
     this.pressingUpOrDown = true;
     this.step('up', e, ratio, recursive);
-  }
+  };
 
-  saveInput = (node) => {
+  saveInput = node => {
     this.input = node;
+  };
+
+  fixCaret(start, end) {
+    if (start === undefined || end === undefined || !this.input || !this.input.value) {
+      return;
+    }
+
+    try {
+      const currentStart = this.input.selectionStart;
+      const currentEnd = this.input.selectionEnd;
+
+      if (start !== currentStart || end !== currentEnd) {
+        this.input.setSelectionRange(start, end);
+      }
+    } catch (e) {
+      // Fix error in Chrome:
+      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
+      // http://stackoverflow.com/q/21177489/3040605
+    }
   }
 
   render() {
     const {
-      prefixCls, disabled, readOnly, useTouch, autoComplete,
-      upHandler, downHandler, className, max, min,
-      style, title, onMouseEnter, onMouseLeave, onMouseOver, onMouseOut,
-      required, onClick, tabIndex, type, placeholder, id, inputMode, pattern,
-      step, maxLength, autoFocus, name, onPaste,
+      prefixCls,
+      disabled,
+      readOnly,
+      useTouch,
+      autoComplete,
+      upHandler,
+      downHandler,
+      className,
+      max,
+      min,
+      style,
+      title,
+      onMouseEnter,
+      onMouseLeave,
+      onMouseOver,
+      onMouseOut,
+      required,
+      onClick,
+      tabIndex,
+      type,
+      placeholder,
+      id,
+      inputMode,
+      pattern,
+      step,
+      maxLength,
+      autoFocus,
+      name,
+      onPaste,
       ...rest
     } = this.props;
     const { value, focused } = this.state;
@@ -642,20 +713,16 @@ export default class InputNumber extends React.Component {
 
     const dataOrAriaAttributeProps = {};
     Object.keys(rest).forEach(key => {
-      if (
-        key.substr(0, 5) === 'data-' ||
-        key.substr(0, 5) === 'aria-' ||
-        key === 'role'
-      ) {
+      if (key.substr(0, 5) === 'data-' || key.substr(0, 5) === 'aria-' || key === 'role') {
         dataOrAriaAttributeProps[key] = rest[key];
       }
-    })
+    });
 
     const editable = !readOnly && !disabled;
 
     // focus state, show input value
     // unfocus state, show valid value
-    const inputDisplayValue = this.getInputDisplayValue();
+    const inputDisplayValue = this.getInputDisplayValue(null);
 
     const upDisabled = (value || value === 0) && (isNaN(value) || Number(value) >= max);
     const downDisabled = (value || value === 0) && (isNaN(value) || Number(value) <= min);
@@ -668,22 +735,26 @@ export default class InputNumber extends React.Component {
       [`${prefixCls}-handler-down-disabled`]: isDownDisabled,
     });
 
-    const upEvents = useTouch ? {
-      onTouchStart: isUpDisabled ? noop : this.up,
-      onTouchEnd: this.stop,
-    } : {
-      onMouseDown: isUpDisabled ? noop : this.up,
-      onMouseUp: this.stop,
-      onMouseLeave: this.stop,
-    };
-    const downEvents = useTouch ? {
-      onTouchStart: isDownDisabled ? noop : this.down,
-      onTouchEnd: this.stop,
-    } : {
-      onMouseDown: isDownDisabled ? noop : this.down,
-      onMouseUp: this.stop,
-      onMouseLeave: this.stop,
-    };
+    const upEvents = useTouch
+      ? {
+          onTouchStart: isUpDisabled ? noop : this.up,
+          onTouchEnd: this.stop,
+        }
+      : {
+          onMouseDown: isUpDisabled ? noop : this.up,
+          onMouseUp: this.stop,
+          onMouseLeave: this.stop,
+        };
+    const downEvents = useTouch
+      ? {
+          onTouchStart: isDownDisabled ? noop : this.down,
+          onTouchEnd: this.stop,
+        }
+      : {
+          onMouseDown: isDownDisabled ? noop : this.down,
+          onMouseUp: this.stop,
+          onMouseLeave: this.stop,
+        };
 
     return (
       <div
@@ -699,40 +770,36 @@ export default class InputNumber extends React.Component {
       >
         <div className={`${prefixCls}-handler-wrap`}>
           <span
-            unselectable="unselectable"
-            {...upEvents}
+            unselectable="on"
+            {...(upEvents as any)}
             role="button"
             aria-label="Increase Value"
             aria-disabled={isUpDisabled}
             className={upClassName}
           >
-            {
-              upHandler || (
-                <span
-                  unselectable="unselectable"
-                  className={`${prefixCls}-handler-up-inner`}
-                  onClick={preventDefault}
-                />
-              )
-            }
+            {upHandler || (
+              <span
+                unselectable="on"
+                className={`${prefixCls}-handler-up-inner`}
+                onClick={preventDefault}
+              />
+            )}
           </span>
           <span
-            unselectable="unselectable"
-            {...downEvents}
+            unselectable="on"
+            {...(downEvents as any)}
             role="button"
             aria-label="Decrease Value"
             aria-disabled={isDownDisabled}
             className={downClassName}
           >
-            {
-              downHandler || (
-                <span
-                  unselectable="unselectable"
-                  className={`${prefixCls}-handler-down-inner`}
-                  onClick={preventDefault}
-                />
-              )
-            }
+            {downHandler || (
+              <span
+                unselectable="on"
+                className={`${prefixCls}-handler-down-inner`}
+                onClick={preventDefault}
+              />
+            )}
           </span>
         </div>
         <div className={`${prefixCls}-input-wrap`}>
@@ -776,3 +843,5 @@ export default class InputNumber extends React.Component {
     );
   }
 }
+
+export default InputNumber;
