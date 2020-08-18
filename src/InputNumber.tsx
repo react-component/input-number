@@ -58,27 +58,27 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     autoComplete: 'off',
   };
 
-  pressingUpOrDown;
+  pressingUpOrDown: boolean;
 
-  inputting;
+  inputting: boolean;
 
   rawInput;
 
-  cursorStart;
+  cursorStart: number;
 
-  cursorAfter;
+  cursorAfter: number | string;
 
-  input;
+  input: HTMLInputElement;
 
   lastKeyCode;
 
-  currentValue: number;
+  currentValue: number | string;
 
-  cursorEnd;
+  cursorEnd: number;
 
-  cursorBefore;
+  cursorBefore: string;
 
-  autoStepTimer;
+  autoStepTimer: NodeJS.Timer;
 
   constructor(props: InputNumberProps) {
     super(props);
