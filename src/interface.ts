@@ -6,6 +6,7 @@ export interface InputNumberProps {
   prefixCls?: string;
   style: React.CSSProperties;
   className?: string;
+  inputClassName?: string;
   onKeyUp: (e, ...arg) => void;
   onKeyDown: (e, ...arg) => void;
   onMouseUp: (...arg) => void;

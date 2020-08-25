@@ -681,6 +681,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
       upHandler,
       downHandler,
       className,
+      inputClassName,
       max,
       min,
       style,
@@ -814,7 +815,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
             onPaste={onPaste}
             onClick={onClick}
             onMouseUp={this.onMouseUp}
-            className={`${prefixCls}-input`}
+            className={`${prefixCls}-input ${inputClassName}`}
             tabIndex={tabIndex}
             autoComplete={autoComplete}
             onFocus={this.onFocus}
