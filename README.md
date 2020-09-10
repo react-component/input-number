@@ -174,6 +174,12 @@ online example: http://react-component.github.io/input-number/examples
           <td>Called when value of an InputNumber changed</td>
         </tr>
         <tr>
+            <td>onBlur</td>
+            <td>Function</td>
+            <td></td>
+            <td>Called when user leaves an input field</td>
+        </tr>
+        <tr>
           <td>onPressEnter</td>
           <td>Function</td>
           <td></td>
