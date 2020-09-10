@@ -55,7 +55,7 @@ npm start
 
 http://127.0.0.1:8000/examples/
 
-online example: http://react-component.github.io/input-number/examples/
+online example: http://react-component.github.io/input-number/examples
 
 ## API
 
