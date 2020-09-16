@@ -702,6 +702,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
       autoFocus,
       name,
       onPaste,
+      onInput,
       ...rest
     } = this.props;
     const { value, focused } = this.state;
@@ -836,6 +837,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
             value={this.getFullNum(inputDisplayValue)}
             pattern={pattern}
             inputMode={inputMode}
+            onInput={onInput}
             {...dataOrAriaAttributeProps}
           />
         </div>
