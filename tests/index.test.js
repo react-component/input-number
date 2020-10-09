@@ -1822,6 +1822,25 @@ describe('InputNumber', () => {
     });
   });
 
+  describe('onStep props', () => {
+    it('triggers onStep when stepping value up or down', () => {
+      const onStep = sinon.spy();
+      class Demo extends React.Component {
+        render() {
+          return <InputNumber value={1} ref="inputNum" onStep={onStep} />;
+        }
+      }
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.UP,
+      });
+      expect(onStep.called).to.be(true);
+      expect(onStep.calledWith(2)).to.be(true);
+    });
+  });
+
   describe('aria and data props', () => {
     it('passes data-* attributes', () => {
       class Demo extends React.Component {
