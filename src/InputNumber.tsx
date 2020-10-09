@@ -613,6 +613,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
       val = props.min;
     }
     this.setValue(val, null);
+    if (props.onStep) props.onStep(val, { offset: ratio, type });
     this.setState(
       {
         focused: true,
