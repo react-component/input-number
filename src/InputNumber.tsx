@@ -293,7 +293,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     if (onBlur) {
       const originValue = this.input.value;
       const displayValue = this.getInputDisplayValue({ focus: false, value: newValue });
-      this.input.value = displayValue ? Number(displayValue) : displayValue;
+      this.input.value = displayValue;
       onBlur(...args);
       this.input.value = originValue;
     }

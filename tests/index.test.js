@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable react/no-multi-comp, no-unused-vars, react/no-unused-state */
 import React from 'react';
 import keyCode from 'rc-util/lib/KeyCode';
@@ -1325,6 +1326,37 @@ describe('InputNumber', () => {
       Simulate.change(inputElement, { target: { value: '' } });
       Simulate.blur(inputElement);
       expect(targetValue).to.be('');
+    });
+
+    it('should set input value as formatted when blur', () => {
+      let valueOnBlur;
+      function onBlur(e) {
+        valueOnBlur = e.target.value;
+      }
+      class Demo extends React.Component {
+        state = {
+          value: 1,
+        };
+
+        render() {
+          return (
+            <div>
+              <InputNumber
+                ref="inputNum"
+                onBlur={onBlur}
+                formatter={value => `${value * 100}%`}
+                value={this.state.value}
+              />
+            </div>
+          );
+        }
+      }
+      example = ReactDOM.render(<Demo />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.blur(inputElement);
+      expect(inputElement.value).to.be('100%');
+      expect(valueOnBlur).to.be('100%');
     });
 
     // https://github.com/ant-design/ant-design/issues/11574
