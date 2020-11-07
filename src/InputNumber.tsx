@@ -323,10 +323,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
   getValueFromEvent(e) {
     // optimize for chinese input expierence
     // https://github.com/ant-design/ant-design/issues/8196
-    let value = e.target.value
-      .trim()
-      .replace(/。/g, '.')
-      .replace(/\.+/g, '.');
+    let value = e.target.value.trim().replace(/。|\.。/g, '.');
 
     if (isValidProps(this.props.decimalSeparator)) {
       value = value.replace(this.props.decimalSeparator, '.');
