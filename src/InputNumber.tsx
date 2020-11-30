@@ -327,7 +327,11 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     let value = e.target.value.trim().replace(/。/g, '.');
 
     if (isValidProps(this.props.decimalSeparator)) {
-      value = value.replace(this.props.decimalSeparator, '.');
+      // https://github.com/ant-design/ant-design/issues/28057
+      // replace last separator
+      // value = value.replace(this.props.decimalSeparator, '.');
+      const regExp = new RegExp(`(.*)${this.props.decimalSeparator}`);
+      value = value.replace(regExp, '$1.');
     }
 
     return value;
@@ -452,7 +456,9 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     if (isValidProps(this.props.decimalSeparator)) {
       inputDisplayValueFormat = inputDisplayValueFormat
         .toString()
-        .replace('.', this.props.decimalSeparator);
+        .replace(/(.*)\./, `$1${this.props.decimalSeparator}`);
+      // fixed https://github.com/ant-design/ant-design/issues/28057
+      // .replace('.', this.props.decimalSeparator);
     }
 
     return inputDisplayValueFormat;
