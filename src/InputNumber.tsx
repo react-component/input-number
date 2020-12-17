@@ -179,6 +179,8 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
             pos = this.cursorStart - 1;
           } else if (this.lastKeyCode === KeyCode.DELETE) {
             pos = this.cursorStart;
+          } else {
+            pos = this.cursorAfter.toString().length + 1;
           }
           this.fixCaret(pos, pos);
         } else if (this.currentValue === this.input.value) {
