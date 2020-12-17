@@ -170,7 +170,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
         ) {
           // If not match any of then, let's just keep the position
           // TODO: Logic should not reach here, need check if happens
-          let pos = this.cursorStart + 1;
+          let pos = this.getInputDisplayValue(this.state).length;
 
           // If not have last string, just position to the end
           if (!this.cursorAfter) {
@@ -179,8 +179,6 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
             pos = this.cursorStart - 1;
           } else if (this.lastKeyCode === KeyCode.DELETE) {
             pos = this.cursorStart;
-          } else {
-            pos = this.cursorAfter.toString().length + 1;
           }
           this.fixCaret(pos, pos);
         } else if (this.currentValue === this.input.value) {
