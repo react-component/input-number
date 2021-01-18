@@ -13,8 +13,8 @@ Input number control.
 
 [npm-image]: http://img.shields.io/npm/v/rc-input-number.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-input-number
-[github-actions-image]: https://github.com/react-component/progress/workflows/CI/badge.svg
-[github-actions-url]: https://github.com/react-component/progress/actions
+[github-actions-image]: https://github.com/react-component/input-number/workflows/CI/badge.svg
+[github-actions-url]: https://github.com/react-component/input-number/actions
 [circleci-image]: https://img.shields.io/circleci/react-component/input-number/master?style=flat-square
 [circleci-url]: https://circleci.com/gh/react-component/input-number
 [coveralls-image]: https://img.shields.io/coveralls/react-component/input-number.svg?style=flat-square
