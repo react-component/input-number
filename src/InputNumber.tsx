@@ -2,7 +2,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
-import { InputNumberProps, InputNumberState } from './interface';
+import type { InputNumberProps, InputNumberState } from './interface';
 
 function noop() {}
 
@@ -574,7 +574,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     const precisionFactor = this.getPrecisionFactor(val, rat);
     const precision = Math.abs(this.getMaxPrecision(val, rat));
     const result = (
-      (precisionFactor * val + precisionFactor * (step as number) * rat) /
+      (precisionFactor * val + precisionFactor * (Number(step)) * rat) /
       precisionFactor
     ).toFixed(precision);
     return this.toNumber(result);
@@ -585,7 +585,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     const precisionFactor = this.getPrecisionFactor(val, rat);
     const precision = Math.abs(this.getMaxPrecision(val, rat));
     const result = (
-      (precisionFactor * val - precisionFactor * (step as number) * rat) /
+      (precisionFactor * val - precisionFactor * (Number(step)) * rat) /
       precisionFactor
     ).toFixed(precision);
     return this.toNumber(result);
@@ -737,7 +737,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
       [`${prefixCls}-handler-down-disabled`]: isDownDisabled,
     });
 
-    const upEvents = useTouch
+    const upEvents: any = useTouch
       ? {
           onTouchStart: isUpDisabled ? noop : this.up,
           onTouchEnd: this.stop,
@@ -747,7 +747,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
           onMouseUp: this.stop,
           onMouseLeave: this.stop,
         };
-    const downEvents = useTouch
+    const downEvents: any = useTouch
       ? {
           onTouchStart: isDownDisabled ? noop : this.down,
           onTouchEnd: this.stop,
@@ -773,7 +773,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
         <div className={`${prefixCls}-handler-wrap`}>
           <span
             unselectable="on"
-            {...(upEvents as any)}
+            {...upEvents}
             role="button"
             aria-label="Increase Value"
             aria-disabled={isUpDisabled}
@@ -789,7 +789,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
           </span>
           <span
             unselectable="on"
-            {...(downEvents as any)}
+            {...downEvents}
             role="button"
             aria-label="Decrease Value"
             aria-disabled={isDownDisabled}
