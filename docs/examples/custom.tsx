@@ -1,20 +1,18 @@
 /* eslint no-console:0 */
 import React from 'react';
-import InputNumber from '../src';
-import '../assets/index.less';
+import InputNumber from 'rc-input-number';
+import '../../assets/index.less';
 
-export default class Demo extends React.Component {
+class Component extends React.Component {
   state = {
     disabled: false,
     readOnly: false,
-    value: 8,
+    value: 5,
   };
 
-  onChange = v => {
-    console.log('onChange:', v);
-    this.setState({
-      value: v,
-    });
+  onChange = value => {
+    console.log('onChange:', value);
+    this.setState({ value });
   };
 
   toggleDisabled = () => {
@@ -30,28 +28,25 @@ export default class Demo extends React.Component {
   };
 
   render() {
+    const upHandler = <div style={{ color: 'blue' }}>x</div>;
+    const downHandler = <div style={{ color: 'red' }}>V</div>;
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
-          aria-label="Number input example that demonstrates using decimal values"
+          aria-label="Number input example that demonstrates custom styling"
           min={-8}
           max={10}
-          step={0.1}
           value={this.state.value}
           style={{ width: 100 }}
           readOnly={this.state.readOnly}
           onChange={this.onChange}
           disabled={this.state.disabled}
+          upHandler={upHandler}
+          downHandler={downHandler}
         />
-        <p>
-          <button type="button" onClick={this.toggleDisabled}>
-            toggle Disabled
-          </button>
-          <button type="button" onClick={this.toggleReadOnly}>
-            toggle readOnly
-          </button>
-        </p>
       </div>
     );
   }
 }
+
+export default Component;

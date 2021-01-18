@@ -8,7 +8,9 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@@/*": ["src/.umi/*"],
+      "rc-input-number": ["src/index.ts"]
     }
   }
 }

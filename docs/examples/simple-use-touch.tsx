@@ -1,7 +1,7 @@
 /* eslint no-console:0 */
 import React from 'react';
-import InputNumber from '../src';
-import '../assets/index.less';
+import InputNumber from 'rc-input-number';
+import '../../assets/index.less';
 
 class Component extends React.Component {
   state = {
@@ -31,14 +31,15 @@ class Component extends React.Component {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
-          aria-label="Simple number input example"
+          aria-label="Simple use touch number input example"
           min={-8}
           max={10}
-          style={{ width: 100 }}
           value={this.state.value}
-          onChange={this.onChange}
+          style={{ width: 100 }}
           readOnly={this.state.readOnly}
+          onChange={this.onChange}
           disabled={this.state.disabled}
+          useTouch
         />
         <p>
           <button type="button" onClick={this.toggleDisabled}>

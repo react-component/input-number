@@ -1,5 +1,6 @@
-# History
-----
+# Changelog
+
+https://github.com/react-component/input-number/releases
 
 ## 5.0.0
 

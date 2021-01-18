@@ -1,7 +1,7 @@
 /* eslint no-console:0 */
 import React from 'react';
-import InputNum from '../src';
-import '../assets/index.less';
+import InputNum from 'rc-input-number';
+import '../../assets/index.less';
 
 class Component extends React.Component {
   state = {
