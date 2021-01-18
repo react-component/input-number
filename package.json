@@ -34,7 +34,8 @@
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "test": "father test",
-    "coverage": "father test --coverage"
+    "coverage": "father test --coverage",
+    "now-build": "npm run docs:build"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.1",
