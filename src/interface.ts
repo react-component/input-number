@@ -1,9 +1,8 @@
-/* eslint-disable no-undef */
-import React from 'react';
+import type React from 'react';
 
 type ISize = 'large' | 'middle' | 'small';
 
-export interface InputNumberProps {
+export type InputNumberProps = {
   focusOnUpDown: boolean;
   useTouch: boolean;
   prefixCls?: string;
@@ -40,7 +39,7 @@ export interface InputNumberProps {
   [key: string]: any;
 }
 
-export interface InputNumberState {
+export type InputNumberState = {
   inputValue?: string;
   value?: number;
   focused?: boolean;

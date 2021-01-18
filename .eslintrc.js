@@ -2,7 +2,6 @@ const base = require("@umijs/fabric/dist/eslint");
 
 module.exports = {
   ...base,
-  "parser": "babel-eslint",
   rules: {
     ...base.rules,
     "arrow-parens": 0,

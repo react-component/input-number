@@ -1,9 +1,8 @@
-/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
-import { InputNumberProps, InputNumberState } from './interface';
+import type { InputNumberProps, InputNumberState } from './interface';
 
 function noop() {}
 
