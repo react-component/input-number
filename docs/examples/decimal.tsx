@@ -1,18 +1,20 @@
 /* eslint no-console:0 */
 import React from 'react';
-import InputNumber from '../src';
-import '../assets/index.less';
+import InputNumber from 'rc-input-number';
+import '../../assets/index.less';
 
-class Component extends React.Component {
+export default class Demo extends React.Component {
   state = {
     disabled: false,
     readOnly: false,
-    value: 5,
+    value: 8,
   };
 
-  onChange = value => {
-    console.log('onChange:', value);
-    this.setState({ value });
+  onChange = v => {
+    console.log('onChange:', v);
+    this.setState({
+      value: v,
+    });
   };
 
   toggleDisabled = () => {
@@ -31,15 +33,15 @@ class Component extends React.Component {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
-          aria-label="Simple use touch number input example"
+          aria-label="Number input example that demonstrates using decimal values"
           min={-8}
           max={10}
+          step={0.1}
           value={this.state.value}
           style={{ width: 100 }}
           readOnly={this.state.readOnly}
           onChange={this.onChange}
           disabled={this.state.disabled}
-          useTouch
         />
         <p>
           <button type="button" onClick={this.toggleDisabled}>
@@ -53,5 +55,3 @@ class Component extends React.Component {
     );
   }
 }
-
-export default Component;
