@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+import React from 'react';
+
 type ISize = 'large' | 'middle' | 'small';
 
 export interface InputNumberProps {
