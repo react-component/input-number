@@ -344,8 +344,8 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     return value;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  getValidValue(value, min = this.props.min, max = this.props.max) {
+  getValidValue(value) {
+    const { min, max } = this.props;
     let val = parseFloat(value);
     // https://github.com/ant-design/ant-design/issues/7358
     if (isNaN(val)) {
@@ -605,6 +605,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
 
   step(type, e, ratio = 1, recursive) {
     this.stop();
+    this.recordCursorPosition();
     if (e) {
       e.persist();
       e.preventDefault();
