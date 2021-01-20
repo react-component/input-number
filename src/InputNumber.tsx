@@ -333,7 +333,8 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     return value;
   }
 
-  getValidValue(value, min = this.props.min, max = this.props.max) {
+  getValidValue(value) {
+    const { min, max } = this.props;
     let val = parseFloat(value);
     // https://github.com/ant-design/ant-design/issues/7358
     if (isNaN(val)) {
