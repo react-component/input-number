@@ -593,6 +593,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
 
   step(type, e, ratio = 1, recursive) {
     this.stop();
+    this.recordCursorPosition();
     if (e) {
       e.persist();
       e.preventDefault();

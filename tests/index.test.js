@@ -1481,7 +1481,6 @@ describe('InputNumber', () => {
           onChange = value => {
             this.setState({ value });
           };
-
           render() {
             return <InputNumber ref="inputNum" value={initialValue} onChange={this.onChange} />;
           }
@@ -1598,6 +1597,7 @@ describe('InputNumber', () => {
       }
       Simulate.change(inputElement, { target: { value: prependValue + initValue } });
     };
+
     it('shold fix caret position on case 1', () => {
       // '$ 1'
       setUpCursorTest('', '1');
