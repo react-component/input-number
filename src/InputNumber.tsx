@@ -343,6 +343,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     return value;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   getValidValue(value, min = this.props.min, max = this.props.max) {
     let val = parseFloat(value);
     // https://github.com/ant-design/ant-design/issues/7358
