@@ -9,7 +9,7 @@ export type InputNumberProps = {
   style: React.CSSProperties;
   className?: string;
   onKeyUp: (e, ...arg) => void;
-  onKeyDown: (e, ...arg) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, preventDefault: () => void) => void;
   onMouseUp: (...arg) => void;
   onFocus: (...arg) => void;
   onBlur: (...arg) => void;

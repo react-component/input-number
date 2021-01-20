@@ -61,6 +61,7 @@ describe('InputNumber', () => {
         <div>
           <InputNumber
             ref="inputNum"
+            {...this.props}
             min={this.state.min}
             max={this.state.max}
             onChange={this.onChange}
@@ -136,6 +137,40 @@ describe('InputNumber', () => {
         ctrlKey: true,
       });
       expect(inputNumber.state.value).to.be(98);
+    });
+  });
+
+  describe('prevent default on keydown', () => {
+    it('should work correctly if no prevent default', () => {
+      const onKeyDown = jest.fn();
+      example = ReactDOM.render(<Component onKeyDown={onKeyDown} />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.UP,
+      });
+      expect(inputNumber.state.value).to.be(99);
+      expect(onKeyDown.mock.calls.length).to.be(1);
+    });
+
+    it("value shouldn't change  if prevent default is called", () => {
+      const onKeyDown = jest.fn(({ keyCode: which }, preventDefault) => {
+        if (which === keyCode.UP) preventDefault();
+      });
+      example = ReactDOM.render(<Component onKeyDown={onKeyDown} />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.UP,
+      });
+      expect(inputNumber.state.value).to.be(98);
+
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.DOWN,
+      });
+      expect(inputNumber.state.value).to.be(97);
+
+      expect(onKeyDown.mock.calls.length).to.be(2);
     });
   });
 

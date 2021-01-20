@@ -80,6 +80,8 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
 
   autoStepTimer: NodeJS.Timer;
 
+  onKeyDownPreventDefault: boolean;
+
   constructor(props: InputNumberProps) {
     super(props);
     let { value } = props;
@@ -217,8 +219,19 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     this.stop();
   }
 
-  onKeyDown = (e, ...args) => {
+  onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const { onKeyDown, onPressEnter } = this.props;
+
+    const keyDownPreventDefault = () => {
+      this.onKeyDownPreventDefault = true;
+    };
+
+    onKeyDown?.(e, keyDownPreventDefault);
+
+    if (this.onKeyDownPreventDefault) {
+      this.onKeyDownPreventDefault = false;
+      return
+    }
 
     if (e.keyCode === KeyCode.UP) {
       const ratio = this.getRatio(e);
@@ -235,9 +248,6 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     // Trigger user key down
     this.recordCursorPosition();
     this.lastKeyCode = e.keyCode;
-    if (onKeyDown) {
-      onKeyDown(e, ...args);
-    }
   };
 
   onKeyUp = (e, ...args) => {
