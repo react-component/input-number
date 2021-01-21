@@ -224,7 +224,10 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
 
     const keyDownPreventDefault = () => {
       this.onKeyDownPreventDefault = true;
-      e.preventDefault();
+      const preventDefaultKeyCodes = [ KeyCode.UP, KeyCode.DOWN ];
+      if (preventDefaultKeyCodes.includes(e.keyCode)) {
+        e.preventDefault();
+      }
     };
 
     onKeyDown?.(e, keyDownPreventDefault);

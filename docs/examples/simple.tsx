@@ -35,7 +35,7 @@ class Component extends React.Component {
   };
 
   onKeyDown = (e: any, preventDefault: any) => {
-    if (this.state.preventDefault && e.keyCode === 38) {
+    if (this.state.preventDefault) {
       preventDefault();
     }
   }
@@ -62,7 +62,7 @@ class Component extends React.Component {
             toggle readOnly
           </button>
           <button type="button" onClick={this.togglePreventDefault}>
-            toggle preventDefault when pressing Up Key
+            toggle preventDefault when pressing keyboard
           </button>
         </p>
       </div>
