@@ -80,8 +80,6 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
 
   autoStepTimer: NodeJS.Timer;
 
-  onKeyDownPreventDefault: boolean;
-
   constructor(props: InputNumberProps) {
     super(props);
     let { value } = props;
