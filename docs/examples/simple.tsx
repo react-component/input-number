@@ -8,7 +8,7 @@ class Component extends React.Component {
     disabled: false,
     readOnly: false,
     value: 5,
-    preventDefault: false
+    keyboard: true
   };
 
   onChange = value => {
@@ -28,23 +28,16 @@ class Component extends React.Component {
     });
   };
 
-  togglePreventDefault = () => {
+  toggleKeyboard = () => {
     this.setState({
-      preventDefault: !this.state.preventDefault,
+      keyboard: !this.state.keyboard,
     });
   };
-
-  onKeyDown = (e: any, preventDefault: any) => {
-    if (this.state.preventDefault) {
-      preventDefault();
-    }
-  }
 
   render() {
     return (
       <div style={{ margin: 10 }}>
         <InputNumber
-          onKeyDown={this.onKeyDown}
           aria-label="Simple number input example"
           min={-8}
           max={10}
@@ -53,6 +46,7 @@ class Component extends React.Component {
           onChange={this.onChange}
           readOnly={this.state.readOnly}
           disabled={this.state.disabled}
+          keyboard={this.state.keyboard}
         />
         <p>
           <button type="button" onClick={this.toggleDisabled}>
@@ -61,8 +55,8 @@ class Component extends React.Component {
           <button type="button" onClick={this.toggleReadOnly}>
             toggle readOnly
           </button>
-          <button type="button" onClick={this.togglePreventDefault}>
-            toggle preventDefault when pressing keyboard
+          <button type="button" onClick={this.toggleKeyboard}>
+            toggle keyboard
           </button>
         </p>
       </div>

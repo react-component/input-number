@@ -220,38 +220,39 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
   }
 
   onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const { onKeyDown, onPressEnter } = this.props;
+    const { onKeyDown, onPressEnter, keyboard } = this.props;
 
-    const keyDownPreventDefault = () => {
-      this.onKeyDownPreventDefault = true;
-      const preventDefaultKeyCodes = [ KeyCode.UP, KeyCode.DOWN ];
-      if (preventDefaultKeyCodes.includes(e.keyCode)) {
-        e.preventDefault();
+    const supportKeyCodes = [ KeyCode.UP, KeyCode.DOWN ];
+
+    // disable keyboard
+    if (keyboard === false && supportKeyCodes.includes(e.keyCode)) {
+      e.preventDefault();
+    } else {
+      switch(e.keyCode) {
+        case KeyCode.UP: {
+          const ratio = this.getRatio(e);
+          this.up(e, ratio, null);
+          this.stop();
+          break;
+        }
+        case KeyCode.DOWN: {
+          const ratio = this.getRatio(e);
+          this.down(e, ratio, null);
+          this.stop();
+          break;
+        }
+        case KeyCode.ENTER: {
+          onPressEnter?.(e);
+          break;
+        }
+        default:
       }
-    };
-
-    onKeyDown?.(e, keyDownPreventDefault);
-
-    if (this.onKeyDownPreventDefault) {
-      this.onKeyDownPreventDefault = false;
-      return
-    }
-
-    if (e.keyCode === KeyCode.UP) {
-      const ratio = this.getRatio(e);
-      this.up(e, ratio, null);
-      this.stop();
-    } else if (e.keyCode === KeyCode.DOWN) {
-      const ratio = this.getRatio(e);
-      this.down(e, ratio, null);
-      this.stop();
-    } else if (e.keyCode === KeyCode.ENTER && onPressEnter) {
-      onPressEnter(e);
     }
 
     // Trigger user key down
     this.recordCursorPosition();
     this.lastKeyCode = e.keyCode;
+    onKeyDown?.(e);
   };
 
   onKeyUp = (e, ...args) => {

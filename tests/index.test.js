@@ -140,24 +140,9 @@ describe('InputNumber', () => {
     });
   });
 
-  describe('prevent default on keydown', () => {
-    it('should work correctly if no prevent default', () => {
-      const onKeyDown = jest.fn();
-      example = ReactDOM.render(<Component onKeyDown={onKeyDown} />, container);
-      inputNumber = example.refs.inputNum;
-      inputElement = ReactDOM.findDOMNode(inputNumber.input);
-      Simulate.keyDown(inputElement, {
-        keyCode: keyCode.UP,
-      });
-      expect(inputNumber.state.value).to.be(99);
-      expect(onKeyDown.mock.calls.length).to.be(1);
-    });
-
-    it("value shouldn't change  if prevent default is called", () => {
-      const onKeyDown = jest.fn(({ keyCode: which }, preventDefault) => {
-        if (which === keyCode.UP) preventDefault();
-      });
-      example = ReactDOM.render(<Component onKeyDown={onKeyDown} />, container);
+  describe('disable keyboard works', () => {
+    it("value shouldn't change if keyboard is disabled", () => {
+      example = ReactDOM.render(<Component keyboard={false} />, container);
       inputNumber = example.refs.inputNum;
       inputElement = ReactDOM.findDOMNode(inputNumber.input);
       Simulate.keyDown(inputElement, {
@@ -168,9 +153,7 @@ describe('InputNumber', () => {
       Simulate.keyDown(inputElement, {
         keyCode: keyCode.DOWN,
       });
-      expect(inputNumber.state.value).to.be(97);
-
-      expect(onKeyDown.mock.calls.length).to.be(2);
+      expect(inputNumber.state.value).to.be(98);
     });
   });
 
