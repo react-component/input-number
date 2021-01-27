@@ -223,6 +223,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     const supportKeyCodes = [ KeyCode.UP, KeyCode.DOWN ];
 
     if (keyboard !== false && supportKeyCodes.includes(e.keyCode)) {
+      // eslint-disable-next-line default-case
       switch(e.keyCode) {
         case KeyCode.UP: {
           const ratio = this.getRatio(e);
@@ -236,7 +237,6 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
           this.stop();
           break;
         }
-        default:
       }
     }
 
