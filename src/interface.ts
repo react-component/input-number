@@ -9,7 +9,7 @@ export type InputNumberProps = {
   style: React.CSSProperties;
   className?: string;
   onKeyUp: (e, ...arg) => void;
-  onKeyDown: (e, ...arg) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onMouseUp: (...arg) => void;
   onFocus: (...arg) => void;
   onBlur: (...arg) => void;
@@ -36,6 +36,7 @@ export type InputNumberProps = {
   upHandler: React.ReactElement;
   downHandler: React.ReactElement;
   tabIndex?: number;
+  keyboard?: boolean;
   [key: string]: any;
 }
 

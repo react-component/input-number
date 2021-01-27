@@ -8,6 +8,7 @@ class Component extends React.Component {
     disabled: false,
     readOnly: false,
     value: 5,
+    keyboard: true
   };
 
   onChange = value => {
@@ -27,6 +28,12 @@ class Component extends React.Component {
     });
   };
 
+  toggleKeyboard = () => {
+    this.setState({
+      keyboard: !this.state.keyboard,
+    });
+  };
+
   render() {
     return (
       <div style={{ margin: 10 }}>
@@ -39,6 +46,7 @@ class Component extends React.Component {
           onChange={this.onChange}
           readOnly={this.state.readOnly}
           disabled={this.state.disabled}
+          keyboard={this.state.keyboard}
         />
         <p>
           <button type="button" onClick={this.toggleDisabled}>
@@ -46,6 +54,9 @@ class Component extends React.Component {
           </button>
           <button type="button" onClick={this.toggleReadOnly}>
             toggle readOnly
+          </button>
+          <button type="button" onClick={this.toggleKeyboard}>
+            toggle keyboard
           </button>
         </p>
       </div>

@@ -61,6 +61,7 @@ describe('InputNumber', () => {
         <div>
           <InputNumber
             ref="inputNum"
+            {...this.props}
             min={this.state.min}
             max={this.state.max}
             onChange={this.onChange}
@@ -134,6 +135,23 @@ describe('InputNumber', () => {
       Simulate.keyDown(inputElement, {
         keyCode: keyCode.DOWN,
         ctrlKey: true,
+      });
+      expect(inputNumber.state.value).to.be(98);
+    });
+  });
+
+  describe('disable keyboard works', () => {
+    it("value shouldn't change if keyboard is disabled", () => {
+      example = ReactDOM.render(<Component keyboard={false} />, container);
+      inputNumber = example.refs.inputNum;
+      inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.UP,
+      });
+      expect(inputNumber.state.value).to.be(98);
+
+      Simulate.keyDown(inputElement, {
+        keyCode: keyCode.DOWN,
       });
       expect(inputNumber.state.value).to.be(98);
     });

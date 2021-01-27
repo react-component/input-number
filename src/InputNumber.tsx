@@ -217,27 +217,37 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
     this.stop();
   }
 
-  onKeyDown = (e, ...args) => {
-    const { onKeyDown, onPressEnter } = this.props;
+  onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { onKeyDown, onPressEnter, keyboard } = this.props;
 
-    if (e.keyCode === KeyCode.UP) {
-      const ratio = this.getRatio(e);
-      this.up(e, ratio, null);
-      this.stop();
-    } else if (e.keyCode === KeyCode.DOWN) {
-      const ratio = this.getRatio(e);
-      this.down(e, ratio, null);
-      this.stop();
-    } else if (e.keyCode === KeyCode.ENTER && onPressEnter) {
-      onPressEnter(e);
+    const supportKeyCodes = [ KeyCode.UP, KeyCode.DOWN ];
+
+    if (keyboard !== false && supportKeyCodes.includes(e.keyCode)) {
+      // eslint-disable-next-line default-case
+      switch(e.keyCode) {
+        case KeyCode.UP: {
+          const ratio = this.getRatio(e);
+          this.up(e, ratio, null);
+          this.stop();
+          break;
+        }
+        case KeyCode.DOWN: {
+          const ratio = this.getRatio(e);
+          this.down(e, ratio, null);
+          this.stop();
+          break;
+        }
+      }
+    }
+
+    if (e.keyCode === KeyCode.ENTER) {
+      onPressEnter?.(e);
     }
 
     // Trigger user key down
     this.recordCursorPosition();
     this.lastKeyCode = e.keyCode;
-    if (onKeyDown) {
-      onKeyDown(e, ...args);
-    }
+    onKeyDown?.(e);
   };
 
   onKeyUp = (e, ...args) => {
