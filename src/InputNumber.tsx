@@ -222,10 +222,7 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
 
     const supportKeyCodes = [ KeyCode.UP, KeyCode.DOWN ];
 
-    // disable keyboard
-    if (keyboard === false && supportKeyCodes.includes(e.keyCode)) {
-      e.preventDefault();
-    } else {
+    if (keyboard !== false && supportKeyCodes.includes(e.keyCode)) {
       switch(e.keyCode) {
         case KeyCode.UP: {
           const ratio = this.getRatio(e);
@@ -239,12 +236,12 @@ class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumber
           this.stop();
           break;
         }
-        case KeyCode.ENTER: {
-          onPressEnter?.(e);
-          break;
-        }
         default:
       }
+    }
+
+    if (e.keyCode === KeyCode.ENTER) {
+      onPressEnter?.(e);
     }
 
     // Trigger user key down
