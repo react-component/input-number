@@ -71,6 +71,12 @@ online example: https://input-number.vercel.app/
           <td>Specifies the class prefix</td>
         </tr>
         <tr>
+          <td>inputClassName</td>
+          <td>string</td>
+          <td></td>
+          <td>Specifies the class of the html input field</td>
+        </tr>
+        <tr>
           <td>min</td>
           <td>Number</td>
           <td></td>

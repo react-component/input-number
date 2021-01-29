@@ -8,6 +8,7 @@ export type InputNumberProps = {
   prefixCls?: string;
   style: React.CSSProperties;
   className?: string;
+  inputClassName?: string;
   onKeyUp: (e, ...arg) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onMouseUp: (...arg) => void;
