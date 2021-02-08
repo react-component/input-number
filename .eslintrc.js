@@ -2,6 +2,7 @@ module.exports = {
   extends: [require.resolve('@umijs/fabric/dist/eslint')],
   rules: {
     'arrow-parens': 0,
+    'default-case': 0,
     'react/no-array-index-key': 0,
     'react/sort-comp': 0,
     'react/no-access-state-in-setstate': 0,

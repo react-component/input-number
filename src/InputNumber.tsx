@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import KeyCode from 'rc-util/lib/KeyCode';
 import MiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
 
@@ -35,6 +36,7 @@ export interface InputNumberProps
   // Customize handler node
   upNode?: React.ReactNode;
   downNode?: React.ReactNode;
+  keyboard?: boolean;
 
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined) => number | string;
@@ -69,7 +71,6 @@ export interface InputNumberProps
   // title?: string;
   // upHandler: React.ReactElement;
   // downHandler: React.ReactElement;
-  // keyboard?: boolean;
 }
 
 const InputNumber = React.forwardRef(
@@ -87,6 +88,7 @@ const InputNumber = React.forwardRef(
       readOnly,
       upNode,
       downNode,
+      keyboard,
 
       stringMode,
 
@@ -196,6 +198,20 @@ const InputNumber = React.forwardRef(
       triggerValueUpdate(rangeValue);
     };
 
+    const onKeyDown: React.KeyboardEventHandler<HTMLElement> = (event) => {
+      if (keyboard === false) {
+        return;
+      }
+
+      // Do step
+      const { which } = event;
+
+      if ([KeyCode.UP, KeyCode.DOWN].includes(which)) {
+        onStep(KeyCode.UP === which);
+        event.preventDefault();
+      }
+    };
+
     // >>> Focus & Blur
     const onBlur = () => {
       const parsedValue = new MiniDecimal(parser(inputValue));
@@ -241,6 +257,7 @@ const InputNumber = React.forwardRef(
           setFocus(true);
         }}
         onBlur={onBlur}
+        onKeyDown={onKeyDown}
       >
         <StepHandler
           prefixCls={prefixCls}
