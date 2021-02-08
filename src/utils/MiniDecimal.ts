@@ -75,7 +75,14 @@ class BigIntDecimal implements DecimalClass {
       return;
     }
 
-    const trimRet = trimNumber(typeof value === 'string' ? value : num2str(value));
+    let mergedValue = value;
+    if (typeof mergedValue === 'string' && /^\d+e-\d+$/.test(mergedValue)) {
+      mergedValue = Number(mergedValue);
+    }
+
+    const trimRet = trimNumber(
+      typeof mergedValue === 'string' ? mergedValue : num2str(mergedValue),
+    );
 
     if (validateNumber(trimRet.fullStr)) {
       this.negative = trimRet.negative;
@@ -127,8 +134,12 @@ class BigIntDecimal implements DecimalClass {
 
     const valueStr = (myAlignedDecimal + offsetAlignedDecimal).toString();
 
+    // We need fill string length back to `maxDecimalLength` to avoid parser failed
+    const { negative, trimStr } = trimNumber(valueStr);
+    const hydrateValueStr = `${negative ? '-' : ''}${trimStr.padStart(maxDecimalLength + 1, '0')}`;
+
     return new BigIntDecimal(
-      `${valueStr.slice(0, -maxDecimalLength)}.${valueStr.slice(-maxDecimalLength)}`,
+      `${hydrateValueStr.slice(0, -maxDecimalLength)}.${hydrateValueStr.slice(-maxDecimalLength)}`,
     );
   }
 

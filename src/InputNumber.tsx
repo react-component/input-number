@@ -3,9 +3,16 @@ import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import MiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
+import { num2str } from './utils/numberUtil';
 
 const defaultParser = (value: ValueType = 0): number | string => value;
-const defaultFormatter = (value: ValueType) => String(value);
+const defaultFormatter = (value: ValueType) => {
+  if (typeof value === 'number') {
+    return num2str(value);
+  }
+
+  return value;
+};
 
 /**
  * We support `stringMode` which need handle correct type when user call in formatter
