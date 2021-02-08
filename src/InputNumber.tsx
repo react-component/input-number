@@ -30,15 +30,19 @@ const InputNumber = React.forwardRef(
   (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const { prefixCls = 'rc-input-number', className, style, autoFocus, min, max } = props;
 
+    const inputClassName = `${prefixCls}-input`;
+
     return (
       <div className={classNames(prefixCls, className)} style={style}>
-        <div className={`${prefixCls}-input-wrap`}>
+        <div className={`${inputClassName}-wrap`}>
           <input
             ref={ref}
             role="spinbutton"
             aria-valuemin={min}
             aria-valuemax={max}
             autoFocus={autoFocus}
+            className={inputClassName}
+            autoComplete="off"
           />
         </div>
       </div>
