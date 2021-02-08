@@ -7,8 +7,10 @@ export function trimNumber(numStr: string) {
   let str = negative ? numStr.slice(1) : numStr;
 
   str = str
-    // Remove decimal 0. `1.1000` => `1.1`, `1.0` => `1`
-    .replace(/\.?0*$/, '')
+    // Remove decimal 0. `1.000` => `1.`, `1.100` => `1.1`
+    .replace(/(\.[^0]*)0*$/, '$1')
+    // Remove useless decimal. `1.` => `1`
+    .replace(/\.$/, '')
     // Remove integer 0. `0001` => `1`, 000.1' => `.1`
     .replace(/^0+/, '');
 

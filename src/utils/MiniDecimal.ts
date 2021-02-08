@@ -18,6 +18,8 @@ export interface DecimalClass {
   toString: () => string;
 
   equals: (target: DecimalClass) => boolean;
+
+  negate: () => DecimalClass;
 }
 
 export class NumberDecimal implements DecimalClass {
@@ -25,6 +27,10 @@ export class NumberDecimal implements DecimalClass {
 
   constructor(value: ValueType) {
     this.number = !value && value !== 0 ? NaN : Number(value);
+  }
+
+  negate() {
+    return new NumberDecimal(-this.toNumber());
   }
 
   add(value: ValueType) {
@@ -99,6 +105,12 @@ export class BigIntDecimal implements DecimalClass {
       '0',
     )}`;
     return BigInt(str);
+  }
+
+  negate() {
+    const clone = new BigIntDecimal(this.toString());
+    clone.negative = !clone.negative;
+    return clone;
   }
 
   add(value: ValueType): BigIntDecimal {

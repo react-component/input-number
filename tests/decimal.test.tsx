@@ -2,6 +2,7 @@ import MiniDecimal from '../src/utils/MiniDecimal';
 
 describe('InputNumber.Decimal', () => {
   it('parse', () => {
+    expect(new MiniDecimal(100).toString()).toEqual('100');
     expect(new MiniDecimal(11).toString()).toEqual('11');
     expect(new MiniDecimal(-9).toString()).toEqual('-9');
     expect(new MiniDecimal('11.28').toString()).toEqual('11.28');

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import MiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
+import StepHandler from './StepHandler';
 
 const defaultParser = (value: ValueType = 0): number | string => value;
 const defaultFormatter = (value: ValueType) => String(value);
@@ -24,6 +25,10 @@ export interface InputNumberProps
   min?: number;
   max?: number;
   tabIndex?: number;
+
+  // Customize handler node
+  upNode?: React.ReactNode;
+  downNode?: React.ReactNode;
 
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined) => number | string;
@@ -73,6 +78,8 @@ const InputNumber = React.forwardRef(
       defaultValue,
       value,
       disabled,
+      upNode,
+      downNode,
 
       stringMode,
 
@@ -91,6 +98,25 @@ const InputNumber = React.forwardRef(
 
     // Real value control
     const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(null);
+
+    // Max & Min limit
+    const upDisabled = React.useMemo(() => {
+      if (max === undefined || !decimalValue) {
+        return false;
+      }
+
+      const maxDecimal = new MiniDecimal(max);
+      return maxDecimal.add(decimalValue.negate().toString()).toNumber() < 0;
+    }, [max, decimalValue]);
+
+    const downDisabled = React.useMemo(() => {
+      if (min === undefined || !decimalValue) {
+        return false;
+      }
+
+      const minDecimal = new MiniDecimal(max);
+      return decimalValue.add(minDecimal.negate().toString()).toNumber() < 0;
+    }, [min, decimalValue]);
 
     // ============================ Events ============================
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -112,6 +138,24 @@ const InputNumber = React.forwardRef(
       onInput?.(inputStr);
     };
 
+    // >>> Steps
+    const stepIntervalRef = React.useRef<number>(null);
+    const onStartStep = (up: boolean) => {
+      function updateStep() {
+        setDecimalValue((ori) => ori.add(step));
+      }
+
+      // Trigger at once
+      updateStep();
+
+      // Interval update
+      stepIntervalRef.current = setInterval(updateStep, 200) as any;
+    };
+
+    const onStopStep = () => {
+      clearInterval(stepIntervalRef.current);
+    };
+
     // ============================= Data =============================
 
     // ============================ Effect ============================
@@ -120,6 +164,8 @@ const InputNumber = React.forwardRef(
       if (defaultValue !== undefined) {
         setDecimalValue(new MiniDecimal(defaultValue));
       }
+
+      return onStopStep;
     }, []);
 
     React.useEffect(() => {
@@ -143,6 +189,15 @@ const InputNumber = React.forwardRef(
         })}
         style={style}
       >
+        <StepHandler
+          prefixCls={prefixCls}
+          upNode={upNode}
+          downNode={downNode}
+          upDisabled={upDisabled}
+          downDisabled={downDisabled}
+          onStartStep={onStartStep}
+          onStopStep={onStopStep}
+        />
         <div className={`${inputClassName}-wrap`}>
           <input
             {...inputProps}
