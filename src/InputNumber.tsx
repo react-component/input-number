@@ -84,6 +84,7 @@ const InputNumber = React.forwardRef(
       defaultValue,
       value,
       disabled,
+      readOnly,
       upNode,
       downNode,
 
@@ -155,7 +156,7 @@ const InputNumber = React.forwardRef(
     const isInRange = (target: DecimalClass) => !getRangeValue(target);
 
     const triggerValueUpdate = (newValue: DecimalClass) => {
-      if (isInRange(newValue)) {
+      if (isInRange(newValue) && !readOnly && !disabled) {
         // Trigger event
         if (!newValue.equals(decimalValue)) {
           setDecimalValue(newValue);
@@ -261,6 +262,7 @@ const InputNumber = React.forwardRef(
             value={inputValue}
             onChange={onInternalInput}
             disabled={disabled}
+            readOnly={readOnly}
           />
         </div>
       </div>
