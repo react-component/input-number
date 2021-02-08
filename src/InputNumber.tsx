@@ -99,40 +99,47 @@ const InputNumber = React.forwardRef(
     // Real value control
     const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(null);
 
-    // Max & Min limit
+    // >>> Max & Min limit
+    const maxDecimal = React.useMemo(() => (max ? new MiniDecimal(max) : null), [max]);
+    const minDecimal = React.useMemo(() => (max ? new MiniDecimal(min) : null), [min]);
+
     const upDisabled = React.useMemo(() => {
       if (max === undefined || !decimalValue) {
         return false;
       }
 
-      const maxDecimal = new MiniDecimal(max);
-      return maxDecimal.add(decimalValue.negate().toString()).toNumber() <= 0;
-    }, [max, decimalValue]);
+      return maxDecimal.lessEquals(decimalValue);
+    }, [maxDecimal, decimalValue]);
 
     const downDisabled = React.useMemo(() => {
       if (min === undefined || !decimalValue) {
         return false;
       }
 
-      const minDecimal = new MiniDecimal(min);
-      return decimalValue.add(minDecimal.negate().toString()).toNumber() <= 0;
-    }, [min, decimalValue]);
+      return decimalValue.lessEquals(minDecimal);
+    }, [minDecimal, decimalValue]);
 
     // ============================= Data =============================
     // Ref here in case interval update in closure
-    const originValueRef = React.useRef<DecimalClass>();
-    originValueRef.current = decimalValue;
-
-    const triggerValueUpdate = (
-      updateValue: DecimalClass | ((originValue: DecimalClass) => DecimalClass),
-    ) => {
-      const originValue = originValueRef.current;
-      const newValue = typeof updateValue === 'function' ? updateValue(originValue) : originValue;
-
+    const triggerValueUpdate = (newValue: DecimalClass) => {
       setDecimalValue(newValue);
 
       // Trigger event
       onChange(stringMode ? newValue.toString() : newValue.toNumber());
+    };
+
+    const isInRange = (target: DecimalClass) => {
+      // target > max
+      if (max && !target.lessEquals(maxDecimal)) {
+        return false;
+      }
+
+      // target < min
+      if (min && !minDecimal.lessEquals(target)) {
+        return false;
+      }
+
+      return true;
     };
 
     // ============================ Events ============================
@@ -153,37 +160,16 @@ const InputNumber = React.forwardRef(
     };
 
     // >>> Steps
-    // Record in ref since its in closure
-    const upDownDisabledRef = React.useRef<{ up?: boolean; down?: boolean }>({});
-    upDownDisabledRef.current.up = upDisabled;
-    upDownDisabledRef.current.down = downDisabled;
-
-    // Interval update by stepF
-    const stepIntervalRef = React.useRef<number>(null);
-    const onStartStep = (up: boolean) => {
+    const onStep = (up: boolean) => {
       let stepDecimal = new MiniDecimal(step);
       if (!up) {
         stepDecimal = stepDecimal.negate();
       }
-      const stepValue = stepDecimal.toString();
+      const target = decimalValue.add(stepDecimal.toString());
 
-      function updateStep() {
-        if (up ? upDownDisabledRef.current.up : upDownDisabledRef.current.down) {
-          return;
-        }
-
-        triggerValueUpdate((ori) => ori.add(stepValue));
+      if (isInRange(target)) {
+        triggerValueUpdate(target);
       }
-
-      // Trigger at once
-      updateStep();
-
-      // Interval update
-      stepIntervalRef.current = setInterval(updateStep, 200) as any;
-    };
-
-    const onStopStep = () => {
-      clearInterval(stepIntervalRef.current);
     };
 
     // ============================ Effect ============================
@@ -192,8 +178,6 @@ const InputNumber = React.forwardRef(
       if (defaultValue !== undefined) {
         setDecimalValue(new MiniDecimal(defaultValue));
       }
-
-      return onStopStep;
     }, []);
 
     React.useEffect(() => {
@@ -223,8 +207,7 @@ const InputNumber = React.forwardRef(
           downNode={downNode}
           upDisabled={upDisabled}
           downDisabled={downDisabled}
-          onStartStep={onStartStep}
-          onStopStep={onStopStep}
+          onStep={onStep}
         />
         <div className={`${inputClassName}-wrap`}>
           <input

@@ -11,8 +11,7 @@ export interface StepHandlerProps {
   downNode?: React.ReactNode;
   upDisabled?: boolean;
   downDisabled?: boolean;
-  onStartStep: (up: boolean) => void;
-  onStopStep: () => void;
+  onStep: (up: boolean) => void;
 }
 
 export default function StepHandler({
@@ -21,9 +20,30 @@ export default function StepHandler({
   downNode,
   upDisabled,
   downDisabled,
-  onStartStep,
-  onStopStep,
+  onStep,
 }: StepHandlerProps) {
+  // ======================== Step ========================
+  const stepIntervalRef = React.useRef<number>();
+
+  const onStepRef = React.useRef<StepHandlerProps['onStep']>();
+  onStepRef.current = onStep;
+
+  // We will interval update step when hold mouse down
+  const onStepMouseDown = (up: boolean) => {
+    onStepRef.current(up);
+
+    stepIntervalRef.current = setInterval(() => {
+      onStepRef.current(up);
+    }, 200) as any;
+  };
+
+  const onStopStep = () => {
+    clearInterval(stepIntervalRef.current);
+  };
+
+  React.useEffect(() => onStopStep, []);
+
+  // ======================= Render =======================
   const handlerClassName = `${prefixCls}-handler`;
 
   const upClassName = classNames(handlerClassName, `${handlerClassName}-up`, {
@@ -45,7 +65,7 @@ export default function StepHandler({
       <span
         {...sharedHandlerProps}
         onMouseDown={() => {
-          onStartStep(true);
+          onStepMouseDown(true);
         }}
         aria-label="Increase Value"
         aria-disabled={upDisabled}
@@ -62,7 +82,7 @@ export default function StepHandler({
       <span
         {...sharedHandlerProps}
         onMouseDown={() => {
-          onStartStep(false);
+          onStepMouseDown(false);
         }}
         aria-label="Decrease Value"
         aria-disabled={downDisabled}

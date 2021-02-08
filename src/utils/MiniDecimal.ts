@@ -19,6 +19,8 @@ export interface DecimalClass {
 
   equals: (target: DecimalClass) => boolean;
 
+  lessEquals: (target: DecimalClass) => boolean;
+
   negate: () => DecimalClass;
 }
 
@@ -43,6 +45,10 @@ export class NumberDecimal implements DecimalClass {
 
   equals(target: DecimalClass) {
     return this.toString() === target.toString();
+  }
+
+  lessEquals(target: DecimalClass) {
+    return this.add(target.negate().toString()).toNumber() <= 0;
   }
 
   toNumber() {
@@ -132,6 +138,10 @@ export class BigIntDecimal implements DecimalClass {
 
   equals(target: DecimalClass) {
     return this.toString() === target.toString();
+  }
+
+  lessEquals(target: DecimalClass) {
+    return this.add(target.negate().toString()).toNumber() <= 0;
   }
 
   toNumber() {
