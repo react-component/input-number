@@ -106,7 +106,7 @@ const InputNumber = React.forwardRef(
       }
 
       const maxDecimal = new MiniDecimal(max);
-      return maxDecimal.add(decimalValue.negate().toString()).toNumber() < 0;
+      return maxDecimal.add(decimalValue.negate().toString()).toNumber() <= 0;
     }, [max, decimalValue]);
 
     const downDisabled = React.useMemo(() => {
@@ -114,8 +114,8 @@ const InputNumber = React.forwardRef(
         return false;
       }
 
-      const minDecimal = new MiniDecimal(max);
-      return decimalValue.add(minDecimal.negate().toString()).toNumber() < 0;
+      const minDecimal = new MiniDecimal(min);
+      return decimalValue.add(minDecimal.negate().toString()).toNumber() <= 0;
     }, [min, decimalValue]);
 
     // ============================ Events ============================
@@ -141,8 +141,18 @@ const InputNumber = React.forwardRef(
     // >>> Steps
     const stepIntervalRef = React.useRef<number>(null);
     const onStartStep = (up: boolean) => {
+      if (up ? upDisabled : downDisabled) {
+        return;
+      }
+
+      let stepDecimal = new MiniDecimal(step);
+      if (!up) {
+        stepDecimal = stepDecimal.negate();
+      }
+      const stepValue = stepDecimal.toString();
+
       function updateStep() {
-        setDecimalValue((ori) => ori.add(step));
+        setDecimalValue((ori) => ori.add(stepValue));
       }
 
       // Trigger at once

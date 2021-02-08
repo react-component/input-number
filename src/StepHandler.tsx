@@ -37,7 +37,6 @@ export default function StepHandler({
     unselectable: 'on' as const,
     role: 'button',
     onMouseUp: onStopStep,
-    onMouseMove: onStopStep,
     onMouseLeave: onStopStep,
   };
 
