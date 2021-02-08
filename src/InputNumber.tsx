@@ -139,12 +139,14 @@ const InputNumber = React.forwardRef(
     };
 
     // >>> Steps
+    // Record in ref since its in closure
+    const upDownDisabledRef = React.useRef<{ up?: boolean; down?: boolean }>({});
+    upDownDisabledRef.current.up = upDisabled;
+    upDownDisabledRef.current.down = downDisabled;
+
+    // Interval update by stepF
     const stepIntervalRef = React.useRef<number>(null);
     const onStartStep = (up: boolean) => {
-      if (up ? upDisabled : downDisabled) {
-        return;
-      }
-
       let stepDecimal = new MiniDecimal(step);
       if (!up) {
         stepDecimal = stepDecimal.negate();
@@ -152,6 +154,10 @@ const InputNumber = React.forwardRef(
       const stepValue = stepDecimal.toString();
 
       function updateStep() {
+        if (up ? upDownDisabledRef.current.up : upDownDisabledRef.current.down) {
+          return;
+        }
+
         setDecimalValue((ori) => ori.add(stepValue));
       }
 
