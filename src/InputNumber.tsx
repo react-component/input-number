@@ -69,8 +69,10 @@ const InputNumber = React.forwardRef(
       style,
       min,
       max,
+      step = 1,
       defaultValue,
       value,
+      disabled,
 
       stringMode,
 
@@ -135,7 +137,12 @@ const InputNumber = React.forwardRef(
 
     // ============================ Render ============================
     return (
-      <div className={classNames(prefixCls, className)} style={style}>
+      <div
+        className={classNames(prefixCls, className, {
+          [`${prefixCls}-disabled`]: disabled,
+        })}
+        style={style}
+      >
         <div className={`${inputClassName}-wrap`}>
           <input
             {...inputProps}
@@ -147,6 +154,7 @@ const InputNumber = React.forwardRef(
             autoComplete="off"
             value={inputValue}
             onChange={onInternalInput}
+            disabled={disabled}
           />
         </div>
       </div>
