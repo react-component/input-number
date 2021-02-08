@@ -118,6 +118,23 @@ const InputNumber = React.forwardRef(
       return decimalValue.add(minDecimal.negate().toString()).toNumber() <= 0;
     }, [min, decimalValue]);
 
+    // ============================= Data =============================
+    // Ref here in case interval update in closure
+    const originValueRef = React.useRef<DecimalClass>();
+    originValueRef.current = decimalValue;
+
+    const triggerValueUpdate = (
+      updateValue: DecimalClass | ((originValue: DecimalClass) => DecimalClass),
+    ) => {
+      const originValue = originValueRef.current;
+      const newValue = typeof updateValue === 'function' ? updateValue(originValue) : originValue;
+
+      setDecimalValue(newValue);
+
+      // Trigger event
+      onChange(stringMode ? newValue.toString() : newValue.toNumber());
+    };
+
     // ============================ Events ============================
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       const inputStr = e.target.value;
@@ -128,10 +145,7 @@ const InputNumber = React.forwardRef(
       const finalValue = parser(inputStr);
       const finalDecimal = new MiniDecimal(finalValue);
       if (!finalDecimal.isNaN() && !finalDecimal.equals(decimalValue)) {
-        setDecimalValue(finalDecimal);
-
-        // Trigger event
-        onChange(stringMode ? finalDecimal.toString() : finalDecimal.toNumber());
+        triggerValueUpdate(finalDecimal);
       }
 
       // Trigger onInput later to let user customize value if they want do handle something after onChange
@@ -158,7 +172,7 @@ const InputNumber = React.forwardRef(
           return;
         }
 
-        setDecimalValue((ori) => ori.add(stepValue));
+        triggerValueUpdate((ori) => ori.add(stepValue));
       }
 
       // Trigger at once
@@ -171,8 +185,6 @@ const InputNumber = React.forwardRef(
     const onStopStep = () => {
       clearInterval(stepIntervalRef.current);
     };
-
-    // ============================= Data =============================
 
     // ============================ Effect ============================
     // Controlled
