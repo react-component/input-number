@@ -1,5 +1,5 @@
 module.exports = {
-  extends: [require.resolve('@umijs/fabric/dist/stylelint')],
+  extends: [require.resolve('@umijs/fabric/dist/eslint')],
   rules: {
     'arrow-parens': 0,
     'react/no-array-index-key': 0,

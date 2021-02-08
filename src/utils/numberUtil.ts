@@ -31,4 +31,5 @@ export function num2str(number: number): string {
 
 export function validateNumber(numStr: string) {
   const { fullStr } = trimNumber(numStr);
+  return /^-?\d+(\.\d+)?$/.test(fullStr);
 }
