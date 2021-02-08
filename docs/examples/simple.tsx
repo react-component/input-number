@@ -10,7 +10,7 @@ export default () => {
   const [value, setValue] = React.useState(5);
 
   const onChange = (val: number) => {
-    console.log('onChange:', val);
+    console.warn('onChange:', val);
     setValue(val);
   };
 

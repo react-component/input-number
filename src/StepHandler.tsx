@@ -1,10 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-function preventDefault(e: React.SyntheticEvent) {
-  e.preventDefault();
-}
-
 export interface StepHandlerProps {
   prefixCls: string;
   upNode?: React.ReactNode;
@@ -29,7 +25,9 @@ export default function StepHandler({
   onStepRef.current = onStep;
 
   // We will interval update step when hold mouse down
-  const onStepMouseDown = (up: boolean) => {
+  const onStepMouseDown = (e: React.MouseEvent, up: boolean) => {
+    e.preventDefault();
+
     onStepRef.current(up);
 
     stepIntervalRef.current = setInterval(() => {
@@ -64,37 +62,25 @@ export default function StepHandler({
     <div className={`${handlerClassName}-wrap`}>
       <span
         {...sharedHandlerProps}
-        onMouseDown={() => {
-          onStepMouseDown(true);
+        onMouseDown={(e) => {
+          onStepMouseDown(e, true);
         }}
         aria-label="Increase Value"
         aria-disabled={upDisabled}
         className={upClassName}
       >
-        {upNode || (
-          <span
-            unselectable="on"
-            className={`${prefixCls}-handler-up-inner`}
-            onClick={preventDefault}
-          />
-        )}
+        {upNode || <span unselectable="on" className={`${prefixCls}-handler-up-inner`} />}
       </span>
       <span
         {...sharedHandlerProps}
-        onMouseDown={() => {
-          onStepMouseDown(false);
+        onMouseDown={(e) => {
+          onStepMouseDown(e, false);
         }}
         aria-label="Decrease Value"
         aria-disabled={downDisabled}
         className={downClassName}
       >
-        {downNode || (
-          <span
-            unselectable="on"
-            className={`${prefixCls}-handler-down-inner`}
-            onClick={preventDefault}
-          />
-        )}
+        {downNode || <span unselectable="on" className={`${prefixCls}-handler-down-inner`} />}
       </span>
     </div>
   );

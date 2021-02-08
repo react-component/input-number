@@ -24,7 +24,7 @@ export interface DecimalClass {
   negate: () => DecimalClass;
 }
 
-export class NumberDecimal implements DecimalClass {
+class NumberDecimal implements DecimalClass {
   number: number;
 
   constructor(value: ValueType) {
@@ -60,7 +60,7 @@ export class NumberDecimal implements DecimalClass {
   }
 }
 
-export class BigIntDecimal implements DecimalClass {
+class BigIntDecimal implements DecimalClass {
   negative: boolean;
   integer: bigint;
   decimal: bigint;
@@ -70,7 +70,7 @@ export class BigIntDecimal implements DecimalClass {
 
   constructor(value: string | number) {
     // Act like Number convert
-    if (!value && value !== 0) {
+    if ((!value && value !== 0) || value === '-') {
       this.nan = true;
       return;
     }

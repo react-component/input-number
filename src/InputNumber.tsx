@@ -6,6 +6,12 @@ import StepHandler from './StepHandler';
 const defaultParser = (value: ValueType = 0): number | string => value;
 const defaultFormatter = (value: ValueType) => String(value);
 
+/**
+ * We support `stringMode` which need handle correct type when user call in formatter
+ */
+const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) =>
+  stringMode ? decimalValue.toString() : decimalValue.toNumber();
+
 export interface InputNumberProps
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -122,19 +128,31 @@ const InputNumber = React.forwardRef(
     }, [minDecimal, decimalValue]);
 
     // ============================= Data =============================
-    const isInRange = (target: DecimalClass) => {
+    /**
+     * Find target value closet within range.
+     * e.g. [11, 28]:
+     *    3  => 11
+     *    23 => 23
+     *    99 => 28
+     */
+    const getRangeValue = (target: DecimalClass) => {
       // target > max
       if (max && !target.lessEquals(maxDecimal)) {
-        return false;
+        return maxDecimal;
       }
 
       // target < min
       if (min && !minDecimal.lessEquals(target)) {
-        return false;
+        return minDecimal;
       }
 
-      return true;
+      return null;
     };
+
+    /**
+     * Check value is in [min, max] range
+     */
+    const isInRange = (target: DecimalClass) => !getRangeValue(target);
 
     const triggerValueUpdate = (newValue: DecimalClass) => {
       if (isInRange(newValue)) {
@@ -146,6 +164,7 @@ const InputNumber = React.forwardRef(
     };
 
     // ============================ Events ============================
+    // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       const inputStr = e.target.value;
 
@@ -175,6 +194,20 @@ const InputNumber = React.forwardRef(
       }
     };
 
+    // >>> Focus & Blur
+    const onBlur = () => {
+      const parsedValue = new MiniDecimal(parser(inputValue));
+      if (!parsedValue.isNaN()) {
+        // Revert value in range if needed
+        const rangedValue = getRangeValue(parsedValue) || parsedValue;
+        triggerValueUpdate(rangedValue);
+      } else if (decimalValue) {
+        // Reset input back since no validate value
+        setInputValue(formatter(getDecimalValue(stringMode, decimalValue)));
+      }
+      setFocus(false);
+    };
+
     // ============================ Effect ============================
     // Controlled
     React.useEffect(() => {
@@ -190,9 +223,7 @@ const InputNumber = React.forwardRef(
     // Format to inputValue
     React.useEffect(() => {
       if (decimalValue) {
-        const passFormatterValue = stringMode ? decimalValue.toString() : decimalValue.toNumber();
-
-        setInputValue(formatter(passFormatterValue));
+        setInputValue(formatter(getDecimalValue(stringMode, decimalValue)));
       }
     }, [decimalValue, stringMode]);
 
@@ -207,9 +238,7 @@ const InputNumber = React.forwardRef(
         onFocus={() => {
           setFocus(true);
         }}
-        onBlur={() => {
-          setFocus(false);
-        }}
+        onBlur={onBlur}
       >
         <StepHandler
           prefixCls={prefixCls}
