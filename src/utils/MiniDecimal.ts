@@ -1,39 +1,10 @@
 /* eslint-disable max-classes-per-file */
 
+import { num2str, trimNumber } from './numberUtil';
+
 // We use BigInt here.
 // Will fallback to Number if not support.
 const supportBigInt = typeof BigInt !== 'undefined';
-
-/**
- * Format string number to readable number
- */
-function trimNumber(numStr: string) {
-  const negative = numStr.startsWith('-');
-
-  let str = negative ? numStr.slice(1) : numStr;
-
-  str = str
-    // Remove decimal 0. `1.1000` => `1.1`, `1.0` => `1`
-    .replace(/\.?0+$/, '')
-    // Remove integer 0. `0001` => `1`, 000.1' => `.1`
-    .replace(/^0+/, '');
-
-  if (str.startsWith('.')) {
-    str = `0${str}`;
-  }
-
-  const trimStr = str || '0';
-
-  return {
-    negative,
-    trimStr,
-    fullStr: `${negative ? '-' : ''}${trimStr}`,
-  };
-}
-
-function num2str(number: number): string {
-  return trimNumber(number.toFixed(100)).fullStr;
-}
 
 export class NumberDecimal {
   number: number;

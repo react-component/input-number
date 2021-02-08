@@ -1,7 +1,14 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-export interface BasicInputNumberProps {
+export interface InputNumberProps
+  extends Omit<React.HTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue'> {
+  /** value will show as string */
+  stringMode?: boolean;
+
+  defaultValue?: string | number;
+  value?: string | number;
+
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
@@ -9,26 +16,53 @@ export interface BasicInputNumberProps {
   decimalSeparator?: string;
   min?: number;
   max?: number;
+  tabIndex?: number;
+
+  // focusOnUpDown: boolean;
+  // useTouch: boolean;
+  // onKeyUp: (e, ...arg) => void;
+  // onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  // onMouseUp: (...arg) => void;
+  // onFocus: (...arg) => void;
+  // onBlur: (...arg) => void;
+  // required: boolean;
+  // autoComplete: string;
+  // autoFocus?: boolean;
+  // defaultValue?: number;
+  // disabled?: boolean;
+  // formatter?: (value: number | string | undefined) => string;
+  // max?: number;
+  // min?: number;
+  // parser?: (displayValue: string | undefined) => number | string;
+  // precision?: number;
+  // decimalSeparator?: string;
+  // size?: ISize;
+  // step?: number | string;
+  // value?: number;
+  // onChange?: (value: number | string | undefined) => void;
+  // onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
+  // id?: string;
+  // name?: string;
+  // placeholder?: string;
+  // title?: string;
+  // upHandler: React.ReactElement;
+  // downHandler: React.ReactElement;
+  // keyboard?: boolean;
 }
-
-export interface NumberInputNumberProps extends BasicInputNumberProps {
-  defaultValue?: number;
-  value?: number;
-}
-
-export interface StringInputNumberProps extends BasicInputNumberProps {
-  /** value will show as string */
-  stringMode: true;
-
-  defaultValue?: string;
-  value?: string;
-}
-
-export type InputNumberProps = BasicInputNumberProps | StringInputNumberProps;
 
 const InputNumber = React.forwardRef(
   (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
-    const { prefixCls = 'rc-input-number', className, style, autoFocus, min, max } = props;
+    const {
+      prefixCls = 'rc-input-number',
+      className,
+      style,
+      min,
+      max,
+      defaultValue,
+      value,
+      stringMode,
+      ...inputProps
+    } = props;
 
     const inputClassName = `${prefixCls}-input`;
 
@@ -40,9 +74,9 @@ const InputNumber = React.forwardRef(
             role="spinbutton"
             aria-valuemin={min}
             aria-valuemax={max}
-            autoFocus={autoFocus}
             className={inputClassName}
             autoComplete="off"
+            {...inputProps}
           />
         </div>
       </div>
