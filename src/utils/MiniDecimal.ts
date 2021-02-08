@@ -35,40 +35,6 @@ function num2str(number: number): string {
   return trimNumber(number.toFixed(100)).fullStr;
 }
 
-/**
- * Return inverse index. `123456` + `5` = 1
- */
-function reverseIndexOf(str: string, char: string) {
-  for (let i = 0; i < str.length; i += 1) {
-    if (str[str.length - 1 - i] === char) {
-      return i;
-    }
-  }
-  return -1;
-}
-
-function hydrateDecimal(num: bigint, decimalPos: number): string {
-  const valueStr = num.toString();
-
-  if (decimalPos === -1) {
-    return valueStr;
-  }
-
-  // With decimal
-  const negative = valueStr.startsWith('-');
-  let splitStr = negative ? valueStr.slice(1) : valueStr;
-
-  // Fill 0 for slice
-  splitStr = splitStr.padStart(decimalPos + 1, '0');
-
-  const integer = splitStr.slice(0, -decimalPos);
-  const decimal = splitStr.slice(-decimalPos);
-
-  const fullNumber = trimNumber(`${integer}.${decimal}`).fullStr;
-
-  return `${negative ? '-' : ''}${fullNumber}`;
-}
-
 export class NumberDecimal {
   number: number;
 
@@ -86,39 +52,61 @@ export class NumberDecimal {
 }
 
 export class BigIntDecimal {
-  number: bigint;
-
-  //  12345.6789012345
-  //       |-- pos --|
-  decimalPos: number;
+  negative: boolean;
+  integer: bigint;
+  decimal: bigint;
+  /** BigInt will convert `0009` to `9`. We need record the len of decimal */
+  decimalLen: number;
 
   constructor(value: string | number) {
     const trimRet = trimNumber(typeof value === 'string' ? value : num2str(value));
-    this.decimalPos = reverseIndexOf(trimRet.trimStr, '.');
-    this.number = BigInt(trimRet.trimStr.replace('.', '')) * BigInt(trimRet.negative ? -1 : 1);
+    this.negative = trimRet.negative;
+    const numbers = trimRet.trimStr.split('.');
+    this.integer = BigInt(numbers[0]);
+    const decimalStr = numbers[1] || '0';
+    this.decimal = BigInt(decimalStr);
+    this.decimalLen = decimalStr.length;
   }
 
-  private alignDecimal(decimalPos: number) {
-    if (this.decimalPos === decimalPos) {
-      return this.number;
-    }
-
-    return this.number * BigInt(10 ** (decimalPos - this.decimalPos));
+  private getMark() {
+    return this.negative ? '-' : '';
   }
 
-  add(value: string | number) {
+  private getIntegerStr() {
+    return this.integer.toString();
+  }
+
+  private getDecimalStr() {
+    return this.decimal.toString().padStart(this.decimalLen, '0');
+  }
+
+  /**
+   * Align BigIntDecimal with same decimal length. e.g. 12.3 + 5 = 1230000
+   * This is used for add function only.
+   */
+  private alignDecimal(decimalLength: number): bigint {
+    const str = `${this.getMark()}${this.getIntegerStr()}${this.getDecimalStr().padEnd(
+      decimalLength,
+      '0',
+    )}`;
+    return BigInt(str);
+  }
+
+  add(value: string | number): BigIntDecimal {
     const offset = new BigIntDecimal(value);
-    const maxDecimalPos = Math.max(this.decimalPos, offset.decimalPos);
-    const value1 = this.alignDecimal(maxDecimalPos);
-    const value2 = offset.alignDecimal(maxDecimalPos);
+    const maxDecimalLength = Math.max(this.getDecimalStr().length, offset.getDecimalStr().length);
+    const myAlignedDecimal = this.alignDecimal(maxDecimalLength);
+    const offsetAlignedDecimal = offset.alignDecimal(maxDecimalLength);
 
-    const mergedValue = value1 + value2;
+    const valueStr = (myAlignedDecimal + offsetAlignedDecimal).toString();
 
-    return new BigIntDecimal(hydrateDecimal(mergedValue, maxDecimalPos));
+    return new BigIntDecimal(
+      `${valueStr.slice(0, -maxDecimalLength)}.${valueStr.slice(-maxDecimalLength)}`,
+    );
   }
 
-  toString() {
-    return hydrateDecimal(this.number, this.decimalPos);
+  toString(): string {
+    return trimNumber(`${this.getMark()}${this.getIntegerStr()}.${this.getDecimalStr()}`).fullStr;
   }
 }
 

@@ -16,5 +16,16 @@ describe('InputNumber.Decimal', () => {
 
   it('add', () => {
     expect(new MiniDecimal('1128').add('9.3').toString()).toEqual('1137.3');
+    expect(new MiniDecimal('11.28').add('0.0903').toString()).toEqual('11.3703');
+    expect(new MiniDecimal(1128).add(93).toString()).toEqual('1221');
+    expect(new MiniDecimal('1.35').add('2.65').toString()).toEqual('4');
+    expect(new MiniDecimal('0.1').add('1.1').toString()).toEqual('1.2');
+
+    // Negative
+    expect(new MiniDecimal('-1128').add('-9.3').toString()).toEqual('-1137.3');
+    expect(new MiniDecimal('11.28').add('-9.3').toString()).toEqual('1.98');
+    expect(new MiniDecimal('1128').add('-0.93').toString()).toEqual('1127.07');
+    expect(new MiniDecimal('11.28').add('-93').toString()).toEqual('-81.72');
+    expect(new MiniDecimal('-11.28').add('9.3').toString()).toEqual('-1.98');
   });
 });
