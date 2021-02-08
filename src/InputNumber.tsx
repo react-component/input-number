@@ -93,6 +93,8 @@ const InputNumber = React.forwardRef(
 
     const inputClassName = `${prefixCls}-input`;
 
+    const [focus, setFocus] = React.useState(false);
+
     // Input text value control
     const [inputValue, setInputValue] = React.useState('');
 
@@ -120,14 +122,6 @@ const InputNumber = React.forwardRef(
     }, [minDecimal, decimalValue]);
 
     // ============================= Data =============================
-    // Ref here in case interval update in closure
-    const triggerValueUpdate = (newValue: DecimalClass) => {
-      setDecimalValue(newValue);
-
-      // Trigger event
-      onChange(stringMode ? newValue.toString() : newValue.toNumber());
-    };
-
     const isInRange = (target: DecimalClass) => {
       // target > max
       if (max && !target.lessEquals(maxDecimal)) {
@@ -140,6 +134,15 @@ const InputNumber = React.forwardRef(
       }
 
       return true;
+    };
+
+    const triggerValueUpdate = (newValue: DecimalClass) => {
+      if (isInRange(newValue)) {
+        setDecimalValue(newValue);
+
+        // Trigger event
+        onChange(stringMode ? newValue.toString() : newValue.toNumber());
+      }
     };
 
     // ============================ Events ============================
@@ -197,9 +200,16 @@ const InputNumber = React.forwardRef(
     return (
       <div
         className={classNames(prefixCls, className, {
+          [`${prefixCls}-focused`]: focus,
           [`${prefixCls}-disabled`]: disabled,
         })}
         style={style}
+        onFocus={() => {
+          setFocus(true);
+        }}
+        onBlur={() => {
+          setFocus(false);
+        }}
       >
         <StepHandler
           prefixCls={prefixCls}
