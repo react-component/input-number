@@ -1,20 +1,46 @@
 /* eslint-disable max-classes-per-file */
 
-import { num2str, trimNumber } from './numberUtil';
+import { num2str, trimNumber, validateNumber } from './numberUtil';
 
 // We use BigInt here.
 // Will fallback to Number if not support.
 const supportBigInt = typeof BigInt !== 'undefined';
 
-export class NumberDecimal {
+export type ValueType = string | number | undefined;
+
+export interface DecimalClass {
+  add: (value: ValueType) => DecimalClass;
+
+  isNaN: () => boolean;
+
+  toNumber: () => number;
+
+  toString: () => string;
+
+  equals: (target: DecimalClass) => boolean;
+}
+
+export class NumberDecimal implements DecimalClass {
   number: number;
 
-  constructor(value: string | number) {
+  constructor(value: ValueType) {
     this.number = Number(value);
   }
 
-  add(value: string | number) {
+  add(value: ValueType) {
     return new NumberDecimal(this.number + Number(value));
+  }
+
+  isNaN() {
+    return Number.isNaN(this.number);
+  }
+
+  equals(target: DecimalClass) {
+    return this.toString() === target.toString();
+  }
+
+  toNumber() {
+    return this.number;
   }
 
   toString() {
@@ -22,21 +48,27 @@ export class NumberDecimal {
   }
 }
 
-export class BigIntDecimal {
+export class BigIntDecimal implements DecimalClass {
   negative: boolean;
   integer: bigint;
   decimal: bigint;
   /** BigInt will convert `0009` to `9`. We need record the len of decimal */
   decimalLen: number;
+  nan: boolean;
 
   constructor(value: string | number) {
     const trimRet = trimNumber(typeof value === 'string' ? value : num2str(value));
-    this.negative = trimRet.negative;
-    const numbers = trimRet.trimStr.split('.');
-    this.integer = BigInt(numbers[0]);
-    const decimalStr = numbers[1] || '0';
-    this.decimal = BigInt(decimalStr);
-    this.decimalLen = decimalStr.length;
+
+    if (validateNumber(trimRet.fullStr)) {
+      this.negative = trimRet.negative;
+      const numbers = trimRet.trimStr.split('.');
+      this.integer = BigInt(numbers[0]);
+      const decimalStr = numbers[1] || '0';
+      this.decimal = BigInt(decimalStr);
+      this.decimalLen = decimalStr.length;
+    } else {
+      this.nan = true;
+    }
   }
 
   private getMark() {
@@ -63,7 +95,7 @@ export class BigIntDecimal {
     return BigInt(str);
   }
 
-  add(value: string | number): BigIntDecimal {
+  add(value: ValueType): BigIntDecimal {
     const offset = new BigIntDecimal(value);
     const maxDecimalLength = Math.max(this.getDecimalStr().length, offset.getDecimalStr().length);
     const myAlignedDecimal = this.alignDecimal(maxDecimalLength);
@@ -74,6 +106,18 @@ export class BigIntDecimal {
     return new BigIntDecimal(
       `${valueStr.slice(0, -maxDecimalLength)}.${valueStr.slice(-maxDecimalLength)}`,
     );
+  }
+
+  isNaN() {
+    return this.nan;
+  }
+
+  equals(target: DecimalClass) {
+    return this.toString() === target.toString();
+  }
+
+  toNumber() {
+    return Number(this.toString());
   }
 
   toString(): string {

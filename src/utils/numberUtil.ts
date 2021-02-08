@@ -29,7 +29,11 @@ export function num2str(number: number): string {
   return trimNumber(number.toFixed(100)).fullStr;
 }
 
-export function validateNumber(numStr: string) {
-  const { fullStr } = trimNumber(numStr);
+export function validateNumber(num: string | number) {
+  if (typeof num === 'number') {
+    return !Number.isNaN(num);
+  }
+
+  const { fullStr } = trimNumber(num);
   return /^-?\d+(\.\d+)?$/.test(fullStr);
 }
