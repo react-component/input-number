@@ -30,5 +30,12 @@ describe('InputNumber.Decimal', () => {
     expect(new MiniDecimal('1128').add('-0.93').toString()).toEqual('1127.07');
     expect(new MiniDecimal('11.28').add('-93').toString()).toEqual('-81.72');
     expect(new MiniDecimal('-11.28').add('9.3').toString()).toEqual('-1.98');
+
+    // Continue update
+    let number = new MiniDecimal('2.3');
+    number = number.add('-1');
+    expect(number.toString()).toEqual('1.3');
+    number = number.add('-1');
+    expect(number.toString()).toEqual('0.3');
   });
 });

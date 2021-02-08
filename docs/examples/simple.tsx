@@ -7,7 +7,8 @@ export default () => {
   const [disabled, setDisabled] = React.useState(false);
   const [readOnly, setReadOnly] = React.useState(false);
   const [keyboard, setKeyboard] = React.useState(true);
-  const [value, setValue] = React.useState(5);
+  const [stringMode, setStringMode] = React.useState(true);
+  const [value, setValue] = React.useState<string | number>(5);
 
   const onChange = (val: number) => {
     console.warn('onChange:', val);
@@ -26,6 +27,7 @@ export default () => {
         readOnly={readOnly}
         disabled={disabled}
         keyboard={keyboard}
+        stringMode={stringMode}
       />
       <p>
         <button type="button" onClick={() => setDisabled(!disabled)}>
@@ -36,6 +38,9 @@ export default () => {
         </button>
         <button type="button" onClick={() => setKeyboard(!keyboard)}>
           toggle keyboard ({String(keyboard)})
+        </button>
+        <button type="button" onClick={() => setStringMode(!stringMode)}>
+          toggle stringMode ({String(stringMode)})
         </button>
       </p>
     </div>

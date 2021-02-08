@@ -156,10 +156,11 @@ const InputNumber = React.forwardRef(
 
     const triggerValueUpdate = (newValue: DecimalClass) => {
       if (isInRange(newValue)) {
-        setDecimalValue(newValue);
-
         // Trigger event
-        onChange(stringMode ? newValue.toString() : newValue.toNumber());
+        if (!newValue.equals(decimalValue)) {
+          setDecimalValue(newValue);
+          onChange?.(getDecimalValue(stringMode, newValue));
+        }
       }
     };
 
@@ -173,7 +174,7 @@ const InputNumber = React.forwardRef(
       // Parse number
       const finalValue = parser(inputStr);
       const finalDecimal = new MiniDecimal(finalValue);
-      if (!finalDecimal.isNaN() && !finalDecimal.equals(decimalValue)) {
+      if (!finalDecimal.isNaN()) {
         triggerValueUpdate(finalDecimal);
       }
 
@@ -189,9 +190,9 @@ const InputNumber = React.forwardRef(
       }
       const target = decimalValue.add(stepDecimal.toString());
 
-      if (isInRange(target)) {
-        triggerValueUpdate(target);
-      }
+      const rangeValue = getRangeValue(target) || target;
+
+      triggerValueUpdate(rangeValue);
     };
 
     // >>> Focus & Blur
