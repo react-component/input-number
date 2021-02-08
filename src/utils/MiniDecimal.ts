@@ -24,7 +24,7 @@ export class NumberDecimal implements DecimalClass {
   number: number;
 
   constructor(value: ValueType) {
-    this.number = Number(value);
+    this.number = !value && value !== 0 ? NaN : Number(value);
   }
 
   add(value: ValueType) {
@@ -57,6 +57,12 @@ export class BigIntDecimal implements DecimalClass {
   nan: boolean;
 
   constructor(value: string | number) {
+    // Act like Number convert
+    if (!value && value !== 0) {
+      this.nan = true;
+      return;
+    }
+
     const trimRet = trimNumber(typeof value === 'string' ? value : num2str(value));
 
     if (validateNumber(trimRet.fullStr)) {

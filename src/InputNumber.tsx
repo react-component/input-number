@@ -7,7 +7,7 @@ const defaultFormatter = (value: ValueType) => String(value);
 
 export interface InputNumberProps
   extends Omit<
-    React.HTMLAttributes<HTMLInputElement>,
+    React.InputHTMLAttributes<HTMLInputElement>,
     'value' | 'defaultValue' | 'onInput' | 'onChange'
   > {
   /** value will show as string */
@@ -101,6 +101,9 @@ const InputNumber = React.forwardRef(
       const finalDecimal = new MiniDecimal(finalValue);
       if (!finalDecimal.isNaN() && !finalDecimal.equals(decimalValue)) {
         setDecimalValue(finalDecimal);
+
+        // Trigger event
+        onChange(stringMode ? finalDecimal.toString() : finalDecimal.toNumber());
       }
 
       // Trigger onInput later to let user customize value if they want do handle something after onChange
