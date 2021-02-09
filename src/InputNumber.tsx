@@ -250,10 +250,8 @@ const InputNumber = React.forwardRef(
       setInputValue(mergedFormatter(formatValue.toString()));
     };
 
-    // >>> Input
-    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      const inputStr = e.target.value;
-
+    // >>> Collect input value
+    const collectInputValue = (inputStr: string) => {
       recordCursor();
       setInputValue(inputStr);
 
@@ -265,6 +263,24 @@ const InputNumber = React.forwardRef(
           triggerValueUpdate(finalDecimal);
         }
       }
+    };
+
+    // >>> Composition
+    const onCompositionStart = () => {
+      compositionRef.current = true;
+    };
+
+    const onCompositionEnd = () => {
+      compositionRef.current = false;
+
+      collectInputValue(inputRef.current.value);
+    };
+
+    // >>> Input
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      const inputStr = e.target.value;
+
+      collectInputValue(inputStr);
 
       // Trigger onInput later to let user customize value if they want do handle something after onChange
       onInput?.(inputStr);
@@ -307,15 +323,6 @@ const InputNumber = React.forwardRef(
 
     const onKeyUp = () => {
       userTypingRef.current = false;
-    };
-
-    // >>> Composition
-    const onCompositionStart = () => {
-      compositionRef.current = true;
-    };
-
-    const onCompositionEnd = () => {
-      compositionRef.current = false;
     };
 
     // >>> Focus & Blur

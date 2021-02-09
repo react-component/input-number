@@ -30,8 +30,6 @@ function chineseParser(text: string) {
     })
     .join('');
 
-  console.log('P:', parsed, text, Number(parsed));
-
   if (Number.isNaN(Number(parsed))) {
     return text;
   }
