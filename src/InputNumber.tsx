@@ -182,10 +182,13 @@ const InputNumber = React.forwardRef(
           return parser(numStr);
         }
 
+        let parsedStr = numStr;
         if (decimalSeparator) {
-          return numStr.replace(decimalSeparator, '.');
+          parsedStr = parsedStr.replace(decimalSeparator, '.');
         }
-        return numStr;
+
+        // [Legacy] We still support auto convert `$ 123,456` to `123456`
+        return parsedStr.replace(/[^\w.-]+/g, '');
       },
       [parser, decimalSeparator],
     );
@@ -315,10 +318,11 @@ const InputNumber = React.forwardRef(
 
     // Format to inputValue
     React.useEffect(() => {
-      if (decimalValue && !userTypingRef.current) {
+      // When not typing or customize formatter can flush input value at once
+      if (decimalValue && (!userTypingRef.current || formatter)) {
         setInputValue(mergedFormatter(decimalValue.toString()));
       }
-    }, [decimalValue && decimalValue.toString(), stringMode]);
+    }, [decimalValue && decimalValue.toString()]);
 
     // ============================ Render ============================
     return (

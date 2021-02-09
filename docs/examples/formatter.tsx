@@ -5,7 +5,7 @@ import '../../assets/index.less';
 
 function getSum(str) {
   let total = 0;
-  str.split('').forEach(c => {
+  str.split('').forEach((c) => {
     const num = Number(c);
 
     if (!Number.isNaN(num)) {
@@ -27,18 +27,21 @@ class App extends React.Component {
         <InputNumber
           aria-label="Controlled number input demonstrating a custom currency format"
           defaultValue={1000}
-          formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          onChange={console.log}
         />
         <InputNumber
           aria-label="Controlled number input demonstrating a custom percentage format"
           defaultValue={100}
-          formatter={value => `${value}%`}
-          parser={value => value.replace('%', '')}
+          formatter={(value) => `${value}%`}
+          parser={(value) => value.replace('%', '')}
+          onChange={console.log}
         />
         <InputNumber
           aria-label="Controlled number input demonstrating a custom format to add commas"
           style={{ width: 100 }}
-          formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          onChange={console.log}
         />
 
         <div>
@@ -46,10 +49,11 @@ class App extends React.Component {
           <InputNumber
             aria-label="Controlled number input demonstrating a custom format"
             value={this.state.value}
-            onChange={value => {
+            onChange={(value) => {
+              console.log(value);
               this.setState({ value });
             }}
-            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           />
         </div>
 
@@ -58,8 +62,9 @@ class App extends React.Component {
           <InputNumber
             aria-label="Number input example demonstrating a strange custom format"
             defaultValue={1000}
-            formatter={value => `$ ${value} - ${getSum(value)}`}
-            parser={value => (value.match(/^\$ ([\d.]*) .*$/) || [])[1]}
+            formatter={(value) => `$ ${value} - ${getSum(value)}`}
+            parser={(value) => (value.match(/^\$ ([\d.]*) .*$/) || [])[1]}
+            onChange={console.log}
           />
         </div>
       </div>
