@@ -175,7 +175,7 @@ const InputNumber = React.forwardRef(
         if (precision >= 0) {
           const { negativeStr, integerStr, decimalStr } = trimNumber(updateValue.toString());
           updateValue = new MiniDecimal(
-            `${negativeStr}${integerStr}.${decimalStr.padEnd(precision, '0').slice(precision)}0`,
+            `${negativeStr}${integerStr}.${decimalStr.padEnd(precision, '0').slice(0, precision)}0`,
           );
         }
 
@@ -266,15 +266,19 @@ const InputNumber = React.forwardRef(
     // >>> Focus & Blur
     const onBlur = () => {
       const parsedValue = new MiniDecimal(parser(inputValue));
+      let formatValue: DecimalClass = parsedValue;
 
       if (!parsedValue.isNaN()) {
         // Revert value in range if needed
         const rangedValue = getRangeValue(parsedValue) || parsedValue;
         triggerValueUpdate(rangedValue);
-      } else if (decimalValue) {
-        // Reset input back since no validate value
-        setInputValue(mergedFormatter(getDecimalValue(stringMode, decimalValue)));
+      } else {
+        formatValue = decimalValue;
       }
+
+      // Reset input back since no validate value
+      setInputValue(mergedFormatter(getDecimalValue(stringMode, formatValue)));
+
       setFocus(false);
     };
 
