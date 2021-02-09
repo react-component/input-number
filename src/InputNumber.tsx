@@ -33,8 +33,6 @@ export interface InputNumberProps
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
-  autoFocus?: boolean;
-  decimalSeparator?: string;
   min?: number;
   max?: number;
   tabIndex?: number;
@@ -50,6 +48,8 @@ export interface InputNumberProps
   formatter?: (value: number | string | undefined) => string;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
+  /** Syntactic sugar of `formatter`. Config decimal separator of display. */
+  decimalSeparator?: string;
 
   onInput?: (text: string) => void;
   onChange?: (value: number | string) => void;
@@ -57,17 +57,7 @@ export interface InputNumberProps
 
   // focusOnUpDown: boolean;
   // useTouch: boolean;
-  // onKeyUp: (e, ...arg) => void;
-  // onMouseUp: (...arg) => void;
-  // onFocus: (...arg) => void;
-  // onBlur: (...arg) => void;
-  // required: boolean;
-  // autoComplete: string;
-  // autoFocus?: boolean;
-  // defaultValue?: number;
-  // disabled?: boolean;
 
-  // decimalSeparator?: string;
   // size?: ISize;
   // step?: number | string;
   // value?: number;
@@ -96,6 +86,7 @@ const InputNumber = React.forwardRef(
       parser = defaultParser,
       formatter,
       precision,
+      decimalSeparator,
 
       onChange,
       onInput,
@@ -191,16 +182,27 @@ const InputNumber = React.forwardRef(
 
         let str = typeof number === 'number' ? num2str(number) : number;
 
-        if (precision >= 0 && validateNumber(str)) {
+        if (validateNumber(str) && (decimalSeparator || precision >= 0)) {
+          // Separator
+          const separatorStr = decimalSeparator || '.';
+
+          // Precision
           const { negativeStr, integerStr, decimalStr } = trimNumber(str);
-          const precisionDecimalStr =
-            precision > 0 ? `.${decimalStr.padEnd(precision, '0').slice(0, precision)}` : '';
+          let precisionDecimalStr = `${separatorStr}${decimalStr}`;
+
+          if (precision >= 0) {
+            precisionDecimalStr =
+              precision > 0
+                ? `${separatorStr}${decimalStr.padEnd(precision, '0').slice(0, precision)}`
+                : '';
+          }
+
           str = `${negativeStr}${integerStr}${precisionDecimalStr}`;
         }
 
         return str;
       },
-      [formatter, precision],
+      [formatter, precision, decimalSeparator],
     );
 
     /**
