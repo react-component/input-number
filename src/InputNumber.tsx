@@ -40,8 +40,8 @@ export interface InputNumberProps
   tabIndex?: number;
 
   // Customize handler node
-  upNode?: React.ReactNode;
-  downNode?: React.ReactNode;
+  upHandler?: React.ReactNode;
+  downHandler?: React.ReactNode;
   keyboard?: boolean;
 
   /** Parse display value to validate number */
@@ -53,11 +53,11 @@ export interface InputNumberProps
 
   onInput?: (text: string) => void;
   onChange?: (value: number | string) => void;
+  onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
 
   // focusOnUpDown: boolean;
   // useTouch: boolean;
   // onKeyUp: (e, ...arg) => void;
-  // onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   // onMouseUp: (...arg) => void;
   // onFocus: (...arg) => void;
   // onBlur: (...arg) => void;
@@ -72,13 +72,6 @@ export interface InputNumberProps
   // step?: number | string;
   // value?: number;
   // onChange?: (value: number | string | undefined) => void;
-  // onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
-  // id?: string;
-  // name?: string;
-  // placeholder?: string;
-  // title?: string;
-  // upHandler: React.ReactElement;
-  // downHandler: React.ReactElement;
 }
 
 const InputNumber = React.forwardRef(
@@ -94,8 +87,8 @@ const InputNumber = React.forwardRef(
       value,
       disabled,
       readOnly,
-      upNode,
-      downNode,
+      upHandler,
+      downHandler,
       keyboard,
 
       stringMode,
@@ -106,6 +99,8 @@ const InputNumber = React.forwardRef(
 
       onChange,
       onInput,
+      onPressEnter,
+
       ...inputProps
     } = props;
 
@@ -208,6 +203,25 @@ const InputNumber = React.forwardRef(
       [formatter, precision],
     );
 
+    /**
+     * Flush current input content to trigger value change & re-formatter input if needed
+     */
+    const flushInputValue = () => {
+      const parsedValue = new MiniDecimal(parser(inputValue));
+      let formatValue: DecimalClass = parsedValue;
+
+      if (!parsedValue.isNaN()) {
+        // Revert value in range if needed
+        const rangedValue = getRangeValue(parsedValue) || parsedValue;
+        triggerValueUpdate(rangedValue);
+      } else {
+        formatValue = decimalValue;
+      }
+
+      // Reset input back since no validate value
+      setInputValue(mergedFormatter(getDecimalValue(stringMode, formatValue)));
+    };
+
     // ============================ Events ============================
     const userTypingRef = React.useRef(false);
 
@@ -243,16 +257,20 @@ const InputNumber = React.forwardRef(
       inputRef.current?.focus();
     };
 
-    const onKeyDown: React.KeyboardEventHandler<HTMLElement> = (event) => {
+    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+      const { which } = event;
       userTypingRef.current = true;
+
+      if (which === KeyCode.ENTER) {
+        flushInputValue();
+        onPressEnter?.(event);
+      }
 
       if (keyboard === false) {
         return;
       }
 
       // Do step
-      const { which } = event;
-
       if ([KeyCode.UP, KeyCode.DOWN].includes(which)) {
         onStep(KeyCode.UP === which);
         event.preventDefault();
@@ -265,19 +283,7 @@ const InputNumber = React.forwardRef(
 
     // >>> Focus & Blur
     const onBlur = () => {
-      const parsedValue = new MiniDecimal(parser(inputValue));
-      let formatValue: DecimalClass = parsedValue;
-
-      if (!parsedValue.isNaN()) {
-        // Revert value in range if needed
-        const rangedValue = getRangeValue(parsedValue) || parsedValue;
-        triggerValueUpdate(rangedValue);
-      } else {
-        formatValue = decimalValue;
-      }
-
-      // Reset input back since no validate value
-      setInputValue(mergedFormatter(getDecimalValue(stringMode, formatValue)));
+      flushInputValue();
 
       setFocus(false);
     };
@@ -318,21 +324,21 @@ const InputNumber = React.forwardRef(
       >
         <StepHandler
           prefixCls={prefixCls}
-          upNode={upNode}
-          downNode={downNode}
+          upNode={upHandler}
+          downNode={downHandler}
           upDisabled={upDisabled}
           downDisabled={downDisabled}
           onStep={onStep}
         />
         <div className={`${inputClassName}-wrap`}>
           <input
+            autoComplete="off"
             {...inputProps}
             ref={composeRef(inputRef, ref)}
             role="spinbutton"
             aria-valuemin={min}
             aria-valuemax={max}
             className={inputClassName}
-            autoComplete="off"
             value={inputValue}
             onChange={onInternalInput}
             disabled={disabled}
