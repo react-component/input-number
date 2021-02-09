@@ -33,7 +33,9 @@ export function trimNumber(numStr: string) {
 }
 
 export function isE(number: string | number) {
-  return /^-?\d+(\.\d+)?e-\d+$/.test(String(number));
+  const str = String(number);
+
+  return !Number.isNaN(Number(str)) && str.includes('e');
 }
 
 export function num2str(number: number): string {
