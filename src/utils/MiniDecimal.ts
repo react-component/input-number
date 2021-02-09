@@ -44,6 +44,9 @@ class NumberDecimal implements DecimalClass {
   }
 
   add(value: ValueType) {
+    if (this.isEmpty() || this.isNaN()) {
+      return new NumberDecimal(value);
+    }
     return new NumberDecimal(this.number + Number(value));
   }
 
@@ -149,6 +152,10 @@ class BigIntDecimal implements DecimalClass {
   }
 
   add(value: ValueType): BigIntDecimal {
+    if (this.isEmpty() || this.isNaN()) {
+      return new BigIntDecimal(value);
+    }
+
     const offset = new BigIntDecimal(value);
     const maxDecimalLength = Math.max(this.getDecimalStr().length, offset.getDecimalStr().length);
     const myAlignedDecimal = this.alignDecimal(maxDecimalLength);
