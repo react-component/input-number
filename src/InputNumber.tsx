@@ -169,12 +169,20 @@ const InputNumber = React.forwardRef(
     const isInRange = (target: DecimalClass) => !getRangeValue(target);
 
     const triggerValueUpdate = (newValue: DecimalClass) => {
-      if (isInRange(newValue) && !readOnly && !disabled) {
+      let updateValue = newValue;
+
+      if (isInRange(updateValue) && !readOnly && !disabled) {
+        if (precision >= 0) {
+          const { negativeStr, integerStr, decimalStr } = trimNumber(updateValue.toString());
+          updateValue = new MiniDecimal(
+            `${negativeStr}${integerStr}.${decimalStr.padEnd(precision, '0').slice(precision)}0`,
+          );
+        }
+
         // Trigger event
-        if (!newValue.equals(decimalValue)) {
-          console.warn('Update:', newValue);
-          setDecimalValue(newValue);
-          onChange?.(getDecimalValue(stringMode, newValue));
+        if (!updateValue.equals(decimalValue)) {
+          setDecimalValue(updateValue);
+          onChange?.(getDecimalValue(stringMode, updateValue));
         }
       }
     };
@@ -188,11 +196,11 @@ const InputNumber = React.forwardRef(
 
         let str = typeof number === 'number' ? num2str(number) : number;
 
-        if (precision > 0 && validateNumber(str)) {
+        if (precision >= 0 && validateNumber(str)) {
           const { negativeStr, integerStr, decimalStr } = trimNumber(str);
-          str = `${negativeStr}${integerStr}.${decimalStr
-            .padEnd(precision, '0')
-            .slice(0, precision)}`;
+          const precisionDecimalStr =
+            precision > 0 ? `.${decimalStr.padEnd(precision, '0').slice(0, precision)}` : '';
+          str = `${negativeStr}${integerStr}${precisionDecimalStr}`;
         }
 
         return str;
@@ -280,16 +288,14 @@ const InputNumber = React.forwardRef(
 
     React.useEffect(() => {
       setDecimalValue(new MiniDecimal(value));
-      console.warn('Effect:', value, new MiniDecimal(value));
     }, [value]);
 
     // Format to inputValue
-    // TODO: 这边逻辑还需要梳理一下，用户在输入中时应该不需要改变输入框内的值，否则不方便输入
     React.useEffect(() => {
       if (decimalValue && !userTypingRef.current) {
         setInputValue(mergedFormatter(getDecimalValue(stringMode, decimalValue)));
       }
-    }, [decimalValue, stringMode]);
+    }, [decimalValue && decimalValue.toString(), stringMode]);
 
     // ============================ Render ============================
     return (
