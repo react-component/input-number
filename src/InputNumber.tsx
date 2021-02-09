@@ -101,12 +101,20 @@ const InputNumber = React.forwardRef(
     const userTypingRef = React.useRef(false);
     const compositionRef = React.useRef(false);
 
+    function getInitValue() {
+      return value !== undefined ? value : defaultValue;
+    }
+
     // Input text value control
-    const [inputValue, setInputValue] = React.useState('');
+    const [inputValue, setInputValue] = React.useState(() => {
+      const initValue = getInitValue();
+      return initValue !== undefined ? initValue : '';
+    });
+    console.log('>>>', inputValue);
 
     // Real value control
     const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() => {
-      const initValue = value !== undefined ? value : defaultValue;
+      const initValue = getInitValue();
       return initValue !== undefined ? new MiniDecimal(initValue) : null;
     });
 
@@ -182,7 +190,9 @@ const InputNumber = React.forwardRef(
     // ====================== Parser & Formatter ======================
     // >>> Parser
     const mergedParser = React.useCallback(
-      (numStr: string) => {
+      (num: string | number) => {
+        const numStr = String(num);
+
         if (parser) {
           return parser(numStr);
         }
@@ -343,7 +353,7 @@ const InputNumber = React.forwardRef(
     // Format to inputValue
     React.useEffect(() => {
       // When not typing or customize formatter can flush input value at once
-      if (decimalValue && (!userTypingRef.current || formatter)) {
+      if (decimalValue && !decimalValue.isInvalidate() && (!userTypingRef.current || formatter)) {
         setInputValue(mergedFormatter(decimalValue.toString()));
       }
     }, [decimalValue && decimalValue.toString()]);
