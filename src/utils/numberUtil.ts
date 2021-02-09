@@ -33,7 +33,7 @@ export function trimNumber(numStr: string) {
 }
 
 export function isE(number: string | number) {
-  return /^\d+e-\d+$/.test(String(number));
+  return /^-?\d+(\.\d+)?e-\d+$/.test(String(number));
 }
 
 export function num2str(number: number): string {
