@@ -177,6 +177,10 @@ const InputNumber = React.forwardRef(
     // >>> Parser
     const mergedParser = React.useCallback(
       (numStr: string) => {
+        if (parser) {
+          return parser(numStr);
+        }
+
         if (decimalSeparator) {
           return numStr.replace(decimalSeparator, '.');
         }
