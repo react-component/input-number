@@ -2,12 +2,12 @@ import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
-import MiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
+import MiniDecimal, { DecimalClass } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
 import { num2str, trimNumber, validateNumber } from './utils/numberUtil';
 
 /**
- * We support `stringMode` which need handle correct type when user call in formatter
+ * We support `stringMode` which need handle correct type when user call in onChange
  */
 const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) => {
   if (stringMode || decimalValue.isEmpty()) {
@@ -33,6 +33,7 @@ export interface InputNumberProps
   style?: React.CSSProperties;
   min?: number;
   max?: number;
+  step?: number | string;
   tabIndex?: number;
 
   // Customize handler node
@@ -43,7 +44,7 @@ export interface InputNumberProps
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined) => number | string;
   /** Transform `value` to display value show in input */
-  formatter?: (value: number | string | undefined) => string;
+  formatter?: (value: string | undefined) => string;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
@@ -57,9 +58,6 @@ export interface InputNumberProps
   // useTouch: boolean;
 
   // size?: ISize;
-  // step?: number | string;
-  // value?: number;
-  // onChange?: (value: number | string | undefined) => void;
 }
 
 const InputNumber = React.forwardRef(
@@ -105,7 +103,10 @@ const InputNumber = React.forwardRef(
     const [inputValue, setInputValue] = React.useState('');
 
     // Real value control
-    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(null);
+    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() => {
+      const initValue = value !== undefined ? value : defaultValue;
+      return initValue !== undefined ? new MiniDecimal(initValue) : null;
+    });
 
     // >>> Max & Min limit
     const maxDecimal = React.useMemo(() => (max ? new MiniDecimal(max) : null), [max]);
@@ -191,7 +192,7 @@ const InputNumber = React.forwardRef(
 
     // >>> Formatter
     const mergedFormatter = React.useCallback(
-      (number: number | string) => {
+      (number: string) => {
         if (formatter) {
           return formatter(number);
         }
@@ -238,7 +239,7 @@ const InputNumber = React.forwardRef(
       }
 
       // Reset input back since no validate value
-      setInputValue(mergedFormatter(getDecimalValue(stringMode, formatValue)));
+      setInputValue(mergedFormatter(formatValue.toString()));
     };
 
     // >>> Input
@@ -264,7 +265,7 @@ const InputNumber = React.forwardRef(
       if (!up) {
         stepDecimal = stepDecimal.negate();
       }
-      const target = decimalValue.add(stepDecimal.toString());
+      const target = (decimalValue || new MiniDecimal(0)).add(stepDecimal.toString());
 
       const rangeValue = getRangeValue(target) || target;
 
@@ -307,19 +308,15 @@ const InputNumber = React.forwardRef(
     // ============================ Effect ============================
     // Controlled
     React.useEffect(() => {
-      if (defaultValue !== undefined) {
-        setDecimalValue(new MiniDecimal(defaultValue));
+      if (value !== undefined) {
+        setDecimalValue(new MiniDecimal(value));
       }
-    }, []);
-
-    React.useEffect(() => {
-      setDecimalValue(new MiniDecimal(value));
     }, [value]);
 
     // Format to inputValue
     React.useEffect(() => {
       if (decimalValue && !userTypingRef.current) {
-        setInputValue(mergedFormatter(getDecimalValue(stringMode, decimalValue)));
+        setInputValue(mergedFormatter(decimalValue.toString()));
       }
     }, [decimalValue && decimalValue.toString(), stringMode]);
 

@@ -65,7 +65,7 @@ class NumberDecimal implements DecimalClass {
   }
 
   equals(target: DecimalClass) {
-    return this.toString() === target.toString();
+    return this.toString() === target?.toString();
   }
 
   lessEquals(target: DecimalClass) {
@@ -196,7 +196,7 @@ class BigIntDecimal implements DecimalClass {
   }
 
   equals(target: DecimalClass) {
-    return this.toString() === target.toString();
+    return this.toString() === target?.toString();
   }
 
   lessEquals(target: DecimalClass) {
