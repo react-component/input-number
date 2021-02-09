@@ -6,8 +6,6 @@ import MiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
 import { num2str, trimNumber, validateNumber } from './utils/numberUtil';
 
-const defaultParser = (value: ValueType = 0): number | string => value;
-
 /**
  * We support `stringMode` which need handle correct type when user call in formatter
  */
@@ -83,7 +81,7 @@ const InputNumber = React.forwardRef(
 
       stringMode,
 
-      parser = defaultParser,
+      parser,
       formatter,
       precision,
       decimalSeparator,
@@ -100,6 +98,8 @@ const InputNumber = React.forwardRef(
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     const [focus, setFocus] = React.useState(false);
+
+    const userTypingRef = React.useRef(false);
 
     // Input text value control
     const [inputValue, setInputValue] = React.useState('');
@@ -174,6 +174,18 @@ const InputNumber = React.forwardRef(
     };
 
     // ====================== Parser & Formatter ======================
+    // >>> Parser
+    const mergedParser = React.useCallback(
+      (numStr: string) => {
+        if (decimalSeparator) {
+          return numStr.replace(decimalSeparator, '.');
+        }
+        return numStr;
+      },
+      [parser, decimalSeparator],
+    );
+
+    // >>> Formatter
     const mergedFormatter = React.useCallback(
       (number: number | string) => {
         if (formatter) {
@@ -205,11 +217,12 @@ const InputNumber = React.forwardRef(
       [formatter, precision, decimalSeparator],
     );
 
+    // ============================ Events ============================
     /**
      * Flush current input content to trigger value change & re-formatter input if needed
      */
     const flushInputValue = () => {
-      const parsedValue = new MiniDecimal(parser(inputValue));
+      const parsedValue = new MiniDecimal(mergedParser(inputValue));
       let formatValue: DecimalClass = parsedValue;
 
       if (!parsedValue.isNaN()) {
@@ -224,9 +237,6 @@ const InputNumber = React.forwardRef(
       setInputValue(mergedFormatter(getDecimalValue(stringMode, formatValue)));
     };
 
-    // ============================ Events ============================
-    const userTypingRef = React.useRef(false);
-
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       const inputStr = e.target.value;
@@ -234,7 +244,7 @@ const InputNumber = React.forwardRef(
       setInputValue(inputStr);
 
       // Parse number
-      const finalValue = parser(inputStr);
+      const finalValue = mergedParser(inputStr);
       const finalDecimal = new MiniDecimal(finalValue);
       if (!finalDecimal.isInvalidate()) {
         triggerValueUpdate(finalDecimal);
