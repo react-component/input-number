@@ -220,7 +220,7 @@ const InputNumber = React.forwardRef(
       // Parse number
       const finalValue = parser(inputStr);
       const finalDecimal = new MiniDecimal(finalValue);
-      if (!finalDecimal.isNaN() && !finalDecimal.isEmpty()) {
+      if (!finalDecimal.isInvalidate()) {
         triggerValueUpdate(finalDecimal);
       }
 

@@ -15,6 +15,8 @@ export interface DecimalClass {
 
   isNaN: () => boolean;
 
+  isInvalidate: () => boolean;
+
   toNumber: () => number;
 
   toString: () => string;
@@ -44,7 +46,7 @@ class NumberDecimal implements DecimalClass {
   }
 
   add(value: ValueType) {
-    if (this.isEmpty() || this.isNaN()) {
+    if (this.isInvalidate()) {
       return new NumberDecimal(value);
     }
     return new NumberDecimal(this.number + Number(value));
@@ -56,6 +58,10 @@ class NumberDecimal implements DecimalClass {
 
   isNaN() {
     return Number.isNaN(this.number);
+  }
+
+  isInvalidate() {
+    return !this.isEmpty() && !this.isNaN();
   }
 
   equals(target: DecimalClass) {
@@ -71,7 +77,7 @@ class NumberDecimal implements DecimalClass {
   }
 
   toString() {
-    if (this.isEmpty()) {
+    if (this.isInvalidate()) {
       return '';
     }
 
@@ -153,11 +159,15 @@ class BigIntDecimal implements DecimalClass {
   }
 
   add(value: ValueType): BigIntDecimal {
-    if (this.isEmpty() || this.isNaN()) {
+    if (this.isInvalidate()) {
       return new BigIntDecimal(value);
     }
 
     const offset = new BigIntDecimal(value);
+    if (offset.isInvalidate()) {
+      return this;
+    }
+
     const maxDecimalLength = Math.max(this.getDecimalStr().length, offset.getDecimalStr().length);
     const myAlignedDecimal = this.alignDecimal(maxDecimalLength);
     const offsetAlignedDecimal = offset.alignDecimal(maxDecimalLength);
@@ -181,6 +191,10 @@ class BigIntDecimal implements DecimalClass {
     return this.nan;
   }
 
+  isInvalidate() {
+    return this.isEmpty() || this.isNaN();
+  }
+
   equals(target: DecimalClass) {
     return this.toString() === target.toString();
   }
@@ -197,7 +211,7 @@ class BigIntDecimal implements DecimalClass {
   }
 
   toString(): string {
-    if (this.isNaN() || this.isEmpty()) {
+    if (this.isInvalidate()) {
       return '';
     }
     return trimNumber(`${this.getMark()}${this.getIntegerStr()}.${this.getDecimalStr()}`).fullStr;
