@@ -17,4 +17,6 @@ describe('InputNumber.Keyboard', () => {
     wrapper.find('input').simulate('keyDown', { which: KeyCode.DOWN });
     expect(onChange).toHaveBeenCalledWith(-1);
   });
+
+  // shift + 10, ctrl + 0.1 test case removed
 });
