@@ -49,6 +49,11 @@ class Component extends React.Component {
   render() {
     return (
       <div style={{ margin: 10 }}>
+        <p>
+          When number is validate in range, keep formatting.
+          Else will flush when blur.
+        </p>
+
         <InputNumber
           aria-label="Number input example that demonstrates combination key format"
           min={-8000}
