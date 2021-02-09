@@ -6,5 +6,18 @@ import '../../assets/index.less';
 export default () => {
   const [value, setValue] = React.useState('aaa');
 
-  return <InputNumber value={value} onInput={setValue} />;
+  return (
+    <div>
+      <InputNumber
+        value={value}
+        onChange={(newValue) => {
+          console.log('Change:', newValue);
+        }}
+        onInput={(text) => {
+          console.log('Input:', text);
+          setValue(text);
+        }}
+      />
+    </div>
+  );
 };

@@ -110,7 +110,6 @@ const InputNumber = React.forwardRef(
       const initValue = getInitValue();
       return initValue !== undefined ? initValue : '';
     });
-    console.log('>>>', inputValue);
 
     // Real value control
     const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() => {
@@ -257,7 +256,9 @@ const InputNumber = React.forwardRef(
       }
 
       // Reset input back since no validate value
-      setInputValue(mergedFormatter(formatValue.toString()));
+      if (!formatValue.isNaN()) {
+        setInputValue(mergedFormatter(formatValue.toString()));
+      }
     };
 
     // >>> Collect input value
