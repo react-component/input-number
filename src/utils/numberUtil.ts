@@ -3,6 +3,7 @@
  */
 export function trimNumber(numStr: string) {
   const negative = numStr.startsWith('-');
+  const negativeStr = negative ? '-' : '';
 
   let str = negative ? numStr.slice(1) : numStr;
 
@@ -19,11 +20,15 @@ export function trimNumber(numStr: string) {
   }
 
   const trimStr = str || '0';
+  const splitNumber = trimStr.split('.');
 
   return {
     negative,
+    negativeStr,
     trimStr,
-    fullStr: `${negative ? '-' : ''}${trimStr}`,
+    integerStr: splitNumber[0] || '0',
+    decimalStr: splitNumber[1] || '0',
+    fullStr: `${negativeStr}${trimStr}`,
   };
 }
 
@@ -36,6 +41,10 @@ export function validateNumber(num: string | number) {
     return !Number.isNaN(num);
   }
 
-  const { fullStr } = trimNumber(num);
-  return /^-?\d+(\.\d+)?$/.test(fullStr);
+  // Empty
+  if (!num) {
+    return false;
+  }
+
+  return /^-?\d+(\.\d+)?$/.test(num);
 }

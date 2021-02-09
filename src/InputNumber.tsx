@@ -1,18 +1,12 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
+import { composeRef } from 'rc-util/lib/ref';
 import MiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
-import { num2str } from './utils/numberUtil';
+import { num2str, trimNumber, validateNumber } from './utils/numberUtil';
 
 const defaultParser = (value: ValueType = 0): number | string => value;
-const defaultFormatter = (value: ValueType) => {
-  if (typeof value === 'number') {
-    return num2str(value);
-  }
-
-  return value;
-};
 
 /**
  * We support `stringMode` which need handle correct type when user call in formatter
@@ -54,6 +48,8 @@ export interface InputNumberProps
   parser?: (displayValue: string | undefined) => number | string;
   /** Transform `value` to display value show in input */
   formatter?: (value: number | string | undefined) => string;
+  /** Syntactic sugar of `formatter`. Config precision of display. */
+  precision?: number;
 
   onInput?: (text: string) => void;
   onChange?: (value: number | string) => void;
@@ -70,7 +66,7 @@ export interface InputNumberProps
   // autoFocus?: boolean;
   // defaultValue?: number;
   // disabled?: boolean;
-  // precision?: number;
+
   // decimalSeparator?: string;
   // size?: ISize;
   // step?: number | string;
@@ -105,7 +101,8 @@ const InputNumber = React.forwardRef(
       stringMode,
 
       parser = defaultParser,
-      formatter = defaultFormatter,
+      formatter,
+      precision,
 
       onChange,
       onInput,
@@ -113,6 +110,8 @@ const InputNumber = React.forwardRef(
     } = props;
 
     const inputClassName = `${prefixCls}-input`;
+
+    const inputRef = React.useRef<HTMLInputElement>(null);
 
     const [focus, setFocus] = React.useState(false);
 
@@ -179,6 +178,27 @@ const InputNumber = React.forwardRef(
       }
     };
 
+    // ====================== Parser & Formatter ======================
+    const mergedFormatter = React.useCallback(
+      (number: number | string) => {
+        if (formatter) {
+          return formatter(number);
+        }
+
+        let str = typeof number === 'number' ? num2str(number) : number;
+
+        if (precision > 0 && validateNumber(str)) {
+          const { negativeStr, integerStr, decimalStr } = trimNumber(str);
+          str = `${negativeStr}${integerStr}.${decimalStr
+            .padEnd(precision, '0')
+            .slice(0, precision)}`;
+        }
+
+        return str;
+      },
+      [formatter, precision],
+    );
+
     // ============================ Events ============================
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -208,6 +228,8 @@ const InputNumber = React.forwardRef(
       const rangeValue = getRangeValue(target) || target;
 
       triggerValueUpdate(rangeValue);
+
+      inputRef.current?.focus();
     };
 
     const onKeyDown: React.KeyboardEventHandler<HTMLElement> = (event) => {
@@ -233,7 +255,7 @@ const InputNumber = React.forwardRef(
         triggerValueUpdate(rangedValue);
       } else if (decimalValue) {
         // Reset input back since no validate value
-        setInputValue(formatter(getDecimalValue(stringMode, decimalValue)));
+        setInputValue(mergedFormatter(getDecimalValue(stringMode, decimalValue)));
       }
       setFocus(false);
     };
@@ -251,9 +273,10 @@ const InputNumber = React.forwardRef(
     }, [value]);
 
     // Format to inputValue
+    // TODO: 这边逻辑还需要梳理一下，用户在输入中时应该不需要改变输入框内的值，否则不方便输入
     React.useEffect(() => {
       if (decimalValue) {
-        setInputValue(formatter(getDecimalValue(stringMode, decimalValue)));
+        setInputValue(mergedFormatter(getDecimalValue(stringMode, decimalValue)));
       }
     }, [decimalValue, stringMode]);
 
@@ -282,7 +305,7 @@ const InputNumber = React.forwardRef(
         <div className={`${inputClassName}-wrap`}>
           <input
             {...inputProps}
-            ref={ref}
+            ref={composeRef(inputRef, ref)}
             role="spinbutton"
             aria-valuemin={min}
             aria-valuemax={max}
