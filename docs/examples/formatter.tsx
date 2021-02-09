@@ -16,6 +16,40 @@ function getSum(str) {
   return total;
 }
 
+const CHINESE_NUMBERS = '零一二三四五六七八九';
+
+function chineseParser(text: string) {
+  const parsed = [...text]
+    .map((cell) => {
+      const index = CHINESE_NUMBERS.indexOf(cell);
+      if (index !== -1) {
+        return index;
+      }
+
+      return cell;
+    })
+    .join('');
+
+  if (Number.isNaN(Number(parsed))) {
+    return text;
+  }
+
+  return parsed;
+}
+
+function chineseFormatter(value: string) {
+  return [...value]
+    .map((cell) => {
+      const index = Number(cell);
+      if (!Number.isNaN(index)) {
+        return CHINESE_NUMBERS[index];
+      }
+
+      return cell;
+    })
+    .join('');
+}
+
 class App extends React.Component {
   state = {
     value: 1000,
@@ -24,7 +58,7 @@ class App extends React.Component {
   render() {
     return (
       <div style={{ margin: 10 }}>
-        <InputNumber
+        {/* <InputNumber
           aria-label="Controlled number input demonstrating a custom currency format"
           defaultValue={1000}
           formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -42,11 +76,11 @@ class App extends React.Component {
           style={{ width: 100 }}
           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           onChange={console.log}
-        />
+        /> */}
 
         <div>
           <h1>In Control</h1>
-          <InputNumber
+          {/* <InputNumber
             aria-label="Controlled number input demonstrating a custom format"
             value={this.state.value}
             onChange={(value) => {
@@ -54,10 +88,21 @@ class App extends React.Component {
               this.setState({ value });
             }}
             formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          /> */}
+
+          <InputNumber
+            aria-label="Controlled number input demonstrating a custom format"
+            value={this.state.value}
+            onChange={(value) => {
+              console.log(value);
+              this.setState({ value });
+            }}
+            parser={chineseParser}
+            formatter={chineseFormatter}
           />
         </div>
 
-        <div>
+        {/* <div>
           <h1>Strange Format</h1>
           <InputNumber
             aria-label="Number input example demonstrating a strange custom format"
@@ -66,7 +111,7 @@ class App extends React.Component {
             parser={(value) => (value.match(/^\$ ([\d.]*) .*$/) || [])[1]}
             onChange={console.log}
           />
-        </div>
+        </div> */}
       </div>
     );
   }

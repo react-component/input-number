@@ -5,6 +5,7 @@ import { composeRef } from 'rc-util/lib/ref';
 import MiniDecimal, { DecimalClass } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
 import { num2str, trimNumber, validateNumber } from './utils/numberUtil';
+import useCursor from './hooks/useCursor';
 
 /**
  * We support `stringMode` which need handle correct type when user call in onChange
@@ -128,6 +129,9 @@ const InputNumber = React.forwardRef(
       return decimalValue.lessEquals(minDecimal);
     }, [minDecimal, decimalValue]);
 
+    // Cursor controller
+    const [recordCursor, restoreCursor] = useCursor(inputRef.current, focus);
+
     // ============================= Data =============================
     /**
      * Find target value closet within range.
@@ -249,6 +253,7 @@ const InputNumber = React.forwardRef(
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       const inputStr = e.target.value;
 
+      recordCursor();
       setInputValue(inputStr);
 
       // Parse number
@@ -323,6 +328,12 @@ const InputNumber = React.forwardRef(
         setInputValue(mergedFormatter(decimalValue.toString()));
       }
     }, [decimalValue && decimalValue.toString()]);
+
+    React.useEffect(() => {
+      if (formatter) {
+        restoreCursor();
+      }
+    }, [inputValue]);
 
     // ============================ Render ============================
     return (
