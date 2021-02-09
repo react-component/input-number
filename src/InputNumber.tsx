@@ -17,8 +17,13 @@ const defaultFormatter = (value: ValueType) => {
 /**
  * We support `stringMode` which need handle correct type when user call in formatter
  */
-const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) =>
-  stringMode ? decimalValue.toString() : decimalValue.toNumber();
+const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) => {
+  if (stringMode || decimalValue.isEmpty()) {
+    return decimalValue.toString();
+  }
+
+  return decimalValue.toNumber();
+};
 
 export interface InputNumberProps
   extends Omit<
@@ -184,7 +189,7 @@ const InputNumber = React.forwardRef(
       // Parse number
       const finalValue = parser(inputStr);
       const finalDecimal = new MiniDecimal(finalValue);
-      if (!finalDecimal.isNaN()) {
+      if (!finalDecimal.isNaN() && !finalDecimal.isEmpty()) {
         triggerValueUpdate(finalDecimal);
       }
 

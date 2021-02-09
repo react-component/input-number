@@ -11,6 +11,8 @@ export type ValueType = string | number | undefined;
 export interface DecimalClass {
   add: (value: ValueType) => DecimalClass;
 
+  isEmpty: () => boolean;
+
   isNaN: () => boolean;
 
   toNumber: () => number;
@@ -26,9 +28,15 @@ export interface DecimalClass {
 
 class NumberDecimal implements DecimalClass {
   number: number;
+  empty: boolean;
 
   constructor(value: ValueType) {
-    this.number = !value && value !== 0 ? NaN : Number(value);
+    if (!value && value !== 0) {
+      this.empty = true;
+      return;
+    }
+
+    this.number = Number(value);
   }
 
   negate() {
@@ -37,6 +45,10 @@ class NumberDecimal implements DecimalClass {
 
   add(value: ValueType) {
     return new NumberDecimal(this.number + Number(value));
+  }
+
+  isEmpty() {
+    return this.isEmpty();
   }
 
   isNaN() {
@@ -56,6 +68,10 @@ class NumberDecimal implements DecimalClass {
   }
 
   toString() {
+    if (this.isEmpty()) {
+      return '';
+    }
+
     return num2str(this.number);
   }
 }
@@ -66,11 +82,17 @@ class BigIntDecimal implements DecimalClass {
   decimal: bigint;
   /** BigInt will convert `0009` to `9`. We need record the len of decimal */
   decimalLen: number;
+  empty: boolean;
   nan: boolean;
 
   constructor(value: string | number) {
+    if (!value && value !== 0) {
+      this.empty = true;
+      return;
+    }
+
     // Act like Number convert
-    if ((!value && value !== 0) || value === '-') {
+    if (value === '-') {
       this.nan = true;
       return;
     }
@@ -143,6 +165,10 @@ class BigIntDecimal implements DecimalClass {
     );
   }
 
+  isEmpty() {
+    return this.empty;
+  }
+
   isNaN() {
     return this.nan;
   }
@@ -156,10 +182,16 @@ class BigIntDecimal implements DecimalClass {
   }
 
   toNumber() {
+    if (this.isNaN()) {
+      return NaN;
+    }
     return Number(this.toString());
   }
 
   toString(): string {
+    if (this.isNaN() || this.isEmpty()) {
+      return '';
+    }
     return trimNumber(`${this.getMark()}${this.getIntegerStr()}.${this.getDecimalStr()}`).fullStr;
   }
 }

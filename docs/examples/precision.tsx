@@ -5,15 +5,16 @@ import '../../assets/index.less';
 
 class Component extends React.Component {
   state = {
+    value: null,
     precision: 2,
   };
 
-  onChange = value => {
+  onChange = (value) => {
     console.log('onChange:', value);
     this.setState({ value });
   };
 
-  changeprecision = e => {
+  changeprecision = (e) => {
     this.setState({
       precision: parseInt(e.target.value, 10),
     });
