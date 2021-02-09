@@ -7,7 +7,7 @@ export default class Demo extends React.Component {
   state = {
     disabled: false,
     readOnly: false,
-    value: 8,
+    value: 99,
   };
 
   onChange = v => {
@@ -32,6 +32,7 @@ export default class Demo extends React.Component {
   render() {
     return (
       <div style={{ margin: 10 }}>
+        <p>Value Range is [-8, 10], initialValue is out of range.</p>
         <InputNumber
           aria-label="Number input example that demonstrates using decimal values"
           min={-8}

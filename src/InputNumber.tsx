@@ -329,6 +329,8 @@ const InputNumber = React.forwardRef(
         className={classNames(prefixCls, className, {
           [`${prefixCls}-focused`]: focus,
           [`${prefixCls}-disabled`]: disabled,
+          [`${prefixCls}-out-of-range`]:
+            decimalValue && !decimalValue.isInvalidate() && !isInRange(decimalValue),
         })}
         style={style}
         onFocus={() => {
