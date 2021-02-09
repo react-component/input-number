@@ -172,6 +172,7 @@ const InputNumber = React.forwardRef(
       if (isInRange(newValue) && !readOnly && !disabled) {
         // Trigger event
         if (!newValue.equals(decimalValue)) {
+          console.warn('Update:', newValue);
           setDecimalValue(newValue);
           onChange?.(getDecimalValue(stringMode, newValue));
         }
@@ -200,6 +201,8 @@ const InputNumber = React.forwardRef(
     );
 
     // ============================ Events ============================
+    const userTypingRef = React.useRef(false);
+
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       const inputStr = e.target.value;
@@ -233,6 +236,8 @@ const InputNumber = React.forwardRef(
     };
 
     const onKeyDown: React.KeyboardEventHandler<HTMLElement> = (event) => {
+      userTypingRef.current = true;
+
       if (keyboard === false) {
         return;
       }
@@ -246,9 +251,14 @@ const InputNumber = React.forwardRef(
       }
     };
 
+    const onKeyUp = () => {
+      userTypingRef.current = false;
+    };
+
     // >>> Focus & Blur
     const onBlur = () => {
       const parsedValue = new MiniDecimal(parser(inputValue));
+
       if (!parsedValue.isNaN()) {
         // Revert value in range if needed
         const rangedValue = getRangeValue(parsedValue) || parsedValue;
@@ -270,12 +280,13 @@ const InputNumber = React.forwardRef(
 
     React.useEffect(() => {
       setDecimalValue(new MiniDecimal(value));
+      console.warn('Effect:', value, new MiniDecimal(value));
     }, [value]);
 
     // Format to inputValue
     // TODO: 这边逻辑还需要梳理一下，用户在输入中时应该不需要改变输入框内的值，否则不方便输入
     React.useEffect(() => {
-      if (decimalValue) {
+      if (decimalValue && !userTypingRef.current) {
         setInputValue(mergedFormatter(getDecimalValue(stringMode, decimalValue)));
       }
     }, [decimalValue, stringMode]);
@@ -293,6 +304,7 @@ const InputNumber = React.forwardRef(
         }}
         onBlur={onBlur}
         onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
       >
         <StepHandler
           prefixCls={prefixCls}

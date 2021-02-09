@@ -32,8 +32,13 @@ export function trimNumber(numStr: string) {
   };
 }
 
+export function isE(number: string | number) {
+  return /^\d+e-\d+$/.test(String(number));
+}
+
 export function num2str(number: number): string {
-  return trimNumber(number.toFixed(100)).fullStr;
+  const numStr = isE(number) ? number.toFixed(100) : String(number);
+  return trimNumber(numStr).fullStr;
 }
 
 export function validateNumber(num: string | number) {

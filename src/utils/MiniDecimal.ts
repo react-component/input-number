@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { num2str, trimNumber, validateNumber } from './numberUtil';
+import { isE, num2str, trimNumber, validateNumber } from './numberUtil';
 
 // We use BigInt here.
 // Will fallback to Number if not support.
@@ -101,7 +101,9 @@ class BigIntDecimal implements DecimalClass {
     }
 
     let mergedValue = value;
-    if (typeof mergedValue === 'string' && /^\d+e-\d+$/.test(mergedValue)) {
+
+    // We need convert back to Number since it require `toFixed` to handle this
+    if (isE(mergedValue)) {
       mergedValue = Number(mergedValue);
     }
 
