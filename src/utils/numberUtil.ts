@@ -2,10 +2,14 @@
  * Format string number to readable number
  */
 export function trimNumber(numStr: string) {
-  const negative = numStr.startsWith('-');
+  let str = numStr.trim();
+
+  const negative = str.startsWith('-');
   const negativeStr = negative ? '-' : '';
 
-  let str = negative ? numStr.slice(1) : numStr;
+  if (negative) {
+    str = str.slice(1);
+  }
 
   str = str
     // Remove decimal 0. `1.000` => `1.`, `1.100` => `1.1`
@@ -53,5 +57,5 @@ export function validateNumber(num: string | number) {
     return false;
   }
 
-  return /^-?\d+(\.\d+)?$/.test(num);
+  return /^\s*-?\d+(\.\d+)?\s*$/.test(num);
 }
