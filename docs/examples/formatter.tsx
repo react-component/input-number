@@ -30,6 +30,8 @@ function chineseParser(text: string) {
     })
     .join('');
 
+  console.log('P:', parsed, text, Number(parsed));
+
   if (Number.isNaN(Number(parsed))) {
     return text;
   }
@@ -58,7 +60,7 @@ class App extends React.Component {
   render() {
     return (
       <div style={{ margin: 10 }}>
-        {/* <InputNumber
+        <InputNumber
           aria-label="Controlled number input demonstrating a custom currency format"
           defaultValue={1000}
           formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -76,11 +78,11 @@ class App extends React.Component {
           style={{ width: 100 }}
           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           onChange={console.log}
-        /> */}
+        />
 
         <div>
           <h1>In Control</h1>
-          {/* <InputNumber
+          <InputNumber
             aria-label="Controlled number input demonstrating a custom format"
             value={this.state.value}
             onChange={(value) => {
@@ -88,7 +90,7 @@ class App extends React.Component {
               this.setState({ value });
             }}
             formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          /> */}
+          />
 
           <InputNumber
             aria-label="Controlled number input demonstrating a custom format"
@@ -102,7 +104,7 @@ class App extends React.Component {
           />
         </div>
 
-        {/* <div>
+        <div>
           <h1>Strange Format</h1>
           <InputNumber
             aria-label="Number input example demonstrating a strange custom format"
@@ -111,7 +113,7 @@ class App extends React.Component {
             parser={(value) => (value.match(/^\$ ([\d.]*) .*$/) || [])[1]}
             onChange={console.log}
           />
-        </div> */}
+        </div>
       </div>
     );
   }

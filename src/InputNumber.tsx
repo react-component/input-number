@@ -99,6 +99,7 @@ const InputNumber = React.forwardRef(
     const [focus, setFocus] = React.useState(false);
 
     const userTypingRef = React.useRef(false);
+    const compositionRef = React.useRef(false);
 
     // Input text value control
     const [inputValue, setInputValue] = React.useState('');
@@ -257,10 +258,12 @@ const InputNumber = React.forwardRef(
       setInputValue(inputStr);
 
       // Parse number
-      const finalValue = mergedParser(inputStr);
-      const finalDecimal = new MiniDecimal(finalValue);
-      if (!finalDecimal.isInvalidate()) {
-        triggerValueUpdate(finalDecimal);
+      if (!compositionRef.current) {
+        const finalValue = mergedParser(inputStr);
+        const finalDecimal = new MiniDecimal(finalValue);
+        if (!finalDecimal.isInvalidate()) {
+          triggerValueUpdate(finalDecimal);
+        }
       }
 
       // Trigger onInput later to let user customize value if they want do handle something after onChange
@@ -304,6 +307,15 @@ const InputNumber = React.forwardRef(
 
     const onKeyUp = () => {
       userTypingRef.current = false;
+    };
+
+    // >>> Composition
+    const onCompositionStart = () => {
+      compositionRef.current = true;
+    };
+
+    const onCompositionEnd = () => {
+      compositionRef.current = false;
     };
 
     // >>> Focus & Blur
@@ -351,6 +363,8 @@ const InputNumber = React.forwardRef(
         onBlur={onBlur}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
+        onCompositionStart={onCompositionStart}
+        onCompositionEnd={onCompositionEnd}
       >
         <StepHandler
           prefixCls={prefixCls}
