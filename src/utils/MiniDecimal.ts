@@ -1,10 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { getPrecision, isE, num2str, trimNumber, validateNumber } from './numberUtil';
-
-// We use BigInt here.
-// Will fallback to Number if not support.
-const supportBigInt = typeof BigInt !== 'undefined';
+import { supportBigInt } from './supportUtil';
 
 export type ValueType = string | number | undefined;
 
@@ -239,6 +236,11 @@ export class BigIntDecimal implements DecimalClass {
   }
 }
 
-const ExportDecimal = supportBigInt ? BigIntDecimal : NumberDecimal;
-
-export default ExportDecimal;
+export default function getMiniDecimal(value: ValueType): DecimalClass {
+  // We use BigInt here.
+  // Will fallback to Number if not support.
+  if (supportBigInt()) {
+    return new BigIntDecimal(value);
+  }
+  return new NumberDecimal(value);
+}

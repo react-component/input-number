@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
-import MiniDecimal, { DecimalClass } from './utils/MiniDecimal';
+import getMiniDecimal, { DecimalClass } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
 import { num2str, trimNumber, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
@@ -158,7 +158,7 @@ const InputNumber = React.forwardRef(
     // ====================== Value & InputValue ======================
     // Real value control
     const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(
-      () => new MiniDecimal(defaultValue ?? value),
+      () => getMiniDecimal(defaultValue ?? value),
     );
 
     function setUncontrolledDecimalValue(newDecimal: DecimalClass) {
@@ -186,11 +186,11 @@ const InputNumber = React.forwardRef(
 
     // >>> Max & Min limit
     const maxDecimal = React.useMemo(
-      () => (max !== undefined && max !== null ? new MiniDecimal(max) : null),
+      () => (max !== undefined && max !== null ? getMiniDecimal(max) : null),
       [max],
     );
     const minDecimal = React.useMemo(
-      () => (min !== undefined && min !== null ? new MiniDecimal(min) : null),
+      () => (min !== undefined && min !== null ? getMiniDecimal(min) : null),
       [min],
     );
 
@@ -253,7 +253,7 @@ const InputNumber = React.forwardRef(
       if (!readOnly && !disabled) {
         if (precision >= 0) {
           const { negativeStr, integerStr, decimalStr } = trimNumber(updateValue.toString());
-          updateValue = new MiniDecimal(
+          updateValue = getMiniDecimal(
             `${negativeStr}${integerStr}.${decimalStr.padEnd(precision, '0').slice(0, precision)}0`,
           );
         }
@@ -286,7 +286,7 @@ const InputNumber = React.forwardRef(
       // Parse number
       if (!compositionRef.current) {
         const finalValue = mergedParser(inputStr);
-        const finalDecimal = new MiniDecimal(finalValue);
+        const finalDecimal = getMiniDecimal(finalValue);
         if (!finalDecimal.isInvalidate()) {
           triggerValueUpdate(finalDecimal);
         }
@@ -316,11 +316,11 @@ const InputNumber = React.forwardRef(
 
     // ============================= Step =============================
     const onStep = (up: boolean) => {
-      let stepDecimal = new MiniDecimal(step);
+      let stepDecimal = getMiniDecimal(step);
       if (!up) {
         stepDecimal = stepDecimal.negate();
       }
-      const target = (decimalValue || new MiniDecimal(0)).add(stepDecimal.toString());
+      const target = (decimalValue || getMiniDecimal(0)).add(stepDecimal.toString());
 
       triggerValueUpdate(target);
 
@@ -332,7 +332,7 @@ const InputNumber = React.forwardRef(
      * Flush current input content to trigger value change & re-formatter input if needed
      */
     const flushInputValue = () => {
-      const parsedValue = new MiniDecimal(mergedParser(inputValue));
+      const parsedValue = getMiniDecimal(mergedParser(inputValue));
       let formatValue: DecimalClass = parsedValue;
 
       if (!parsedValue.isNaN()) {
@@ -385,7 +385,7 @@ const InputNumber = React.forwardRef(
     // ============================ Effect ============================
     // Controlled
     useUpdateEffect(() => {
-      const newValue = new MiniDecimal(value);
+      const newValue = getMiniDecimal(value);
       setDecimalValue(newValue);
 
       // Update value as effect

@@ -1,3 +1,5 @@
+import { supportBigInt } from './supportUtil';
+
 /**
  * Format string number to readable number
  */
@@ -76,6 +78,14 @@ export function getPrecision(number: string | number) {
 export function num2str(number: number): string {
   let numStr: string = String(number);
   if (isE(number)) {
+    if (number > Number.MAX_SAFE_INTEGER) {
+      return String(supportBigInt() ? BigInt(number).toString() : Number.MAX_SAFE_INTEGER);
+    }
+
+    if (number < Number.MIN_SAFE_INTEGER) {
+      return String(supportBigInt() ? BigInt(number).toString() : Number.MIN_SAFE_INTEGER);
+    }
+
     numStr = number.toFixed(getPrecision(numStr));
   }
 
