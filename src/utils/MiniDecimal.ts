@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { isE, num2str, trimNumber, validateNumber } from './numberUtil';
+import { getPrecision, isE, num2str, trimNumber, validateNumber } from './numberUtil';
 
 // We use BigInt here.
 // Will fallback to Number if not support.
@@ -32,7 +32,7 @@ export interface DecimalClass {
   negate: () => DecimalClass;
 }
 
-class NumberDecimal implements DecimalClass {
+export class NumberDecimal implements DecimalClass {
   origin: string = '';
   number: number;
   empty: boolean;
@@ -55,11 +55,20 @@ class NumberDecimal implements DecimalClass {
     if (this.isInvalidate()) {
       return new NumberDecimal(value);
     }
-    return new NumberDecimal(this.number + Number(value));
+
+    const target = Number(value);
+
+    if (Number.isNaN(target)) {
+      return this;
+    }
+
+    const number = this.number + target;
+    const maxPrecision = Math.max(getPrecision(this.number), getPrecision(target));
+    return new NumberDecimal(number.toFixed(maxPrecision));
   }
 
   isEmpty() {
-    return this.isEmpty();
+    return this.empty;
   }
 
   isNaN() {
@@ -67,7 +76,7 @@ class NumberDecimal implements DecimalClass {
   }
 
   isInvalidate() {
-    return !this.isEmpty() && !this.isNaN();
+    return this.isEmpty() || this.isNaN();
   }
 
   equals(target: DecimalClass) {
@@ -91,7 +100,7 @@ class NumberDecimal implements DecimalClass {
   }
 }
 
-class BigIntDecimal implements DecimalClass {
+export class BigIntDecimal implements DecimalClass {
   origin: string = '';
   negative: boolean;
   integer: bigint;

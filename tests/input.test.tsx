@@ -39,4 +39,25 @@ describe('InputNumber.Input', () => {
     const wrapper = prepareWrapper('15.', { max: 10 });
     expect(wrapper.find('input').props().value).toEqual('10');
   });
+
+  it('input invalid decimal point with min number', () => {
+    const wrapper = prepareWrapper('3.', { min: 5 });
+    expect(wrapper.find('input').props().value).toEqual('5');
+  });
+
+  it('input negative symbol', () => {
+    const wrapper = prepareWrapper('-');
+    expect(wrapper.find('input').props().value).toEqual('');
+  });
+
+  it('input negative number', () => {
+    const wrapper = prepareWrapper('-98');
+    expect(wrapper.find('input').props().value).toEqual('-98');
+  });
+
+  // https://github.com/ant-design/ant-design/issues/9439
+  it('input negative zero', () => {
+    const wrapper = prepareWrapper('-0');
+    expect(wrapper.find('input').props().value).toEqual('0');
+  });
 });

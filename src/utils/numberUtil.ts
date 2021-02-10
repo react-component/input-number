@@ -4,8 +4,7 @@
 export function trimNumber(numStr: string) {
   let str = numStr.trim();
 
-  const negative = str.startsWith('-');
-  const negativeStr = negative ? '-' : '';
+  let negative = str.startsWith('-');
 
   if (negative) {
     str = str.slice(1);
@@ -26,12 +25,21 @@ export function trimNumber(numStr: string) {
   const trimStr = str || '0';
   const splitNumber = trimStr.split('.');
 
+  const integerStr = splitNumber[0] || '0';
+  const decimalStr = splitNumber[1] || '0';
+
+  if (integerStr === '0' && decimalStr === '0') {
+    negative = false;
+  }
+
+  const negativeStr = negative ? '-' : '';
+
   return {
     negative,
     negativeStr,
     trimStr,
-    integerStr: splitNumber[0] || '0',
-    decimalStr: splitNumber[1] || '0',
+    integerStr,
+    decimalStr,
     fullStr: `${negativeStr}${trimStr}`,
   };
 }
@@ -42,18 +50,33 @@ export function isE(number: string | number) {
   return !Number.isNaN(Number(str)) && str.includes('e');
 }
 
-export function num2str(number: number): string {
-  let numStr: string = String(number);
+/**
+ * [Legacy] Convert 1e-9 to 0.000000001.
+ * This may lose some precision if user really want 1e-9.
+ */
+export function getPrecision(number: string | number) {
+  const numStr: string = String(number);
+
   if (isE(number)) {
-    // [Legacy] Convert 1e-9 to 0.000000001.
-    // This may lose some precision if user really want 1e-9.
     let precision = Number(numStr.slice(numStr.indexOf('e-') + 2));
 
     const decimalMatch = numStr.match(/\.(\d+)/);
     if (decimalMatch?.[1]) {
       precision += decimalMatch[1].length;
     }
-    numStr = number.toFixed(precision);
+    return precision;
+  }
+
+  return numStr.includes('.') ? numStr.length - numStr.indexOf('.') - 1 : 0;
+}
+
+/**
+ * Convert number (includes scientific notation) to -xxx.yyy format
+ */
+export function num2str(number: number): string {
+  let numStr: string = String(number);
+  if (isE(number)) {
+    numStr = number.toFixed(getPrecision(numStr));
   }
 
   return trimNumber(numStr).fullStr;
@@ -69,5 +92,12 @@ export function validateNumber(num: string | number) {
     return false;
   }
 
-  return /^\s*-?\d+(\.\d+)?\s*$/.test(num);
+  return (
+    // Normal type: 11.28
+    /^\s*-?\d+(\.\d+)?\s*$/.test(num) ||
+    // Pre-number: 1.
+    /^\s*-?\d+\.\s*$/.test(num) ||
+    // Post-number: .1
+    /^\s*-?\.\d+\s*$/.test(num)
+  );
 }
