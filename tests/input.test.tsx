@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import InputNumber, { InputNumberProps } from '../src';
 
 describe('InputNumber.Input', () => {
-  function prepareWrapper(text: string, props?: Partial<InputNumberProps>) {
+  function prepareWrapper(text: string, props?: Partial<InputNumberProps>, skipInputCheck = false) {
     const wrapper = mount(<InputNumber {...props} />);
     wrapper.find('input').simulate('focus');
     for (let i = 0; i < text.length; i += 1) {
@@ -11,7 +11,10 @@ describe('InputNumber.Input', () => {
       wrapper.find('input').simulate('change', { target: { value: inputTxt } });
     }
 
-    expect(wrapper.find('input').props().value).toEqual(text);
+    if (!skipInputCheck) {
+      expect(wrapper.find('input').props().value).toEqual(text);
+    }
+
     wrapper.find('input').simulate('blur');
 
     return wrapper;
@@ -57,7 +60,7 @@ describe('InputNumber.Input', () => {
 
   // https://github.com/ant-design/ant-design/issues/9439
   it('input negative zero', () => {
-    const wrapper = prepareWrapper('-0');
+    const wrapper = prepareWrapper('-0', {}, true);
     expect(wrapper.find('input').props().value).toEqual('0');
   });
 });

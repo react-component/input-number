@@ -234,7 +234,11 @@ const InputNumber = React.forwardRef(
      */
     const isInRange = (target: DecimalClass) => !getRangeValue(target);
 
-    const triggerValueUpdate = (newValue: DecimalClass) => {
+    /**
+     * Trigger `onChange` if value validated and not equals of origin.
+     * Return the value that re-align in range.
+     */
+    const triggerValueUpdate = (newValue: DecimalClass): DecimalClass => {
       let updateValue = newValue;
 
       // Revert value in range if needed
@@ -252,38 +256,20 @@ const InputNumber = React.forwardRef(
         if (!updateValue.equals(decimalValue)) {
           setUncontrolledDecimalValue(updateValue);
           onChange?.(getDecimalValue(stringMode, updateValue));
+
+          // Reformat input if value is not controlled
+          if (value === undefined) {
+            setInputValue(updateValue);
+          }
         }
 
-        // Reformat input if value is not controlled
-        if (value === undefined) {
-          setInputValue(updateValue);
-        }
+        return updateValue;
       }
+
+      return decimalValue;
     };
 
     // ========================== User Input ==========================
-    /**
-     * Flush current input content to trigger value change & re-formatter input if needed
-     */
-    const flushInputValue = () => {
-      const parsedValue = new MiniDecimal(mergedParser(inputValue));
-      let formatValue: DecimalClass = parsedValue;
-
-      if (!parsedValue.isNaN()) {
-        triggerValueUpdate(parsedValue);
-      } else {
-        formatValue = decimalValue;
-      }
-
-      if (value !== undefined) {
-        // Reset back with controlled value first
-        setInputValue(decimalValue);
-      } else if (!formatValue.isNaN()) {
-        // Reset input back since no validate value
-        setInputValue(formatValue);
-      }
-    };
-
     // >>> Collect input value
     const collectInputValue = (inputStr: string) => {
       recordCursor();
@@ -323,7 +309,6 @@ const InputNumber = React.forwardRef(
     };
 
     // ============================= Step =============================
-    // >>> Steps
     const onStep = (up: boolean) => {
       let stepDecimal = new MiniDecimal(step);
       if (!up) {
@@ -334,6 +319,30 @@ const InputNumber = React.forwardRef(
       triggerValueUpdate(target);
 
       inputRef.current?.focus();
+    };
+
+    // ============================ Flush =============================
+    /**
+     * Flush current input content to trigger value change & re-formatter input if needed
+     */
+    const flushInputValue = () => {
+      const parsedValue = new MiniDecimal(mergedParser(inputValue));
+      let formatValue: DecimalClass = parsedValue;
+
+      if (!parsedValue.isNaN()) {
+        // Reassign the formatValue within ranged of trigger control
+        formatValue = triggerValueUpdate(parsedValue);
+      } else {
+        formatValue = decimalValue;
+      }
+
+      if (value !== undefined) {
+        // Reset back with controlled value first
+        setInputValue(decimalValue);
+      } else if (!formatValue.isNaN()) {
+        // Reset input back since no validate value
+        setInputValue(formatValue);
+      }
     };
 
     const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {

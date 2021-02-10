@@ -32,6 +32,9 @@ export interface DecimalClass {
   negate: () => DecimalClass;
 }
 
+/**
+ * We can remove this when IE not support anymore
+ */
 export class NumberDecimal implements DecimalClass {
   origin: string = '';
   number: number;
