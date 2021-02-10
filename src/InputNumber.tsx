@@ -237,7 +237,10 @@ const InputNumber = React.forwardRef(
     const triggerValueUpdate = (newValue: DecimalClass) => {
       let updateValue = newValue;
 
-      if (isInRange(updateValue) && !readOnly && !disabled) {
+      // Revert value in range if needed
+      updateValue = getRangeValue(updateValue) || updateValue;
+
+      if (!readOnly && !disabled) {
         if (precision >= 0) {
           const { negativeStr, integerStr, decimalStr } = trimNumber(updateValue.toString());
           updateValue = new MiniDecimal(
@@ -267,9 +270,7 @@ const InputNumber = React.forwardRef(
       let formatValue: DecimalClass = parsedValue;
 
       if (!parsedValue.isNaN()) {
-        // Revert value in range if needed
-        const rangedValue = getRangeValue(parsedValue) || parsedValue;
-        triggerValueUpdate(rangedValue);
+        triggerValueUpdate(parsedValue);
       } else {
         formatValue = decimalValue;
       }
@@ -330,9 +331,7 @@ const InputNumber = React.forwardRef(
       }
       const target = (decimalValue || new MiniDecimal(0)).add(stepDecimal.toString());
 
-      const rangeValue = getRangeValue(target) || target;
-
-      triggerValueUpdate(rangeValue);
+      triggerValueUpdate(target);
 
       inputRef.current?.focus();
     };

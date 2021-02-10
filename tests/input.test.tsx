@@ -8,7 +8,6 @@ describe('InputNumber.Input', () => {
     wrapper.find('input').simulate('focus');
     for (let i = 0; i < text.length; i += 1) {
       const inputTxt = text.slice(0, i + 1);
-      console.log('~~~~>', inputTxt);
       wrapper.find('input').simulate('change', { target: { value: inputTxt } });
     }
 
@@ -36,7 +35,7 @@ describe('InputNumber.Input', () => {
     expect(wrapper.find('input').props().value).toEqual('2');
   });
 
-  it.only('input invalid decimal point with max number', () => {
+  it('input invalid decimal point with max number', () => {
     const wrapper = prepareWrapper('15.', { max: 10 });
     expect(wrapper.find('input').props().value).toEqual('10');
   });
