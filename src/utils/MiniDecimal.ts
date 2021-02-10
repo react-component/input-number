@@ -63,6 +63,16 @@ export class NumberDecimal implements DecimalClass {
     }
 
     const number = this.number + target;
+
+    // [Legacy] Back to safe integer
+    if (number > Number.MAX_SAFE_INTEGER) {
+      return new NumberDecimal(Number.MAX_SAFE_INTEGER);
+    }
+
+    if (number < Number.MIN_SAFE_INTEGER) {
+      return new NumberDecimal(Number.MIN_SAFE_INTEGER);
+    }
+
     const maxPrecision = Math.max(getPrecision(this.number), getPrecision(target));
     return new NumberDecimal(number.toFixed(maxPrecision));
   }
@@ -80,7 +90,7 @@ export class NumberDecimal implements DecimalClass {
   }
 
   equals(target: DecimalClass) {
-    return this.toString() === target?.toString();
+    return this.toNumber() === target?.toNumber();
   }
 
   lessEquals(target: DecimalClass) {

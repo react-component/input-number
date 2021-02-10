@@ -1,9 +1,19 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { mount, ReactWrapper } from 'enzyme';
 import InputNumber, { InputNumberProps } from '../src';
 
+jest.mock('../src/utils/supportUtil');
+const { supportBigInt } = require('../src/utils/supportUtil');
+
 describe('InputNumber.Click', () => {
+  beforeEach(() => {
+    supportBigInt.mockImplementation(() => true);
+  });
+
+  afterEach(() => {
+    supportBigInt.mockRestore();
+  });
+
   function testInputNumber(
     name: string,
     props: Partial<InputNumberProps>,
@@ -100,6 +110,50 @@ describe('InputNumber.Click', () => {
     it('max', () => {
       const wrapper = mount(<InputNumber value={9} min={3} max={9} />);
       expect(wrapper.exists('.rc-input-number-handler-up-disabled')).toBeTruthy();
+    });
+  });
+
+  describe('safe integer', () => {
+    it('back to max safe when BigInt not support', () => {
+      supportBigInt.mockImplementation(() => false);
+
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber defaultValue={1e24} onChange={onChange} />);
+      wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+      expect(onChange).toHaveBeenCalledWith(Number.MAX_SAFE_INTEGER);
+
+      wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+      expect(onChange).toHaveBeenCalledWith(Number.MAX_SAFE_INTEGER - 1);
+
+      supportBigInt.mockRestore();
+    });
+
+    it('back to min safe when BigInt not support', () => {
+      supportBigInt.mockImplementation(() => false);
+
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber defaultValue={-1e25} onChange={onChange} />);
+      wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+      expect(onChange).toHaveBeenCalledWith(Number.MIN_SAFE_INTEGER);
+
+      wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+      expect(onChange).toHaveBeenCalledWith(Number.MIN_SAFE_INTEGER + 1);
+
+      supportBigInt.mockRestore();
+    });
+
+    it('no limit max safe when BigInt support', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber stringMode defaultValue={1e24} onChange={onChange} />);
+      wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+      expect(onChange).toHaveBeenCalledWith('999999999999999983222785');
+    });
+
+    it('no limit min safe when BigInt support', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber stringMode defaultValue={-1e25} onChange={onChange} />);
+      wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+      expect(onChange).toHaveBeenCalledWith('-10000000000000000905969665');
     });
   });
 

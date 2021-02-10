@@ -242,17 +242,6 @@ describe('InputNumber.Props', () => {
       expect(onChange).toHaveBeenCalledWith(0);
     });
 
-    // TODO: handle this
-    // describe('safe integer', () => {
-    //   it('normal should back to max safe', () => {
-    //     const onChange = jest.fn();
-    //     const wrapper = mount(<InputNumber value={1e24} onChange={onChange} />);
-    //     console.log(wrapper.find('input').html());
-    //     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    //     expect(onChange).toHaveBeenCalledWith(Number.MAX_SAFE_INTEGER);
-    //   });
-    // });
-
     it('value can be changed when dynamic setting max', () => {
       const wrapper = mount(<InputNumber value={11} max={10} />);
 

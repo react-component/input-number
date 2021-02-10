@@ -157,8 +157,8 @@ const InputNumber = React.forwardRef(
 
     // ====================== Value & InputValue ======================
     // Real value control
-    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(
-      () => getMiniDecimal(defaultValue ?? value),
+    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() =>
+      getMiniDecimal(defaultValue ?? value),
     );
 
     function setUncontrolledDecimalValue(newDecimal: DecimalClass) {
