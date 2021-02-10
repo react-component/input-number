@@ -55,19 +55,15 @@ describe('InputNumber.Decimal', () => {
     expect(wrapper.find('input').props().value).toEqual('1.000000000');
   });
 
-  // it('custom decimal separator', () => {
-  //   class Demo extends React.Component {
-  //     render() {
-  //       return <InputNumber ref="inputNum" decimalSeparator="," />;
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '1,1' } });
-  //   Simulate.blur(inputElement);
-  //   expect(inputElement.value).to.be('1,1');
-  //   expect(inputNumber.state.value).to.be(1.1);
-  // });
+  it('custom decimal separator', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber decimalSeparator="," onChange={onChange} />);
+
+    wrapper.find('input').simulate('focus');
+    wrapper.find('input').simulate('change', { target: { value: '1,1' } });
+    wrapper.find('input').simulate('blur');
+
+    expect(wrapper.find('input').props().value).toEqual('1,1');
+    expect(onChange).toHaveBeenCalledWith(1.1);
+  });
 });
