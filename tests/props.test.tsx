@@ -60,7 +60,12 @@ describe('InputNumber.Props', () => {
     it('stringMode', () => {
       const onChange = jest.fn();
       const wrapper = mount(
-        <InputNumber stringMode onChange={onChange} step="0.000000001" defaultValue="0.000000001" />,
+        <InputNumber
+          stringMode
+          onChange={onChange}
+          step="0.000000001"
+          defaultValue="0.000000001"
+        />,
       );
 
       for (let i = 0; i < 11; i += 1) {
@@ -68,6 +73,21 @@ describe('InputNumber.Props', () => {
       }
 
       expect(onChange).toHaveBeenCalledWith('-0.00000001');
+    });
+
+    it('decimal', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber onChange={onChange} step={0.1} defaultValue={0.9} />);
+      for (let i = 0; i < 3; i += 1) {
+        wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+      }
+      expect(onChange).toHaveBeenCalledWith(1.2);
+    });
+  });
+
+  describe('controlled', () => {
+    it('restore when blur input', () => {
+      const wrapper = mount(<InputNumber value={1} />);
     });
   });
 });

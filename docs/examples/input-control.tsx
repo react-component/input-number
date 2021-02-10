@@ -7,6 +7,7 @@ import '../../assets/index.less';
 
 export default () => {
   const [value, setValue] = React.useState('aaa');
+  const [lock, setLock] = React.useState(false);
 
   return (
     <div>
@@ -17,9 +18,13 @@ export default () => {
         }}
         onInput={(text) => {
           console.log('Input:', text);
-          setValue(text);
+          if (!lock) {
+            setValue(text);
+          }
         }}
       />
+
+      <button onClick={() => setLock(!lock)}>Lock Value {String(lock)}</button>
     </div>
   );
 };

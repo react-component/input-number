@@ -6,6 +6,7 @@ import MiniDecimal, { DecimalClass } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
 import { num2str, trimNumber, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
+import useUpdateEffect from './hooks/useUpdateEffect';
 
 /**
  * We support `stringMode` which need handle correct type when user call in onChange
@@ -101,26 +102,81 @@ const InputNumber = React.forwardRef(
     const userTypingRef = React.useRef(false);
     const compositionRef = React.useRef(false);
 
-    function getInitValue() {
-      return value !== undefined ? value : defaultValue;
-    }
+    // ====================== Parser & Formatter ======================
+    // >>> Parser
+    const mergedParser = React.useCallback(
+      (num: string | number) => {
+        const numStr = String(num);
 
-    // Input text value control
-    const [inputValue, setInternalInputValue] = React.useState(() => {
-      const initValue = getInitValue();
-      return initValue ?? '';
-    });
+        if (parser) {
+          return parser(numStr);
+        }
+
+        let parsedStr = numStr;
+        if (decimalSeparator) {
+          parsedStr = parsedStr.replace(decimalSeparator, '.');
+        }
+
+        // [Legacy] We still support auto convert `$ 123,456` to `123456`
+        return parsedStr.replace(/[^\w.-]+/g, '');
+      },
+      [parser, decimalSeparator],
+    );
+
+    // >>> Formatter
+    const mergedFormatter = React.useCallback(
+      (number: string) => {
+        if (formatter) {
+          return formatter(number);
+        }
+
+        let str = typeof number === 'number' ? num2str(number) : number;
+
+        if (validateNumber(str) && (decimalSeparator || precision >= 0)) {
+          // Separator
+          const separatorStr = decimalSeparator || '.';
+
+          // Precision
+          const { negativeStr, integerStr, decimalStr } = trimNumber(str);
+          let precisionDecimalStr = `${separatorStr}${decimalStr}`;
+
+          if (precision >= 0) {
+            precisionDecimalStr =
+              precision > 0
+                ? `${separatorStr}${decimalStr.padEnd(precision, '0').slice(0, precision)}`
+                : '';
+          }
+
+          str = `${negativeStr}${integerStr}${precisionDecimalStr}`;
+        }
+
+        return str;
+      },
+      [formatter, precision, decimalSeparator],
+    );
+
+    // ======================== Value & Input =========================
+    // Real value control
+    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(
+      () => new MiniDecimal(defaultValue),
+    );
+
+    /**
+     * Input text value control
+     *
+     * User can not update input content directly. It update with follow rules by priority:
+     *  1. `value` changed
+     *  2. User typing
+     *  3. Blur or Enter trigger revalidate
+     */
+    const [inputValue, setInternalInputValue] = React.useState<string | number>(() =>
+      mergedFormatter(decimalValue.toString()),
+    );
 
     // Should always be string
     function setInputValue(newValue: string | number) {
       setInternalInputValue(newValue ?? '');
     }
-
-    // Real value control
-    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() => {
-      const initValue = getInitValue();
-      return initValue !== undefined ? new MiniDecimal(initValue) : null;
-    });
 
     // >>> Max & Min limit
     const maxDecimal = React.useMemo(() => (max ? new MiniDecimal(max) : null), [max]);
@@ -190,59 +246,6 @@ const InputNumber = React.forwardRef(
         }
       }
     };
-
-    // ====================== Parser & Formatter ======================
-    // >>> Parser
-    const mergedParser = React.useCallback(
-      (num: string | number) => {
-        const numStr = String(num);
-
-        if (parser) {
-          return parser(numStr);
-        }
-
-        let parsedStr = numStr;
-        if (decimalSeparator) {
-          parsedStr = parsedStr.replace(decimalSeparator, '.');
-        }
-
-        // [Legacy] We still support auto convert `$ 123,456` to `123456`
-        return parsedStr.replace(/[^\w.-]+/g, '');
-      },
-      [parser, decimalSeparator],
-    );
-
-    // >>> Formatter
-    const mergedFormatter = React.useCallback(
-      (number: string) => {
-        if (formatter) {
-          return formatter(number);
-        }
-
-        let str = typeof number === 'number' ? num2str(number) : number;
-
-        if (validateNumber(str) && (decimalSeparator || precision >= 0)) {
-          // Separator
-          const separatorStr = decimalSeparator || '.';
-
-          // Precision
-          const { negativeStr, integerStr, decimalStr } = trimNumber(str);
-          let precisionDecimalStr = `${separatorStr}${decimalStr}`;
-
-          if (precision >= 0) {
-            precisionDecimalStr =
-              precision > 0
-                ? `${separatorStr}${decimalStr.padEnd(precision, '0').slice(0, precision)}`
-                : '';
-          }
-
-          str = `${negativeStr}${integerStr}${precisionDecimalStr}`;
-        }
-
-        return str;
-      },
-      [formatter, precision, decimalSeparator],
-    );
 
     // ============================ Events ============================
     /**
@@ -350,19 +353,13 @@ const InputNumber = React.forwardRef(
 
     // ============================ Effect ============================
     // Controlled
-    React.useEffect(() => {
-      if (value !== undefined) {
-        setDecimalValue(new MiniDecimal(value));
-      }
-    }, [value]);
+    useUpdateEffect(() => {
+      const newValue = new MiniDecimal(value);
+      setDecimalValue(newValue);
 
-    // Format to inputValue
-    React.useEffect(() => {
-      // When not typing or customize formatter can flush input value at once
-      if (decimalValue && !decimalValue.isInvalidate() && (!userTypingRef.current || formatter)) {
-        setInputValue(mergedFormatter(decimalValue.toString()));
-      }
-    }, [decimalValue && decimalValue.toString()]);
+      // Update value as effect
+      setInputValue(mergedFormatter(newValue.toString()));
+    }, [value]);
 
     React.useEffect(() => {
       if (formatter) {

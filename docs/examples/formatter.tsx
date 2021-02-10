@@ -64,7 +64,7 @@ class App extends React.Component {
           formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           onChange={console.log}
         />
-        <InputNumber
+        {/* <InputNumber
           aria-label="Controlled number input demonstrating a custom percentage format"
           defaultValue={100}
           formatter={(value) => `${value}%`}
@@ -76,9 +76,9 @@ class App extends React.Component {
           style={{ width: 100 }}
           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           onChange={console.log}
-        />
+        /> */}
 
-        <div>
+        {/* <div>
           <h1>In Control</h1>
           <InputNumber
             aria-label="Controlled number input demonstrating a custom format"
@@ -111,7 +111,7 @@ class App extends React.Component {
             parser={(value) => (value.match(/^\$ ([\d.]*) .*$/) || [])[1]}
             onChange={console.log}
           />
-        </div>
+        </div> */}
       </div>
     );
   }

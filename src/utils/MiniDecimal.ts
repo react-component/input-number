@@ -33,7 +33,7 @@ class NumberDecimal implements DecimalClass {
   empty: boolean;
 
   constructor(value: ValueType) {
-    if (!value && value !== 0) {
+    if ((!value && value !== 0) || !String(value).trim()) {
       this.empty = true;
       return;
     }
@@ -95,7 +95,7 @@ class BigIntDecimal implements DecimalClass {
   nan: boolean;
 
   constructor(value: string | number) {
-    if (!value && value !== 0) {
+    if ((!value && value !== 0) || !String(value).trim()) {
       this.empty = true;
       return;
     }
