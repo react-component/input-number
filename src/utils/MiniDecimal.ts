@@ -19,7 +19,11 @@ export interface DecimalClass {
 
   toNumber: () => number;
 
-  toString: () => string;
+  /**
+   * Parse value as string. Will return empty string if `isInvalidate`.
+   * You can set `safe=false` to get origin string content.
+   */
+  toString: (safe?: boolean) => string;
 
   equals: (target: DecimalClass) => boolean;
 
@@ -29,6 +33,7 @@ export interface DecimalClass {
 }
 
 class NumberDecimal implements DecimalClass {
+  origin: string = '';
   number: number;
   empty: boolean;
 
@@ -38,6 +43,7 @@ class NumberDecimal implements DecimalClass {
       return;
     }
 
+    this.origin = String(value);
     this.number = Number(value);
   }
 
@@ -76,9 +82,9 @@ class NumberDecimal implements DecimalClass {
     return this.number;
   }
 
-  toString() {
+  toString(safe = true) {
     if (this.isInvalidate()) {
-      return '';
+      return safe ? '' : this.origin;
     }
 
     return num2str(this.number);
@@ -86,6 +92,7 @@ class NumberDecimal implements DecimalClass {
 }
 
 class BigIntDecimal implements DecimalClass {
+  origin: string = '';
   negative: boolean;
   integer: bigint;
   decimal: bigint;
@@ -99,6 +106,8 @@ class BigIntDecimal implements DecimalClass {
       this.empty = true;
       return;
     }
+
+    this.origin = String(value);
 
     // Act like Number convert
     if (value === '-') {
@@ -210,9 +219,9 @@ class BigIntDecimal implements DecimalClass {
     return Number(this.toString());
   }
 
-  toString(): string {
+  toString(safe = true): string {
     if (this.isInvalidate()) {
-      return '';
+      return safe ? '' : this.origin;
     }
     return trimNumber(`${this.getMark()}${this.getIntegerStr()}.${this.getDecimalStr()}`).fullStr;
   }

@@ -161,6 +161,12 @@ const InputNumber = React.forwardRef(
       () => new MiniDecimal(defaultValue ?? value),
     );
 
+    function setUncontrolledDecimalValue(newDecimal: DecimalClass) {
+      if (value === undefined) {
+        setDecimalValue(newDecimal);
+      }
+    }
+
     /**
      * Input text value control
      *
@@ -175,7 +181,7 @@ const InputNumber = React.forwardRef(
 
     // Should always be string
     function setInputValue(newValue: DecimalClass) {
-      setInternalInputValue(mergedFormatter(newValue.toString()));
+      setInternalInputValue(mergedFormatter(newValue.toString(false)));
     }
 
     // >>> Max & Min limit
@@ -241,7 +247,7 @@ const InputNumber = React.forwardRef(
 
         // Trigger event
         if (!updateValue.equals(decimalValue)) {
-          setDecimalValue(updateValue);
+          setUncontrolledDecimalValue(updateValue);
           onChange?.(getDecimalValue(stringMode, updateValue));
         }
 
@@ -268,8 +274,11 @@ const InputNumber = React.forwardRef(
         formatValue = decimalValue;
       }
 
-      // Reset input back since no validate value
-      if (!formatValue.isNaN()) {
+      if (value !== undefined) {
+        // Reset back with controlled value first
+        setInputValue(decimalValue);
+      } else if (!formatValue.isNaN()) {
+        // Reset input back since no validate value
         setInputValue(formatValue);
       }
     };
@@ -382,8 +391,8 @@ const InputNumber = React.forwardRef(
           [`${prefixCls}-focused`]: focus,
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-readonly`]: readOnly,
-          [`${prefixCls}-out-of-range`]:
-            decimalValue && !decimalValue.isInvalidate() && !isInRange(decimalValue),
+          [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
+          [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
         })}
         style={style}
         onFocus={() => {

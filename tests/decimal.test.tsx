@@ -8,10 +8,10 @@ describe('InputNumber.Decimal', () => {
     expect(new MiniDecimal('11.28').toString()).toEqual('11.28');
     expect(new MiniDecimal('-9.3').toString()).toEqual('-9.3');
     expect(new MiniDecimal(1e-19).toString()).toEqual(
-      '0.0000000000000000000999999999999999975245926835260131855729159055676881799265554029432223615003749728',
+      '0.0000000000000000001',
     );
     expect(new MiniDecimal(-1e-19).toString()).toEqual(
-      '-0.0000000000000000000999999999999999975245926835260131855729159055676881799265554029432223615003749728',
+      '-0.0000000000000000001',
     );
   });
 
@@ -44,7 +44,7 @@ describe('InputNumber.Decimal', () => {
 
     // mini value
     expect(new MiniDecimal(0).add(-0.000000001).toString()).toEqual(
-      '-0.0000000010000000000000000622815914577798564188970686927859787829220294952392578125',
+      '-0.000000001',
     );
   });
 });

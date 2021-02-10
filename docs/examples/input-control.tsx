@@ -24,7 +24,8 @@ export default () => {
         }}
       />
 
-      <button onClick={() => setLock(!lock)}>Lock Value {String(lock)}</button>
+      <button onClick={() => setLock(!lock)}>Lock Value ({String(lock)})</button>
+      <button onClick={() => setValue('93')}>Change Value</button>
     </div>
   );
 };
