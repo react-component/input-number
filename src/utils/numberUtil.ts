@@ -43,7 +43,12 @@ export function isE(number: string | number) {
 }
 
 export function num2str(number: number): string {
-  const numStr = isE(number) ? number.toFixed(100) : String(number);
+  let numStr: string = String(number);
+  if (isE(number)) {
+    const precision = Number(numStr.slice(numStr.indexOf('e-') + 2));
+    numStr = number.toFixed(precision);
+  }
+
   return trimNumber(numStr).fullStr;
 }
 

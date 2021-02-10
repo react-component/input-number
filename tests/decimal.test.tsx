@@ -13,8 +13,12 @@ describe('InputNumber.Decimal', () => {
     expect(new MiniDecimal(-1e-19).toString()).toEqual(
       '-0.0000000000000000000999999999999999975245926835260131855729159055676881799265554029432223615003749728',
     );
-    expect(new MiniDecimal('.1').toString()).toEqual('0.1');
-    expect(new MiniDecimal('1.').toString()).toEqual('1');
+  });
+
+  it('invalidate', () => {
+    expect(new MiniDecimal('.1').toString()).toEqual('');
+    expect(new MiniDecimal('abc').toString()).toEqual('');
+    expect(new MiniDecimal('1.').toString()).toEqual('');
   });
 
   it('add', () => {

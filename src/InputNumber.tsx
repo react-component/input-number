@@ -106,10 +106,15 @@ const InputNumber = React.forwardRef(
     }
 
     // Input text value control
-    const [inputValue, setInputValue] = React.useState(() => {
+    const [inputValue, setInternalInputValue] = React.useState(() => {
       const initValue = getInitValue();
-      return initValue !== undefined ? initValue : '';
+      return initValue ?? '';
     });
+
+    // Should always be string
+    function setInputValue(newValue: string | number) {
+      setInternalInputValue(newValue ?? '');
+    }
 
     // Real value control
     const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() => {
@@ -119,7 +124,7 @@ const InputNumber = React.forwardRef(
 
     // >>> Max & Min limit
     const maxDecimal = React.useMemo(() => (max ? new MiniDecimal(max) : null), [max]);
-    const minDecimal = React.useMemo(() => (max ? new MiniDecimal(min) : null), [min]);
+    const minDecimal = React.useMemo(() => (min ? new MiniDecimal(min) : null), [min]);
 
     const upDisabled = React.useMemo(() => {
       if (max === undefined || !decimalValue) {
@@ -371,6 +376,7 @@ const InputNumber = React.forwardRef(
         className={classNames(prefixCls, className, {
           [`${prefixCls}-focused`]: focus,
           [`${prefixCls}-disabled`]: disabled,
+          [`${prefixCls}-readonly`]: readOnly,
           [`${prefixCls}-out-of-range`]:
             decimalValue && !decimalValue.isInvalidate() && !isInRange(decimalValue),
         })}
