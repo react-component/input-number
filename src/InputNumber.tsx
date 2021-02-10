@@ -185,11 +185,17 @@ const InputNumber = React.forwardRef(
     }
 
     // >>> Max & Min limit
-    const maxDecimal = React.useMemo(() => (max ? new MiniDecimal(max) : null), [max]);
-    const minDecimal = React.useMemo(() => (min ? new MiniDecimal(min) : null), [min]);
+    const maxDecimal = React.useMemo(
+      () => (max !== undefined && max !== null ? new MiniDecimal(max) : null),
+      [max],
+    );
+    const minDecimal = React.useMemo(
+      () => (min !== undefined && min !== null ? new MiniDecimal(min) : null),
+      [min],
+    );
 
     const upDisabled = React.useMemo(() => {
-      if (max === undefined || !decimalValue) {
+      if (!maxDecimal || !decimalValue) {
         return false;
       }
 
@@ -197,7 +203,7 @@ const InputNumber = React.forwardRef(
     }, [maxDecimal, decimalValue]);
 
     const downDisabled = React.useMemo(() => {
-      if (min === undefined || !decimalValue) {
+      if (!minDecimal || !decimalValue) {
         return false;
       }
 
@@ -217,12 +223,12 @@ const InputNumber = React.forwardRef(
      */
     const getRangeValue = (target: DecimalClass) => {
       // target > max
-      if (max && !target.lessEquals(maxDecimal)) {
+      if (maxDecimal && !target.lessEquals(maxDecimal)) {
         return maxDecimal;
       }
 
       // target < min
-      if (min && !minDecimal.lessEquals(target)) {
+      if (minDecimal && !minDecimal.lessEquals(target)) {
         return minDecimal;
       }
 

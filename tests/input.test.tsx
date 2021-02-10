@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import KeyCode from 'rc-util/lib/KeyCode';
 import InputNumber, { InputNumberProps } from '../src';
 
 describe('InputNumber.Input', () => {
@@ -62,5 +63,34 @@ describe('InputNumber.Input', () => {
   it('input negative zero', () => {
     const wrapper = prepareWrapper('-0', {}, true);
     expect(wrapper.find('input').props().value).toEqual('0');
+  });
+
+  it('input decimal number with integer step', () => {
+    const wrapper = prepareWrapper('1.2', { step: 1.2 });
+    expect(wrapper.find('input').props().value).toEqual('1.2');
+  });
+
+  it('input decimal number with decimal step', () => {
+    const wrapper = prepareWrapper('1.2', { step: 0.1 });
+    expect(wrapper.find('input').props().value).toEqual('1.2');
+  });
+
+  it('input empty text and blur', () => {
+    const wrapper = prepareWrapper('');
+    expect(wrapper.find('input').props().value).toEqual('');
+  });
+
+  it('blur on default input', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber onChange={onChange} />);
+    wrapper.find('input').simulate('blur');
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('pressEnter works', () => {
+    const onPressEnter = jest.fn();
+    const wrapper = mount(<InputNumber onPressEnter={onPressEnter} />);
+    wrapper.find('input').simulate('keyDown', { which: KeyCode.ENTER });
+    expect(onPressEnter).toHaveBeenCalled();
   });
 });

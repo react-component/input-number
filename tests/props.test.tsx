@@ -163,4 +163,167 @@ describe('InputNumber.Props', () => {
       expect(wrapper.find('input').props().value).toEqual('');
     });
   });
+
+  describe('defaultValue', () => {
+    it('default value should be empty', () => {
+      const wrapper = mount(<InputNumber />);
+      expect(wrapper.find('input').props().value).toEqual('');
+    });
+
+    it('default value should be empty when step is decimal', () => {
+      const wrapper = mount(<InputNumber step={0.1} />);
+      expect(wrapper.find('input').props().value).toEqual('');
+    });
+
+    it('default value should be 1', () => {
+      const wrapper = mount(<InputNumber defaultValue={1} />);
+      expect(wrapper.find('input').props().value).toEqual('1');
+    });
+
+    it('default value could be null', () => {
+      const wrapper = mount(<InputNumber defaultValue={null} />);
+      expect(wrapper.find('input').props().value).toEqual('');
+    });
+
+    it('warning when defaultValue higher than max', () => {
+      const wrapper = mount(<InputNumber min={0} max={10} defaultValue={13} />);
+      expect(wrapper.find('input').props().value).toEqual('13');
+      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    });
+
+    it('warning when defaultValue lower than min', () => {
+      const wrapper = mount(<InputNumber min={0} max={10} defaultValue={-1} />);
+      expect(wrapper.find('input').props().value).toEqual('-1');
+      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    });
+
+    it('default value can be a string greater than 16 characters', () => {
+      const wrapper = mount(<InputNumber max={10} defaultValue="-3.637978807091713e-12" />);
+      expect(wrapper.find('input').props().value).toEqual('-0.000000000003637978807091713');
+    });
+  });
+
+  describe('value', () => {
+    it("value shouldn't higher than max", () => {
+      const wrapper = mount(<InputNumber min={0} max={10} value={13} />);
+      expect(wrapper.find('input').props().value).toEqual('13');
+      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    });
+
+    it("value shouldn't lower than min", () => {
+      const wrapper = mount(<InputNumber min={0} max={10} value={-1} />);
+      expect(wrapper.find('input').props().value).toEqual('-1');
+      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    });
+
+    it('value can be a string greater than 16 characters', () => {
+      const wrapper = mount(<InputNumber max={10} value="-3.637978807091713e-12" />);
+      expect(wrapper.find('input').props().value).toEqual('-0.000000000003637978807091713');
+    });
+
+    it('value decimal over six decimal not be scientific notation', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber precision={7} step={0.0000001} onChange={onChange} />);
+
+      for (let i = 1; i <= 9; i += 1) {
+        wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+        expect(wrapper.find('input').props().value).toEqual(`0.000000${i}`);
+        expect(onChange).toHaveBeenCalledWith(0.0000001 * i);
+      }
+
+      for (let i = 8; i >= 1; i -= 1) {
+        wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+        expect(wrapper.find('input').props().value).toEqual(`0.000000${i}`);
+        expect(onChange).toHaveBeenCalledWith(0.0000001 * i);
+      }
+
+      wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+      expect(wrapper.find('input').props().value).toEqual(`0.0000000`);
+      expect(onChange).toHaveBeenCalledWith(0);
+    });
+
+    it('value should be max safe integer when it exceeds max safe integer', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber value={1e24} onChange={onChange}/>);
+      wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+      expect(onChange).toHaveBeenCalledWith(Number.MAX_SAFE_INTEGER);
+    });
+
+    // it('value can be changed when dynamic setting max', () => {
+    //   class Demo extends React.Component {
+    //     state = {
+    //       max: 10,
+    //       value: 11,
+    //     };
+    //     onChange = value => {
+    //       this.setState({ value });
+    //     };
+    //     changeMax = () => {
+    //       this.setState({
+    //         value: 11,
+    //         max: 20,
+    //       });
+    //     };
+    //     render() {
+    //       return (
+    //         <div>
+    //           <InputNumber
+    //             ref="inputNum"
+    //             max={this.state.max}
+    //             onChange={this.onChange}
+    //             value={this.state.value}
+    //           />
+    //           <button type="button" onClick={this.changeMax}>
+    //             change max
+    //           </button>
+    //         </div>
+    //       );
+    //     }
+    //   }
+    //   example = ReactDOM.render(<Demo />, container);
+    //   inputNumber = example.refs.inputNum;
+    //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
+    //   expect(inputNumber.state.value).to.be(10);
+    //   Simulate.click(findRenderedDOMComponentWithTag(example, 'button'));
+    //   expect(inputNumber.state.value).to.be(11);
+    // });
+    // it('value can be changed when dynamic setting min', () => {
+    //   class Demo extends React.Component {
+    //     state = {
+    //       min: 10,
+    //       value: 9,
+    //     };
+    //     onChange = value => {
+    //       this.setState({ value });
+    //     };
+    //     changeMax = () => {
+    //       this.setState({
+    //         value: 9,
+    //         min: 0,
+    //       });
+    //     };
+    //     render() {
+    //       return (
+    //         <div>
+    //           <InputNumber
+    //             ref="inputNum"
+    //             min={this.state.min}
+    //             onChange={this.onChange}
+    //             value={this.state.value}
+    //           />
+    //           <button type="button" onClick={this.changeMax}>
+    //             change min
+    //           </button>
+    //         </div>
+    //       );
+    //     }
+    //   }
+    //   example = ReactDOM.render(<Demo />, container);
+    //   inputNumber = example.refs.inputNum;
+    //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
+    //   expect(inputNumber.state.value).to.be(10);
+    //   Simulate.click(findRenderedDOMComponentWithTag(example, 'button'));
+    //   expect(inputNumber.state.value).to.be(9);
+    // });
+  });
 });
