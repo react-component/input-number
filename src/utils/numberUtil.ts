@@ -45,7 +45,14 @@ export function isE(number: string | number) {
 export function num2str(number: number): string {
   let numStr: string = String(number);
   if (isE(number)) {
-    const precision = Number(numStr.slice(numStr.indexOf('e-') + 2));
+    // [Legacy] Convert 1e-9 to 0.000000001.
+    // This may lose some precision if user really want 1e-9.
+    let precision = Number(numStr.slice(numStr.indexOf('e-') + 2));
+
+    const decimalMatch = numStr.match(/\.(\d+)/);
+    if (decimalMatch?.[1]) {
+      precision += decimalMatch[1].length;
+    }
     numStr = number.toFixed(precision);
   }
 
