@@ -155,7 +155,7 @@ const InputNumber = React.forwardRef(
       [formatter, precision, decimalSeparator],
     );
 
-    // ======================== Value & Input =========================
+    // ====================== Value & InputValue ======================
     // Real value control
     const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(
       () => new MiniDecimal(defaultValue),
@@ -174,8 +174,8 @@ const InputNumber = React.forwardRef(
     );
 
     // Should always be string
-    function setInputValue(newValue: string | number) {
-      setInternalInputValue(newValue ?? '');
+    function setInputValue(newValue: DecimalClass) {
+      setInternalInputValue(mergedFormatter(newValue.toString()));
     }
 
     // >>> Max & Min limit
@@ -244,10 +244,15 @@ const InputNumber = React.forwardRef(
           setDecimalValue(updateValue);
           onChange?.(getDecimalValue(stringMode, updateValue));
         }
+
+        // Reformat input if value is not controlled
+        if (value === undefined) {
+          setInputValue(updateValue);
+        }
       }
     };
 
-    // ============================ Events ============================
+    // ========================== User Input ==========================
     /**
      * Flush current input content to trigger value change & re-formatter input if needed
      */
@@ -265,14 +270,16 @@ const InputNumber = React.forwardRef(
 
       // Reset input back since no validate value
       if (!formatValue.isNaN()) {
-        setInputValue(mergedFormatter(formatValue.toString()));
+        setInputValue(formatValue);
       }
     };
 
     // >>> Collect input value
     const collectInputValue = (inputStr: string) => {
       recordCursor();
-      setInputValue(inputStr);
+
+      // Update inputValue incase input can not parse as number
+      setInternalInputValue(inputStr);
 
       // Parse number
       if (!compositionRef.current) {
@@ -305,6 +312,7 @@ const InputNumber = React.forwardRef(
       onInput?.(inputStr);
     };
 
+    // ============================= Step =============================
     // >>> Steps
     const onStep = (up: boolean) => {
       let stepDecimal = new MiniDecimal(step);
@@ -358,7 +366,7 @@ const InputNumber = React.forwardRef(
       setDecimalValue(newValue);
 
       // Update value as effect
-      setInputValue(mergedFormatter(newValue.toString()));
+      setInputValue(newValue);
     }, [value]);
 
     React.useEffect(() => {
