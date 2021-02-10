@@ -1,116 +1,73 @@
-import getMiniDecimal, {
-  BigIntDecimal,
-  DecimalClass,
-  NumberDecimal,
-  ValueType,
-} from '../src/utils/MiniDecimal';
-
-jest.mock('../src/utils/supportUtil');
-const { supportBigInt } = require('../src/utils/supportUtil');
+import React from 'react';
+import { mount } from 'enzyme';
+import InputNumber from '../src';
 
 describe('InputNumber.Decimal', () => {
-  beforeEach(() => {
-    supportBigInt.mockImplementation(() => {
-      return true;
-    });
+  it('decimal value', () => {
+    const wrapper = mount(<InputNumber step={1} value={2.1} />);
+    expect(wrapper.find('input').props().value).toEqual('2.1');
   });
 
-  afterEach(() => {
-    supportBigInt.mockRestore();
+  it('decimal defaultValue', () => {
+    const wrapper = mount(<InputNumber step={1} defaultValue={2.1} />);
+    expect(wrapper.find('input').props().value).toEqual('2.1');
   });
 
-  const classList: {
-    name: string;
-    getDecimal: (value: ValueType) => DecimalClass;
-    mockSupportBigInt?: boolean;
-  }[] = [
-    { name: 'Default', getDecimal: getMiniDecimal },
-    { name: 'BigInt', getDecimal: (value: ValueType) => new BigIntDecimal(value) },
-    {
-      name: 'Number',
-      getDecimal: (value: ValueType) => new NumberDecimal(value),
-      mockSupportBigInt: false,
-    },
-  ];
-
-  classList.forEach(({ name, getDecimal, mockSupportBigInt }) => {
-    describe(name, () => {
-      beforeEach(() => {
-        supportBigInt.mockImplementation(() => {
-          return mockSupportBigInt !== false;
-        });
-      });
-
-      afterEach(() => {
-        supportBigInt.mockRestore();
-      });
-
-      it('parse', () => {
-        expect(getDecimal(100).toString()).toEqual('100');
-        expect(getDecimal(11).toString()).toEqual('11');
-        expect(getDecimal(-9).toString()).toEqual('-9');
-        expect(getDecimal('11.28').toString()).toEqual('11.28');
-        expect(getDecimal('-9.3').toString()).toEqual('-9.3');
-        expect(getDecimal(1e-19).toString()).toEqual('0.0000000000000000001');
-        expect(getDecimal(-1e-19).toString()).toEqual('-0.0000000000000000001');
-        expect(getDecimal('-0').toString()).toEqual('0');
-        expect(getDecimal('.1').toString()).toEqual('0.1');
-        expect(getDecimal('1.').toString()).toEqual('1');
-      });
-
-      it('invalidate', () => {
-        expect(getDecimal('abc').toString()).toEqual('');
-      });
-
-      it('add', () => {
-        expect(getDecimal('1128').add('9.3').toString()).toEqual('1137.3');
-        expect(getDecimal(1128).add(93).toString()).toEqual('1221');
-        expect(getDecimal('1.35').add('2.65').toString()).toEqual('4');
-        expect(getDecimal('0.1').add('1.1').toString()).toEqual('1.2');
-
-        // Negative
-        expect(getDecimal('-1128').add('-9.3').toString()).toEqual('-1137.3');
-        expect(getDecimal('11.28').add('-9.3').toString()).toEqual('1.98');
-        expect(getDecimal('1128').add('-0.93').toString()).toEqual('1127.07');
-        expect(getDecimal('11.28').add('-93').toString()).toEqual('-81.72');
-        expect(getDecimal('-11.28').add('9.3').toString()).toEqual('-1.98');
-
-        // Continue update
-        let number = getDecimal('2.3');
-        number = number.add('-1');
-        expect(number.toString()).toEqual('1.3');
-        number = number.add('-1');
-        expect(number.toString()).toEqual('0.3');
-
-        // mini value
-        expect(getDecimal(0).add(-0.000000001).toString()).toEqual('-0.000000001');
-      });
-    });
+  it('increase and decrease decimal InputNumber by integer step', () => {
+    const wrapper = mount(<InputNumber step={1} defaultValue={2.1} />);
+    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+    expect(wrapper.find('input').props().value).toEqual('3.1');
+    wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+    expect(wrapper.find('input').props().value).toEqual('2.1');
   });
 
-  describe('NumberDecimal', () => {
-    beforeEach(() => {
-      supportBigInt.mockImplementation(() => false);
-    });
+  it('small value and step', () => {
+    const Demo = () => {
+      const [value, setValue] = React.useState<string | number>(0.000000001);
 
-    afterEach(() => {
-      supportBigInt.mockRestore();
-    });
+      return (
+        <InputNumber
+          value={value}
+          step={0.000000001}
+          min={-10}
+          max={10}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
+        />
+      );
+    };
 
-    it('parse', () => {
-      expect(new NumberDecimal('1e24').toString()).toEqual(String(Number.MAX_SAFE_INTEGER));
-      expect(new NumberDecimal('-1e+25').toString()).toEqual(String(Number.MIN_SAFE_INTEGER));
-    });
+    const wrapper = mount(<Demo />);
+    expect(wrapper.find('input').props().value).toEqual('0.000000001');
+
+    for (let i = 0; i < 10; i += 1) {
+      // plus until change precision
+      wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+    }
+
+    wrapper.find('input').simulate('blur');
+    expect(wrapper.find('input').props().value).toEqual('0.000000011');
   });
 
-  describe('BigIntDecimal', () => {
-    it('parse', () => {
-      expect(new BigIntDecimal('1e24').toString()).toEqual('999999999999999983222784');
-      expect(new BigIntDecimal('1e+25').toString()).toEqual('10000000000000000905969664');
-    });
-
-    it('add', () => {
-      expect(new BigIntDecimal('11.28').add('0.0903').toString()).toEqual('11.3703');
-    });
+  it('small step with integer value', () => {
+    const wrapper = mount(<InputNumber step="0.000000001" value={1} />);
+    expect(wrapper.find('input').props().value).toEqual('1.000000000');
   });
+
+  // it('custom decimal separator', () => {
+  //   class Demo extends React.Component {
+  //     render() {
+  //       return <InputNumber ref="inputNum" decimalSeparator="," />;
+  //     }
+  //   }
+  //   example = ReactDOM.render(<Demo />, container);
+  //   inputNumber = example.refs.inputNum;
+  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
+  //   Simulate.focus(inputElement);
+  //   Simulate.change(inputElement, { target: { value: '1,1' } });
+  //   Simulate.blur(inputElement);
+  //   expect(inputElement.value).to.be('1,1');
+  //   expect(inputNumber.state.value).to.be(1.1);
+  // });
 });

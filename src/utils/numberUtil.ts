@@ -69,7 +69,9 @@ export function getPrecision(number: string | number) {
     return precision;
   }
 
-  return numStr.includes('.') ? numStr.length - numStr.indexOf('.') - 1 : 0;
+  return numStr.includes('.') && validateNumber(numStr)
+    ? numStr.length - numStr.indexOf('.') - 1
+    : 0;
 }
 
 /**

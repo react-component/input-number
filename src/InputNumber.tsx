@@ -4,7 +4,7 @@ import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
 import getMiniDecimal, { DecimalClass } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
-import { num2str, trimNumber, validateNumber } from './utils/numberUtil';
+import { getPrecision, num2str, trimNumber, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
 import useUpdateEffect from './hooks/useUpdateEffect';
 
@@ -102,7 +102,31 @@ const InputNumber = React.forwardRef(
     const userTypingRef = React.useRef(false);
     const compositionRef = React.useRef(false);
 
+    // ============================ Value =============================
+    // Real value control
+    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() =>
+      getMiniDecimal(defaultValue ?? value),
+    );
+
+    function setUncontrolledDecimalValue(newDecimal: DecimalClass) {
+      if (value === undefined) {
+        setDecimalValue(newDecimal);
+      }
+    }
+
     // ====================== Parser & Formatter ======================
+    const mergedPrecision = React.useMemo(() => {
+      if (precision >= 0) {
+        return precision;
+      }
+
+      if (decimalValue.isInvalidate()) {
+        return undefined;
+      }
+
+      return Math.max(getPrecision(decimalValue.toString()), getPrecision(step));
+    }, [precision, step, decimalValue]);
+
     // >>> Parser
     const mergedParser = React.useCallback(
       (num: string | number) => {
@@ -132,7 +156,7 @@ const InputNumber = React.forwardRef(
 
         let str = typeof number === 'number' ? num2str(number) : number;
 
-        if (validateNumber(str) && (decimalSeparator || precision >= 0)) {
+        if (validateNumber(str) && (decimalSeparator || mergedPrecision >= 0)) {
           // Separator
           const separatorStr = decimalSeparator || '.';
 
@@ -140,10 +164,12 @@ const InputNumber = React.forwardRef(
           const { negativeStr, integerStr, decimalStr } = trimNumber(str);
           let precisionDecimalStr = `${separatorStr}${decimalStr}`;
 
-          if (precision >= 0) {
+          if (mergedPrecision >= 0) {
             precisionDecimalStr =
-              precision > 0
-                ? `${separatorStr}${decimalStr.padEnd(precision, '0').slice(0, precision)}`
+              mergedPrecision > 0
+                ? `${separatorStr}${decimalStr
+                    .padEnd(mergedPrecision, '0')
+                    .slice(0, mergedPrecision)}`
                 : '';
           }
 
@@ -152,20 +178,10 @@ const InputNumber = React.forwardRef(
 
         return str;
       },
-      [formatter, precision, decimalSeparator],
+      [formatter, mergedPrecision, decimalSeparator],
     );
 
-    // ====================== Value & InputValue ======================
-    // Real value control
-    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() =>
-      getMiniDecimal(defaultValue ?? value),
-    );
-
-    function setUncontrolledDecimalValue(newDecimal: DecimalClass) {
-      if (value === undefined) {
-        setDecimalValue(newDecimal);
-      }
-    }
+    // ========================== InputValue ==========================
 
     /**
      * Input text value control
@@ -251,10 +267,12 @@ const InputNumber = React.forwardRef(
       updateValue = getRangeValue(updateValue) || updateValue;
 
       if (!readOnly && !disabled) {
-        if (precision >= 0) {
+        if (mergedPrecision >= 0) {
           const { negativeStr, integerStr, decimalStr } = trimNumber(updateValue.toString());
           updateValue = getMiniDecimal(
-            `${negativeStr}${integerStr}.${decimalStr.padEnd(precision, '0').slice(0, precision)}0`,
+            `${negativeStr}${integerStr}.${decimalStr
+              .padEnd(mergedPrecision, '0')
+              .slice(0, mergedPrecision)}0`,
           );
         }
 
