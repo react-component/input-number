@@ -17,11 +17,11 @@ describe('InputNumber.Github', () => {
   // https://github.com/react-component/input-number/issues/32
   it('issue 32', () => {
     const wrapper = mount(<InputNumber step={0.1} />);
-    wrapper.find('input').simulate('focus');
+    wrapper.focusInput();
     wrapper.changeValue('2');
     expect(wrapper.find('input').props().value).toEqual('2');
 
-    wrapper.find('input').simulate('blur');
+    wrapper.blurInput();
     expect(wrapper.find('input').props().value).toEqual('2.0');
   });
 
@@ -41,7 +41,7 @@ describe('InputNumber.Github', () => {
       );
     };
     const wrapper = mount(<Demo />);
-    wrapper.find('input').simulate('focus');
+    wrapper.focusInput();
     wrapper.changeValue('foo');
   });
 
@@ -62,7 +62,7 @@ describe('InputNumber.Github', () => {
       );
     };
     const wrapper = mount(<Demo />);
-    wrapper.find('input').simulate('focus');
+    wrapper.focusInput();
     wrapper.changeValue('foo');
 
     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
@@ -89,7 +89,7 @@ describe('InputNumber.Github', () => {
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((200 - i) / 100).toFixed(2));
-      expect(wrapper.find('input').props().value).toEqual(String(expectedValue));
+      expect(wrapper.find('input').props().value).toEqual(String(expectedValue.toFixed(2)));
       expect(num).toEqual(expectedValue);
     }
 
@@ -99,7 +99,7 @@ describe('InputNumber.Github', () => {
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((i - 200) / 100).toFixed(2));
-      expect(wrapper.find('input').props().value).toEqual(String(expectedValue));
+      expect(wrapper.find('input').props().value).toEqual(String(expectedValue.toFixed(2)));
       expect(num).toEqual(expectedValue);
     }
   });
@@ -139,59 +139,53 @@ describe('InputNumber.Github', () => {
 
     const wrapper = mount(<Demo />);
 
-    wrapper.find('input').simulate('focus');
+    wrapper.focusInput();
     wrapper.changeValue('1.');
     expect(wrapper.find('input').props().value).toEqual('1.');
 
-    wrapper.find('input').simulate('blur');
+    wrapper.blurInput();
     expect(wrapper.find('input').props().value).toEqual('1');
   });
 
-  // // https://github.com/ant-design/ant-design/issues/5012
-  // // https://github.com/react-component/input-number/issues/64
-  // it('controller InputNumber should be able to input number like 1.00* and 1.10*', () => {
-  //   let num;
-  //   class Demo extends React.Component {
-  //     state = {
-  //       value: 2,
-  //     };
+  // https://github.com/ant-design/ant-design/issues/5012
+  // https://github.com/react-component/input-number/issues/64
+  it('controller InputNumber should be able to input number like 1.00* and 1.10*', () => {
+    let num;
 
-  //     onChange = (value) => {
-  //       this.setState({ value });
-  //     };
+    const Demo = () => {
+      const [value, setValue] = React.useState<string | number>(2);
 
-  //     render() {
-  //       return (
-  //         <InputNumber
-  //           ref="inputNum"
-  //           value={this.state.value}
-  //           onChange={(value) => {
-  //             num = value;
-  //             this.onChange(value);
-  //           }}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      return (
+        <InputNumber
+          value={value}
+          onChange={(newValue) => {
+            num = newValue;
+            setValue(newValue);
+          }}
+        />
+      );
+    };
 
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '6.0' } });
-  //   expect(inputElement.value).to.be('6.0');
-  //   expect(num).to.be(6);
-  //   Simulate.blur(inputElement);
-  //   expect(inputElement.value).to.be('6');
-  //   expect(num).to.be(6);
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '6.10' } });
-  //   expect(inputElement.value).to.be('6.10');
-  //   expect(num).to.be(6.1);
-  //   Simulate.blur(inputElement);
-  //   expect(inputElement.value).to.be('6.1');
-  //   expect(num).to.be(6.1);
-  // });
+    const wrapper = mount(<Demo />);
+
+    wrapper.focusInput();
+    wrapper.changeValue('6.0');
+    expect(wrapper.findInput().props().value).toEqual('6.0');
+    expect(num).toEqual(6);
+
+    wrapper.blurInput();
+    expect(wrapper.findInput().props().value).toEqual('6');
+    expect(num).toEqual(6);
+
+    wrapper.focusInput();
+    wrapper.changeValue('6.10');
+    expect(wrapper.findInput().props().value).toEqual('6.10');
+    expect(num).toEqual(6.1);
+
+    wrapper.blurInput();
+    expect(wrapper.findInput().props().value).toEqual('6.1');
+    expect(num).toEqual(6.1);
+  });
 
   // it('onChange should not be called when input is not changed', () => {
   //   Simulate.focus(inputElement);

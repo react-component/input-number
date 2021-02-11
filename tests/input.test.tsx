@@ -6,7 +6,7 @@ import InputNumber, { InputNumberProps } from '../src';
 describe('InputNumber.Input', () => {
   function prepareWrapper(text: string, props?: Partial<InputNumberProps>, skipInputCheck = false) {
     const wrapper = mount(<InputNumber {...props} />);
-    wrapper.find('input').simulate('focus');
+    wrapper.focusInput();
     for (let i = 0; i < text.length; i += 1) {
       const inputTxt = text.slice(0, i + 1);
       wrapper.changeValue(inputTxt);
@@ -16,7 +16,7 @@ describe('InputNumber.Input', () => {
       expect(wrapper.find('input').props().value).toEqual(text);
     }
 
-    wrapper.find('input').simulate('blur');
+    wrapper.blurInput();
 
     return wrapper;
   }
@@ -83,7 +83,7 @@ describe('InputNumber.Input', () => {
   it('blur on default input', () => {
     const onChange = jest.fn();
     const wrapper = mount(<InputNumber onChange={onChange} />);
-    wrapper.find('input').simulate('blur');
+    wrapper.blurInput();
     expect(onChange).not.toHaveBeenCalled();
   });
 

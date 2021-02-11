@@ -4,7 +4,7 @@ import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
 import getMiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
-import { getPrecision, num2str, trimNumber, validateNumber } from './utils/numberUtil';
+import { getNumberPrecision, num2str, trimNumber, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
 import useUpdateEffect from './hooks/useUpdateEffect';
 
@@ -124,20 +124,27 @@ const InputNumber = React.forwardRef(
      * `precision` is used for formatter & onChange.
      * It will auto generate by `value` & `step`.
      * But it will not block user typing when auto generated.
+     * 
+     * Note: Auto generate `precision` is used for legacy logic.
+     * We should remove this since we already support high precision with BigInt.
+     *
+     * @param number  Provide which number should calculate precision
+     * @param userTyping  Change by user typing
      */
-    const [mergedPrecision, autoPrecision] = React.useMemo(() => {
-      if (precision >= 0) {
-        return [precision, false];
-      }
+    const getPrecision = React.useCallback(
+      (numStr: string, userTyping: boolean) => {
+        if (precision >= 0) {
+          return precision;
+        }
 
-      return [
-        Math.max(
-          getPrecision(decimalValue.isInvalidate() ? 0 : decimalValue.toString()),
-          getPrecision(step),
-        ),
-        true,
-      ];
-    }, [precision, step, decimalValue, userTypingRef.current]);
+        if (userTyping) {
+          return undefined;
+        }
+
+        return Math.max(getNumberPrecision(numStr), getNumberPrecision(step));
+      },
+      [precision, step],
+    );
 
     // >>> Parser
     const mergedParser = React.useCallback(
@@ -156,7 +163,7 @@ const InputNumber = React.forwardRef(
         // [Legacy] We still support auto convert `$ 123,456` to `123456`
         return parsedStr.replace(/[^\w.-]+/g, '');
       },
-      [parser, decimalSeparator, autoPrecision],
+      [parser, decimalSeparator],
     );
 
     // >>> Formatter
@@ -168,6 +175,8 @@ const InputNumber = React.forwardRef(
 
         let str = typeof number === 'number' ? num2str(number) : number;
 
+        const mergedPrecision = getPrecision(str, userTyping);
+
         if (validateNumber(str) && (decimalSeparator || mergedPrecision >= 0)) {
           // Separator
           const separatorStr = decimalSeparator || '.';
@@ -176,7 +185,7 @@ const InputNumber = React.forwardRef(
           const { negativeStr, integerStr, decimalStr } = trimNumber(str);
           let precisionDecimalStr = `${separatorStr}${decimalStr}`;
 
-          if (mergedPrecision >= 0 && (!autoPrecision || !userTyping)) {
+          if (mergedPrecision >= 0) {
             precisionDecimalStr =
               mergedPrecision > 0
                 ? `${separatorStr}${decimalStr
@@ -193,11 +202,10 @@ const InputNumber = React.forwardRef(
 
         return str;
       },
-      [formatter, mergedPrecision, autoPrecision, decimalSeparator],
+      [formatter, getPrecision, decimalSeparator],
     );
 
     // ========================== InputValue ==========================
-
     /**
      * Input text value control
      *
@@ -277,8 +285,10 @@ const InputNumber = React.forwardRef(
       updateValue = getRangeValue(updateValue) || updateValue;
 
       if (!readOnly && !disabled) {
-        if (mergedPrecision >= 0 && (!userTyping || !autoPrecision)) {
-          const { negativeStr, integerStr, decimalStr } = trimNumber(updateValue.toString());
+        const numStr = updateValue.toString();
+        const mergedPrecision = getPrecision(numStr, userTyping);
+        if (mergedPrecision) {
+          const { negativeStr, integerStr, decimalStr } = trimNumber(numStr);
           updateValue = getMiniDecimal(
             `${negativeStr}${integerStr}.${decimalStr
               .padEnd(mergedPrecision, '0')
@@ -417,7 +427,8 @@ const InputNumber = React.forwardRef(
       setDecimalValue(newValue);
 
       // When user typing from `1.2` to `1.`, we should not convert to `1` immediately.
-      if (newValue.isNaN() || !userTypingRef.current) {
+      // But let it go if user set `formatter`
+      if (newValue.isNaN() || !userTypingRef.current || formatter) {
         // Update value as effect
         setInputValue(newValue, false);
       }

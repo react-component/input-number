@@ -1,11 +1,14 @@
+import * as React from 'react';
 import { ReactWrapper, mount } from 'enzyme';
 
 type ReplaceReturnType<T extends (...a: any) => any, TNewReturn> = (
   ...a: Parameters<T>
 ) => TNewReturn;
 
-interface Wrapper extends ReactWrapper {
-  findInput: () => Wrapper;
+interface Wrapper<P = {}, S = {}, C = React.Component<{}, {}, any>> extends ReactWrapper<P, S, C> {
+  findInput: () => Wrapper<React.InputHTMLAttributes<HTMLInputElement>>;
+  focusInput: () => Wrapper;
+  blurInput: () => Wrapper;
   changeValue: (value: string) => Wrapper;
 }
 

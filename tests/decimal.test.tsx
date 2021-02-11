@@ -46,7 +46,7 @@ describe('InputNumber.Decimal', () => {
       wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
     }
 
-    wrapper.find('input').simulate('blur');
+    wrapper.blurInput();
     expect(wrapper.find('input').props().value).toEqual('0.000000011');
   });
 
@@ -67,9 +67,9 @@ describe('InputNumber.Decimal', () => {
     const onChange = jest.fn();
     const wrapper = mount(<InputNumber decimalSeparator="," onChange={onChange} />);
 
-    wrapper.find('input').simulate('focus');
+    wrapper.focusInput();
     wrapper.changeValue('1,1');
-    wrapper.find('input').simulate('blur');
+    wrapper.blurInput();
 
     expect(wrapper.find('input').props().value).toEqual('1,1');
     expect(onChange).toHaveBeenCalledWith(1.1);

@@ -16,4 +16,10 @@ Object.assign(Enzyme.ReactWrapper.prototype, {
     this.findInput().simulate('keyUp');
     return this;
   },
+  focusInput() {
+    return this.findInput().simulate('focus');
+  },
+  blurInput() {
+    return this.findInput().simulate('blur');
+  },
 });

@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { getPrecision, isE, num2str, trimNumber, validateNumber } from './numberUtil';
+import { getNumberPrecision, isE, num2str, trimNumber, validateNumber } from './numberUtil';
 import { supportBigInt } from './supportUtil';
 
 export type ValueType = string | number | undefined;
@@ -73,7 +73,7 @@ export class NumberDecimal implements DecimalClass {
       return new NumberDecimal(Number.MIN_SAFE_INTEGER);
     }
 
-    const maxPrecision = Math.max(getPrecision(this.number), getPrecision(target));
+    const maxPrecision = Math.max(getNumberPrecision(this.number), getNumberPrecision(target));
     return new NumberDecimal(number.toFixed(maxPrecision));
   }
 

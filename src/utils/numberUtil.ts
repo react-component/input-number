@@ -56,7 +56,7 @@ export function isE(number: string | number) {
  * [Legacy] Convert 1e-9 to 0.000000001.
  * This may lose some precision if user really want 1e-9.
  */
-export function getPrecision(number: string | number) {
+export function getNumberPrecision(number: string | number) {
   const numStr: string = String(number);
 
   if (isE(number)) {
@@ -88,7 +88,7 @@ export function num2str(number: number): string {
       return String(supportBigInt() ? BigInt(number).toString() : Number.MIN_SAFE_INTEGER);
     }
 
-    numStr = number.toFixed(getPrecision(numStr));
+    numStr = number.toFixed(getNumberPrecision(numStr));
   }
 
   return trimNumber(numStr).fullStr;
