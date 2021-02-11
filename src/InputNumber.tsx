@@ -183,6 +183,9 @@ const InputNumber = React.forwardRef(
                     .padEnd(mergedPrecision, '0')
                     .slice(0, mergedPrecision)}`
                 : '';
+          } else if (precisionDecimalStr === '.0') {
+            // Remove unnecessary `.0` of number
+            precisionDecimalStr = '';
           }
 
           str = `${negativeStr}${integerStr}${precisionDecimalStr}`;
