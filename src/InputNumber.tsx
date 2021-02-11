@@ -120,16 +120,23 @@ const InputNumber = React.forwardRef(
     }
 
     // ====================== Parser & Formatter ======================
-    const mergedPrecision = React.useMemo(() => {
+    /**
+     * `precision` is used for formatter & onChange.
+     * It will auto generate by `value` & `step`.
+     * But it will not block user typing when auto generated.
+     */
+    const [mergedPrecision, autoPrecision] = React.useMemo(() => {
       if (precision >= 0) {
-        return precision;
+        return [precision, false];
       }
 
-      if (decimalValue.isInvalidate() || userTypingRef.current) {
-        return undefined;
-      }
-
-      return Math.max(getPrecision(decimalValue.toString()), getPrecision(step));
+      return [
+        Math.max(
+          getPrecision(decimalValue.isInvalidate() ? 0 : decimalValue.toString()),
+          getPrecision(step),
+        ),
+        true,
+      ];
     }, [precision, step, decimalValue, userTypingRef.current]);
 
     // >>> Parser
@@ -149,12 +156,12 @@ const InputNumber = React.forwardRef(
         // [Legacy] We still support auto convert `$ 123,456` to `123456`
         return parsedStr.replace(/[^\w.-]+/g, '');
       },
-      [parser, decimalSeparator],
+      [parser, decimalSeparator, autoPrecision],
     );
 
     // >>> Formatter
     const mergedFormatter = React.useCallback(
-      (number: string) => {
+      (number: string, userTyping: boolean) => {
         if (formatter) {
           return formatter(number);
         }
@@ -169,7 +176,7 @@ const InputNumber = React.forwardRef(
           const { negativeStr, integerStr, decimalStr } = trimNumber(str);
           let precisionDecimalStr = `${separatorStr}${decimalStr}`;
 
-          if (mergedPrecision >= 0) {
+          if (mergedPrecision >= 0 && (!autoPrecision || !userTyping)) {
             precisionDecimalStr =
               mergedPrecision > 0
                 ? `${separatorStr}${decimalStr
@@ -183,7 +190,7 @@ const InputNumber = React.forwardRef(
 
         return str;
       },
-      [formatter, mergedPrecision, decimalSeparator],
+      [formatter, mergedPrecision, autoPrecision, decimalSeparator],
     );
 
     // ========================== InputValue ==========================
@@ -198,12 +205,12 @@ const InputNumber = React.forwardRef(
      *  3. Blur or Enter trigger revalidate
      */
     const [inputValue, setInternalInputValue] = React.useState<string | number>(() =>
-      mergedFormatter(decimalValue.toString()),
+      mergedFormatter(decimalValue.toString(), false),
     );
 
     // Should always be string
-    function setInputValue(newValue: DecimalClass) {
-      setInternalInputValue(mergedFormatter(newValue.toString(false)));
+    function setInputValue(newValue: DecimalClass, userTyping: boolean) {
+      setInternalInputValue(mergedFormatter(newValue.toString(false), userTyping));
     }
 
     // >>> Max & Min limit
@@ -260,14 +267,14 @@ const InputNumber = React.forwardRef(
      * Trigger `onChange` if value validated and not equals of origin.
      * Return the value that re-align in range.
      */
-    const triggerValueUpdate = (newValue: DecimalClass): DecimalClass => {
+    const triggerValueUpdate = (newValue: DecimalClass, userTyping: boolean): DecimalClass => {
       let updateValue = newValue;
 
       // Revert value in range if needed
       updateValue = getRangeValue(updateValue) || updateValue;
 
       if (!readOnly && !disabled) {
-        if (mergedPrecision >= 0) {
+        if (mergedPrecision >= 0 && (!userTyping || !autoPrecision)) {
           const { negativeStr, integerStr, decimalStr } = trimNumber(updateValue.toString());
           updateValue = getMiniDecimal(
             `${negativeStr}${integerStr}.${decimalStr
@@ -283,7 +290,7 @@ const InputNumber = React.forwardRef(
 
           // Reformat input if value is not controlled
           if (value === undefined) {
-            setInputValue(updateValue);
+            setInputValue(updateValue, userTyping);
           }
         }
 
@@ -306,7 +313,7 @@ const InputNumber = React.forwardRef(
         const finalValue = mergedParser(inputStr);
         const finalDecimal = getMiniDecimal(finalValue);
         if (!finalDecimal.isInvalidate()) {
-          triggerValueUpdate(finalDecimal);
+          triggerValueUpdate(finalDecimal, true);
         }
       }
     };
@@ -340,7 +347,7 @@ const InputNumber = React.forwardRef(
       }
       const target = (decimalValue || getMiniDecimal(0)).add(stepDecimal.toString());
 
-      triggerValueUpdate(target);
+      triggerValueUpdate(target, false);
 
       inputRef.current?.focus();
     };
@@ -355,17 +362,17 @@ const InputNumber = React.forwardRef(
 
       if (!parsedValue.isNaN()) {
         // Reassign the formatValue within ranged of trigger control
-        formatValue = triggerValueUpdate(parsedValue);
+        formatValue = triggerValueUpdate(parsedValue, true);
       } else {
         formatValue = decimalValue;
       }
 
       if (value !== undefined) {
         // Reset back with controlled value first
-        setInputValue(decimalValue);
+        setInputValue(decimalValue, false);
       } else if (!formatValue.isNaN()) {
         // Reset input back since no validate value
-        setInputValue(formatValue);
+        setInputValue(formatValue, false);
       }
     };
 
@@ -409,7 +416,7 @@ const InputNumber = React.forwardRef(
       // When user typing from `1.2` to `1.`, we should not convert to `1` immediately.
       if (newValue.isNaN() || !userTypingRef.current) {
         // Update value as effect
-        setInputValue(newValue);
+        setInputValue(newValue, false);
       }
     }, [value]);
 
