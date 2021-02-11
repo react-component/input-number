@@ -220,37 +220,44 @@ describe('InputNumber.Github', () => {
     expect(onInput).toHaveBeenCalledTimes(2);
   });
 
-  // // https://github.com/ant-design/ant-design/issues/5235
-  // it('input long number', () => {
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '111111111111111111111' } });
-  //   expect(inputElement.value).to.be('111111111111111111111');
-  //   Simulate.change(inputElement, { target: { value: '11111111111111111111111111111' } });
-  //   expect(inputElement.value).to.be('11111111111111111111111111111');
-  // });
+  // https://github.com/ant-design/ant-design/issues/5235
+  it('input long number', () => {
+    const wrapper = mount(<InputNumber />);
+    wrapper.focusInput();
+    wrapper.changeValue('111111111111111111111');
+    expect(wrapper.findInput().props().value).toEqual('111111111111111111111');
+    wrapper.changeValue('11111111111111111111111111111');
+    expect(wrapper.findInput().props().value).toEqual('11111111111111111111111111111');
+  });
 
-  // // https://github.com/ant-design/ant-design/issues/7363
-  // it('uncontrolled input should trigger onChange always when blur it', () => {
-  //   const onChange = sinon.spy();
-  //   inputNumber = ReactDOM.render(<InputNumber min={1} max={10} onChange={onChange} />, container);
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '123' } });
-  //   expect(onChange.callCount).to.be(1);
-  //   expect(onChange.calledWith(123)).to.be(true);
-  //   Simulate.blur(inputElement);
-  //   expect(onChange.callCount).to.be(2);
-  //   expect(onChange.calledWith(10)).to.be(true);
+  // https://github.com/ant-design/ant-design/issues/7363
+  it('uncontrolled input should trigger onChange always when blur it', () => {
+    const onChange = jest.fn();
+    const onInput = jest.fn();
+    const wrapper = mount(<InputNumber min={1} max={10} onChange={onChange} onInput={onInput} />);
 
-  //   // repeat it, it should works in same way
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '123' } });
-  //   expect(onChange.callCount).to.be(3);
-  //   expect(onChange.calledWith(123)).to.be(true);
-  //   Simulate.blur(inputElement);
-  //   expect(onChange.callCount).to.be(4);
-  //   expect(onChange.calledWith(10)).to.be(true);
-  // });
+    wrapper.focusInput();
+    wrapper.changeValue('123');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(10);
+    expect(onInput).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledWith('123');
+
+    wrapper.blurInput();
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    //   expect(onChange.callCount).to.be(2);
+    //   expect(onChange.calledWith(10)).to.be(true);
+
+    //   // repeat it, it should works in same way
+    //   Simulate.focus(inputElement);
+    //   Simulate.change(inputElement, { target: { value: '123' } });
+    //   expect(onChange.callCount).to.be(3);
+    //   expect(onChange.calledWith(123)).to.be(true);
+    //   Simulate.blur(inputElement);
+    //   expect(onChange.callCount).to.be(4);
+    //   expect(onChange.calledWith(10)).to.be(true);
+  });
 
   // // https://github.com/ant-design/ant-design/issues/7867
   // it('focus should not cut precision of input value', () => {
