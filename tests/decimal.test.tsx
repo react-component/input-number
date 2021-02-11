@@ -55,6 +55,14 @@ describe('InputNumber.Decimal', () => {
     expect(wrapper.find('input').props().value).toEqual('1.000000000');
   });
 
+  it('small step with empty value', () => {
+    const wrapper = mount(<InputNumber step={0.1} />);
+    expect(wrapper.find('input').props().value).toEqual('');
+
+    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+    expect(wrapper.find('input').props().value).toEqual('0.1');
+  });
+
   it('custom decimal separator', () => {
     const onChange = jest.fn();
     const wrapper = mount(<InputNumber decimalSeparator="," onChange={onChange} />);

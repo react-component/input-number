@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
-import getMiniDecimal, { DecimalClass } from './utils/MiniDecimal';
+import getMiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
 import { getPrecision, num2str, trimNumber, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
@@ -17,6 +17,11 @@ const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) => {
   }
 
   return decimalValue.toNumber();
+};
+
+const getDecimalIfValidate = (value: ValueType) => {
+  const decimal = getMiniDecimal(value);
+  return decimal.isInvalidate() ? null : decimal;
 };
 
 export interface InputNumberProps
@@ -202,11 +207,11 @@ const InputNumber = React.forwardRef(
 
     // >>> Max & Min limit
     const maxDecimal = React.useMemo(
-      () => (max !== undefined && max !== null ? getMiniDecimal(max) : null),
+      () => getDecimalIfValidate(max),
       [max],
     );
     const minDecimal = React.useMemo(
-      () => (min !== undefined && min !== null ? getMiniDecimal(min) : null),
+      () => getDecimalIfValidate(min),
       [min],
     );
 
