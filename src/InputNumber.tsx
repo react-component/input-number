@@ -124,7 +124,7 @@ const InputNumber = React.forwardRef(
      * `precision` is used for formatter & onChange.
      * It will auto generate by `value` & `step`.
      * But it will not block user typing when auto generated.
-     * 
+     *
      * Note: Auto generate `precision` is used for legacy logic.
      * We should remove this since we already support high precision with BigInt.
      *
@@ -374,8 +374,11 @@ const InputNumber = React.forwardRef(
       let formatValue: DecimalClass = parsedValue;
 
       if (!parsedValue.isNaN()) {
-        // Reassign the formatValue within ranged of trigger control
-        formatValue = triggerValueUpdate(parsedValue, true);
+        // Only validate value can be re-fill to inputValue
+        if (!formatValue.isEmpty()) {
+          // Reassign the formatValue within ranged of trigger control
+          formatValue = triggerValueUpdate(parsedValue, true);
+        }
       } else {
         formatValue = decimalValue;
       }
