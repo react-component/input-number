@@ -3,6 +3,7 @@ import getMiniDecimal, {
   DecimalClass,
   NumberDecimal,
   ValueType,
+  toFixed,
 } from '../src/utils/MiniDecimal';
 
 jest.mock('../src/utils/supportUtil');
@@ -111,6 +112,28 @@ describe('InputNumber.Util', () => {
 
     it('add', () => {
       expect(new BigIntDecimal('11.28').add('0.0903').toString()).toEqual('11.3703');
+    });
+  });
+
+  describe('toFixed', () => {
+    it('less than precision', () => {
+      expect(toFixed('1.1', ',', 2)).toEqual('1,10');
+      expect(toFixed('1.23', '.', 5)).toEqual('1.23000');
+    });
+
+    it('large than precision', () => {
+      expect(toFixed('1.234', '.', 2)).toEqual('1.23');
+      expect(toFixed('1.235', '.', 2)).toEqual('1.24');
+      expect(toFixed('1.238', '.', 2)).toEqual('1.24');
+
+      // Integer
+      expect(toFixed('1.238', '.', 0)).toEqual('1');
+      expect(toFixed('1.5', '.', 0)).toEqual('2');
+    });
+
+    it('empty precision', () => {
+      expect(toFixed('1.2', '.')).toEqual('1.2');
+      expect(toFixed('1.000', '.')).toEqual('1');
     });
   });
 });

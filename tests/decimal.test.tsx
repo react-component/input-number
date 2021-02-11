@@ -74,4 +74,70 @@ describe('InputNumber.Decimal', () => {
     expect(wrapper.find('input').props().value).toEqual('1,1');
     expect(onChange).toHaveBeenCalledWith(1.1);
   });
+
+  describe('precision', () => {
+    it('decimal step should not display complete precision', () => {
+      const wrapper = mount(<InputNumber step={0.01} value={2.1} />);
+      expect(wrapper.findInput().props().value).toEqual('2.10');
+    });
+
+    it('string step should display complete precision', () => {
+      const wrapper = mount(<InputNumber step="1.000" value={2.1} />);
+      expect(wrapper.findInput().props().value).toEqual('2.100');
+    });
+
+    it('prop precision is specified', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber onChange={onChange} precision={2} defaultValue={2} />);
+      expect(wrapper.findInput().props().value).toEqual('2.00');
+
+      wrapper.changeValue('3.456');
+      wrapper.blurInput();
+      expect(onChange).toHaveBeenCalledWith(3.46);
+      expect(wrapper.findInput().props().value).toEqual('3.46');
+
+      onChange.mockReset();
+      wrapper.changeValue('3.465');
+      wrapper.blurInput();
+      expect(onChange).toHaveBeenCalledWith(3.47);
+      expect(wrapper.findInput().props().value).toEqual('3.47');
+
+      onChange.mockReset();
+      wrapper.changeValue('3.455');
+      wrapper.blurInput();
+      expect(onChange).toHaveBeenCalledWith(3.46);
+      expect(wrapper.findInput().props().value).toEqual('3.46');
+
+      onChange.mockReset();
+      wrapper.changeValue('1');
+      wrapper.blurInput();
+      expect(onChange).toHaveBeenCalledWith(1);
+      expect(wrapper.findInput().props().value).toEqual('1.00');
+    });
+
+    // it('should not trigger onChange when blur InputNumber with precision', () => {
+    //   class Demo extends React.Component {
+    //     onChange = () => {
+    //       onChangeCallCount += 1;
+    //     };
+
+    //     render() {
+    //       return (
+    //         <InputNumber
+    //           ref="inputNum"
+    //           mergedPPrecision={2}
+    //           defaultValue={2}
+    //           onChange={this.onChange}
+    //         />
+    //       );
+    //     }
+    //   }
+    //   example = ReactDOM.render(<Demo />, container);
+    //   inputNumber = example.refs.inputNum;
+    //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
+    //   Simulate.focus(inputElement);
+    //   Simulate.blur(inputElement);
+    //   expect(onChangeCallCount).to.be(0);
+    // });
+  });
 });

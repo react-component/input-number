@@ -254,3 +254,39 @@ export default function getMiniDecimal(value: ValueType): DecimalClass {
   }
   return new NumberDecimal(value);
 }
+
+/**
+ * Align the logic of toFixed to around like 1.5 => 2
+ */
+export function toFixed(numStr: string, separatorStr: string, precision?: number) {
+  const { negativeStr, integerStr, decimalStr } = trimNumber(numStr);
+  const precisionDecimalStr = `${separatorStr}${decimalStr}`;
+
+  const numberWithoutDecimal = `${negativeStr}${integerStr}`;
+
+  if (precision >= 0) {
+    // We will get last + 1 number to check if need advanced number
+    const advancedNum = Number(decimalStr[precision]);
+
+    if (advancedNum >= 5) {
+      const advancedDecimal = getMiniDecimal(numStr).add(
+        `0.${'0'.repeat(precision)}${10 - advancedNum}`,
+      );
+      return toFixed(advancedDecimal.toString(), separatorStr, precision);
+    }
+
+    if (precision === 0) {
+      return numberWithoutDecimal;
+    }
+
+    return `${numberWithoutDecimal}${separatorStr}${decimalStr
+      .padEnd(precision, '0')
+      .slice(0, precision)}`;
+  }
+
+  if (precisionDecimalStr === '.0') {
+    return numberWithoutDecimal;
+  }
+
+  return `${numberWithoutDecimal}${precisionDecimalStr}`;
+}
