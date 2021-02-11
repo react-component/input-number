@@ -158,4 +158,20 @@ describe('InputNumber.Click', () => {
   });
 
   // TODO: cursor follow up
+
+  it('focus input when click up/down button ', () => {
+    const onFocus = jest.fn();
+    const onBlur = jest.fn();
+    const wrapper = mount(<InputNumber onFocus={onFocus} onBlur={onBlur} />, {
+      attachTo: document.body,
+    });
+
+    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+    expect(wrapper.exists('.rc-input-number-focused')).toBeTruthy();
+    expect(onFocus).toHaveBeenCalled();
+
+    wrapper.blurInput();
+    expect(onBlur).toHaveBeenCalled();
+    expect(wrapper.exists('.rc-input-number-focused')).toBeFalsy();
+  });
 });

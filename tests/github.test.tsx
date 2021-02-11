@@ -245,93 +245,76 @@ describe('InputNumber.Github', () => {
 
     wrapper.blurInput();
     expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledTimes(1);
 
-    //   expect(onChange.callCount).to.be(2);
-    //   expect(onChange.calledWith(10)).to.be(true);
+    // repeat it, it should works in same way
+    wrapper.focusInput();
+    wrapper.changeValue('123');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledTimes(2);
+    expect(onInput).toHaveBeenCalledWith('123');
 
-    //   // repeat it, it should works in same way
-    //   Simulate.focus(inputElement);
-    //   Simulate.change(inputElement, { target: { value: '123' } });
-    //   expect(onChange.callCount).to.be(3);
-    //   expect(onChange.calledWith(123)).to.be(true);
-    //   Simulate.blur(inputElement);
-    //   expect(onChange.callCount).to.be(4);
-    //   expect(onChange.calledWith(10)).to.be(true);
+    wrapper.blurInput();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledTimes(2);
   });
 
-  // // https://github.com/ant-design/ant-design/issues/7867
-  // it('focus should not cut precision of input value', () => {
-  //   class Demo extends React.Component {
-  //     state = {
-  //       value: 2,
-  //     };
+  // https://github.com/ant-design/ant-design/issues/7867
+  it('focus should not cut precision of input value', () => {
+    const Demo = () => {
+      const [value, setValue] = React.useState<string | number>(2);
+      return (
+        <InputNumber
+          value={value}
+          step={0.1}
+          onBlur={() => {
+            setValue(2);
+          }}
+        />
+      );
+    };
 
-  //     onBlur = () => {
-  //       this.setState({ value: 2 });
-  //     };
+    const wrapper = mount(<Demo />);
 
-  //     render() {
-  //       return (
-  //         <InputNumber ref="inputNum" value={this.state.value} step={0.1} onBlur={this.onBlur} />
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   Simulate.focus(inputElement);
-  //   Simulate.blur(inputElement);
-  //   expect(inputElement.value).to.be('2.0');
-  //   Simulate.focus(inputElement);
-  //   expect(inputElement.value).to.be('2.0');
-  // });
+    wrapper.focusInput();
+    wrapper.blurInput();
 
-  // // https://github.com/ant-design/ant-design/issues/7940
-  // it('should not format during input', () => {
-  //   class Demo extends React.Component {
-  //     state = {
-  //       value: '',
-  //     };
+    expect(wrapper.findInput().props().value).toEqual('2.0');
 
-  //     onChange = (value) => {
-  //       this.setState({ value });
-  //     };
+    wrapper.focusInput();
+    expect(wrapper.findInput().props().value).toEqual('2.0');
+  });
 
-  //     render() {
-  //       return (
-  //         <InputNumber
-  //           ref="inputNum"
-  //           value={this.state.value}
-  //           step={0.1}
-  //           onChange={this.onChange}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '1' } });
-  //   expect(inputElement.value).to.be('1');
-  // });
+  // https://github.com/ant-design/ant-design/issues/7940
+  it('should not format during input', () => {
+    const Demo = () => {
+      const [value, setValue] = React.useState<string | number>('');
+      return (
+        <InputNumber
+          value={value}
+          step={0.1}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
+        />
+      );
+    };
 
-  // // https://github.com/ant-design/ant-design/issues/8196
-  // it('Allow inputing 。', () => {
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '8。1' } });
-  //   expect(inputElement.value).to.be('8.1');
-  // });
+    const wrapper = mount(<Demo />);
 
-  // it('focus input when click up/down button ', () => {
-  //   Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
-  //   expect(ReactDOM.findDOMNode(inputNumber).className.indexOf('focused') > 0).to.be(true);
-  //   expect(document.activeElement).to.be(inputElement);
-  //   expect(onFocusCallCount).to.be(1);
-  //   Simulate.blur(inputElement);
-  //   expect(onBlurCallCount).to.be(1);
-  //   expect(ReactDOM.findDOMNode(inputNumber).className.indexOf('focused') > 0).to.be(false);
-  // });
+    wrapper.focusInput();
+    wrapper.changeValue('1');
+    expect(wrapper.findInput().props().value).toEqual('1');
+  });
+
+  // https://github.com/ant-design/ant-design/issues/8196
+  it('Allow input 。', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber min={1} max={10} onChange={onChange} />);
+    wrapper.changeValue('8。1');
+    expect(wrapper.findInput().props().value).toEqual('8.1');
+    expect(onChange).toHaveBeenCalledWith(8.1);
+  });
 
   // // https://github.com/ant-design/ant-design/issues/25614
   // it("focus value should be '' when clear the input", () => {

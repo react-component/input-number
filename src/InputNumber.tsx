@@ -348,7 +348,13 @@ const InputNumber = React.forwardRef(
 
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      const inputStr = e.target.value;
+      let inputStr = e.target.value;
+
+      // optimize for chinese input experience
+      // https://github.com/ant-design/ant-design/issues/8196
+      if (!parser) {
+        inputStr = inputStr.replace(/。/g, '.');
+      }
 
       collectInputValue(inputStr);
 
