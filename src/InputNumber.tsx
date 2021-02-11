@@ -215,9 +215,13 @@ const InputNumber = React.forwardRef(
      *  2. User typing
      *  3. Blur or Enter trigger revalidate
      */
-    const [inputValue, setInternalInputValue] = React.useState<string | number>(() =>
-      mergedFormatter(decimalValue.toString(), false),
-    );
+    const [inputValue, setInternalInputValue] = React.useState<string | number>(() => {
+      const initValue = defaultValue ?? value;
+      if (decimalValue.isInvalidate() && ['string', 'number'].includes(typeof initValue)) {
+        return Number.isNaN(initValue) ? '' : initValue;
+      }
+      return mergedFormatter(decimalValue.toString(), false);
+    });
 
     // Should always be string
     function setInputValue(newValue: DecimalClass, userTyping: boolean) {

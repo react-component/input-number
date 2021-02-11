@@ -13,6 +13,7 @@ export default () => {
     <div>
       <InputNumber
         value={value}
+        max={999}
         onChange={(newValue) => {
           console.log('Change:', newValue);
         }}
