@@ -5,6 +5,14 @@ import KeyCode from 'rc-util/lib/KeyCode';
 
 // Github issues
 describe('InputNumber.Github', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   // https://github.com/react-component/input-number/issues/32
   it('issue 32', () => {
     const wrapper = mount(<InputNumber step={0.1} />);
@@ -80,50 +88,39 @@ describe('InputNumber.Github', () => {
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((200 - i) / 100).toFixed(2));
-      expect(wrapper.find('input').props().value).toEqual(String(expectedValue));
+      expect(wrapper.find('input').props().value).toEqual(String(expectedValue.toFixed(2)));
       expect(num).toEqual(expectedValue);
     }
 
-    //   for (let i = 1; i <= 300; i += 1) {
-    //     Simulate.keyDown(inputElement, {
-    //       keyCode: keyCode.UP,
-    //     });
-    //     // no number like 1.5499999999999999
-    //     expect((num.toString().split('.')[1] || '').length).to.below(3);
-    //     const expectedValue = Number(((i - 200) / 100).toFixed(2));
-    //     expect(num).to.be(expectedValue);
-    //     expect(inputNumber.state.value).to.be(expectedValue);
-    //   }
+    for (let i = 1; i <= 300; i += 1) {
+      wrapper.find('input').simulate('keyDown', { which: KeyCode.UP });
+
+      // no number like 1.5499999999999999
+      expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
+      const expectedValue = Number(((i - 200) / 100).toFixed(2));
+      expect(wrapper.find('input').props().value).toEqual(String(expectedValue.toFixed(2)));
+      expect(num).toEqual(expectedValue);
+    }
   });
 
-  // // https://github.com/ant-design/ant-design/issues/4229
-  // it('long press not trigger onChange in uncontrolled component', (done) => {
-  //   let num;
-  //   class Demo extends React.Component {
-  //     render() {
-  //       return (
-  //         <InputNumber
-  //           ref="inputNum"
-  //           defaultValue={0}
-  //           onChange={(value) => {
-  //             num = value;
-  //           }}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
+  // https://github.com/ant-design/ant-design/issues/4229
+  it('long press not trigger onChange in uncontrolled component', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber defaultValue={0} onChange={onChange} />);
 
-  //   Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
-  //   setTimeout(() => {
-  //     expect(num).to.be(1);
-  //     setTimeout(() => {
-  //       expect(num).to.above(1);
-  //       done();
-  //     }, 200);
-  //   }, 500);
-  // });
+    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+
+    // jest.advanceTimersByTime();
+
+    //   Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
+    //   setTimeout(() => {
+    //     expect(num).to.be(1);
+    //     setTimeout(() => {
+    //       expect(num).to.above(1);
+    //       done();
+    //     }, 200);
+    //   }, 500);
+  });
 
   // // https://github.com/ant-design/ant-design/issues/4757
   // it('should allow to input text like "1."', () => {

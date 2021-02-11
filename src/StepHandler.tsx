@@ -1,6 +1,16 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
+/**
+ * When click and hold on a button - the speed of auto changing the value.
+ */
+const STEP_INTERVAL = 200;
+
+/**
+ * When click and hold on a button - the delay before auto changing the value.
+ */
+const STEP_DELAY = 600;
+
 export interface StepHandlerProps {
   prefixCls: string;
   upNode?: React.ReactNode;
@@ -19,7 +29,7 @@ export default function StepHandler({
   onStep,
 }: StepHandlerProps) {
   // ======================== Step ========================
-  const stepIntervalRef = React.useRef<number>();
+  const stepTimeoutRef = React.useRef<any>();
 
   const onStepRef = React.useRef<StepHandlerProps['onStep']>();
   onStepRef.current = onStep;
@@ -30,13 +40,19 @@ export default function StepHandler({
 
     onStepRef.current(up);
 
-    stepIntervalRef.current = setInterval(() => {
+    // Loop step for interval
+    function loopStep() {
       onStepRef.current(up);
-    }, 200) as any;
+
+      stepTimeoutRef.current = setTimeout(loopStep, STEP_INTERVAL);
+    }
+
+    // First time press will wait some time to trigger loop step update
+    stepTimeoutRef.current = setTimeout(loopStep, STEP_DELAY);
   };
 
   const onStopStep = () => {
-    clearInterval(stepIntervalRef.current);
+    clearTimeout(stepTimeoutRef.current);
   };
 
   React.useEffect(() => onStopStep, []);
