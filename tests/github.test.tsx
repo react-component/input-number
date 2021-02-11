@@ -89,7 +89,7 @@ describe('InputNumber.Github', () => {
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((200 - i) / 100).toFixed(2));
-      expect(wrapper.find('input').props().value).toEqual(String(expectedValue.toFixed(2)));
+      expect(wrapper.find('input').props().value).toEqual(String(expectedValue));
       expect(num).toEqual(expectedValue);
     }
 
@@ -99,7 +99,7 @@ describe('InputNumber.Github', () => {
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((i - 200) / 100).toFixed(2));
-      expect(wrapper.find('input').props().value).toEqual(String(expectedValue.toFixed(2)));
+      expect(wrapper.find('input').props().value).toEqual(String(expectedValue));
       expect(num).toEqual(expectedValue);
     }
   });

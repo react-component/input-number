@@ -125,12 +125,12 @@ const InputNumber = React.forwardRef(
         return precision;
       }
 
-      if (decimalValue.isInvalidate()) {
+      if (decimalValue.isInvalidate() || userTypingRef.current) {
         return undefined;
       }
 
       return Math.max(getPrecision(decimalValue.toString()), getPrecision(step));
-    }, [precision, step, decimalValue]);
+    }, [precision, step, decimalValue, userTypingRef.current]);
 
     // >>> Parser
     const mergedParser = React.useCallback(
@@ -192,7 +192,8 @@ const InputNumber = React.forwardRef(
      * Input text value control
      *
      * User can not update input content directly. It update with follow rules by priority:
-     *  1. `value` changed
+     *  1. controlled `value` changed
+     *    * [SPECIAL] Typing like `1.` should not immediately convert to `1`
      *  2. User typing
      *  3. Blur or Enter trigger revalidate
      */
@@ -206,14 +207,8 @@ const InputNumber = React.forwardRef(
     }
 
     // >>> Max & Min limit
-    const maxDecimal = React.useMemo(
-      () => getDecimalIfValidate(max),
-      [max],
-    );
-    const minDecimal = React.useMemo(
-      () => getDecimalIfValidate(min),
-      [min],
-    );
+    const maxDecimal = React.useMemo(() => getDecimalIfValidate(max), [max]);
+    const minDecimal = React.useMemo(() => getDecimalIfValidate(min), [min]);
 
     const upDisabled = React.useMemo(() => {
       if (!maxDecimal || !decimalValue) {
@@ -410,6 +405,8 @@ const InputNumber = React.forwardRef(
     useUpdateEffect(() => {
       const newValue = getMiniDecimal(value);
       setDecimalValue(newValue);
+
+      console.log('Value:', value, typeof value, newValue);
 
       // Update value as effect
       setInputValue(newValue);
