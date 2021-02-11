@@ -316,179 +316,113 @@ describe('InputNumber.Github', () => {
     expect(onChange).toHaveBeenCalledWith(8.1);
   });
 
-  // // https://github.com/ant-design/ant-design/issues/25614
-  // it("focus value should be '' when clear the input", () => {
-  //   let targetValue;
-  //   class Demo extends React.Component {
-  //     state = {
-  //       value: 1,
-  //     };
+  // https://github.com/ant-design/ant-design/issues/25614
+  it("focus value should be '' when clear the input", () => {
+    let targetValue: string;
 
-  //     render() {
-  //       return (
-  //         <div>
-  //           <InputNumber
-  //             ref="inputNum"
-  //             min={1}
-  //             max={10}
-  //             onBlur={(e) => {
-  //               targetValue = e.target.value;
-  //             }}
-  //             value={this.state.value}
-  //           />
-  //         </div>
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   expect(inputNumber.state.value).to.be(1);
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '' } });
-  //   Simulate.blur(inputElement);
-  //   expect(targetValue).to.be('');
-  // });
+    const wrapper = mount(
+      <InputNumber
+        min={1}
+        max={10}
+        onBlur={(e) => {
+          targetValue = e.target.value;
+        }}
+        value={1}
+      />,
+    );
+    wrapper.focusInput();
+    wrapper.changeValue('');
+    wrapper.blurInput();
+    expect(targetValue).toEqual('');
+  });
 
-  // it('should set input value as formatted when blur', () => {
-  //   let valueOnBlur;
-  //   function onBlur(e) {
-  //     valueOnBlur = e.target.value;
-  //   }
-  //   class Demo extends React.Component {
-  //     state = {
-  //       value: 1,
-  //     };
+  it('should set input value as formatted when blur', () => {
+    let valueOnBlur: string;
 
-  //     render() {
-  //       return (
-  //         <div>
-  //           <InputNumber
-  //             ref="inputNum"
-  //             onBlur={onBlur}
-  //             formatter={(value) => `${value * 100}%`}
-  //             value={this.state.value}
-  //           />
-  //         </div>
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   Simulate.blur(inputElement);
-  //   expect(inputElement.value).to.be('100%');
-  //   expect(valueOnBlur).to.be('100%');
-  // });
+    const wrapper = mount(
+      <InputNumber
+        onBlur={(e) => {
+          valueOnBlur = e.target.value;
+        }}
+        formatter={(value) => `${Number(value) * 100}%`}
+        value={1}
+      />,
+    );
 
-  // // https://github.com/ant-design/ant-design/issues/11574
-  // it('should trigger onChange when max or min change', () => {
-  //   const onChange = sinon.spy();
-  //   class Demo extends Component {
-  //     state = {
-  //       value: 10,
-  //       min: 0,
-  //       max: 20,
-  //     };
+    wrapper.blurInput();
+    expect(wrapper.find('input').props().value).toEqual('100%');
+    expect(valueOnBlur).toEqual('100%');
+  });
 
-  //     onChange = (value) => {
-  //       this.setValue(value);
-  //       onChange(value);
-  //     };
+  // https://github.com/ant-design/ant-design/issues/11574
+  // Origin: should trigger onChange when max or min change
+  it('warning UI when max or min change', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber min={0} max={20} value={10} onChange={onChange} />);
 
-  //     setMax(max) {
-  //       this.setState({ max });
-  //     }
+    expect(wrapper.exists('.rc-input-number-out-of-range')).toBeFalsy();
 
-  //     setMin(min) {
-  //       this.setState({ min });
-  //     }
+    wrapper.setProps({ min: 11 });
+    wrapper.update();
+    expect(wrapper.findInput().props().value).toEqual('10');
+    expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    expect(onChange).toHaveBeenCalledTimes(0);
 
-  //     setValue(value) {
-  //       this.setState({ value });
-  //     }
+    wrapper.setProps({ value: 15 });
+    wrapper.setProps({ max: 14 });
+    wrapper.update();
 
-  //     render() {
-  //       return (
-  //         <InputNumber
-  //           ref="inputNum"
-  //           value={this.state.value}
-  //           onChange={this.onChange}
-  //           max={this.state.max}
-  //           min={this.state.min}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   example.setMin(11);
-  //   expect(inputElement.value).to.be('11');
-  //   expect(onChange.calledWith(11)).to.be(true);
+    expect(wrapper.findInput().props().value).toEqual('15');
+    expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    expect(onChange).toHaveBeenCalledTimes(0);
+  });
 
-  //   example.setValue(15);
+  // https://github.com/react-component/input-number/issues/120
+  it('should not reset value when parent re-render with the same `value` prop', () => {
+    const Demo = () => {
+      const [, forceUpdate] = React.useState({});
 
-  //   example.setMax(14);
-  //   expect(inputElement.value).to.be('14');
-  //   expect(onChange.calledWith(14)).to.be(true);
-  // });
+      return (
+        <InputNumber
+          value={40}
+          onChange={() => {
+            forceUpdate({});
+          }}
+        />
+      );
+    };
 
-  // // https://github.com/react-component/input-number/issues/120
-  // it('should not reset value when parent rerenders with the same `value` prop', () => {
-  //   class Demo extends React.Component {
-  //     state = { value: 40 };
+    const wrapper = mount(<Demo />);
+    wrapper.focusInput();
+    wrapper.changeValue('401');
 
-  //     onChange = () => {
-  //       this.forceUpdate();
-  //     };
+    // Demo re-render and the `value` prop is still 40, but the user input should be retained
+    expect(wrapper.findInput().props().value).toEqual('401');
+  });
 
-  //     render() {
-  //       return <InputNumber ref="inputNum" value={this.state.value} onChange={this.onChange} />;
-  //     }
-  //   }
+  // https://github.com/ant-design/ant-design/issues/16710
+  it('should use correct precision when change it to 0', () => {
+    const Demo = () => {
+      const [precision, setPrecision] = React.useState(2);
 
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
+      return (
+        <div>
+          <InputNumber
+            onChange={(newPrecision: number) => {
+              setPrecision(newPrecision);
+            }}
+          />
+          <InputNumber precision={precision} defaultValue={1.23} />
+        </div>
+      );
+    };
 
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '401' } });
+    const wrapper = mount(<Demo />);
+    wrapper.find('input').last().simulate('change', { target: { value: '1.23' } });
+    wrapper.find('input').first().simulate('change', { target: { value: '0' } });
 
-  //   // Demo rerenders and the `value` prop is still 40, but the user input should
-  //   // be retained
-  //   expect(inputElement.value).to.be('401');
-  // });
-
-  // // https://github.com/ant-design/ant-design/issues/16710
-  // it('should use correct precision when change it to 0', () => {
-  //   class Demo extends React.Component {
-  //     state = {
-  //       precision: 2,
-  //     };
-
-  //     onPrecisionChange = (precision) => {
-  //       this.setState({ precision });
-  //     };
-
-  //     render() {
-  //       const { precision } = this.state;
-  //       return (
-  //         <div>
-  //           <InputNumber onChange={this.onPrecisionChange} />
-  //           <InputNumber mergedPPrecision={precision} defaultValue={1.23} />
-  //         </div>
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   const [precisionInput, numberInput] = scryRenderedDOMComponentsWithTag(example, 'input');
-  //   expect(numberInput.value).to.be('1.23');
-  //   Simulate.focus(precisionInput);
-  //   Simulate.change(precisionInput, { target: { value: '0' } });
-  //   Simulate.blur(precisionInput);
-  //   expect(numberInput.value).to.be('1');
-  // });
+    expect(wrapper.find('input').last().props().value).toEqual('1');
+  });
 
   // // https://github.com/react-component/input-number/issues/235
   // describe('cursor position', () => {

@@ -433,8 +433,15 @@ const InputNumber = React.forwardRef(
       setFocus(false);
     };
 
-    // ============================ Effect ============================
-    // Controlled
+    // ========================== Controlled ==========================
+    // Input by precision
+    useUpdateEffect(() => {
+      if (!decimalValue.isInvalidate()) {
+        setInputValue(decimalValue, false);
+      }
+    }, [precision]);
+
+    // Input by value
     useUpdateEffect(() => {
       const newValue = getMiniDecimal(value);
       setDecimalValue(newValue);
@@ -447,6 +454,7 @@ const InputNumber = React.forwardRef(
       }
     }, [value]);
 
+    // ============================ Cursor ============================
     React.useEffect(() => {
       if (formatter) {
         restoreCursor();
