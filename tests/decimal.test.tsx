@@ -68,7 +68,7 @@ describe('InputNumber.Decimal', () => {
     const wrapper = mount(<InputNumber decimalSeparator="," onChange={onChange} />);
 
     wrapper.find('input').simulate('focus');
-    wrapper.find('input').simulate('change', { target: { value: '1,1' } });
+    wrapper.changeValue('1,1');
     wrapper.find('input').simulate('blur');
 
     expect(wrapper.find('input').props().value).toEqual('1,1');

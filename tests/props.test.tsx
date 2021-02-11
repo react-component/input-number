@@ -93,7 +93,7 @@ describe('InputNumber.Props', () => {
       const wrapper = mount(<InputNumber value={9} />);
       wrapper.find('input').simulate('focus');
 
-      wrapper.find('input').simulate('change', { target: { value: '3' } });
+      wrapper.changeValue('3');
       expect(wrapper.find('input').props().value).toEqual('3');
 
       wrapper.find('input').simulate('blur');

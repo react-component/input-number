@@ -9,7 +9,7 @@ describe('InputNumber.Input', () => {
     wrapper.find('input').simulate('focus');
     for (let i = 0; i < text.length; i += 1) {
       const inputTxt = text.slice(0, i + 1);
-      wrapper.find('input').simulate('change', { target: { value: inputTxt } });
+      wrapper.changeValue(inputTxt);
     }
 
     if (!skipInputCheck) {

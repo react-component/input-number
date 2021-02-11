@@ -18,7 +18,7 @@ describe('InputNumber.Github', () => {
   it('issue 32', () => {
     const wrapper = mount(<InputNumber step={0.1} />);
     wrapper.find('input').simulate('focus');
-    wrapper.find('input').simulate('change', { target: { value: '2' } });
+    wrapper.changeValue('2');
     expect(wrapper.find('input').props().value).toEqual('2');
 
     wrapper.find('input').simulate('blur');
@@ -42,7 +42,7 @@ describe('InputNumber.Github', () => {
     };
     const wrapper = mount(<Demo />);
     wrapper.find('input').simulate('focus');
-    wrapper.find('input').simulate('change', { target: { value: 'foo' } });
+    wrapper.changeValue('foo');
   });
 
   // https://github.com/react-component/input-number/issues/222
@@ -63,7 +63,7 @@ describe('InputNumber.Github', () => {
     };
     const wrapper = mount(<Demo />);
     wrapper.find('input').simulate('focus');
-    wrapper.find('input').simulate('change', { target: { value: 'foo' } });
+    wrapper.changeValue('foo');
 
     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
     expect(wrapper.find('input').props().value).toEqual('2');
@@ -123,7 +123,7 @@ describe('InputNumber.Github', () => {
   });
 
   // https://github.com/ant-design/ant-design/issues/4757
-  it.only('should allow to input text like "1."', () => {
+  it('should allow to input text like "1."', () => {
     const Demo = () => {
       const [value, setValue] = React.useState<string | number>(1.1);
 

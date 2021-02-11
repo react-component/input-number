@@ -406,10 +406,11 @@ const InputNumber = React.forwardRef(
       const newValue = getMiniDecimal(value);
       setDecimalValue(newValue);
 
-      console.log('Value:', value, typeof value, newValue);
-
-      // Update value as effect
-      setInputValue(newValue);
+      // When user typing from `1.2` to `1.`, we should not convert to `1` immediately.
+      if (newValue.isNaN() || !userTypingRef.current) {
+        // Update value as effect
+        setInputValue(newValue);
+      }
     }, [value]);
 
     React.useEffect(() => {
