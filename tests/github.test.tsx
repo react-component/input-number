@@ -122,16 +122,30 @@ describe('InputNumber.Github', () => {
     expect(onChange).toHaveBeenCalledWith(2);
   });
 
-  // // https://github.com/ant-design/ant-design/issues/4757
-  // it('should allow to input text like "1."', () => {
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '1.' } });
-  //   expect(inputElement.value).to.be('1.');
-  //   expect(onChangeFirstArgument).to.be('1.');
-  //   Simulate.blur(inputElement);
-  //   expect(inputElement.value).to.be('1');
-  //   expect(onChangeFirstArgument).to.be(1);
-  // });
+  // https://github.com/ant-design/ant-design/issues/4757
+  it('should allow to input text like "1."', () => {
+    const Demo = () => {
+      const [value, setValue] = React.useState<string | number>(1.1);
+
+      return (
+        <InputNumber
+          value={value}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
+        />
+      );
+    };
+
+    const wrapper = mount(<Demo />);
+
+    wrapper.find('input').simulate('focus');
+    wrapper.find('input').simulate('change', { target: { value: '1.' } });
+    expect(wrapper.find('input').props().value).toEqual('1.');
+
+    wrapper.find('input').simulate('blur');
+    expect(wrapper.find('input').props().value).toEqual('1');
+  });
 
   // // https://github.com/ant-design/ant-design/issues/5012
   // // https://github.com/react-component/input-number/issues/64
