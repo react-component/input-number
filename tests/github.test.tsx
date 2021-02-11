@@ -187,24 +187,38 @@ describe('InputNumber.Github', () => {
     expect(num).toEqual(6.1);
   });
 
-  // it('onChange should not be called when input is not changed', () => {
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '1' } });
-  //   expect(onChangeCallCount).to.be(1);
-  //   expect(onChangeFirstArgument).to.be(1);
-  //   Simulate.blur(inputElement);
-  //   expect(onChangeCallCount).to.be(1);
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '' } });
-  //   expect(onChangeCallCount).to.be(2);
-  //   expect(onChangeFirstArgument).to.be('');
-  //   Simulate.blur(inputElement);
-  //   expect(onChangeCallCount).to.be(3);
-  //   expect(onChangeFirstArgument).to.be(null);
-  //   Simulate.focus(inputElement);
-  //   Simulate.blur(inputElement);
-  //   expect(onChangeCallCount).to.be(3);
-  // });
+  it('onChange should not be called when input is not changed', () => {
+    const onChange = jest.fn();
+    const onInput = jest.fn();
+
+    const wrapper = mount(<InputNumber onChange={onChange} onInput={onInput} />);
+
+    wrapper.focusInput();
+    wrapper.changeValue('1');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(1);
+    expect(onInput).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledWith('1');
+
+    wrapper.blurInput();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledTimes(1);
+
+    wrapper.focusInput();
+    wrapper.changeValue('');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledTimes(2);
+    expect(onInput).toHaveBeenCalledWith('');
+
+    wrapper.blurInput();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledTimes(2);
+
+    wrapper.focusInput();
+    wrapper.blurInput();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onInput).toHaveBeenCalledTimes(2);
+  });
 
   // // https://github.com/ant-design/ant-design/issues/5235
   // it('input long number', () => {
