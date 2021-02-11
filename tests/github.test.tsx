@@ -1,4 +1,5 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import InputNumber from '../src';
 import KeyCode from 'rc-util/lib/KeyCode';
@@ -110,16 +111,15 @@ describe('InputNumber.Github', () => {
 
     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
 
-    // jest.advanceTimersByTime();
+    act(() => {
+      jest.advanceTimersByTime(500);
+    });
+    expect(onChange).toHaveBeenCalledWith(1);
 
-    //   Simulate.mouseDown(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
-    //   setTimeout(() => {
-    //     expect(num).to.be(1);
-    //     setTimeout(() => {
-    //       expect(num).to.above(1);
-    //       done();
-    //     }, 200);
-    //   }, 500);
+    act(() => {
+      jest.advanceTimersByTime(200);
+    });
+    expect(onChange).toHaveBeenCalledWith(2);
   });
 
   // // https://github.com/ant-design/ant-design/issues/4757

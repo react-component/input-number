@@ -20,7 +20,7 @@ describe('InputNumber.LongPress', () => {
     const wrapper = mount(<InputNumber defaultValue={20} onChange={onChange} />);
     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
     act(() => {
-      jest.advanceTimersByTime(1100);
+      jest.advanceTimersByTime(600 + 200 * 5 + 100);
     });
     wrapper.find('.rc-input-number-handler-up').simulate('mouseUp');
 
@@ -32,7 +32,7 @@ describe('InputNumber.LongPress', () => {
     const wrapper = mount(<InputNumber defaultValue={20} onChange={onChange} />);
     wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
     act(() => {
-      jest.advanceTimersByTime(1100);
+      jest.advanceTimersByTime(600 + 200 * 5 + 100);
     });
     wrapper.find('.rc-input-number-handler-down').simulate('mouseUp');
 
