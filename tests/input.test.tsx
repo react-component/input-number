@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount } from './util/wrapper';
 import KeyCode from 'rc-util/lib/KeyCode';
 import InputNumber, { InputNumberProps } from '../src';
 

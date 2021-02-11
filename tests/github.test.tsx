@@ -1,6 +1,6 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { mount } from './util/wrapper';
 import InputNumber from '../src';
 import KeyCode from 'rc-util/lib/KeyCode';
 
@@ -123,7 +123,7 @@ describe('InputNumber.Github', () => {
   });
 
   // https://github.com/ant-design/ant-design/issues/4757
-  it('should allow to input text like "1."', () => {
+  it.only('should allow to input text like "1."', () => {
     const Demo = () => {
       const [value, setValue] = React.useState<string | number>(1.1);
 
@@ -140,7 +140,7 @@ describe('InputNumber.Github', () => {
     const wrapper = mount(<Demo />);
 
     wrapper.find('input').simulate('focus');
-    wrapper.find('input').simulate('change', { target: { value: '1.' } });
+    wrapper.changeValue('1.');
     expect(wrapper.find('input').props().value).toEqual('1.');
 
     wrapper.find('input').simulate('blur');

@@ -1,6 +1,6 @@
 import React from 'react';
 import KeyCode from 'rc-util/lib/KeyCode';
-import { mount } from 'enzyme';
+import { mount } from './util/wrapper';
 import InputNumber from '../src';
 
 describe('InputNumber.Keyboard', () => {

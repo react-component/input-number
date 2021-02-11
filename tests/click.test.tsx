@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
+import { mount, ReactWrapper } from './util/wrapper';
 import InputNumber, { InputNumberProps } from '../src';
 
 jest.mock('../src/utils/supportUtil');

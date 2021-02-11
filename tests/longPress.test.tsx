@@ -1,6 +1,6 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { mount } from './util/wrapper';
 import InputNumber from '../src';
 
 // Jest will mass of advanceTimersByTime if other test case not use fakeTimer.
