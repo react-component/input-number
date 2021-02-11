@@ -203,7 +203,7 @@ describe('InputNumber.Props', () => {
     });
 
     it('invalidate defaultValue', () => {
-      const wrapper = mount(<InputNumber  defaultValue="light" />);
+      const wrapper = mount(<InputNumber defaultValue="light" />);
       expect(wrapper.findInput().props().value).toEqual('light');
     });
   });
@@ -271,6 +271,35 @@ describe('InputNumber.Props', () => {
       wrapper.update();
       expect(wrapper.findInput().props().value).toEqual('9');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeFalsy();
+    });
+  });
+
+  describe(`required prop`, () => {
+    it(`should add required attr to the input tag when get passed as true`, () => {
+      const wrapper = mount(<InputNumber required />);
+      expect(wrapper.findInput().props().required).toBeTruthy();
+    });
+
+    it(`should not add required attr to the input as default props when not being supplied`, () => {
+      const wrapper = mount(<InputNumber />);
+      expect(wrapper.findInput().props().required).toBeFalsy();
+    });
+
+    it(`should not add required attr to the input tag when get passed as false`, () => {
+      const wrapper = mount(<InputNumber required={false} />);
+      expect(wrapper.findInput().props().required).toBeFalsy();
+    });
+  });
+
+  describe('Pattern prop', () => {
+    it(`should render with a pattern attribute if the pattern prop is supplied`, () => {
+      const wrapper = mount(<InputNumber pattern="\d*" />);
+      expect(wrapper.findInput().props().pattern).toEqual('\\d*');
+    });
+
+    it(`should render with no pattern attribute if the pattern prop is not supplied`, () => {
+      const wrapper = mount(<InputNumber />);
+      expect(wrapper.findInput().props().pattern).toBeFalsy();
     });
   });
 });
