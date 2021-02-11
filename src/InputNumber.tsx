@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
-import getMiniDecimal, { DecimalClass, ValueType } from './utils/MiniDecimal';
+import getMiniDecimal, { DecimalClass, toFixed, ValueType } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
 import { getNumberPrecision, num2str, trimNumber, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
@@ -181,23 +181,7 @@ const InputNumber = React.forwardRef(
           // Separator
           const separatorStr = decimalSeparator || '.';
 
-          // Precision
-          const { negativeStr, integerStr, decimalStr } = trimNumber(str);
-          let precisionDecimalStr = `${separatorStr}${decimalStr}`;
-
-          if (mergedPrecision >= 0) {
-            precisionDecimalStr =
-              mergedPrecision > 0
-                ? `${separatorStr}${decimalStr
-                    .padEnd(mergedPrecision, '0')
-                    .slice(0, mergedPrecision)}`
-                : '';
-          } else if (precisionDecimalStr === '.0') {
-            // Remove unnecessary `.0` of number
-            precisionDecimalStr = '';
-          }
-
-          str = `${negativeStr}${integerStr}${precisionDecimalStr}`;
+          str = toFixed(str, separatorStr, mergedPrecision);
         }
 
         return str;
@@ -292,12 +276,7 @@ const InputNumber = React.forwardRef(
         const numStr = updateValue.toString();
         const mergedPrecision = getPrecision(numStr, userTyping);
         if (mergedPrecision) {
-          const { negativeStr, integerStr, decimalStr } = trimNumber(numStr);
-          updateValue = getMiniDecimal(
-            `${negativeStr}${integerStr}.${decimalStr
-              .padEnd(mergedPrecision, '0')
-              .slice(0, mergedPrecision)}0`,
-          );
+          updateValue = getMiniDecimal(toFixed(numStr, '.', mergedPrecision));
         }
 
         // Trigger event
