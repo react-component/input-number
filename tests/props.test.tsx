@@ -311,4 +311,37 @@ describe('InputNumber.Props', () => {
       expect(onPaste).toHaveBeenCalled();
     });
   });
+
+  describe('aria and data props', () => {
+    it('passes data-* attributes', () => {
+      const wrapper = mount(<InputNumber value={1} data-test="test-id" data-id="12345" />);
+      expect(wrapper.findInput().props()).toEqual(
+        expect.objectContaining({
+          'data-test': 'test-id',
+          'data-id': '12345',
+        }),
+      );
+    });
+
+    it('passes aria-* attributes', () => {
+      const wrapper = mount(
+        <InputNumber value={1} aria-labelledby="test-id" aria-label="some-label" />,
+      );
+      expect(wrapper.findInput().props()).toEqual(
+        expect.objectContaining({
+          'aria-labelledby': 'test-id',
+          'aria-label': 'some-label',
+        }),
+      );
+    });
+
+    it('passes role attribute', () => {
+      const wrapper = mount(<InputNumber value={1} role="searchbox" />);
+      expect(wrapper.findInput().props()).toEqual(
+        expect.objectContaining({
+          role: 'searchbox',
+        }),
+      );
+    });
+  });
 });

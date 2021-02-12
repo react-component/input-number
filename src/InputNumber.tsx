@@ -489,11 +489,11 @@ const InputNumber = React.forwardRef(
         <div className={`${inputClassName}-wrap`}>
           <input
             autoComplete="off"
-            {...inputProps}
-            ref={composeRef(inputRef, ref)}
             role="spinbutton"
             aria-valuemin={min}
             aria-valuemax={max}
+            {...inputProps}
+            ref={composeRef(inputRef, ref)}
             className={inputClassName}
             value={inputValue}
             onChange={onInternalInput}
