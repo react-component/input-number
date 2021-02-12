@@ -302,4 +302,13 @@ describe('InputNumber.Props', () => {
       expect(wrapper.findInput().props().pattern).toBeFalsy();
     });
   });
+
+  describe('onPaste props', () => {
+    it('passes onPaste event handler', () => {
+      const onPaste = jest.fn();
+      const wrapper = mount(<InputNumber value={1} onPaste={onPaste} />);
+      wrapper.findInput().simulate('paste');
+      expect(onPaste).toHaveBeenCalled();
+    });
+  });
 });

@@ -427,6 +427,6 @@ describe('InputNumber.Github', () => {
       .first()
       .simulate('change', { target: { value: '0' } });
 
-    expect(wrapper.getInputValue()).toEqual('1');
+    expect(wrapper.find('input').last().props().value).toEqual('1');
   });
 });
