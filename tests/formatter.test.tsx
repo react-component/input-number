@@ -61,71 +61,40 @@ describe('InputNumber.Formatter', () => {
     expect(onChange).toHaveBeenCalledWith(5);
   });
 
-  // it('formatter on direct input', () => {
-  //   let onChangeFirstArgumentFormat;
+  it('formatter on direct input', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(
+      <InputNumber defaultValue={5} formatter={(num) => `$ ${num}`} onChange={onChange} />,
+    );
 
-  //   class Demo extends React.Component {
-  //     state = {
-  //       value: 5,
-  //     };
+    wrapper.focusInput();
+    wrapper.changeValue('100');
+    expect(wrapper.getInputValue()).toEqual('$ 100');
+    expect(onChange).toHaveBeenCalledWith(100);
+  });
 
-  //     onChange = (value) => {
-  //       onChangeFirstArgumentFormat = value;
-  //       this.setState({ value });
-  //     };
+  it('formatter and parser', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(
+      <InputNumber
+        defaultValue={5}
+        formatter={(num) => `$ ${num} boeing 737`}
+        parser={(num) => num.toString().split(' ')[1]}
+        onChange={onChange}
+      />,
+    );
 
-  //     render() {
-  //       return (
-  //         <InputNumber
-  //           ref="inputNum"
-  //           step={1}
-  //           defaultValue={5}
-  //           formatter={(num) => `$ ${num}`}
-  //           onChange={this.onChange}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
+    wrapper.focusInput();
+    wrapper.findInput().simulate('keyDown', { which: KeyCode.UP });
+    expect(wrapper.getInputValue()).toEqual('$ 6 boeing 737');
+    expect(onChange).toHaveBeenLastCalledWith(6);
 
-  //   Simulate.focus(inputElement);
-  //   Simulate.change(inputElement, { target: { value: '100' } });
-  //   expect(inputElement.value).to.be('$ 100');
-  //   expect(onChangeFirstArgumentFormat).to.be(100);
-  //   Simulate.blur(inputElement);
-  //   expect(inputElement.value).to.be('$ 100');
-  //   expect(inputNumber.state.value).to.be(100);
-  // });
+    wrapper.findInput().simulate('keyDown', { which: KeyCode.DOWN });
+    expect(wrapper.getInputValue()).toEqual('$ 5 boeing 737');
+    expect(onChange).toHaveBeenLastCalledWith(5);
 
-  // it('formatter and parser', () => {
-  //   class Demo extends React.Component {
-  //     render() {
-  //       return (
-  //         <InputNumber
-  //           ref="inputNum"
-  //           step={1}
-  //           defaultValue={5}
-  //           useTouch
-  //           formatter={(num) => `$ ${num} boeing 737`}
-  //           parser={(num) => num.toString().split(' ')[1]}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   Simulate.focus(inputElement);
-  //   Simulate.keyDown(inputElement, { keyCode: keyCode.UP });
-  //   expect(inputNumber.state.value).to.be(6);
-  //   expect(inputElement.value).to.be('$ 6 boeing 737');
-  //   Simulate.keyDown(inputElement, { keyCode: keyCode.DOWN });
-  //   expect(inputNumber.state.value).to.be(5);
-  //   expect(inputElement.value).to.be('$ 5 boeing 737');
-  //   Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
-  //   expect(inputNumber.state.value).to.be(6);
-  //   expect(inputElement.value).to.be('$ 6 boeing 737');
-  // });
+    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+    expect(wrapper.getInputValue()).toEqual('$ 6 boeing 737');
+    expect(onChange).toHaveBeenLastCalledWith(6);
+  });
 });
