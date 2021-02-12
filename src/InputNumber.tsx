@@ -4,7 +4,7 @@ import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
 import getMiniDecimal, { DecimalClass, toFixed, ValueType } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
-import { getNumberPrecision, num2str, trimNumber, validateNumber } from './utils/numberUtil';
+import { getNumberPrecision, num2str, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
 import useUpdateEffect from './hooks/useUpdateEffect';
 
@@ -24,7 +24,7 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
-export interface InputNumberProps
+export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
     'value' | 'defaultValue' | 'onInput' | 'onChange'
@@ -32,15 +32,15 @@ export interface InputNumberProps
   /** value will show as string */
   stringMode?: boolean;
 
-  defaultValue?: string | number;
-  value?: string | number;
+  defaultValue?: T;
+  value?: T;
 
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
   min?: number;
   max?: number;
-  step?: number | string;
+  step?: ValueType;
   tabIndex?: number;
 
   // Customize handler node
@@ -49,17 +49,19 @@ export interface InputNumberProps
   keyboard?: boolean;
 
   /** Parse display value to validate number */
-  parser?: (displayValue: string | undefined) => number | string;
+  parser?: (displayValue: string | undefined) => T;
   /** Transform `value` to display value show in input */
-  formatter?: (value: string | undefined) => string;
+  formatter?: (value: T | undefined) => string;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
   decimalSeparator?: string;
 
   onInput?: (text: string) => void;
-  onChange?: (value: number | string) => void;
+  onChange?: (value: T) => void;
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
+
+  onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down' }) => void;
 
   // focusOnUpDown: boolean;
   // useTouch: boolean;
@@ -94,6 +96,7 @@ const InputNumber = React.forwardRef(
       onChange,
       onInput,
       onPressEnter,
+      onStep,
 
       ...inputProps
     } = props;
@@ -217,7 +220,7 @@ const InputNumber = React.forwardRef(
     const minDecimal = React.useMemo(() => getDecimalIfValidate(min), [min]);
 
     const upDisabled = React.useMemo(() => {
-      if (!maxDecimal || !decimalValue) {
+      if (!maxDecimal || !decimalValue || decimalValue.isInvalidate()) {
         return false;
       }
 
@@ -225,7 +228,7 @@ const InputNumber = React.forwardRef(
     }, [maxDecimal, decimalValue]);
 
     const downDisabled = React.useMemo(() => {
-      if (!minDecimal || !decimalValue) {
+      if (!minDecimal || !decimalValue || decimalValue.isInvalidate()) {
         return false;
       }
 
@@ -342,14 +345,29 @@ const InputNumber = React.forwardRef(
     };
 
     // ============================= Step =============================
-    const onStep = (up: boolean) => {
+    const onInternalStep = (up: boolean) => {
+      // Ignore step since out of range
+      if ((up && upDisabled) || (!up && downDisabled)) {
+        return;
+      }
+
+      // Clear typing status since it may caused by up & down key.
+      // We should sync with input value.
+      userTypingRef.current = false;
+
       let stepDecimal = getMiniDecimal(step);
       if (!up) {
         stepDecimal = stepDecimal.negate();
       }
+
       const target = (decimalValue || getMiniDecimal(0)).add(stepDecimal.toString());
 
-      triggerValueUpdate(target, false);
+      const updatedValue = triggerValueUpdate(target, false);
+
+      onStep?.(getDecimalValue(stringMode, updatedValue), {
+        offset: step,
+        type: up ? 'up' : 'down',
+      });
 
       inputRef.current?.focus();
     };
@@ -395,8 +413,8 @@ const InputNumber = React.forwardRef(
       }
 
       // Do step
-      if ([KeyCode.UP, KeyCode.DOWN].includes(which)) {
-        onStep(KeyCode.UP === which);
+      if (!compositionRef.current && [KeyCode.UP, KeyCode.DOWN].includes(which)) {
+        onInternalStep(KeyCode.UP === which);
         event.preventDefault();
       }
     };
@@ -466,7 +484,7 @@ const InputNumber = React.forwardRef(
           downNode={downHandler}
           upDisabled={upDisabled}
           downDisabled={downDisabled}
-          onStep={onStep}
+          onStep={onInternalStep}
         />
         <div className={`${inputClassName}-wrap`}>
           <input

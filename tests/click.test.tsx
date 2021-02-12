@@ -19,13 +19,15 @@ describe('InputNumber.Click', () => {
     props: Partial<InputNumberProps>,
     operate: (wrapper: ReactWrapper) => void,
     changedValue: string | number,
+    stepType: 'up' | 'down',
   ) {
     it(name, () => {
       const onChange = jest.fn();
-      const wrapper = mount(<InputNumber onChange={onChange} {...props} />);
+      const onStep = jest.fn();
+      const wrapper = mount(<InputNumber onChange={onChange} onStep={onStep} {...props} />);
       operate(wrapper);
-      wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
       expect(onChange).toHaveBeenCalledWith(changedValue);
+      expect(onStep).toHaveBeenCalledWith(changedValue, { offset: 1, type: stepType });
 
       wrapper.unmount();
     });
@@ -37,6 +39,7 @@ describe('InputNumber.Click', () => {
       { defaultValue: 10 },
       (wrapper) => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
       11,
+      'up',
     );
 
     testInputNumber(
@@ -44,6 +47,7 @@ describe('InputNumber.Click', () => {
       { value: 10 },
       (wrapper) => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
       9,
+      'down',
     );
   });
 
@@ -53,6 +57,7 @@ describe('InputNumber.Click', () => {
       {},
       (wrapper) => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
       1,
+      'up',
     );
 
     testInputNumber(
@@ -60,6 +65,7 @@ describe('InputNumber.Click', () => {
       {},
       (wrapper) => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
       -1,
+      'down',
     );
   });
 
@@ -69,6 +75,7 @@ describe('InputNumber.Click', () => {
       { min: 6, max: 10 },
       (wrapper) => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
       6,
+      'up',
     );
 
     testInputNumber(
@@ -76,6 +83,7 @@ describe('InputNumber.Click', () => {
       { min: 6, max: 10 },
       (wrapper) => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
       6,
+      'down',
     );
   });
 
@@ -85,6 +93,7 @@ describe('InputNumber.Click', () => {
       { value: null, min: 6, max: 10 },
       (wrapper) => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
       6,
+      'up',
     );
 
     testInputNumber(
@@ -92,6 +101,7 @@ describe('InputNumber.Click', () => {
       { value: null, min: 6, max: 10 },
       (wrapper) => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
       6,
+      'down',
     );
   });
 
