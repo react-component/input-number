@@ -94,17 +94,17 @@ describe('InputNumber.Props', () => {
       wrapper.focusInput();
 
       wrapper.changeValue('3');
-      expect(wrapper.findInput().props().value).toEqual('3');
+      expect(wrapper.getInputValue()).toEqual('3');
 
       wrapper.blurInput();
-      expect(wrapper.findInput().props().value).toEqual('9');
+      expect(wrapper.getInputValue()).toEqual('9');
     });
 
     it('dynamic change value', () => {
       const wrapper = mount(<InputNumber value={9} />);
       wrapper.setProps({ value: '3' });
       wrapper.update();
-      expect(wrapper.findInput().props().value).toEqual('3');
+      expect(wrapper.getInputValue()).toEqual('3');
     });
 
     // Origin https://github.com/ant-design/ant-design/issues/7334
@@ -129,10 +129,10 @@ describe('InputNumber.Props', () => {
       };
 
       const wrapper = mount(<Demo />);
-      expect(wrapper.findInput().props().value).toEqual('2');
+      expect(wrapper.getInputValue()).toEqual('2');
 
       wrapper.find('button').simulate('click');
-      expect(wrapper.findInput().props().value).toEqual('103aa');
+      expect(wrapper.getInputValue()).toEqual('103aa');
       expect(wrapper.exists('.rc-input-number-not-a-number')).toBeTruthy();
     });
 
@@ -157,73 +157,73 @@ describe('InputNumber.Props', () => {
       };
 
       const wrapper = mount(<Demo />);
-      expect(wrapper.findInput().props().value).toEqual('2');
+      expect(wrapper.getInputValue()).toEqual('2');
 
       wrapper.find('button').simulate('click');
-      expect(wrapper.findInput().props().value).toEqual('');
+      expect(wrapper.getInputValue()).toEqual('');
     });
   });
 
   describe('defaultValue', () => {
     it('default value should be empty', () => {
       const wrapper = mount(<InputNumber />);
-      expect(wrapper.findInput().props().value).toEqual('');
+      expect(wrapper.getInputValue()).toEqual('');
     });
 
     it('default value should be empty when step is decimal', () => {
       const wrapper = mount(<InputNumber step={0.1} />);
-      expect(wrapper.findInput().props().value).toEqual('');
+      expect(wrapper.getInputValue()).toEqual('');
     });
 
     it('default value should be 1', () => {
       const wrapper = mount(<InputNumber defaultValue={1} />);
-      expect(wrapper.findInput().props().value).toEqual('1');
+      expect(wrapper.getInputValue()).toEqual('1');
     });
 
     it('default value could be null', () => {
       const wrapper = mount(<InputNumber defaultValue={null} />);
-      expect(wrapper.findInput().props().value).toEqual('');
+      expect(wrapper.getInputValue()).toEqual('');
     });
 
     it('warning when defaultValue higher than max', () => {
       const wrapper = mount(<InputNumber min={0} max={10} defaultValue={13} />);
-      expect(wrapper.findInput().props().value).toEqual('13');
+      expect(wrapper.getInputValue()).toEqual('13');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
     it('warning when defaultValue lower than min', () => {
       const wrapper = mount(<InputNumber min={0} max={10} defaultValue={-1} />);
-      expect(wrapper.findInput().props().value).toEqual('-1');
+      expect(wrapper.getInputValue()).toEqual('-1');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
     it('default value can be a string greater than 16 characters', () => {
       const wrapper = mount(<InputNumber max={10} defaultValue="-3.637978807091713e-12" />);
-      expect(wrapper.findInput().props().value).toEqual('-0.000000000003637978807091713');
+      expect(wrapper.getInputValue()).toEqual('-0.000000000003637978807091713');
     });
 
     it('invalidate defaultValue', () => {
       const wrapper = mount(<InputNumber defaultValue="light" />);
-      expect(wrapper.findInput().props().value).toEqual('light');
+      expect(wrapper.getInputValue()).toEqual('light');
     });
   });
 
   describe('value', () => {
     it("value shouldn't higher than max", () => {
       const wrapper = mount(<InputNumber min={0} max={10} value={13} />);
-      expect(wrapper.findInput().props().value).toEqual('13');
+      expect(wrapper.getInputValue()).toEqual('13');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
     it("value shouldn't lower than min", () => {
       const wrapper = mount(<InputNumber min={0} max={10} value={-1} />);
-      expect(wrapper.findInput().props().value).toEqual('-1');
+      expect(wrapper.getInputValue()).toEqual('-1');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
     it('value can be a string greater than 16 characters', () => {
       const wrapper = mount(<InputNumber max={10} value="-3.637978807091713e-12" />);
-      expect(wrapper.findInput().props().value).toEqual('-0.000000000003637978807091713');
+      expect(wrapper.getInputValue()).toEqual('-0.000000000003637978807091713');
     });
 
     it('value decimal over six decimal not be scientific notation', () => {
@@ -232,18 +232,18 @@ describe('InputNumber.Props', () => {
 
       for (let i = 1; i <= 9; i += 1) {
         wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-        expect(wrapper.findInput().props().value).toEqual(`0.000000${i}`);
+        expect(wrapper.getInputValue()).toEqual(`0.000000${i}`);
         expect(onChange).toHaveBeenCalledWith(0.0000001 * i);
       }
 
       for (let i = 8; i >= 1; i -= 1) {
         wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-        expect(wrapper.findInput().props().value).toEqual(`0.000000${i}`);
+        expect(wrapper.getInputValue()).toEqual(`0.000000${i}`);
         expect(onChange).toHaveBeenCalledWith(0.0000001 * i);
       }
 
       wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-      expect(wrapper.findInput().props().value).toEqual(`0.0000000`);
+      expect(wrapper.getInputValue()).toEqual(`0.0000000`);
       expect(onChange).toHaveBeenCalledWith(0);
     });
 
@@ -251,12 +251,12 @@ describe('InputNumber.Props', () => {
       const wrapper = mount(<InputNumber value={11} max={10} />);
 
       // Origin logic shows `10` as `max`. But it breaks form logic.
-      expect(wrapper.findInput().props().value).toEqual('11');
+      expect(wrapper.getInputValue()).toEqual('11');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
 
       wrapper.setProps({ max: 20 });
       wrapper.update();
-      expect(wrapper.findInput().props().value).toEqual('11');
+      expect(wrapper.getInputValue()).toEqual('11');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeFalsy();
     });
 
@@ -264,12 +264,12 @@ describe('InputNumber.Props', () => {
       const wrapper = mount(<InputNumber value={9} min={10} />);
 
       // Origin logic shows `10` as `max`. But it breaks form logic.
-      expect(wrapper.findInput().props().value).toEqual('9');
+      expect(wrapper.getInputValue()).toEqual('9');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
 
       wrapper.setProps({ min: 0 });
       wrapper.update();
-      expect(wrapper.findInput().props().value).toEqual('9');
+      expect(wrapper.getInputValue()).toEqual('9');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeFalsy();
     });
   });

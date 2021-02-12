@@ -13,7 +13,7 @@ describe('InputNumber.Input', () => {
     }
 
     if (!skipInputCheck) {
-      expect(wrapper.find('input').props().value).toEqual(text);
+      expect(wrapper.getInputValue()).toEqual(text);
     }
 
     wrapper.blurInput();
@@ -24,60 +24,60 @@ describe('InputNumber.Input', () => {
   it('input valid number', () => {
     const wrapper = prepareWrapper('6');
 
-    expect(wrapper.find('input').props().value).toEqual('6');
+    expect(wrapper.getInputValue()).toEqual('6');
   });
 
   it('input invalid number', () => {
     const wrapper = prepareWrapper('xx');
 
-    expect(wrapper.find('input').props().value).toEqual('');
+    expect(wrapper.getInputValue()).toEqual('');
   });
 
   it('input invalid string with number', () => {
     const wrapper = prepareWrapper('2x');
 
-    expect(wrapper.find('input').props().value).toEqual('2');
+    expect(wrapper.getInputValue()).toEqual('2');
   });
 
   it('input invalid decimal point with max number', () => {
     const wrapper = prepareWrapper('15.', { max: 10 });
-    expect(wrapper.find('input').props().value).toEqual('10');
+    expect(wrapper.getInputValue()).toEqual('10');
   });
 
   it('input invalid decimal point with min number', () => {
     const wrapper = prepareWrapper('3.', { min: 5 });
-    expect(wrapper.find('input').props().value).toEqual('5');
+    expect(wrapper.getInputValue()).toEqual('5');
   });
 
   it('input negative symbol', () => {
     const wrapper = prepareWrapper('-');
-    expect(wrapper.find('input').props().value).toEqual('');
+    expect(wrapper.getInputValue()).toEqual('');
   });
 
   it('input negative number', () => {
     const wrapper = prepareWrapper('-98');
-    expect(wrapper.find('input').props().value).toEqual('-98');
+    expect(wrapper.getInputValue()).toEqual('-98');
   });
 
   // https://github.com/ant-design/ant-design/issues/9439
   it('input negative zero', () => {
     const wrapper = prepareWrapper('-0', {}, true);
-    expect(wrapper.find('input').props().value).toEqual('0');
+    expect(wrapper.getInputValue()).toEqual('0');
   });
 
   it('input decimal number with integer step', () => {
     const wrapper = prepareWrapper('1.2', { step: 1.2 });
-    expect(wrapper.find('input').props().value).toEqual('1.2');
+    expect(wrapper.getInputValue()).toEqual('1.2');
   });
 
   it('input decimal number with decimal step', () => {
     const wrapper = prepareWrapper('1.2', { step: 0.1 });
-    expect(wrapper.find('input').props().value).toEqual('1.2');
+    expect(wrapper.getInputValue()).toEqual('1.2');
   });
 
   it('input empty text and blur', () => {
     const wrapper = prepareWrapper('');
-    expect(wrapper.find('input').props().value).toEqual('');
+    expect(wrapper.getInputValue()).toEqual('');
   });
 
   it('blur on default input', () => {

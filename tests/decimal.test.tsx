@@ -5,20 +5,20 @@ import InputNumber from '../src';
 describe('InputNumber.Decimal', () => {
   it('decimal value', () => {
     const wrapper = mount(<InputNumber step={1} value={2.1} />);
-    expect(wrapper.find('input').props().value).toEqual('2.1');
+    expect(wrapper.getInputValue()).toEqual('2.1');
   });
 
   it('decimal defaultValue', () => {
     const wrapper = mount(<InputNumber step={1} defaultValue={2.1} />);
-    expect(wrapper.find('input').props().value).toEqual('2.1');
+    expect(wrapper.getInputValue()).toEqual('2.1');
   });
 
   it('increase and decrease decimal InputNumber by integer step', () => {
     const wrapper = mount(<InputNumber step={1} defaultValue={2.1} />);
     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    expect(wrapper.find('input').props().value).toEqual('3.1');
+    expect(wrapper.getInputValue()).toEqual('3.1');
     wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-    expect(wrapper.find('input').props().value).toEqual('2.1');
+    expect(wrapper.getInputValue()).toEqual('2.1');
   });
 
   it('small value and step', () => {
@@ -39,7 +39,7 @@ describe('InputNumber.Decimal', () => {
     };
 
     const wrapper = mount(<Demo />);
-    expect(wrapper.find('input').props().value).toEqual('0.000000001');
+    expect(wrapper.getInputValue()).toEqual('0.000000001');
 
     for (let i = 0; i < 10; i += 1) {
       // plus until change precision
@@ -47,20 +47,20 @@ describe('InputNumber.Decimal', () => {
     }
 
     wrapper.blurInput();
-    expect(wrapper.find('input').props().value).toEqual('0.000000011');
+    expect(wrapper.getInputValue()).toEqual('0.000000011');
   });
 
   it('small step with integer value', () => {
     const wrapper = mount(<InputNumber step="0.000000001" value={1} />);
-    expect(wrapper.find('input').props().value).toEqual('1.000000000');
+    expect(wrapper.getInputValue()).toEqual('1.000000000');
   });
 
   it('small step with empty value', () => {
     const wrapper = mount(<InputNumber step={0.1} />);
-    expect(wrapper.find('input').props().value).toEqual('');
+    expect(wrapper.getInputValue()).toEqual('');
 
     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    expect(wrapper.find('input').props().value).toEqual('0.1');
+    expect(wrapper.getInputValue()).toEqual('0.1');
   });
 
   it('custom decimal separator', () => {
@@ -71,48 +71,48 @@ describe('InputNumber.Decimal', () => {
     wrapper.changeValue('1,1');
     wrapper.blurInput();
 
-    expect(wrapper.find('input').props().value).toEqual('1,1');
+    expect(wrapper.getInputValue()).toEqual('1,1');
     expect(onChange).toHaveBeenCalledWith(1.1);
   });
 
   describe('precision', () => {
     it('decimal step should not display complete precision', () => {
       const wrapper = mount(<InputNumber step={0.01} value={2.1} />);
-      expect(wrapper.findInput().props().value).toEqual('2.10');
+      expect(wrapper.getInputValue()).toEqual('2.10');
     });
 
     it('string step should display complete precision', () => {
       const wrapper = mount(<InputNumber step="1.000" value={2.1} />);
-      expect(wrapper.findInput().props().value).toEqual('2.100');
+      expect(wrapper.getInputValue()).toEqual('2.100');
     });
 
     it('prop precision is specified', () => {
       const onChange = jest.fn();
       const wrapper = mount(<InputNumber onChange={onChange} precision={2} defaultValue={2} />);
-      expect(wrapper.findInput().props().value).toEqual('2.00');
+      expect(wrapper.getInputValue()).toEqual('2.00');
 
       wrapper.changeValue('3.456');
       wrapper.blurInput();
       expect(onChange).toHaveBeenCalledWith(3.46);
-      expect(wrapper.findInput().props().value).toEqual('3.46');
+      expect(wrapper.getInputValue()).toEqual('3.46');
 
       onChange.mockReset();
       wrapper.changeValue('3.465');
       wrapper.blurInput();
       expect(onChange).toHaveBeenCalledWith(3.47);
-      expect(wrapper.findInput().props().value).toEqual('3.47');
+      expect(wrapper.getInputValue()).toEqual('3.47');
 
       onChange.mockReset();
       wrapper.changeValue('3.455');
       wrapper.blurInput();
       expect(onChange).toHaveBeenCalledWith(3.46);
-      expect(wrapper.findInput().props().value).toEqual('3.46');
+      expect(wrapper.getInputValue()).toEqual('3.46');
 
       onChange.mockReset();
       wrapper.changeValue('1');
       wrapper.blurInput();
       expect(onChange).toHaveBeenCalledWith(1);
-      expect(wrapper.findInput().props().value).toEqual('1.00');
+      expect(wrapper.getInputValue()).toEqual('1.00');
     });
 
     it('should not trigger onChange when blur InputNumber with precision', () => {

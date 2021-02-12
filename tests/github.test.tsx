@@ -19,10 +19,10 @@ describe('InputNumber.Github', () => {
     const wrapper = mount(<InputNumber step={0.1} />);
     wrapper.focusInput();
     wrapper.changeValue('2');
-    expect(wrapper.find('input').props().value).toEqual('2');
+    expect(wrapper.getInputValue()).toEqual('2');
 
     wrapper.blurInput();
-    expect(wrapper.find('input').props().value).toEqual('2.0');
+    expect(wrapper.getInputValue()).toEqual('2.0');
   });
 
   // https://github.com/react-component/input-number/issues/197
@@ -66,7 +66,7 @@ describe('InputNumber.Github', () => {
     wrapper.changeValue('foo');
 
     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    expect(wrapper.find('input').props().value).toEqual('2');
+    expect(wrapper.getInputValue()).toEqual('2');
   });
 
   // https://github.com/react-component/input-number/issues/35
@@ -89,7 +89,7 @@ describe('InputNumber.Github', () => {
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((200 - i) / 100).toFixed(2));
-      expect(wrapper.find('input').props().value).toEqual(String(expectedValue.toFixed(2)));
+      expect(wrapper.getInputValue()).toEqual(String(expectedValue.toFixed(2)));
       expect(num).toEqual(expectedValue);
     }
 
@@ -99,7 +99,7 @@ describe('InputNumber.Github', () => {
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((i - 200) / 100).toFixed(2));
-      expect(wrapper.find('input').props().value).toEqual(String(expectedValue.toFixed(2)));
+      expect(wrapper.getInputValue()).toEqual(String(expectedValue.toFixed(2)));
       expect(num).toEqual(expectedValue);
     }
   });
@@ -141,10 +141,10 @@ describe('InputNumber.Github', () => {
 
     wrapper.focusInput();
     wrapper.changeValue('1.');
-    expect(wrapper.find('input').props().value).toEqual('1.');
+    expect(wrapper.getInputValue()).toEqual('1.');
 
     wrapper.blurInput();
-    expect(wrapper.find('input').props().value).toEqual('1');
+    expect(wrapper.getInputValue()).toEqual('1');
   });
 
   // https://github.com/ant-design/ant-design/issues/5012
@@ -170,20 +170,20 @@ describe('InputNumber.Github', () => {
 
     wrapper.focusInput();
     wrapper.changeValue('6.0');
-    expect(wrapper.findInput().props().value).toEqual('6.0');
+    expect(wrapper.getInputValue()).toEqual('6.0');
     expect(num).toEqual(6);
 
     wrapper.blurInput();
-    expect(wrapper.findInput().props().value).toEqual('6');
+    expect(wrapper.getInputValue()).toEqual('6');
     expect(num).toEqual(6);
 
     wrapper.focusInput();
     wrapper.changeValue('6.10');
-    expect(wrapper.findInput().props().value).toEqual('6.10');
+    expect(wrapper.getInputValue()).toEqual('6.10');
     expect(num).toEqual(6.1);
 
     wrapper.blurInput();
-    expect(wrapper.findInput().props().value).toEqual('6.1');
+    expect(wrapper.getInputValue()).toEqual('6.1');
     expect(num).toEqual(6.1);
   });
 
@@ -225,9 +225,9 @@ describe('InputNumber.Github', () => {
     const wrapper = mount(<InputNumber />);
     wrapper.focusInput();
     wrapper.changeValue('111111111111111111111');
-    expect(wrapper.findInput().props().value).toEqual('111111111111111111111');
+    expect(wrapper.getInputValue()).toEqual('111111111111111111111');
     wrapper.changeValue('11111111111111111111111111111');
-    expect(wrapper.findInput().props().value).toEqual('11111111111111111111111111111');
+    expect(wrapper.getInputValue()).toEqual('11111111111111111111111111111');
   });
 
   // https://github.com/ant-design/ant-design/issues/7363
@@ -279,10 +279,10 @@ describe('InputNumber.Github', () => {
     wrapper.focusInput();
     wrapper.blurInput();
 
-    expect(wrapper.findInput().props().value).toEqual('2.0');
+    expect(wrapper.getInputValue()).toEqual('2.0');
 
     wrapper.focusInput();
-    expect(wrapper.findInput().props().value).toEqual('2.0');
+    expect(wrapper.getInputValue()).toEqual('2.0');
   });
 
   // https://github.com/ant-design/ant-design/issues/7940
@@ -304,7 +304,7 @@ describe('InputNumber.Github', () => {
 
     wrapper.focusInput();
     wrapper.changeValue('1');
-    expect(wrapper.findInput().props().value).toEqual('1');
+    expect(wrapper.getInputValue()).toEqual('1');
   });
 
   // https://github.com/ant-design/ant-design/issues/8196
@@ -312,7 +312,7 @@ describe('InputNumber.Github', () => {
     const onChange = jest.fn();
     const wrapper = mount(<InputNumber min={1} max={10} onChange={onChange} />);
     wrapper.changeValue('8。1');
-    expect(wrapper.findInput().props().value).toEqual('8.1');
+    expect(wrapper.getInputValue()).toEqual('8.1');
     expect(onChange).toHaveBeenCalledWith(8.1);
   });
 
@@ -350,7 +350,7 @@ describe('InputNumber.Github', () => {
     );
 
     wrapper.blurInput();
-    expect(wrapper.find('input').props().value).toEqual('100%');
+    expect(wrapper.getInputValue()).toEqual('100%');
     expect(valueOnBlur).toEqual('100%');
   });
 
@@ -364,7 +364,7 @@ describe('InputNumber.Github', () => {
 
     wrapper.setProps({ min: 11 });
     wrapper.update();
-    expect(wrapper.findInput().props().value).toEqual('10');
+    expect(wrapper.getInputValue()).toEqual('10');
     expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
     expect(onChange).toHaveBeenCalledTimes(0);
 
@@ -372,7 +372,7 @@ describe('InputNumber.Github', () => {
     wrapper.setProps({ max: 14 });
     wrapper.update();
 
-    expect(wrapper.findInput().props().value).toEqual('15');
+    expect(wrapper.getInputValue()).toEqual('15');
     expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
     expect(onChange).toHaveBeenCalledTimes(0);
   });
@@ -397,7 +397,7 @@ describe('InputNumber.Github', () => {
     wrapper.changeValue('401');
 
     // Demo re-render and the `value` prop is still 40, but the user input should be retained
-    expect(wrapper.findInput().props().value).toEqual('401');
+    expect(wrapper.getInputValue()).toEqual('401');
   });
 
   // https://github.com/ant-design/ant-design/issues/16710
@@ -427,6 +427,6 @@ describe('InputNumber.Github', () => {
       .first()
       .simulate('change', { target: { value: '0' } });
 
-    expect(wrapper.find('input').last().props().value).toEqual('1');
+    expect(wrapper.getInputValue()).toEqual('1');
   });
 });

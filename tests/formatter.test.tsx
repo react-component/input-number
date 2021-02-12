@@ -6,16 +6,16 @@ import KeyCode from 'rc-util/lib/KeyCode';
 describe('InputNumber.Formatter', () => {
   it('formatter on default', () => {
     const wrapper = mount(<InputNumber step={1} value={5} formatter={(num) => `$ ${num}`} />);
-    expect(wrapper.findInput().props().value).toEqual('$ 5');
+    expect(wrapper.getInputValue()).toEqual('$ 5');
   });
 
   it('formatter on mousedown', () => {
     const wrapper = mount(<InputNumber defaultValue={5} formatter={(num) => `$ ${num}`} />);
     wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    expect(wrapper.findInput().props().value).toEqual('$ 6');
+    expect(wrapper.getInputValue()).toEqual('$ 6');
 
     wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-    expect(wrapper.findInput().props().value).toEqual('$ 5');
+    expect(wrapper.getInputValue()).toEqual('$ 5');
   });
 
   // TODO: handle this
