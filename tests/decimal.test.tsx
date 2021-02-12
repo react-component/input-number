@@ -115,29 +115,14 @@ describe('InputNumber.Decimal', () => {
       expect(wrapper.findInput().props().value).toEqual('1.00');
     });
 
-    // it('should not trigger onChange when blur InputNumber with precision', () => {
-    //   class Demo extends React.Component {
-    //     onChange = () => {
-    //       onChangeCallCount += 1;
-    //     };
+    it('should not trigger onChange when blur InputNumber with precision', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber precision={2} defaultValue={2} onChange={onChange} />);
 
-    //     render() {
-    //       return (
-    //         <InputNumber
-    //           ref="inputNum"
-    //           mergedPPrecision={2}
-    //           defaultValue={2}
-    //           onChange={this.onChange}
-    //         />
-    //       );
-    //     }
-    //   }
-    //   example = ReactDOM.render(<Demo />, container);
-    //   inputNumber = example.refs.inputNum;
-    //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-    //   Simulate.focus(inputElement);
-    //   Simulate.blur(inputElement);
-    //   expect(onChangeCallCount).to.be(0);
-    // });
+      wrapper.focusInput();
+      wrapper.blurInput();
+
+      expect(onChange).toHaveBeenCalledTimes(0);
+    });
   });
 });

@@ -10,6 +10,7 @@ interface Wrapper<P = {}, S = {}, C = React.Component<{}, {}, any>> extends Reac
   focusInput: () => Wrapper;
   blurInput: () => Wrapper;
   changeValue: (value: string) => Wrapper;
+  getInputValue: () => string;
 }
 
 const wrapperMount = (mount as any) as ReplaceReturnType<typeof mount, Wrapper>;

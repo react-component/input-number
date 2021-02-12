@@ -22,4 +22,7 @@ Object.assign(Enzyme.ReactWrapper.prototype, {
   blurInput() {
     return this.findInput().simulate('blur');
   },
+  getInputValue() {
+    return this.findInput().props().value;
+  },
 });
