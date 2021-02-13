@@ -167,9 +167,7 @@ describe('InputNumber.Click', () => {
     });
   });
 
-  // TODO: cursor follow up
-
-  it('focus input when click up/down button ', () => {
+  it('focus input when click up/down button', () => {
     const onFocus = jest.fn();
     const onBlur = jest.fn();
     const wrapper = mount(<InputNumber onFocus={onFocus} onBlur={onBlur} />, {

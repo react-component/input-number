@@ -18,33 +18,6 @@ describe('InputNumber.Formatter', () => {
     expect(wrapper.getInputValue()).toEqual('$ 5');
   });
 
-  // TODO: handle this
-  // it('formatter on touchstart', () => {
-  //   class Demo extends React.Component {
-  //     render() {
-  //       return (
-  //         <InputNumber
-  //           ref="inputNum"
-  //           step={1}
-  //           defaultValue={5}
-  //           useTouch
-  //           formatter={(num) => `${num} ¥`}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   example = ReactDOM.render(<Demo />, container);
-  //   inputNumber = example.refs.inputNum;
-  //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-
-  //   Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-up'));
-  //   expect(inputNumber.state.value).to.be(6);
-  //   expect(inputElement.value).to.be('6 ¥');
-  //   Simulate.touchStart(findRenderedDOMComponentWithClass(example, 'rc-input-number-handler-down'));
-  //   expect(inputNumber.state.value).to.be(5);
-  //   expect(inputElement.value).to.be('5 ¥');
-  // });
-
   it('formatter on keydown', () => {
     const onChange = jest.fn();
     const wrapper = mount(

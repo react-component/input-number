@@ -10,10 +10,10 @@ Object.assign(Enzyme.ReactWrapper.prototype, {
   findInput() {
     return this.find('input');
   },
-  changeValue(value) {
-    this.findInput().simulate('keyDown');
+  changeValue(value, which) {
+    this.findInput().simulate('keyDown', { which });
     this.findInput().simulate('change', { target: { value } });
-    this.findInput().simulate('keyUp');
+    this.findInput().simulate('keyUp', { which });
     return this;
   },
   focusInput() {

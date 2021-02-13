@@ -9,7 +9,7 @@ interface Wrapper<P = {}, S = {}, C = React.Component<{}, {}, any>> extends Reac
   findInput: () => Wrapper<React.InputHTMLAttributes<HTMLInputElement>>;
   focusInput: () => Wrapper;
   blurInput: () => Wrapper;
-  changeValue: (value: string) => Wrapper;
+  changeValue: (value: string, which?: number) => Wrapper;
   getInputValue: () => string;
 }
 

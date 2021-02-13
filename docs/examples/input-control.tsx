@@ -3,8 +3,6 @@ import React from 'react';
 import InputNumber from 'rc-input-number';
 import '../../assets/index.less';
 
-// TODO: keydown should change!!
-
 export default () => {
   const [value, setValue] = React.useState('aaa');
   const [lock, setLock] = React.useState(false);

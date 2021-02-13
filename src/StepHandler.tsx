@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import isMobile from 'rc-util/lib/isMobile';
 
 /**
  * When click and hold on a button - the speed of auto changing the value.
@@ -58,6 +59,10 @@ export default function StepHandler({
   React.useEffect(() => onStopStep, []);
 
   // ======================= Render =======================
+  if (isMobile()) {
+    return null;
+  }
+
   const handlerClassName = `${prefixCls}-handler`;
 
   const upClassName = classNames(handlerClassName, `${handlerClassName}-up`, {

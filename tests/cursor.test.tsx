@@ -1,13 +1,33 @@
 import React from 'react';
 import KeyCode from 'rc-util/lib/KeyCode';
-import { mount } from './util/wrapper';
+import { mount, ReactWrapper } from './util/wrapper';
 import InputNumber from '../src';
 
-describe.skip('InputNumber.Cursor', () => {
+describe('InputNumber.Cursor', () => {
+  function cursorInput(wrapper: ReactWrapper, pos?: number) {
+    const input = (wrapper.findInput().instance() as any) as HTMLInputElement;
+
+    if (pos !== undefined) {
+      input.setSelectionRange(pos, pos);
+    }
+
+    return input.selectionStart;
+  }
+
   // https://github.com/react-component/input-number/issues/235
+  it('DELETE (not backspace)', () => {
+    const wrapper = mount(<InputNumber defaultValue={11} />);
+    wrapper.focusInput();
+    cursorInput(wrapper, 1);
+
+    wrapper.findInput().simulate('keyDown', { which: KeyCode.DELETE });
+    wrapper.changeValue('1', KeyCode.DELETE);
+
+    expect(cursorInput(wrapper)).toEqual(233);
+  });
+
   // TODO: handle this
   describe('cursor position', () => {
-    it('w', () => {});
     //   const setUpCursorTest = (
     //     initialValue,
     //     changedValue,
