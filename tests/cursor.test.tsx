@@ -42,68 +42,76 @@ describe('InputNumber.Cursor', () => {
   });
 
   // https://github.com/ant-design/ant-design/issues/28366
-  it('quick typing', () => {
-    const wrapper = mount(<InputNumber defaultValue="$ " formatter={(val) => `$ ${val}`} />);
-    wrapper.focusInput();
-    cursorInput(wrapper, 0);
-    changeOnPos(wrapper, '9$ ', 1, KeyCode.NUM_ONE);
+  // Origin test suite:
+  // https://github.com/react-component/input-number/blob/e72ee088bdc8a8df32383b8fc0de562574e8616c/tests/index.test.js#L1584
+  describe('pre-pend string', () => {
+    it('quick typing', () => {
+      // `$ ` => `9$ ` => `$ 9`
+      const wrapper = mount(<InputNumber defaultValue="$ " formatter={(val) => `$ ${val}`} />);
+      wrapper.focusInput();
+      cursorInput(wrapper, 0);
+      changeOnPos(wrapper, '9$ ', 1, KeyCode.NUM_ONE);
 
-    expect(cursorInput(wrapper)).toEqual(3);
+      expect(cursorInput(wrapper)).toEqual(3);
+    });
+
+    describe('[LEGACY]', () => {
+      const setUpCursorTest = (initValue: string, prependValue: string) => {
+        const Demo = () => {
+          const [value, setValue] = React.useState(initValue);
+
+          return (
+            <InputNumber<string>
+              stringMode
+              value={value}
+              onChange={(newValue) => {
+                setValue(newValue);
+              }}
+              formatter={(val) => `$ ${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              parser={(val) => val.replace(/\$\s?|(,*)/g, '')}
+            />
+          );
+        };
+
+        const wrapper = mount(<Demo />);
+        wrapper.focusInput();
+
+        for (let i = 0; i < prependValue.length; i += 1) {
+          wrapper.findInput().simulate('keyDown', { which: KeyCode.ONE });
+        }
+
+        const finalValue = prependValue + initValue;
+        // eslint-disable-next-line no-param-reassign
+        (wrapper.findInput().instance() as any).value = finalValue;
+        cursorInput(wrapper, prependValue.length);
+        wrapper.findInput().simulate('change', { target: { value: finalValue } });
+
+        return wrapper;
+      };
+
+      it('should fix caret position on case 1', () => {
+        // '$ 1'
+        const wrapper = setUpCursorTest('', '1');
+        expect(cursorInput(wrapper)).toEqual(3);
+      });
+
+      it('should fix caret position on case 2', () => {
+        // '$ 111'
+        const wrapper = setUpCursorTest('', '111');
+        expect(cursorInput(wrapper)).toEqual(5);
+      });
+
+      it('should fix caret position on case 3', () => {
+        // '$ 111'
+        const wrapper = setUpCursorTest('1', '11');
+        expect(cursorInput(wrapper)).toEqual(4);
+      });
+
+      it('should fix caret position on case 4', () => {
+        // '$ 123,456'
+        const wrapper = setUpCursorTest('456', '123');
+        expect(cursorInput(wrapper)).toEqual(6);
+      });
+    });
   });
-  // describe('cursor position when last string exists', () => {
-  //   // const setUpCursorTest = (initValue, prependValue) => {
-  //   //   class Demo extends React.Component {
-  //   //     state = {
-  //   //       value: initValue,
-  //   //     };
-
-  //   //     onChange = value => {
-  //   //       this.setState({ value });
-  //   //     };
-
-  //   //     render() {
-  //   //       return (
-  //   //         <InputNumber
-  //   //           ref="inputNum"
-  //   //           value={this.state.value}
-  //   //           onChange={this.onChange}
-  //   //           formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-  //   //           parser={value => value.replace(/\$\s?|(,*)/g, '')}
-  //   //         />
-  //   //       );
-  //   //     }
-  //   //   }
-  //   //   example = ReactDOM.render(<Demo />, container);
-  //   //   inputNumber = example.refs.inputNum;
-  //   //   inputNumber.input.selectionStart = 0;
-  //   //   inputNumber.input.selectionEnd = 0;
-  //   //   inputElement = ReactDOM.findDOMNode(inputNumber.input);
-  //   //   Simulate.focus(inputElement);
-  //   //   for (let i = 0; i < prependValue.length; i += 1) {
-  //   //     Simulate.keyDown(inputElement, { keyCode: keyCode.ONE });
-  //   //   }
-  //   //   Simulate.change(inputElement, { target: { value: prependValue + initValue } });
-  //   // };
-
-  //   // it('shold fix caret position on case 1', () => {
-  //   //   // '$ 1'
-  //   //   setUpCursorTest('', '1');
-  //   //   expect(inputNumber.input.selectionStart).to.be(3);
-  //   // });
-  //   // it('shold fix caret position on case 2', () => {
-  //   //   // '$ 111'
-  //   //   setUpCursorTest('', '111');
-  //   //   expect(inputNumber.input.selectionStart).to.be(5);
-  //   // });
-  //   // it('shold fix caret position on case 3', () => {
-  //   //   // '$ 111'
-  //   //   setUpCursorTest('1', '11');
-  //   //   expect(inputNumber.input.selectionStart).to.be(4);
-  //   // });
-  //   // it('shold fix caret position on case 4', () => {
-  //   //   // '$ 123,456'
-  //   //   setUpCursorTest('456', '123');
-  //   //   expect(inputNumber.input.selectionStart).to.be(6);
-  //   // });
-  // });
 });

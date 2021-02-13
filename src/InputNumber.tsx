@@ -504,7 +504,11 @@ const InputNumber = React.forwardRef(
       </div>
     );
   },
-);
+) as (<T extends ValueType = ValueType>(
+  props: React.PropsWithChildren<InputNumberProps<T>> & {
+    ref?: React.Ref<HTMLInputElement>;
+  },
+) => React.ReactElement) & { displayName?: string };
 
 InputNumber.displayName = 'InputNumber';
 
