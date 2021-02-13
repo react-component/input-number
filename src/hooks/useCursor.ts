@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import warning from 'rc-util/lib/warning';
 /**
  * Keep input cursor in the correct position if possible.
  * Is this necessary since we have `formatter` which may mass the content?
@@ -36,14 +37,37 @@ export default function useCursor(
     }
   }
 
+  /**
+   * Restore logic:
+   *  1. back string same
+   *  2. start string same
+   */
   function restoreCursor() {
     if (input && selectionRef.current && focused) {
       try {
         const { value } = input;
-        const startPos = value.length - selectionRef.current.afterTxt.length;
+        const { beforeTxt, afterTxt, start } = selectionRef.current;
+
+        let startPos = value.length;
+
+        if (value.endsWith(afterTxt)) {
+          startPos = value.length - selectionRef.current.afterTxt.length;
+        } else if (value.startsWith(beforeTxt)) {
+          startPos = beforeTxt.length;
+        } else {
+          const beforeLastChar = beforeTxt[start - 1];
+          const newIndex = value.indexOf(beforeLastChar, start - 1);
+          if (newIndex !== -1) {
+            startPos = newIndex + 1;
+          }
+        }
+
         input.setSelectionRange(startPos, startPos);
       } catch (e) {
-        //
+        warning(
+          false,
+          `Something warning of cursor restore. Please fire issue about this: ${e.message}`,
+        );
       }
     }
   }

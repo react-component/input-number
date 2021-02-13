@@ -452,7 +452,7 @@ const InputNumber = React.forwardRef(
     }, [value]);
 
     // ============================ Cursor ============================
-    React.useEffect(() => {
+    useUpdateEffect(() => {
       if (formatter) {
         restoreCursor();
       }
