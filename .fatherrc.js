@@ -1,9 +1,10 @@
 export default {
-  cjs: "babel",
-  esm: { type: "babel", importLibToEs: true },
+  cjs: 'babel',
+  esm: { type: 'babel', importLibToEs: true },
   preCommit: {
-    eslint: true,
-    prettier: true,
+    // Father preCommit is OOD. comment this tmp.
+    // eslint: true,
+    // prettier: true,
   },
   runtimeHelpers: true,
 };

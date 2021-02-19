@@ -1,28 +1,33 @@
 @inputNumberPrefixCls: rc-input-number;
 
 .@{inputNumberPrefixCls} {
+  display: inline-block;
+  height: 26px;
   margin: 0;
   padding: 0;
-  line-height: 26px;
   font-size: 12px;
-  height: 26px;
-  display: inline-block;
+  line-height: 26px;
   vertical-align: middle;
-  border: 1px solid #D9D9D9;
+  border: 1px solid #d9d9d9;
   border-radius: 4px;
-  transition: all .3s;
+  transition: all 0.3s;
 
   &-focused {
     border-color: #1890ff;
-    box-shadow: 0 0 0 2px rgba(24,144,255,.2);
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+  &-out-of-range {
+    input {
+      color: red;
+    }
   }
 
   &-handler {
-    text-align: center;
-    line-height: 12px;
+    display: block;
     height: 12px;
     overflow: hidden;
-    display:block;
+    line-height: 12px;
+    text-align: center;
     touch-action: none;
 
     &-active {
@@ -30,16 +35,18 @@
     }
   }
 
-  &-handler-up-inner, &-handler-down-inner {
+  &-handler-up-inner,
+  &-handler-down-inner {
     color: #666666;
-    user-select: none;
     -webkit-user-select: none;
+    user-select: none;
   }
 
   &:hover {
     border-color: #1890ff;
 
-    .@{inputNumberPrefixCls}-handler-up, .@{inputNumberPrefixCls}-handler-wrap {
+    .@{inputNumberPrefixCls}-handler-up,
+    .@{inputNumberPrefixCls}-handler-wrap {
       border-color: #1890ff;
     }
   }
@@ -47,43 +54,44 @@
   &-disabled:hover {
     border-color: #d9d9d9;
 
-    .@{inputNumberPrefixCls}-handler-up, .@{inputNumberPrefixCls}-handler-wrap {
+    .@{inputNumberPrefixCls}-handler-up,
+    .@{inputNumberPrefixCls}-handler-wrap {
       border-color: #d9d9d9;
     }
   }
 
   &-input-wrap {
-    overflow: hidden;
     height: 100%;
+    overflow: hidden;
   }
 
   &-input {
     width: 100%;
-    text-align: center;
-    outline: 0;
-    -moz-appearance: textfield;
-    line-height: 26px;
     height: 100%;
-    transition: all 0.3s ease;
+    padding: 0;
     color: #666666;
+    line-height: 26px;
+    text-align: center;
     border: 0;
     border-radius: 4px;
-    padding: 0;
-    transition: all .3s;
+    outline: 0;
+    transition: all 0.3s ease;
+    transition: all 0.3s;
+    -moz-appearance: textfield;
   }
 
   &-handler-wrap {
     float: right;
-    border-left: 1px solid #D9D9D9;
     width: 20px;
     height: 100%;
-    transition: all .3s;
+    border-left: 1px solid #d9d9d9;
+    transition: all 0.3s;
   }
 
   &-handler-up {
-    border-bottom: 1px solid #D9D9D9;
     padding-top: 1px;
-    transition: all .3s;
+    border-bottom: 1px solid #d9d9d9;
+    transition: all 0.3s;
 
     &-inner {
       &:after {
@@ -93,7 +101,7 @@
   }
 
   &-handler-down {
-    transition: all .3s;
+    transition: all 0.3s;
 
     &-inner {
       &:after {
@@ -103,22 +111,23 @@
   }
 
   .handler-disabled() {
-    opacity: 0.72;
+    opacity: 0.3;
     &:hover {
       color: #999;
       border-color: #d9d9d9;
     }
   }
 
-  &-handler-down-disabled, &-handler-up-disabled {
+  &-handler-down-disabled,
+  &-handler-up-disabled {
     .handler-disabled();
   }
 
   &-disabled {
     .@{inputNumberPrefixCls}-input {
-      opacity: 0.72;
-      cursor: not-allowed;
       background-color: #f3f3f3;
+      cursor: not-allowed;
+      opacity: 0.72;
     }
     .@{inputNumberPrefixCls}-handler {
       .handler-disabled();

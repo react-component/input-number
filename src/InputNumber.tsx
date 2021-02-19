@@ -1,862 +1,515 @@
-/* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
-import type { InputNumberProps, InputNumberState } from './interface';
+import { composeRef } from 'rc-util/lib/ref';
+import getMiniDecimal, { DecimalClass, toFixed, ValueType } from './utils/MiniDecimal';
+import StepHandler from './StepHandler';
+import { getNumberPrecision, num2str, validateNumber } from './utils/numberUtil';
+import useCursor from './hooks/useCursor';
+import useUpdateEffect from './hooks/useUpdateEffect';
 
-function noop() {}
+/**
+ * We support `stringMode` which need handle correct type when user call in onChange
+ */
+const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) => {
+  if (stringMode || decimalValue.isEmpty()) {
+    return decimalValue.toString();
+  }
 
-function preventDefault(e) {
-  e.preventDefault();
-}
-
-const defaultParser = (input: string) => {
-  return input.replace(/[^\w.-]+/g, '');
+  return decimalValue.toNumber();
 };
 
-/**
- * When click and hold on a button - the speed of auto changin the value.
- */
-const SPEED = 200;
-
-/**
- * When click and hold on a button - the delay before auto changin the value.
- */
-const DELAY = 600;
-
-/**
- * Max Safe Integer -- on IE this is not available, so manually set the number in that case.
- * The reason this is used, instead of Infinity is because numbers above the MSI are unstable
- */
-const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 2 ** 53 - 1;
-
-const isValidProps = value => value !== undefined && value !== null;
-
-const isEqual = (oldValue, newValue) =>
-  newValue === oldValue ||
-  (typeof newValue === 'number' &&
-    typeof oldValue === 'number' &&
-    isNaN(newValue) &&
-    isNaN(oldValue));
-
-class InputNumber extends React.Component<Partial<InputNumberProps>, InputNumberState> {
-  static defaultProps = {
-    focusOnUpDown: true,
-    useTouch: false,
-    prefixCls: 'rc-input-number',
-    max: MAX_SAFE_INTEGER,
-    min: -MAX_SAFE_INTEGER,
-    step: 1,
-    style: {},
-    onChange: noop,
-    onKeyDown: noop,
-    onPressEnter: noop,
-    onFocus: noop,
-    onBlur: noop,
-    parser: defaultParser,
-    required: false,
-    autoComplete: 'off',
-  };
-
-  pressingUpOrDown: boolean;
-
-  inputting: boolean;
-
-  rawInput;
-
-  cursorStart: number;
-
-  cursorAfter: number | string;
-
-  input: HTMLInputElement;
-
-  lastKeyCode;
-
-  currentValue: number | string;
-
-  cursorEnd: number;
-
-  cursorBefore: string;
-
-  autoStepTimer: NodeJS.Timer;
-
-  constructor(props: InputNumberProps) {
-    super(props);
-    let { value } = props;
-    if (value === undefined) {
-      value = props.defaultValue;
-    }
-    this.state = {
-      focused: props.autoFocus,
-    };
-    const validValue = this.getValidValue(this.toNumber(value));
-    this.state = {
-      ...this.state,
-      inputValue: this.toPrecisionAsStep(validValue),
-      value: validValue,
-    };
-  }
-
-  componentDidMount() {
-    this.componentDidUpdate(null);
-  }
-
-  componentDidUpdate(prevProps) {
-    const { value, onChange, max, min } = this.props;
-    const { focused } = this.state;
-
-    // Don't trigger in componentDidMount
-    if (prevProps) {
-      if (
-        !isEqual(prevProps.value, value) ||
-        !isEqual(prevProps.max, max) ||
-        !isEqual(prevProps.min, min)
-      ) {
-        const validValue = focused ? value : this.getValidValue(value);
-        let nextInputValue;
-        if (this.pressingUpOrDown) {
-          nextInputValue = validValue;
-        } else if (this.inputting) {
-          nextInputValue = this.rawInput;
-        } else {
-          nextInputValue = this.toPrecisionAsStep(validValue);
-        }
-        this.setState({
-          // eslint-disable-line
-          value: validValue,
-          inputValue: nextInputValue,
-        });
-      }
-
-      // Trigger onChange when max or min change
-      // https://github.com/ant-design/ant-design/issues/11574
-      const nextValue = 'value' in this.props ? value : this.state.value;
-      // ref: null < 20 === true
-      // https://github.com/ant-design/ant-design/issues/14277
-      if (
-        'max' in this.props &&
-        prevProps.max !== max &&
-        typeof nextValue === 'number' &&
-        nextValue > max &&
-        onChange
-      ) {
-        onChange(max);
-      }
-      if (
-        'min' in this.props &&
-        prevProps.min !== min &&
-        typeof nextValue === 'number' &&
-        nextValue < min &&
-        onChange
-      ) {
-        onChange(min);
-      }
-    }
-
-    // Restore cursor
-    try {
-      // Firefox set the input cursor after it get focused.
-      // This caused that if an input didn't init with the selection,
-      // set will cause cursor not correct when first focus.
-      // Safari will focus input if set selection. We need skip this.
-      if (this.cursorStart !== undefined && this.state.focused) {
-        // In most cases, the string after cursor is stable.
-        // We can move the cursor before it
-
-        if (
-          // If not match full str, try to match part of str
-          !this.partRestoreByAfter(this.cursorAfter) &&
-          this.state.value !== this.props.value
-        ) {
-          // If not match any of then, let's just keep the position
-          // TODO: Logic should not reach here, need check if happens
-          let pos = this.getInputDisplayValue(this.state).length;
-
-          // If not have last string, just position to the end
-          if (!this.cursorAfter) {
-            pos = this.input.value.length;
-          } else if (this.lastKeyCode === KeyCode.BACKSPACE) {
-            pos = this.cursorStart - 1;
-          } else if (this.lastKeyCode === KeyCode.DELETE) {
-            pos = this.cursorStart;
-          }
-          this.fixCaret(pos, pos);
-        } else if (this.currentValue === this.input.value) {
-          // Handle some special key code
-          switch (this.lastKeyCode) {
-            case KeyCode.BACKSPACE:
-              this.fixCaret(this.cursorStart - 1, this.cursorStart - 1);
-              break;
-            case KeyCode.DELETE:
-              this.fixCaret(this.cursorStart + 1, this.cursorStart + 1);
-              break;
-            default:
-            // Do nothing
-          }
-        }
-      }
-    } catch (e) {
-      // Do nothing
-    }
-
-    // Reset last key
-    this.lastKeyCode = null;
-
-    // pressingUpOrDown is true means that someone just click up or down button
-    if (!this.pressingUpOrDown) {
-      return;
-    }
-    if (this.props.focusOnUpDown && this.state.focused) {
-      if (document.activeElement !== this.input) {
-        this.focus();
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    this.stop();
-  }
-
-  onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const { onKeyDown, onPressEnter, keyboard } = this.props;
-
-    const supportKeyCodes = [ KeyCode.UP, KeyCode.DOWN ];
-
-    if (keyboard !== false && supportKeyCodes.includes(e.keyCode)) {
-      // eslint-disable-next-line default-case
-      switch(e.keyCode) {
-        case KeyCode.UP: {
-          const ratio = this.getRatio(e);
-          this.up(e, ratio, null);
-          this.stop();
-          break;
-        }
-        case KeyCode.DOWN: {
-          const ratio = this.getRatio(e);
-          this.down(e, ratio, null);
-          this.stop();
-          break;
-        }
-      }
-    }
-
-    if (e.keyCode === KeyCode.ENTER) {
-      onPressEnter?.(e);
-    }
-
-    // Trigger user key down
-    this.recordCursorPosition();
-    this.lastKeyCode = e.keyCode;
-    onKeyDown?.(e);
-  };
-
-  onKeyUp = (e, ...args) => {
-    const { onKeyUp } = this.props;
-
-    this.stop();
-
-    this.recordCursorPosition();
-
-    // Trigger user key up
-    if (onKeyUp) {
-      onKeyUp(e, ...args);
-    }
-  };
-
-  onChange = e => {
-    const { onChange } = this.props;
-
-    if (this.state.focused) {
-      this.inputting = true;
-    }
-    this.rawInput = this.props.parser(this.getValueFromEvent(e));
-    this.setState({ inputValue: this.rawInput });
-    onChange(this.toNumber(this.rawInput)); // valid number or invalid string
-  };
-
-  onMouseUp = (...args) => {
-    const { onMouseUp } = this.props;
-
-    this.recordCursorPosition();
-
-    if (onMouseUp) {
-      onMouseUp(...args);
-    }
-  };
-
-  onFocus = (...args) => {
-    this.setState({
-      focused: true,
-    });
-    this.props.onFocus(...args);
-  };
-
-  onBlur = (...args) => {
-    const { onBlur } = this.props;
-    this.inputting = false;
-    this.setState({
-      focused: false,
-    });
-    const value = this.getCurrentValidValue(this.state.inputValue);
-    const newValue = this.setValue(value, noop);
-
-    if (onBlur) {
-      const originValue = this.input.value;
-      const displayValue = this.getInputDisplayValue({ focus: false, value: newValue });
-      this.input.value = displayValue;
-      onBlur(...args);
-      this.input.value = originValue;
-    }
-  };
-
-  getCurrentValidValue(value) {
-    let val = value;
-    if (val === '') {
-      val = '';
-    } else if (!this.isNotCompleteNumber(parseFloat(val))) {
-      val = this.getValidValue(val);
-    } else {
-      val = this.state.value;
-    }
-    return this.toNumber(val);
-  }
-
-  getRatio = e => {
-    let ratio = 1;
-    if (e.metaKey || e.ctrlKey) {
-      ratio = 0.1;
-    } else if (e.shiftKey) {
-      ratio = 10;
-    }
-    return ratio;
-  };
-
-  getValueFromEvent(e) {
-    // optimize for chinese input expierence
-    // https://github.com/ant-design/ant-design/issues/8196
-    let value = e.target.value.trim().replace(/。/g, '.');
-
-    if (isValidProps(this.props.decimalSeparator)) {
-      value = value.replace(this.props.decimalSeparator, '.');
-    }
-
-    return value;
-  }
-
-  getValidValue(value) {
-    const { min, max } = this.props;
-    let val = parseFloat(value);
-    // https://github.com/ant-design/ant-design/issues/7358
-    if (isNaN(val)) {
-      return value;
-    }
-    if (val < min) {
-      val = min;
-    }
-    if (val > max) {
-      val = max;
-    }
-    return val;
-  }
-
-  setValue(v, callback) {
-    // trigger onChange
-    const { precision } = this.props;
-    const newValue = this.isNotCompleteNumber(parseFloat(v)) ? null : parseFloat(v);
-    const { value = null } = this.state;
-    let { inputValue = null } = this.state;
-    // https://github.com/ant-design/ant-design/issues/7363
-    // https://github.com/ant-design/ant-design/issues/16622
-    const newValueInString =
-      typeof newValue === 'number' ? newValue.toFixed(precision) : `${newValue}`;
-    const changed = newValue !== value || newValueInString !== `${inputValue}`;
-    if (!('value' in this.props)) {
-      this.setState(
-        {
-          value: newValue,
-          inputValue: this.toPrecisionAsStep(v),
-        },
-        callback,
-      );
-    } else {
-      // always set input value same as value
-      inputValue = this.toPrecisionAsStep(this.state.value);
-      this.setState(
-        {
-          inputValue,
-        },
-        callback,
-      );
-    }
-    if (changed) {
-      this.props.onChange(newValue);
-    }
-
-    return newValue;
-  }
-
-  getFullNum = num => {
-    if (isNaN(num)) {
-      return num;
-    }
-    if (!/e/i.test(String(num))) {
-      return num;
-    }
-    return Number(num)
-      .toFixed(18)
-      .replace(/\.?0+$/, '');
-  };
-
-  getPrecision = value => {
-    if (isValidProps(this.props.precision)) {
-      return this.props.precision;
-    }
-    const valueString = String(value);
-    if (valueString.indexOf('e-') >= 0) {
-      return parseInt(valueString.slice(valueString.indexOf('e-') + 2), 10);
-    }
-    let precision = 0;
-    if (valueString.indexOf('.') >= 0) {
-      precision = valueString.length - valueString.indexOf('.') - 1;
-    }
-    return precision;
-  };
-
-  // step={1.0} value={1.51}
-  // press +
-  // then value should be 2.51, rather than 2.5
-  // if this.props.precision is undefined
-  // https://github.com/react-component/input-number/issues/39
-  getMaxPrecision(currentValue, ratio = 1) {
-    const { precision, step } = this.props;
-    if (isValidProps(precision)) {
-      return precision;
-    }
-    const ratioPrecision = this.getPrecision(ratio);
-    const stepPrecision = this.getPrecision(step);
-    const currentValuePrecision = this.getPrecision(currentValue);
-    if (!currentValue) {
-      return ratioPrecision + stepPrecision;
-    }
-    return Math.max(currentValuePrecision, ratioPrecision + stepPrecision);
-  }
-
-  getPrecisionFactor(currentValue, ratio = 1) {
-    const precision = this.getMaxPrecision(currentValue, ratio);
-    return 10 ** precision;
-  }
-
-  getInputDisplayValue = state => {
-    const { focused, inputValue, value } = state || this.state;
-    let inputDisplayValue;
-    if (focused) {
-      inputDisplayValue = inputValue;
-    } else {
-      inputDisplayValue = this.toPrecisionAsStep(value);
-    }
-
-    if (inputDisplayValue === undefined || inputDisplayValue === null) {
-      inputDisplayValue = '';
-    }
-
-    let inputDisplayValueFormat = this.formatWrapper(inputDisplayValue);
-    if (isValidProps(this.props.decimalSeparator)) {
-      inputDisplayValueFormat = inputDisplayValueFormat
-        .toString()
-        .replace('.', this.props.decimalSeparator);
-    }
-
-    return inputDisplayValueFormat;
-  };
-
-  recordCursorPosition = () => {
-    // Record position
-    try {
-      this.cursorStart = this.input.selectionStart;
-      this.cursorEnd = this.input.selectionEnd;
-      this.currentValue = this.input.value;
-      this.cursorBefore = this.input.value.substring(0, this.cursorStart);
-      this.cursorAfter = this.input.value.substring(this.cursorEnd);
-    } catch (e) {
-      // Fix error in Chrome:
-      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
-      // http://stackoverflow.com/q/21177489/3040605
-    }
-  };
-
-  restoreByAfter = str => {
-    if (str === undefined) return false;
-
-    const fullStr = this.input.value;
-    const index = fullStr.lastIndexOf(str);
-
-    if (index === -1) return false;
-
-    const prevCursorPos = this.cursorBefore.length;
-    if (
-      this.lastKeyCode === KeyCode.DELETE &&
-      this.cursorBefore.charAt(prevCursorPos - 1) === str[0]
-    ) {
-      this.fixCaret(prevCursorPos, prevCursorPos);
-      return true;
-    }
-
-    if (index + str.length === fullStr.length) {
-      this.fixCaret(index, index);
-
-      return true;
-    }
-    return false;
-  };
-
-  partRestoreByAfter = str => {
-    if (str === undefined) return false;
-
-    // For loop from full str to the str with last char to map. e.g. 123
-    // -> 123
-    // -> 23
-    // -> 3
-    return Array.prototype.some.call(str, (_, start) => {
-      const partStr = str.substring(start);
-
-      return this.restoreByAfter(partStr);
-    });
-  };
-
-  focus() {
-    this.input.focus();
-    this.recordCursorPosition();
-  }
-
-  blur() {
-    this.input.blur();
-  }
-
-  select() {
-    this.input.select();
-  }
-
-  formatWrapper(num) {
-    // http://2ality.com/2012/03/signedzero.html
-    // https://github.com/ant-design/ant-design/issues/9439
-    if (this.props.formatter) {
-      return this.props.formatter(num);
-    }
-    return num;
-  }
-
-  toPrecisionAsStep(num) {
-    if (this.isNotCompleteNumber(num) || num === '') {
-      return num;
-    }
-    const precision = Math.abs(this.getMaxPrecision(num));
-    if (!isNaN(precision)) {
-      return Number(num).toFixed(precision);
-    }
-    return num.toString();
-  }
-
-  // '1.' '1x' 'xx' '' => are not complete numbers
-  isNotCompleteNumber = num => {
-    return (
-      isNaN(num) ||
-      num === '' ||
-      num === null ||
-      (num && num.toString().indexOf('.') === num.toString().length - 1)
-    );
-  };
-
-  toNumber(num) {
-    const { precision } = this.props;
-    const { focused } = this.state;
-    // num.length > 16 => This is to prevent input of large numbers
-    const numberIsTooLarge = num && num.length > 16 && focused;
-    if (this.isNotCompleteNumber(num) || numberIsTooLarge) {
-      return num;
-    }
-    if (isValidProps(precision)) {
-      return Math.round(num * 10 ** precision) / 10 ** precision;
-    }
-    return Number(num);
-  }
-
-  upStep(val, rat) {
-    const { step } = this.props;
-    const precisionFactor = this.getPrecisionFactor(val, rat);
-    const precision = Math.abs(this.getMaxPrecision(val, rat));
-    const result = (
-      (precisionFactor * val + precisionFactor * (Number(step)) * rat) /
-      precisionFactor
-    ).toFixed(precision);
-    return this.toNumber(result);
-  }
-
-  downStep(val, rat) {
-    const { step } = this.props;
-    const precisionFactor = this.getPrecisionFactor(val, rat);
-    const precision = Math.abs(this.getMaxPrecision(val, rat));
-    const result = (
-      (precisionFactor * val - precisionFactor * (Number(step)) * rat) /
-      precisionFactor
-    ).toFixed(precision);
-    return this.toNumber(result);
-  }
-
-  step(type, e, ratio = 1, recursive) {
-    this.stop();
-    this.recordCursorPosition();
-    if (e) {
-      e.persist();
-      e.preventDefault();
-    }
-    const { props } = this;
-    if (props.disabled) {
-      return;
-    }
-    const value = this.getCurrentValidValue(this.state.inputValue) || 0;
-    if (this.isNotCompleteNumber(value)) {
-      return;
-    }
-    let val = this[`${type}Step`](value, ratio);
-    const outOfRange = val > props.max || val < props.min;
-    if (val > props.max) {
-      val = props.max;
-    } else if (val < props.min) {
-      val = props.min;
-    }
-    this.setValue(val, null);
-    if (props.onStep) props.onStep(val, { offset: ratio, type });
-    this.setState(
-      {
-        focused: true,
-      },
-      () => {
-        this.pressingUpOrDown = false;
-      },
-    );
-    if (outOfRange) {
-      return;
-    }
-    this.autoStepTimer = setTimeout(
-      () => {
-        this[type](e, ratio, true);
-      },
-      recursive ? SPEED : DELAY,
-    );
-  }
-
-  stop = () => {
-    if (this.autoStepTimer) {
-      clearTimeout(this.autoStepTimer);
-    }
-  };
-
-  down = (e, ratio, recursive) => {
-    this.pressingUpOrDown = true;
-    this.step('down', e, ratio, recursive);
-  };
-
-  up = (e, ratio, recursive) => {
-    this.pressingUpOrDown = true;
-    this.step('up', e, ratio, recursive);
-  };
-
-  saveInput = node => {
-    this.input = node;
-  };
-
-  fixCaret(start, end) {
-    if (start === undefined || end === undefined || !this.input || !this.input.value) {
-      return;
-    }
-
-    try {
-      const currentStart = this.input.selectionStart;
-      const currentEnd = this.input.selectionEnd;
-
-      if (start !== currentStart || end !== currentEnd) {
-        this.input.setSelectionRange(start, end);
-      }
-    } catch (e) {
-      // Fix error in Chrome:
-      // Failed to read the 'selectionStart' property from 'HTMLInputElement'
-      // http://stackoverflow.com/q/21177489/3040605
-    }
-  }
-
-  render() {
+const getDecimalIfValidate = (value: ValueType) => {
+  const decimal = getMiniDecimal(value);
+  return decimal.isInvalidate() ? null : decimal;
+};
+
+export interface InputNumberProps<T extends ValueType = ValueType>
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    'value' | 'defaultValue' | 'onInput' | 'onChange'
+  > {
+  /** value will show as string */
+  stringMode?: boolean;
+
+  defaultValue?: T;
+  value?: T;
+
+  prefixCls?: string;
+  className?: string;
+  style?: React.CSSProperties;
+  min?: number;
+  max?: number;
+  step?: ValueType;
+  tabIndex?: number;
+
+  // Customize handler node
+  upHandler?: React.ReactNode;
+  downHandler?: React.ReactNode;
+  keyboard?: boolean;
+
+  /** Parse display value to validate number */
+  parser?: (displayValue: string | undefined) => T;
+  /** Transform `value` to display value show in input */
+  formatter?: (value: T | undefined) => string;
+  /** Syntactic sugar of `formatter`. Config precision of display. */
+  precision?: number;
+  /** Syntactic sugar of `formatter`. Config decimal separator of display. */
+  decimalSeparator?: string;
+
+  onInput?: (text: string) => void;
+  onChange?: (value: T) => void;
+  onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
+
+  onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down' }) => void;
+
+  // focusOnUpDown: boolean;
+  // useTouch: boolean;
+
+  // size?: ISize;
+}
+
+const InputNumber = React.forwardRef(
+  (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const {
-      prefixCls,
+      prefixCls = 'rc-input-number',
+      className,
+      style,
+      min,
+      max,
+      step = 1,
+      defaultValue,
+      value,
       disabled,
       readOnly,
-      useTouch,
-      autoComplete,
       upHandler,
       downHandler,
-      className,
-      max,
-      min,
-      style,
-      title,
-      onMouseEnter,
-      onMouseLeave,
-      onMouseOver,
-      onMouseOut,
-      required,
-      onClick,
-      tabIndex,
-      type,
-      placeholder,
-      id,
-      inputMode,
-      pattern,
-      step,
-      maxLength,
-      autoFocus,
-      name,
-      onPaste,
+      keyboard,
+
+      stringMode,
+
+      parser,
+      formatter,
+      precision,
+      decimalSeparator,
+
+      onChange,
       onInput,
-      ...rest
-    } = this.props;
-    const { value, focused } = this.state;
-    const classes = classNames(prefixCls, {
-      [className]: !!className,
-      [`${prefixCls}-disabled`]: disabled,
-      [`${prefixCls}-focused`]: focused,
-    });
+      onPressEnter,
+      onStep,
 
-    const dataOrAriaAttributeProps = {};
-    Object.keys(rest).forEach(key => {
-      if (key.substr(0, 5) === 'data-' || key.substr(0, 5) === 'aria-' || key === 'role') {
-        dataOrAriaAttributeProps[key] = rest[key];
+      ...inputProps
+    } = props;
+
+    const inputClassName = `${prefixCls}-input`;
+
+    const inputRef = React.useRef<HTMLInputElement>(null);
+
+    const [focus, setFocus] = React.useState(false);
+
+    const userTypingRef = React.useRef(false);
+    const compositionRef = React.useRef(false);
+
+    // ============================ Value =============================
+    // Real value control
+    const [decimalValue, setDecimalValue] = React.useState<DecimalClass>(() =>
+      getMiniDecimal(defaultValue ?? value),
+    );
+
+    function setUncontrolledDecimalValue(newDecimal: DecimalClass) {
+      if (value === undefined) {
+        setDecimalValue(newDecimal);
       }
-    });
+    }
 
-    const editable = !readOnly && !disabled;
-
-    // focus state, show input value
-    // unfocus state, show valid value
-    const inputDisplayValue = this.getInputDisplayValue(null);
-
-    const upDisabled = (value || value === 0) && (isNaN(value) || Number(value) >= max);
-    const downDisabled = (value || value === 0) && (isNaN(value) || Number(value) <= min);
-    const isUpDisabled = upDisabled || disabled || readOnly;
-    const isDownDisabled = downDisabled || disabled || readOnly;
-    const upClassName = classNames(`${prefixCls}-handler`, `${prefixCls}-handler-up`, {
-      [`${prefixCls}-handler-up-disabled`]: isUpDisabled,
-    });
-    const downClassName = classNames(`${prefixCls}-handler`, `${prefixCls}-handler-down`, {
-      [`${prefixCls}-handler-down-disabled`]: isDownDisabled,
-    });
-
-    const upEvents: any = useTouch
-      ? {
-          onTouchStart: isUpDisabled ? noop : this.up,
-          onTouchEnd: this.stop,
+    // ====================== Parser & Formatter ======================
+    /**
+     * `precision` is used for formatter & onChange.
+     * It will auto generate by `value` & `step`.
+     * But it will not block user typing when auto generated.
+     *
+     * Note: Auto generate `precision` is used for legacy logic.
+     * We should remove this since we already support high precision with BigInt.
+     *
+     * @param number  Provide which number should calculate precision
+     * @param userTyping  Change by user typing
+     */
+    const getPrecision = React.useCallback(
+      (numStr: string, userTyping: boolean) => {
+        if (precision >= 0) {
+          return precision;
         }
-      : {
-          onMouseDown: isUpDisabled ? noop : this.up,
-          onMouseUp: this.stop,
-          onMouseLeave: this.stop,
-        };
-    const downEvents: any = useTouch
-      ? {
-          onTouchStart: isDownDisabled ? noop : this.down,
-          onTouchEnd: this.stop,
-        }
-      : {
-          onMouseDown: isDownDisabled ? noop : this.down,
-          onMouseUp: this.stop,
-          onMouseLeave: this.stop,
-        };
 
+        if (userTyping) {
+          return undefined;
+        }
+
+        return Math.max(getNumberPrecision(numStr), getNumberPrecision(step));
+      },
+      [precision, step],
+    );
+
+    // >>> Parser
+    const mergedParser = React.useCallback(
+      (num: string | number) => {
+        const numStr = String(num);
+
+        if (parser) {
+          return parser(numStr);
+        }
+
+        let parsedStr = numStr;
+        if (decimalSeparator) {
+          parsedStr = parsedStr.replace(decimalSeparator, '.');
+        }
+
+        // [Legacy] We still support auto convert `$ 123,456` to `123456`
+        return parsedStr.replace(/[^\w.-]+/g, '');
+      },
+      [parser, decimalSeparator],
+    );
+
+    // >>> Formatter
+    const mergedFormatter = React.useCallback(
+      (number: string, userTyping: boolean) => {
+        if (formatter) {
+          return formatter(number);
+        }
+
+        let str = typeof number === 'number' ? num2str(number) : number;
+
+        const mergedPrecision = getPrecision(str, userTyping);
+
+        if (validateNumber(str) && (decimalSeparator || mergedPrecision >= 0)) {
+          // Separator
+          const separatorStr = decimalSeparator || '.';
+
+          str = toFixed(str, separatorStr, mergedPrecision);
+        }
+
+        return str;
+      },
+      [formatter, getPrecision, decimalSeparator],
+    );
+
+    // ========================== InputValue ==========================
+    /**
+     * Input text value control
+     *
+     * User can not update input content directly. It update with follow rules by priority:
+     *  1. controlled `value` changed
+     *    * [SPECIAL] Typing like `1.` should not immediately convert to `1`
+     *  2. User typing
+     *  3. Blur or Enter trigger revalidate
+     */
+    const [inputValue, setInternalInputValue] = React.useState<string | number>(() => {
+      const initValue = defaultValue ?? value;
+      if (decimalValue.isInvalidate() && ['string', 'number'].includes(typeof initValue)) {
+        return Number.isNaN(initValue) ? '' : initValue;
+      }
+      return mergedFormatter(decimalValue.toString(), false);
+    });
+
+    // Should always be string
+    function setInputValue(newValue: DecimalClass, userTyping: boolean) {
+      setInternalInputValue(mergedFormatter(newValue.toString(false), userTyping));
+    }
+
+    // >>> Max & Min limit
+    const maxDecimal = React.useMemo(() => getDecimalIfValidate(max), [max]);
+    const minDecimal = React.useMemo(() => getDecimalIfValidate(min), [min]);
+
+    const upDisabled = React.useMemo(() => {
+      if (!maxDecimal || !decimalValue || decimalValue.isInvalidate()) {
+        return false;
+      }
+
+      return maxDecimal.lessEquals(decimalValue);
+    }, [maxDecimal, decimalValue]);
+
+    const downDisabled = React.useMemo(() => {
+      if (!minDecimal || !decimalValue || decimalValue.isInvalidate()) {
+        return false;
+      }
+
+      return decimalValue.lessEquals(minDecimal);
+    }, [minDecimal, decimalValue]);
+
+    // Cursor controller
+    const [recordCursor, restoreCursor] = useCursor(inputRef.current, focus);
+
+    // ============================= Data =============================
+    /**
+     * Find target value closet within range.
+     * e.g. [11, 28]:
+     *    3  => 11
+     *    23 => 23
+     *    99 => 28
+     */
+    const getRangeValue = (target: DecimalClass) => {
+      // target > max
+      if (maxDecimal && !target.lessEquals(maxDecimal)) {
+        return maxDecimal;
+      }
+
+      // target < min
+      if (minDecimal && !minDecimal.lessEquals(target)) {
+        return minDecimal;
+      }
+
+      return null;
+    };
+
+    /**
+     * Check value is in [min, max] range
+     */
+    const isInRange = (target: DecimalClass) => !getRangeValue(target);
+
+    /**
+     * Trigger `onChange` if value validated and not equals of origin.
+     * Return the value that re-align in range.
+     */
+    const triggerValueUpdate = (newValue: DecimalClass, userTyping: boolean): DecimalClass => {
+      let updateValue = newValue;
+
+      // Revert value in range if needed
+      updateValue = getRangeValue(updateValue) || updateValue;
+
+      if (!readOnly && !disabled) {
+        const numStr = updateValue.toString();
+        const mergedPrecision = getPrecision(numStr, userTyping);
+        if (mergedPrecision) {
+          updateValue = getMiniDecimal(toFixed(numStr, '.', mergedPrecision));
+        }
+
+        // Trigger event
+        if (!updateValue.equals(decimalValue)) {
+          setUncontrolledDecimalValue(updateValue);
+          onChange?.(getDecimalValue(stringMode, updateValue));
+
+          // Reformat input if value is not controlled
+          if (value === undefined) {
+            setInputValue(updateValue, userTyping);
+          }
+        }
+
+        return updateValue;
+      }
+
+      return decimalValue;
+    };
+
+    // ========================== User Input ==========================
+    // >>> Collect input value
+    const collectInputValue = (inputStr: string) => {
+      recordCursor();
+
+      // Update inputValue incase input can not parse as number
+      setInternalInputValue(inputStr);
+
+      // Parse number
+      if (!compositionRef.current) {
+        const finalValue = mergedParser(inputStr);
+        const finalDecimal = getMiniDecimal(finalValue);
+        if (!finalDecimal.isInvalidate()) {
+          triggerValueUpdate(finalDecimal, true);
+        }
+      }
+    };
+
+    // >>> Composition
+    const onCompositionStart = () => {
+      compositionRef.current = true;
+    };
+
+    const onCompositionEnd = () => {
+      compositionRef.current = false;
+
+      collectInputValue(inputRef.current.value);
+    };
+
+    // >>> Input
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      let inputStr = e.target.value;
+
+      // optimize for chinese input experience
+      // https://github.com/ant-design/ant-design/issues/8196
+      if (!parser) {
+        inputStr = inputStr.replace(/。/g, '.');
+      }
+
+      collectInputValue(inputStr);
+
+      // Trigger onInput later to let user customize value if they want do handle something after onChange
+      onInput?.(inputStr);
+    };
+
+    // ============================= Step =============================
+    const onInternalStep = (up: boolean) => {
+      // Ignore step since out of range
+      if ((up && upDisabled) || (!up && downDisabled)) {
+        return;
+      }
+
+      // Clear typing status since it may caused by up & down key.
+      // We should sync with input value.
+      userTypingRef.current = false;
+
+      let stepDecimal = getMiniDecimal(step);
+      if (!up) {
+        stepDecimal = stepDecimal.negate();
+      }
+
+      const target = (decimalValue || getMiniDecimal(0)).add(stepDecimal.toString());
+
+      const updatedValue = triggerValueUpdate(target, false);
+
+      onStep?.(getDecimalValue(stringMode, updatedValue), {
+        offset: step,
+        type: up ? 'up' : 'down',
+      });
+
+      inputRef.current?.focus();
+    };
+
+    // ============================ Flush =============================
+    /**
+     * Flush current input content to trigger value change & re-formatter input if needed
+     */
+    const flushInputValue = () => {
+      const parsedValue = getMiniDecimal(mergedParser(inputValue));
+      let formatValue: DecimalClass = parsedValue;
+
+      if (!parsedValue.isNaN()) {
+        // Only validate value can be re-fill to inputValue
+        if (!formatValue.isEmpty()) {
+          // Reassign the formatValue within ranged of trigger control
+          formatValue = triggerValueUpdate(parsedValue, true);
+        }
+      } else {
+        formatValue = decimalValue;
+      }
+
+      if (value !== undefined) {
+        // Reset back with controlled value first
+        setInputValue(decimalValue, false);
+      } else if (!formatValue.isNaN()) {
+        // Reset input back since no validate value
+        setInputValue(formatValue, false);
+      }
+    };
+
+    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+      const { which } = event;
+      userTypingRef.current = true;
+
+      if (which === KeyCode.ENTER) {
+        flushInputValue();
+        onPressEnter?.(event);
+      }
+
+      if (keyboard === false) {
+        return;
+      }
+
+      // Do step
+      if (!compositionRef.current && [KeyCode.UP, KeyCode.DOWN].includes(which)) {
+        onInternalStep(KeyCode.UP === which);
+        event.preventDefault();
+      }
+    };
+
+    const onKeyUp = () => {
+      userTypingRef.current = false;
+    };
+
+    // >>> Focus & Blur
+    const onBlur = () => {
+      flushInputValue();
+
+      setFocus(false);
+    };
+
+    // ========================== Controlled ==========================
+    // Input by precision
+    useUpdateEffect(() => {
+      if (!decimalValue.isInvalidate()) {
+        setInputValue(decimalValue, false);
+      }
+    }, [precision]);
+
+    // Input by value
+    useUpdateEffect(() => {
+      const newValue = getMiniDecimal(value);
+      setDecimalValue(newValue);
+
+      // When user typing from `1.2` to `1.`, we should not convert to `1` immediately.
+      // But let it go if user set `formatter`
+      if (newValue.isNaN() || !userTypingRef.current || formatter) {
+        // Update value as effect
+        setInputValue(newValue, false);
+      }
+    }, [value]);
+
+    // ============================ Cursor ============================
+    useUpdateEffect(() => {
+      if (formatter) {
+        restoreCursor();
+      }
+    }, [inputValue]);
+
+    // ============================ Render ============================
     return (
       <div
-        className={classes}
+        className={classNames(prefixCls, className, {
+          [`${prefixCls}-focused`]: focus,
+          [`${prefixCls}-disabled`]: disabled,
+          [`${prefixCls}-readonly`]: readOnly,
+          [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
+          [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
+        })}
         style={style}
-        title={title}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
-        onFocus={() => null}
-        onBlur={() => null}
+        onFocus={() => {
+          setFocus(true);
+        }}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
+        onCompositionStart={onCompositionStart}
+        onCompositionEnd={onCompositionEnd}
       >
-        <div className={`${prefixCls}-handler-wrap`}>
-          <span
-            unselectable="on"
-            {...upEvents}
-            role="button"
-            aria-label="Increase Value"
-            aria-disabled={isUpDisabled}
-            className={upClassName}
-          >
-            {upHandler || (
-              <span
-                unselectable="on"
-                className={`${prefixCls}-handler-up-inner`}
-                onClick={preventDefault}
-              />
-            )}
-          </span>
-          <span
-            unselectable="on"
-            {...downEvents}
-            role="button"
-            aria-label="Decrease Value"
-            aria-disabled={isDownDisabled}
-            className={downClassName}
-          >
-            {downHandler || (
-              <span
-                unselectable="on"
-                className={`${prefixCls}-handler-down-inner`}
-                onClick={preventDefault}
-              />
-            )}
-          </span>
-        </div>
-        <div className={`${prefixCls}-input-wrap`}>
+        <StepHandler
+          prefixCls={prefixCls}
+          upNode={upHandler}
+          downNode={downHandler}
+          upDisabled={upDisabled}
+          downDisabled={downDisabled}
+          onStep={onInternalStep}
+        />
+        <div className={`${inputClassName}-wrap`}>
           <input
+            autoComplete="off"
             role="spinbutton"
             aria-valuemin={min}
             aria-valuemax={max}
-            aria-valuenow={value}
-            required={required}
-            type={type}
-            placeholder={placeholder}
-            onPaste={onPaste}
-            onClick={onClick}
-            onMouseUp={this.onMouseUp}
-            className={`${prefixCls}-input`}
-            tabIndex={tabIndex}
-            autoComplete={autoComplete}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
-            onKeyDown={editable ? this.onKeyDown : noop}
-            onKeyUp={editable ? this.onKeyUp : noop}
-            autoFocus={autoFocus}
-            maxLength={maxLength}
-            readOnly={readOnly}
+            {...inputProps}
+            ref={composeRef(inputRef, ref)}
+            className={inputClassName}
+            value={inputValue}
+            onChange={onInternalInput}
             disabled={disabled}
-            max={max}
-            min={min}
-            step={step}
-            name={name}
-            title={title}
-            id={id}
-            onChange={this.onChange}
-            ref={this.saveInput}
-            value={this.getFullNum(inputDisplayValue)}
-            pattern={pattern}
-            inputMode={inputMode}
-            onInput={onInput}
-            {...dataOrAriaAttributeProps}
+            readOnly={readOnly}
           />
         </div>
       </div>
     );
-  }
-}
+  },
+) as (<T extends ValueType = ValueType>(
+  props: React.PropsWithChildren<InputNumberProps<T>> & {
+    ref?: React.Ref<HTMLInputElement>;
+  },
+) => React.ReactElement) & { displayName?: string };
+
+InputNumber.displayName = 'InputNumber';
 
 export default InputNumber;

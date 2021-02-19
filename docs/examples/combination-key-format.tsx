@@ -10,7 +10,7 @@ class Component extends React.Component {
     value: 50000,
   };
 
-  onChange = value => {
+  onChange = (value) => {
     console.log('onChange:', value);
     this.setState({ value });
   };
@@ -27,24 +27,33 @@ class Component extends React.Component {
     });
   };
 
-  numberWithCommas = x => {
+  numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
-  format = num => {
+  format = (num) => {
     return `$ ${this.numberWithCommas(num)} boeing737`;
   };
 
-  parser = num => {
-    return num
-      .toString()
-      .split(' ')[1]
-      .replace(/,*/g, '');
+  parser = (num: string) => {
+    const cells = num.toString().split(' ');
+    if (!cells[1]) {
+      return num;
+    }
+
+    const parsed = cells[1].replace(/,*/g, '');
+
+    return parsed;
   };
 
   render() {
     return (
       <div style={{ margin: 10 }}>
+        <p>
+          When number is validate in range, keep formatting.
+          Else will flush when blur.
+        </p>
+
         <InputNumber
           aria-label="Number input example that demonstrates combination key format"
           min={-8000}
