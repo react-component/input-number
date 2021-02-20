@@ -12,6 +12,10 @@ describe('InputNumber.Props', () => {
     }
 
     expect(onChange.mock.calls[onChange.mock.calls.length - 1][0]).toEqual(10);
+    expect(wrapper.find('input').props()).toEqual(expect.objectContaining({
+      'aria-valuemax': 10,
+      'aria-valuenow': '10',
+    }));
   });
 
   it('min', () => {
@@ -22,6 +26,10 @@ describe('InputNumber.Props', () => {
     }
 
     expect(onChange.mock.calls[onChange.mock.calls.length - 1][0]).toEqual(-10);
+    expect(wrapper.find('input').props()).toEqual(expect.objectContaining({
+      'aria-valuemin': -10,
+      'aria-valuenow': '-10',
+    }));
   });
 
   it('disabled', () => {
@@ -58,6 +66,8 @@ describe('InputNumber.Props', () => {
         wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
         expect(onChange).toHaveBeenCalledWith(-5 * (i + 1));
       }
+
+      expect(wrapper.find('input').props().step).toEqual(5);
     });
 
     it('stringMode', () => {

@@ -492,6 +492,8 @@ const InputNumber = React.forwardRef(
             role="spinbutton"
             aria-valuemin={min}
             aria-valuemax={max}
+            aria-valuenow={decimalValue.isInvalidate() ? null : (decimalValue.toString() as any)}
+            step={step}
             {...inputProps}
             ref={composeRef(inputRef, ref)}
             className={inputClassName}
