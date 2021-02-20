@@ -93,4 +93,14 @@ describe('InputNumber.Input', () => {
     wrapper.find('input').simulate('keyDown', { which: KeyCode.ENTER });
     expect(onPressEnter).toHaveBeenCalled();
   });
+
+  it('empty on blur should trigger null', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber defaultValue="1" onChange={onChange} />);
+    wrapper.changeValue('');
+    expect(onChange).not.toHaveBeenCalled();
+
+    wrapper.blurInput()
+    expect(onChange).toHaveBeenLastCalledWith(null);
+  });
 });
