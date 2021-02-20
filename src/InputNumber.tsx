@@ -285,7 +285,7 @@ const InputNumber = React.forwardRef(
         // Trigger event
         if (!updateValue.equals(decimalValue)) {
           setUncontrolledDecimalValue(updateValue);
-          onChange?.(getDecimalValue(stringMode, updateValue));
+          onChange?.(updateValue.isEmpty() ? null : getDecimalValue(stringMode, updateValue));
 
           // Reformat input if value is not controlled
           if (value === undefined) {
@@ -381,11 +381,9 @@ const InputNumber = React.forwardRef(
       let formatValue: DecimalClass = parsedValue;
 
       if (!parsedValue.isNaN()) {
-        // Only validate value can be re-fill to inputValue
-        if (!formatValue.isEmpty()) {
-          // Reassign the formatValue within ranged of trigger control
-          formatValue = triggerValueUpdate(parsedValue, true);
-        }
+        // Only validate value or empty value can be re-fill to inputValue
+        // Reassign the formatValue within ranged of trigger control
+        formatValue = triggerValueUpdate(parsedValue, true);
       } else {
         formatValue = decimalValue;
       }

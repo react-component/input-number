@@ -17,6 +17,7 @@ export default () => {
 
   return (
     <div style={{ margin: 10 }}>
+      <h3>Controlled</h3>
       <InputNumber
         aria-label="Simple number input example"
         min={-8}
@@ -43,6 +44,10 @@ export default () => {
           toggle stringMode ({String(stringMode)})
         </button>
       </p>
+
+      <hr />
+      <h3>Uncontrolled</h3>
+      <InputNumber style={{ width: 100 }} onChange={onChange} defaultValue={33} />
     </div>
   );
 };
