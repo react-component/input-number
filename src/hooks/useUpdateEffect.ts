@@ -6,7 +6,7 @@ import * as React from 'react';
 export default function useUpdateEffect(callback: () => void | (() => void), condition: any[]) {
   const initRef = React.useRef(false);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!initRef.current) {
       initRef.current = true;
       return undefined;

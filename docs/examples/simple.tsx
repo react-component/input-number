@@ -11,7 +11,7 @@ export default () => {
   const [value, setValue] = React.useState<string | number>(5);
 
   const onChange = (val: number) => {
-    console.warn('onChange:', val);
+    console.warn('onChange:', val, typeof val);
     setValue(val);
   };
 
@@ -47,7 +47,7 @@ export default () => {
 
       <hr />
       <h3>Uncontrolled</h3>
-      <InputNumber style={{ width: 100 }} onChange={onChange} defaultValue={33} />
+      {/* <InputNumber style={{ width: 100 }} onChange={onChange} defaultValue={33} /> */}
     </div>
   );
 };

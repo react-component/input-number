@@ -211,12 +211,13 @@ describe('InputNumber.Github', () => {
     expect(onInput).toHaveBeenCalledWith('');
 
     wrapper.blurInput();
-    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith(null);
 
     wrapper.focusInput();
     wrapper.blurInput();
-    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledTimes(2);
   });
 
