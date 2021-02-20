@@ -18,7 +18,7 @@ export default () => {
   return (
     <div style={{ margin: 10 }}>
       <h3>Controlled</h3>
-      <InputNumber
+      {/* <InputNumber
         aria-label="Simple number input example"
         min={-8}
         max={10}
@@ -29,7 +29,7 @@ export default () => {
         disabled={disabled}
         keyboard={keyboard}
         stringMode={stringMode}
-      />
+      /> */}
       <p>
         <button type="button" onClick={() => setDisabled(!disabled)}>
           toggle Disabled ({String(disabled)})
@@ -47,7 +47,7 @@ export default () => {
 
       <hr />
       <h3>Uncontrolled</h3>
-      {/* <InputNumber style={{ width: 100 }} onChange={onChange} defaultValue={33} /> */}
+      <InputNumber style={{ width: 100 }} onChange={onChange} min={1} max={99} defaultValue={33} />
     </div>
   );
 };

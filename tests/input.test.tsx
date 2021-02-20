@@ -94,13 +94,25 @@ describe('InputNumber.Input', () => {
     expect(onPressEnter).toHaveBeenCalled();
   });
 
-  it('empty on blur should trigger null', () => {
-    const onChange = jest.fn();
-    const wrapper = mount(<InputNumber defaultValue="1" onChange={onChange} />);
-    wrapper.changeValue('');
-    expect(onChange).not.toHaveBeenCalled();
+  describe('empty on blur should trigger null', () => {
+    it('basic', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber defaultValue="1" onChange={onChange} />);
+      wrapper.changeValue('');
+      expect(onChange).not.toHaveBeenCalled();
 
-    wrapper.blurInput()
-    expect(onChange).toHaveBeenLastCalledWith(null);
+      wrapper.blurInput();
+      expect(onChange).toHaveBeenLastCalledWith(null);
+    });
+
+    it('min range', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber min="1" defaultValue="11" onChange={onChange} />);
+      wrapper.changeValue('');
+      expect(onChange).not.toHaveBeenCalled();
+
+      wrapper.blurInput();
+      expect(onChange).toHaveBeenLastCalledWith(null);
+    });
   });
 });

@@ -38,8 +38,8 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
-  min?: number;
-  max?: number;
+  min?: T;
+  max?: T;
   step?: ValueType;
   tabIndex?: number;
 
@@ -272,8 +272,12 @@ const InputNumber = React.forwardRef(
     const triggerValueUpdate = (newValue: DecimalClass, userTyping: boolean): DecimalClass => {
       let updateValue = newValue;
 
-      // Revert value in range if needed
-      updateValue = getRangeValue(updateValue) || updateValue;
+      // Skip align value when trigger value is empty.
+      // We just trigger onChange(null)
+      if (!updateValue.isEmpty()) {
+        // Revert value in range if needed
+        updateValue = getRangeValue(updateValue) || updateValue;
+      }
 
       if (!readOnly && !disabled) {
         const numStr = updateValue.toString();
