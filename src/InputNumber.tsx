@@ -492,8 +492,8 @@ const InputNumber = React.forwardRef(
           <input
             autoComplete="off"
             role="spinbutton"
-            aria-valuemin={min}
-            aria-valuemax={max}
+            aria-valuemin={min as any}
+            aria-valuemax={max as any}
             aria-valuenow={decimalValue.isInvalidate() ? null : (decimalValue.toString() as any)}
             step={step}
             {...inputProps}
