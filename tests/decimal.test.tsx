@@ -124,5 +124,14 @@ describe('InputNumber.Decimal', () => {
 
       expect(onChange).toHaveBeenCalledTimes(0);
     });
+
+    it('uncontrolled precision should not format immediately', () => {
+      const wrapper = mount(<InputNumber precision={2} />);
+
+      wrapper.focusInput();
+      wrapper.changeValue('3');
+
+      expect(wrapper.getInputValue()).toEqual('3');
+    });
   });
 });
