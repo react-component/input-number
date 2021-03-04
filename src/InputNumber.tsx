@@ -178,13 +178,16 @@ const InputNumber = React.forwardRef(
 
         let str = typeof number === 'number' ? num2str(number) : number;
 
-        const mergedPrecision = getPrecision(str, userTyping);
+        // User typing will not auto format with precision directly
+        if (!userTyping) {
+          const mergedPrecision = getPrecision(str, userTyping);
 
-        if (validateNumber(str) && (decimalSeparator || mergedPrecision >= 0)) {
-          // Separator
-          const separatorStr = decimalSeparator || '.';
+          if (validateNumber(str) && (decimalSeparator || mergedPrecision >= 0)) {
+            // Separator
+            const separatorStr = decimalSeparator || '.';
 
-          str = toFixed(str, separatorStr, mergedPrecision);
+            str = toFixed(str, separatorStr, mergedPrecision);
+          }
         }
 
         return str;
@@ -199,7 +202,7 @@ const InputNumber = React.forwardRef(
      * User can not update input content directly. It update with follow rules by priority:
      *  1. controlled `value` changed
      *    * [SPECIAL] Typing like `1.` should not immediately convert to `1`
-     *  2. User typing
+     *  2. User typing with format (not precision)
      *  3. Blur or Enter trigger revalidate
      */
     const [inputValue, setInternalInputValue] = React.useState<string | number>(() => {
