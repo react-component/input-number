@@ -1,5 +1,4 @@
 import * as React from 'react';
+import canUseDom from 'rc-util/lib/Dom/canUseDom';
 
-const isBrowser = typeof window !== 'undefined' && window.document && window.document.createElement;
-
-export const useLayoutEffect = isBrowser ? React.useLayoutEffect : React.useEffect;
+export const useLayoutEffect = canUseDom() ? React.useLayoutEffect : React.useEffect;
