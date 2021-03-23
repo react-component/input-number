@@ -279,8 +279,8 @@ export default class InputNumber extends React.Component {
       this.setState({ inputValue: this.getValueFromEvent(e) });
     } else {
       this.setState({ inputValue: this.rawInput });
+      onChange(this.toNumber(this.rawInput)); // valid number or invalid string
     }
-    onChange(this.toNumber(this.rawInput)); // valid number or invalid string
   }
 
   onMouseUp = (...args) => {
