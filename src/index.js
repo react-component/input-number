@@ -270,15 +270,16 @@ export default class InputNumber extends React.Component {
   }
 
   onChange = (e) => {
-    const {
-      onChange,
-    } = this.props;
-
+    const { onChange } = this.props;
     if (this.state.focused) {
       this.inputting = true;
     }
     this.rawInput = this.props.parser(this.getValueFromEvent(e));
-    this.setState({ inputValue: this.rawInput });
+    if (this.composing) {
+      this.setState({ inputValue: this.getValueFromEvent(e) });
+    } else {
+      this.setState({ inputValue: this.rawInput });
+    }
     onChange(this.toNumber(this.rawInput)); // valid number or invalid string
   }
 
@@ -314,6 +315,15 @@ export default class InputNumber extends React.Component {
       this.input.value = inputValue;
       onBlur(...args);
       this.input.value = originValue;
+    }
+  }
+
+  onComposition = (e) => {
+    if (e.type === 'compositionstart') {
+      this.composing = true;
+    } else if (e.type === 'compositionend') {
+      this.composing = false;
+      this.onChange(e);
     }
   }
 
@@ -679,7 +689,7 @@ export default class InputNumber extends React.Component {
     });
     let upDisabledClass = '';
     let downDisabledClass = '';
-    const { value } = this.state;
+    const { value, inputValue } = this.state;
     if (value || value === 0) {
       if (!isNaN(value)) {
         const val = Number(value);
@@ -713,7 +723,7 @@ export default class InputNumber extends React.Component {
 
     // focus state, show input value
     // unfocus state, show valid value
-    const inputDisplayValue = this.getInputDisplayValue();
+    const inputDisplayValue = this.composing ? inputValue : this.getInputDisplayValue();
 
     let upEvents;
     let downEvents;
@@ -751,6 +761,8 @@ export default class InputNumber extends React.Component {
         onMouseLeave={props.onMouseLeave}
         onMouseOver={props.onMouseOver}
         onMouseOut={props.onMouseOut}
+        onCompositionStart={this.onComposition}
+        onCompositionEnd={this.onComposition}
       >
         <div className={`${prefixCls}-handler-wrap`}>
           <InputHandler
