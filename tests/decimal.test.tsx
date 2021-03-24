@@ -133,5 +133,18 @@ describe('InputNumber.Decimal', () => {
 
       expect(wrapper.getInputValue()).toEqual('3');
     });
+
+    it('should empty value after removing value', () => {
+      const wrapper = mount(<InputNumber precision={2} />);
+
+      wrapper.focusInput();
+      wrapper.changeValue('3');
+      wrapper.changeValue('');
+
+      expect(wrapper.getInputValue()).toEqual('');
+
+      wrapper.blurInput();
+      expect(wrapper.getInputValue()).toEqual('');
+    });
   });
 });
