@@ -259,6 +259,9 @@ export default function getMiniDecimal(value: ValueType): DecimalClass {
  * Align the logic of toFixed to around like 1.5 => 2
  */
 export function toFixed(numStr: string, separatorStr: string, precision?: number) {
+  if (numStr === '') {
+    return '';
+  }
   const { negativeStr, integerStr, decimalStr } = trimNumber(numStr);
   const precisionDecimalStr = `${separatorStr}${decimalStr}`;
 
