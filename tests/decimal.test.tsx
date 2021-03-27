@@ -133,5 +133,20 @@ describe('InputNumber.Decimal', () => {
 
       expect(wrapper.getInputValue()).toEqual('3');
     });
+
+    it('should empty value after removing value', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber precision={2} onChange={onChange} />);
+
+      wrapper.focusInput();
+      wrapper.changeValue('3');
+      wrapper.changeValue('');
+
+      expect(wrapper.getInputValue()).toEqual('');
+
+      wrapper.blurInput();
+      expect(onChange).toHaveBeenCalledWith(null);
+      expect(wrapper.getInputValue()).toEqual('');
+    });
   });
 });

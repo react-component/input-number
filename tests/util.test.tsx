@@ -135,5 +135,9 @@ describe('InputNumber.Util', () => {
       expect(toFixed('1.2', '.')).toEqual('1.2');
       expect(toFixed('1.000', '.')).toEqual('1');
     });
+
+    it('should return "" when input is ""', () => {
+      expect(toFixed('', '.')).toEqual('');
+    });
   });
 });
