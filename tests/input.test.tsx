@@ -94,6 +94,28 @@ describe('InputNumber.Input', () => {
     expect(onPressEnter).toHaveBeenCalled();
   });
 
+  it('pressEnter value should be ok', () => {
+    const Demo = () => {
+      const [value, setValue] = React.useState(1);
+      const inputRef = React.useRef<HTMLInputElement>(null)
+      return (
+        <InputNumber
+          ref={inputRef}
+          value={value}
+          onPressEnter={() => {
+            setValue(Number(inputRef.current.value));
+          }}
+        />
+      );
+    };
+
+    const wrapper = mount(<Demo />);
+    wrapper.focusInput();
+    wrapper.changeValue('3');
+    wrapper.find('input').simulate('keyDown', { which: KeyCode.ENTER });
+    expect(wrapper.getInputValue()).toEqual('3');
+  });
+
   describe('empty on blur should trigger null', () => {
     it('basic', () => {
       const onChange = jest.fn();
