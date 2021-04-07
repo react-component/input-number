@@ -115,6 +115,16 @@ describe('InputNumber.Decimal', () => {
       expect(wrapper.getInputValue()).toEqual('1.00');
     });
 
+    it('zero precision should work',()=>{
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber onChange={onChange} precision={0} />);
+
+      wrapper.changeValue('1.44');
+      wrapper.blurInput();
+      expect(onChange).toHaveBeenCalledWith(1);
+      expect(wrapper.getInputValue()).toEqual('1');
+    })
+
     it('should not trigger onChange when blur InputNumber with precision', () => {
       const onChange = jest.fn();
       const wrapper = mount(<InputNumber precision={2} defaultValue={2} onChange={onChange} />);
