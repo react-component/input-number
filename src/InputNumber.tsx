@@ -67,6 +67,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   // useTouch: boolean;
 
   // size?: ISize;
+  maxLength?: number;
 }
 
 const InputNumber = React.forwardRef(
@@ -92,6 +93,7 @@ const InputNumber = React.forwardRef(
       formatter,
       precision,
       decimalSeparator,
+      maxLength,
 
       onChange,
       onInput,
@@ -336,8 +338,11 @@ const InputNumber = React.forwardRef(
     };
 
     // >>> Input
-    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = e => {
       let inputStr = e.target.value;
+      if (maxLength) {
+        inputStr = inputStr.slice(0, maxLength);
+      }
 
       // optimize for chinese input experience
       // https://github.com/ant-design/ant-design/issues/8196
@@ -404,7 +409,7 @@ const InputNumber = React.forwardRef(
       }
     };
 
-    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = event => {
       const { which } = event;
       userTypingRef.current = true;
 
