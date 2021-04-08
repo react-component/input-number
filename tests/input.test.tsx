@@ -80,9 +80,14 @@ describe('InputNumber.Input', () => {
     expect(wrapper.getInputValue()).toEqual('');
   });
 
-  it('max length', () => {
+  it('max length 3', () => {
     const wrapper = prepareWrapper('333333', { maxLength: 3 }, true);
     expect(wrapper.getInputValue()).toEqual('333');
+  });
+
+  it('max length 0', () => {
+    const wrapper = prepareWrapper('333333', { maxLength: 0 }, true);
+    expect(wrapper.getInputValue()).toEqual('333333');
   });
 
   it('blur on default input', () => {
