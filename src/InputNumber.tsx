@@ -340,7 +340,7 @@ const InputNumber = React.forwardRef(
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = e => {
       let inputStr = e.target.value;
-      if (maxLength >= 0) {
+      if (maxLength > 0) {
         inputStr = inputStr.slice(0, maxLength);
       }
 
