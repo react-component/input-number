@@ -206,7 +206,7 @@ describe('InputNumber.Github', () => {
 
     wrapper.focusInput();
     wrapper.changeValue('');
-    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledWith('');
 
