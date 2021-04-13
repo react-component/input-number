@@ -285,7 +285,7 @@ const InputNumber = React.forwardRef(
       if (!readOnly && !disabled) {
         const numStr = updateValue.toString();
         const mergedPrecision = getPrecision(numStr, userTyping);
-        if (mergedPrecision) {
+        if (mergedPrecision >= 0) {
           updateValue = getMiniDecimal(toFixed(numStr, '.', mergedPrecision));
         }
 
