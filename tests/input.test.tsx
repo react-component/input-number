@@ -91,8 +91,9 @@ describe('InputNumber.Input', () => {
   });
 
   it('control max length', () => {
-    const wrapper = mount(<InputNumber value={9} maxLength={3} />);
+    const wrapper = mount(<InputNumber value={1234} maxLength={3} />);
     wrapper.focusInput();
+    expect(wrapper.getInputValue()).toEqual('1234');
 
     wrapper.changeValue('1234');
     expect(wrapper.getInputValue()).toEqual('123');
