@@ -161,6 +161,15 @@ describe('InputNumber.Decimal', () => {
       wrapper.changeValue('')
       expect(wrapper.getInputValue()).toEqual('');
       expect(onChange).toHaveBeenCalledWith(null);
+
+      wrapper.setProps({min:0,max:10})
+      wrapper.changeValue('2')
+      expect(wrapper.getInputValue()).toEqual('2')
+      expect(onChange).toHaveBeenCalledWith(2)
+
+      wrapper.changeValue('')
+      expect(wrapper.getInputValue()).toEqual('')
+      expect(onChange).toHaveBeenCalledWith(null)
     })
   });
 });
