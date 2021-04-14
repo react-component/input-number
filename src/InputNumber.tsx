@@ -409,7 +409,9 @@ const InputNumber = React.forwardRef(
       userTypingRef.current = true;
 
       if (which === KeyCode.ENTER) {
-        userTypingRef.current = false;
+        if(!compositionRef.current) { 
+          userTypingRef.current = false;
+        }
         flushInputValue();
         onPressEnter?.(event);
       }

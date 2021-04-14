@@ -114,6 +114,9 @@ describe('InputNumber.Input', () => {
     wrapper.changeValue('3');
     wrapper.find('input').simulate('keyDown', { which: KeyCode.ENTER });
     expect(wrapper.getInputValue()).toEqual('3');
+    wrapper.changeValue('5');
+    wrapper.find('input').simulate('keyDown', { which: KeyCode.ENTER });
+    expect(wrapper.getInputValue()).toEqual('5');
   });
 
   describe('empty on blur should trigger null', () => {
