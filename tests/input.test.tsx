@@ -97,7 +97,7 @@ describe('InputNumber.Input', () => {
   it('pressEnter value should be ok', () => {
     const Demo = () => {
       const [value, setValue] = React.useState(1);
-      const inputRef = React.useRef<HTMLInputElement>(null)
+      const inputRef = React.useRef<HTMLInputElement>(null);
       return (
         <InputNumber
           ref={inputRef}
@@ -116,6 +116,24 @@ describe('InputNumber.Input', () => {
     expect(wrapper.getInputValue()).toEqual('3');
     wrapper.changeValue('5');
     wrapper.find('input').simulate('keyDown', { which: KeyCode.ENTER });
+    expect(wrapper.getInputValue()).toEqual('5');
+  });
+
+  it('keydown Tab, after change value should be ok', () => {
+    let outSetValue;
+
+    const Demo = () => {
+      const [value, setValue] = React.useState<string | number>(1);
+      outSetValue = setValue;
+      return <InputNumber autoFocus value={value} onChange={val => setValue(val)} />;
+    };
+
+    const wrapper = mount(<Demo />);
+    wrapper.findInput().simulate('keyDown', { which: KeyCode.TAB });
+    wrapper.blurInput();
+    expect(wrapper.getInputValue()).toEqual('1');
+    outSetValue(5);
+    wrapper.focusInput();
     expect(wrapper.getInputValue()).toEqual('5');
   });
 
