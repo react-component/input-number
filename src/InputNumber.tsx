@@ -313,7 +313,7 @@ const InputNumber = React.forwardRef(
 
       // Update inputValue incase input can not parse as number
       setInternalInputValue(inputStr);
-
+      if (inputStr === '') triggerValueUpdate(getMiniDecimal(mergedParser(inputStr)), true);
       // Parse number
       if (!compositionRef.current) {
         const finalValue = mergedParser(inputStr);
@@ -338,7 +338,6 @@ const InputNumber = React.forwardRef(
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       let inputStr = e.target.value;
-
       // optimize for chinese input experience
       // https://github.com/ant-design/ant-design/issues/8196
       if (!parser) {
