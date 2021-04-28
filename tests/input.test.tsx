@@ -124,7 +124,7 @@ describe('InputNumber.Input', () => {
       const onChange = jest.fn();
       const wrapper = mount(<InputNumber defaultValue="1" onChange={onChange} />);
       wrapper.changeValue('');
-      expect(onChange).not.toHaveBeenCalled();
+      expect(onChange).toHaveBeenCalledWith(null);
 
       wrapper.blurInput();
       expect(onChange).toHaveBeenLastCalledWith(null);
@@ -134,7 +134,7 @@ describe('InputNumber.Input', () => {
       const onChange = jest.fn();
       const wrapper = mount(<InputNumber min="1" defaultValue="11" onChange={onChange} />);
       wrapper.changeValue('');
-      expect(onChange).not.toHaveBeenCalled();
+      expect(onChange).toHaveBeenCalled();
 
       wrapper.blurInput();
       expect(onChange).toHaveBeenLastCalledWith(null);

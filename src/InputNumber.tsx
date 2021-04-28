@@ -318,7 +318,7 @@ const InputNumber = React.forwardRef(
       if (!compositionRef.current) {
         const finalValue = mergedParser(inputStr);
         const finalDecimal = getMiniDecimal(finalValue);
-        if (!finalDecimal.isInvalidate()) {
+        if (!finalDecimal.isNaN()) {
           triggerValueUpdate(finalDecimal, true);
         }
       }

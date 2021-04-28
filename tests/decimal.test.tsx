@@ -158,5 +158,28 @@ describe('InputNumber.Decimal', () => {
       expect(onChange).toHaveBeenCalledWith(null);
       expect(wrapper.getInputValue()).toEqual('');
     });
+
+    it('should trigger onChange when removing value',()=>{
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber onChange={onChange} />);
+
+      wrapper.focusInput();
+      wrapper.changeValue('1');
+      expect(wrapper.getInputValue()).toEqual('1');
+      expect(onChange).toHaveBeenCalledWith(1);
+
+      wrapper.changeValue('')
+      expect(wrapper.getInputValue()).toEqual('');
+      expect(onChange).toHaveBeenCalledWith(null);
+
+      wrapper.setProps({min:0,max:10})
+      wrapper.changeValue('2')
+      expect(wrapper.getInputValue()).toEqual('2')
+      expect(onChange).toHaveBeenCalledWith(2)
+
+      wrapper.changeValue('')
+      expect(wrapper.getInputValue()).toEqual('')
+      expect(onChange).toHaveBeenCalledWith(null)
+    })
   });
 });
