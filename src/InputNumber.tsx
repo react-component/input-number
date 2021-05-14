@@ -336,7 +336,7 @@ const InputNumber = React.forwardRef(
     };
 
     // >>> Input
-    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = e => {
       let inputStr = e.target.value;
 
       // optimize for chinese input experience
@@ -404,12 +404,12 @@ const InputNumber = React.forwardRef(
       }
     };
 
-    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = event => {
       const { which } = event;
       userTypingRef.current = true;
 
       if (which === KeyCode.ENTER) {
-        if(!compositionRef.current) { 
+        if (!compositionRef.current) {
           userTypingRef.current = false;
         }
         flushInputValue();
@@ -436,6 +436,8 @@ const InputNumber = React.forwardRef(
       flushInputValue();
 
       setFocus(false);
+
+      userTypingRef.current = false;
     };
 
     // ========================== Controlled ==========================
