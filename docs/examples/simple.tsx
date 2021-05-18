@@ -8,7 +8,7 @@ export default () => {
   const [readOnly, setReadOnly] = React.useState(false);
   const [keyboard, setKeyboard] = React.useState(true);
   const [stringMode, setStringMode] = React.useState(false);
-  const [value, setValue] = React.useState<string | number>(0.000000001);
+  const [value, setValue] = React.useState<string | number>(93);
 
   const onChange = (val: number) => {
     console.warn('onChange:', val, typeof val);
@@ -29,7 +29,6 @@ export default () => {
         disabled={disabled}
         keyboard={keyboard}
         stringMode={stringMode}
-        step={0.000000001}
       />
       <p>
         <button type="button" onClick={() => setDisabled(!disabled)}>
@@ -48,13 +47,13 @@ export default () => {
 
       <hr />
       <h3>Uncontrolled</h3>
-      {/* <InputNumber
+      <InputNumber
         style={{ width: 100 }}
         onChange={onChange}
         min={-99}
         max={99}
         defaultValue={33}
-      /> */}
+      />
     </div>
   );
 };
