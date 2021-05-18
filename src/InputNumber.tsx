@@ -126,7 +126,7 @@ const InputNumber = React.forwardRef(
     /**
      * `precision` is used for formatter & onChange.
      * It will auto generate by `value` & `step`.
-     * But it will not block user typing when auto generated.
+     * But it will not block user typing.
      *
      * Note: Auto generate `precision` is used for legacy logic.
      * We should remove this since we already support high precision with BigInt.
@@ -136,12 +136,12 @@ const InputNumber = React.forwardRef(
      */
     const getPrecision = React.useCallback(
       (numStr: string, userTyping: boolean) => {
-        if (precision >= 0) {
-          return precision;
-        }
-
         if (userTyping) {
           return undefined;
+        }
+
+        if (precision >= 0) {
+          return precision;
         }
 
         return Math.max(getNumberPrecision(numStr), getNumberPrecision(step));
