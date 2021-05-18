@@ -86,6 +86,12 @@ describe('InputNumber.Util', () => {
         // mini value
         expect(getDecimal(0).add(-0.000000001).toString()).toEqual('-0.000000001');
       });
+
+      it('toString !safe', () => {
+        const invalidate = getDecimal('Invalidate');
+        expect(invalidate.toString()).toEqual('');
+        expect(invalidate.toString(false)).toEqual('Invalidate');
+      });
     });
   });
 
