@@ -430,4 +430,13 @@ describe('InputNumber.Github', () => {
 
     expect(wrapper.find('input').last().props().value).toEqual('1');
   });
+
+  // https://github.com/ant-design/ant-design/issues/30478
+  it('-0 should input able', () => {
+    const wrapper = mount(<InputNumber />);
+    wrapper.changeValue('-');
+    wrapper.changeValue('-0');
+
+    expect(wrapper.getInputValue()).toEqual('-0');
+  });
 });
