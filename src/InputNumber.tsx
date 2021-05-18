@@ -126,7 +126,7 @@ const InputNumber = React.forwardRef(
     /**
      * `precision` is used for formatter & onChange.
      * It will auto generate by `value` & `step`.
-     * But it will not block user typing when auto generated.
+     * But it will not block user typing.
      *
      * Note: Auto generate `precision` is used for legacy logic.
      * We should remove this since we already support high precision with BigInt.
@@ -136,12 +136,12 @@ const InputNumber = React.forwardRef(
      */
     const getPrecision = React.useCallback(
       (numStr: string, userTyping: boolean) => {
-        if (precision >= 0) {
-          return precision;
-        }
-
         if (userTyping) {
           return undefined;
+        }
+
+        if (precision >= 0) {
+          return precision;
         }
 
         return Math.max(getNumberPrecision(numStr), getNumberPrecision(step));
@@ -215,7 +215,15 @@ const InputNumber = React.forwardRef(
 
     // Should always be string
     function setInputValue(newValue: DecimalClass, userTyping: boolean) {
-      setInternalInputValue(mergedFormatter(newValue.toString(false), userTyping));
+      setInternalInputValue(
+        mergedFormatter(
+          // Invalidate number is sometime passed by external control, we should let it go
+          // Otherwise is controlled by internal interactive logic which check by userTyping
+          // You can ref 'show limited value when input is not focused' test for more info.
+          newValue.isInvalidate() ? newValue.toString(false) : newValue.toString(!userTyping),
+          userTyping,
+        ),
+      );
     }
 
     // >>> Max & Min limit
@@ -336,7 +344,7 @@ const InputNumber = React.forwardRef(
     };
 
     // >>> Input
-    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = e => {
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       let inputStr = e.target.value;
 
       // optimize for chinese input experience
@@ -383,14 +391,14 @@ const InputNumber = React.forwardRef(
     /**
      * Flush current input content to trigger value change & re-formatter input if needed
      */
-    const flushInputValue = () => {
+    const flushInputValue = (userTyping: boolean) => {
       const parsedValue = getMiniDecimal(mergedParser(inputValue));
       let formatValue: DecimalClass = parsedValue;
 
       if (!parsedValue.isNaN()) {
         // Only validate value or empty value can be re-fill to inputValue
         // Reassign the formatValue within ranged of trigger control
-        formatValue = triggerValueUpdate(parsedValue, true);
+        formatValue = triggerValueUpdate(parsedValue, userTyping);
       } else {
         formatValue = decimalValue;
       }
@@ -404,7 +412,7 @@ const InputNumber = React.forwardRef(
       }
     };
 
-    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = event => {
+    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
       const { which } = event;
       userTypingRef.current = true;
 
@@ -412,7 +420,7 @@ const InputNumber = React.forwardRef(
         if (!compositionRef.current) {
           userTypingRef.current = false;
         }
-        flushInputValue();
+        flushInputValue(true);
         onPressEnter?.(event);
       }
 
@@ -433,7 +441,7 @@ const InputNumber = React.forwardRef(
 
     // >>> Focus & Blur
     const onBlur = () => {
-      flushInputValue();
+      flushInputValue(false);
 
       setFocus(false);
 

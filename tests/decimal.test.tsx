@@ -115,7 +115,7 @@ describe('InputNumber.Decimal', () => {
       expect(wrapper.getInputValue()).toEqual('1.00');
     });
 
-    it('zero precision should work',()=>{
+    it('zero precision should work', () => {
       const onChange = jest.fn();
       const wrapper = mount(<InputNumber onChange={onChange} precision={0} />);
 
@@ -123,7 +123,7 @@ describe('InputNumber.Decimal', () => {
       wrapper.blurInput();
       expect(onChange).toHaveBeenCalledWith(1);
       expect(wrapper.getInputValue()).toEqual('1');
-    })
+    });
 
     it('should not trigger onChange when blur InputNumber with precision', () => {
       const onChange = jest.fn();
@@ -159,7 +159,7 @@ describe('InputNumber.Decimal', () => {
       expect(wrapper.getInputValue()).toEqual('');
     });
 
-    it('should trigger onChange when removing value',()=>{
+    it('should trigger onChange when removing value', () => {
       const onChange = jest.fn();
       const wrapper = mount(<InputNumber onChange={onChange} />);
 
@@ -168,18 +168,18 @@ describe('InputNumber.Decimal', () => {
       expect(wrapper.getInputValue()).toEqual('1');
       expect(onChange).toHaveBeenCalledWith(1);
 
-      wrapper.changeValue('')
+      wrapper.changeValue('');
       expect(wrapper.getInputValue()).toEqual('');
       expect(onChange).toHaveBeenCalledWith(null);
 
-      wrapper.setProps({min:0,max:10})
-      wrapper.changeValue('2')
-      expect(wrapper.getInputValue()).toEqual('2')
-      expect(onChange).toHaveBeenCalledWith(2)
+      wrapper.setProps({ min: 0, max: 10 });
+      wrapper.changeValue('2');
+      expect(wrapper.getInputValue()).toEqual('2');
+      expect(onChange).toHaveBeenCalledWith(2);
 
-      wrapper.changeValue('')
-      expect(wrapper.getInputValue()).toEqual('')
-      expect(onChange).toHaveBeenCalledWith(null)
-    })
+      wrapper.changeValue('');
+      expect(wrapper.getInputValue()).toEqual('');
+      expect(onChange).toHaveBeenCalledWith(null);
+    });
   });
 });
