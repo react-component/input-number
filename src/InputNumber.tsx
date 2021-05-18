@@ -215,7 +215,15 @@ const InputNumber = React.forwardRef(
 
     // Should always be string
     function setInputValue(newValue: DecimalClass, userTyping: boolean) {
-      setInternalInputValue(mergedFormatter(newValue.toString(!userTyping), userTyping));
+      setInternalInputValue(
+        mergedFormatter(
+          // Invalidate number is sometime passed by external control, we should let it go
+          // Otherwise is controlled by internal interactive logic which check by userTyping
+          // You can ref 'show limited value when input is not focused' test for more info.
+          newValue.isInvalidate() ? newValue.toString(false) : newValue.toString(!userTyping),
+          userTyping,
+        ),
+      );
     }
 
     // >>> Max & Min limit
