@@ -106,6 +106,10 @@ export class NumberDecimal implements DecimalClass {
       return this.origin;
     }
 
+    if (this.isInvalidate()) {
+      return '';
+    }
+
     return num2str(this.number);
   }
 }
@@ -242,6 +246,11 @@ export class BigIntDecimal implements DecimalClass {
     if (!safe) {
       return this.origin;
     }
+
+    if (this.isInvalidate()) {
+      return '';
+    }
+
     return trimNumber(`${this.getMark()}${this.getIntegerStr()}.${this.getDecimalStr()}`).fullStr;
   }
 }
