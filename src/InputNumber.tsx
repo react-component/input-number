@@ -336,7 +336,7 @@ const InputNumber = React.forwardRef(
     };
 
     // >>> Input
-    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = e => {
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       let inputStr = e.target.value;
 
       // optimize for chinese input experience
@@ -383,14 +383,14 @@ const InputNumber = React.forwardRef(
     /**
      * Flush current input content to trigger value change & re-formatter input if needed
      */
-    const flushInputValue = () => {
+    const flushInputValue = (userTyping: boolean) => {
       const parsedValue = getMiniDecimal(mergedParser(inputValue));
       let formatValue: DecimalClass = parsedValue;
 
       if (!parsedValue.isNaN()) {
         // Only validate value or empty value can be re-fill to inputValue
         // Reassign the formatValue within ranged of trigger control
-        formatValue = triggerValueUpdate(parsedValue, true);
+        formatValue = triggerValueUpdate(parsedValue, userTyping);
       } else {
         formatValue = decimalValue;
       }
@@ -404,7 +404,7 @@ const InputNumber = React.forwardRef(
       }
     };
 
-    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = event => {
+    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
       const { which } = event;
       userTypingRef.current = true;
 
@@ -412,7 +412,7 @@ const InputNumber = React.forwardRef(
         if (!compositionRef.current) {
           userTypingRef.current = false;
         }
-        flushInputValue();
+        flushInputValue(true);
         onPressEnter?.(event);
       }
 
@@ -433,7 +433,7 @@ const InputNumber = React.forwardRef(
 
     // >>> Focus & Blur
     const onBlur = () => {
-      flushInputValue();
+      flushInputValue(false);
 
       setFocus(false);
 

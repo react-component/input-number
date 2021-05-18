@@ -47,7 +47,7 @@ export default () => {
 
       <hr />
       <h3>Uncontrolled</h3>
-      <InputNumber style={{ width: 100 }} onChange={onChange} min={1} max={99} defaultValue={33} />
+      <InputNumber style={{ width: 100 }} onChange={onChange} min={-99} max={99} defaultValue={33} />
     </div>
   );
 };
