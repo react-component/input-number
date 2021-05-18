@@ -101,9 +101,9 @@ export class NumberDecimal implements DecimalClass {
     return this.number;
   }
 
-  toString(safe = true) {
-    if (this.isInvalidate()) {
-      return safe ? '' : this.origin;
+  toString(safe: boolean = true) {
+    if (!safe) {
+      return this.origin;
     }
 
     return num2str(this.number);
@@ -238,9 +238,9 @@ export class BigIntDecimal implements DecimalClass {
     return Number(this.toString());
   }
 
-  toString(safe = true): string {
-    if (this.isInvalidate()) {
-      return safe ? '' : this.origin;
+  toString(safe: boolean = true) {
+    if (!safe) {
+      return this.origin;
     }
     return trimNumber(`${this.getMark()}${this.getIntegerStr()}.${this.getDecimalStr()}`).fullStr;
   }
