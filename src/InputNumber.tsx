@@ -215,7 +215,7 @@ const InputNumber = React.forwardRef(
 
     // Should always be string
     function setInputValue(newValue: DecimalClass, userTyping: boolean) {
-      setInternalInputValue(mergedFormatter(newValue.toString(false), userTyping));
+      setInternalInputValue(mergedFormatter(newValue.toString(!userTyping), userTyping));
     }
 
     // >>> Max & Min limit
