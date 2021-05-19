@@ -239,13 +239,13 @@ describe('InputNumber.Github', () => {
 
     wrapper.focusInput();
     wrapper.changeValue('123');
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith(10);
+    expect(onChange).toHaveBeenCalledTimes(0);
     expect(onInput).toHaveBeenCalledTimes(1);
     expect(onInput).toHaveBeenCalledWith('123');
 
     wrapper.blurInput();
     expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(10);
     expect(onInput).toHaveBeenCalledTimes(1);
 
     // repeat it, it should works in same way
@@ -258,6 +258,33 @@ describe('InputNumber.Github', () => {
     wrapper.blurInput();
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onInput).toHaveBeenCalledTimes(2);
+  });
+
+  // https://github.com/ant-design/ant-design/issues/30465
+  it('not block user input with min & max', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber min={1900} onChange={onChange} />);
+
+    wrapper.focusInput();
+
+    wrapper.changeValue('2');
+    expect(onChange).not.toHaveBeenCalled();
+
+    wrapper.changeValue('20');
+    expect(onChange).not.toHaveBeenCalled();
+
+    wrapper.changeValue('200');
+    expect(onChange).not.toHaveBeenCalled();
+
+    wrapper.changeValue('2000');
+    expect(onChange).toHaveBeenCalledWith(2000);
+    onChange.mockRestore();
+
+    wrapper.changeValue('1');
+    expect(onChange).not.toHaveBeenCalled();
+
+    wrapper.blurInput();
+    expect(onChange).toHaveBeenCalledWith(1900);
   });
 
   // https://github.com/ant-design/ant-design/issues/7867
