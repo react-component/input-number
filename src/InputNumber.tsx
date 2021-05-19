@@ -283,14 +283,18 @@ const InputNumber = React.forwardRef(
     const triggerValueUpdate = (newValue: DecimalClass, userTyping: boolean): DecimalClass => {
       let updateValue = newValue;
 
+      let isRangeValidate = isInRange(updateValue) || updateValue.isEmpty();
+
       // Skip align value when trigger value is empty.
       // We just trigger onChange(null)
-      if (!updateValue.isEmpty()) {
+      // This should not block user typing
+      if (!updateValue.isEmpty() && !userTyping) {
         // Revert value in range if needed
         updateValue = getRangeValue(updateValue) || updateValue;
+        isRangeValidate = true;
       }
 
-      if (!readOnly && !disabled) {
+      if (!readOnly && !disabled && isRangeValidate) {
         const numStr = updateValue.toString();
         const mergedPrecision = getPrecision(numStr, userTyping);
         if (mergedPrecision >= 0) {
