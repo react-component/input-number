@@ -282,6 +282,11 @@ describe('InputNumber.Props', () => {
       expect(wrapper.getInputValue()).toEqual('9');
       expect(wrapper.exists('.rc-input-number-out-of-range')).toBeFalsy();
     });
+
+    it('value can override given defaultValue', () => {
+      const wrapper = mount(<InputNumber value={2} defaultValue={1} />);
+      expect(wrapper.getInputValue()).toEqual('2');
+    });
   });
 
   describe(`required prop`, () => {
