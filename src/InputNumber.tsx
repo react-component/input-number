@@ -51,7 +51,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined) => T;
   /** Transform `value` to display value show in input */
-  formatter?: (value: T | undefined) => string;
+  formatter?: (value: T | undefined, info: { userTyping: boolean; input: string }) => string;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
@@ -170,10 +170,11 @@ const InputNumber = React.forwardRef(
     );
 
     // >>> Formatter
+    const inputValueRef = React.useRef<string | number>('');
     const mergedFormatter = React.useCallback(
       (number: string, userTyping: boolean) => {
         if (formatter) {
-          return formatter(number);
+          return formatter(number, { userTyping, input: String(inputValueRef.current) });
         }
 
         let str = typeof number === 'number' ? num2str(number) : number;
@@ -212,6 +213,7 @@ const InputNumber = React.forwardRef(
       }
       return mergedFormatter(decimalValue.toString(), false);
     });
+    inputValueRef.current = inputValue;
 
     // Should always be string
     function setInputValue(newValue: DecimalClass, userTyping: boolean) {
@@ -469,7 +471,7 @@ const InputNumber = React.forwardRef(
       // But let it go if user set `formatter`
       if (newValue.isNaN() || !userTypingRef.current || formatter) {
         // Update value as effect
-        setInputValue(newValue, false);
+        setInputValue(newValue, userTypingRef.current);
       }
     }, [value]);
 
