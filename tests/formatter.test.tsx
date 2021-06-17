@@ -70,4 +70,34 @@ describe('InputNumber.Formatter', () => {
     expect(wrapper.getInputValue()).toEqual('$ 6 boeing 737');
     expect(onChange).toHaveBeenLastCalledWith(6);
   });
+
+  it('control not block user input', () => {
+    const Demo = () => {
+      const [value, setValue] = React.useState<number>(null);
+
+      return (
+        <InputNumber<number>
+          value={value}
+          onChange={setValue}
+          formatter={(num, info) => {
+            if (info.userTyping) {
+              return info.input;
+            }
+
+            return String(num);
+          }}
+          parser={(num) => Number(num)}
+        />
+      );
+    };
+
+    const wrapper = mount(<Demo />);
+
+    wrapper.changeValue('-');
+    wrapper.changeValue('-0');
+    expect(wrapper.findInput().props().value).toEqual('-0');
+
+    wrapper.findInput().simulate('blur');
+    expect(wrapper.findInput().props().value).toEqual('0');
+  });
 });

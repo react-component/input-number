@@ -84,13 +84,18 @@ class App extends React.Component {
             aria-label="Controlled number input demonstrating a custom format"
             value={this.state.value}
             onChange={(value) => {
-              console.log(value);
+              // console.log(value);
               this.setState({ value });
             }}
-            formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            formatter={(value, { userTyping, input }) => {
+              if (userTyping) {
+                return input;
+              }
+              return `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }}
           />
 
-          <InputNumber
+          <InputNumber<string | number>
             aria-label="Controlled number input demonstrating a custom format"
             value={this.state.value}
             onChange={(value) => {
