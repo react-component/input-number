@@ -80,6 +80,25 @@ describe('InputNumber.Input', () => {
     expect(wrapper.getInputValue()).toEqual('');
   });
 
+  it('max length 3', () => {
+    const wrapper = prepareWrapper('333333', { maxLength: 3 }, true);
+    expect(wrapper.getInputValue()).toEqual('333');
+  });
+
+  it('max length 0', () => {
+    const wrapper = prepareWrapper('333333', { maxLength: 0 }, true);
+    expect(wrapper.getInputValue()).toEqual('333333');
+  });
+
+  it('control max length', () => {
+    const wrapper = mount(<InputNumber value={1234} maxLength={3} />);
+    wrapper.focusInput();
+    expect(wrapper.getInputValue()).toEqual('1234');
+
+    wrapper.changeValue('1234');
+    expect(wrapper.getInputValue()).toEqual('123');
+  });
+
   it('blur on default input', () => {
     const onChange = jest.fn();
     const wrapper = mount(<InputNumber onChange={onChange} />);
