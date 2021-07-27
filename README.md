@@ -137,6 +137,12 @@ online example: https://input-number.vercel.app/
           <td>Specifies that an InputNumber is read only </td>
         </tr>
         <tr>
+          <td>controls</td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Whether to enable the control buttons</td>
+        </tr>
+        <tr>
           <td>name</td>
           <td>String</td>
           <td></td>

@@ -42,6 +42,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   max?: T;
   step?: ValueType;
   tabIndex?: number;
+  controls?: boolean;
 
   // Customize handler node
   upHandler?: React.ReactNode;
@@ -85,6 +86,7 @@ const InputNumber = React.forwardRef(
       upHandler,
       downHandler,
       keyboard,
+      controls = true,
 
       stringMode,
 
@@ -502,14 +504,16 @@ const InputNumber = React.forwardRef(
         onCompositionStart={onCompositionStart}
         onCompositionEnd={onCompositionEnd}
       >
-        <StepHandler
-          prefixCls={prefixCls}
-          upNode={upHandler}
-          downNode={downHandler}
-          upDisabled={upDisabled}
-          downDisabled={downDisabled}
-          onStep={onInternalStep}
-        />
+        {controls && (
+          <StepHandler
+            prefixCls={prefixCls}
+            upNode={upHandler}
+            downNode={downHandler}
+            upDisabled={upDisabled}
+            downDisabled={downDisabled}
+            onStep={onInternalStep}
+          />
+        )}
         <div className={`${inputClassName}-wrap`}>
           <input
             autoComplete="off"
