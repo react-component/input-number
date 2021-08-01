@@ -457,12 +457,12 @@ const InputNumber = React.forwardRef(
     };
 
     // ========================== Controlled ==========================
-    // Input by precision
+    // Input by precision & formatter
     useUpdateEffect(() => {
       if (!decimalValue.isInvalidate()) {
         setInputValue(decimalValue, false);
       }
-    }, [precision]);
+    }, [precision, formatter]);
 
     // Input by value
     useUpdateEffect(() => {
