@@ -428,7 +428,7 @@ const InputNumber = React.forwardRef(
         if (!compositionRef.current) {
           userTypingRef.current = false;
         }
-        flushInputValue(true);
+        flushInputValue(false);
         onPressEnter?.(event);
       }
 
