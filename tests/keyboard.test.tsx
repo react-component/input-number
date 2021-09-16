@@ -30,4 +30,16 @@ describe('InputNumber.Keyboard', () => {
     wrapper.find('input').simulate('keyDown', { which: KeyCode.DOWN });
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  it('enter to trigger onChange with precision', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber precision={0} onChange={onChange} />);
+
+    wrapper.find('input').simulate('change', { target: { value: '2.3333' } });
+    expect(onChange).toHaveBeenCalledWith(2.3333);
+    onChange.mockReset();
+
+    wrapper.find('input').simulate('keyDown', { which: KeyCode.ENTER });
+    expect(onChange).toHaveBeenCalledWith(2);
+  });
 });
