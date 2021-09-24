@@ -7,6 +7,7 @@ import StepHandler from './StepHandler';
 import { getNumberPrecision, num2str, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
 import useUpdateEffect from './hooks/useUpdateEffect';
+import useFrame from './hooks/useFrame';
 
 /**
  * We support `stringMode` which need handle correct type when user call in onChange
@@ -323,6 +324,8 @@ const InputNumber = React.forwardRef(
     };
 
     // ========================== User Input ==========================
+    const onNextPromise = useFrame();
+
     // >>> Collect input value
     const collectInputValue = (inputStr: string) => {
       recordCursor();
@@ -338,6 +341,22 @@ const InputNumber = React.forwardRef(
           triggerValueUpdate(finalDecimal, true);
         }
       }
+
+      // Trigger onInput later to let user customize value if they want do handle something after onChange
+      onInput?.(inputStr);
+
+      // optimize for chinese input experience
+      // https://github.com/ant-design/ant-design/issues/8196
+      onNextPromise(() => {
+        let nextInputStr = inputStr;
+        if (!parser) {
+          nextInputStr = inputStr.replace(/。/g, '.');
+        }
+
+        if (nextInputStr !== inputStr) {
+          collectInputValue(nextInputStr);
+        }
+      });
     };
 
     // >>> Composition
@@ -353,18 +372,7 @@ const InputNumber = React.forwardRef(
 
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      let inputStr = e.target.value;
-
-      // optimize for chinese input experience
-      // https://github.com/ant-design/ant-design/issues/8196
-      if (!parser) {
-        inputStr = inputStr.replace(/。/g, '.');
-      }
-
-      collectInputValue(inputStr);
-
-      // Trigger onInput later to let user customize value if they want do handle something after onChange
-      onInput?.(inputStr);
+      collectInputValue(e.target.value);
     };
 
     // ============================= Step =============================
