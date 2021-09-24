@@ -11,6 +11,7 @@ describe('InputNumber.Github', () => {
   });
 
   afterEach(() => {
+    jest.clearAllTimers();
     jest.useRealTimers();
   });
 
@@ -337,8 +338,6 @@ describe('InputNumber.Github', () => {
 
   // https://github.com/ant-design/ant-design/issues/8196
   it('Allow input 。', () => {
-    jest.useFakeTimers();
-
     const onChange = jest.fn();
     const wrapper = mount(<InputNumber min={1} max={10} onChange={onChange} />);
     wrapper.changeValue('8。1');
@@ -348,10 +347,10 @@ describe('InputNumber.Github', () => {
       wrapper.update();
     });
 
+    wrapper.update();
+
     expect(wrapper.getInputValue()).toEqual('8.1');
     expect(onChange).toHaveBeenCalledWith(8.1);
-
-    jest.useRealTimers();
   });
 
   // https://github.com/ant-design/ant-design/issues/25614

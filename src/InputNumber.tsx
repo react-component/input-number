@@ -7,7 +7,7 @@ import StepHandler from './StepHandler';
 import { getNumberPrecision, num2str, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
 import useUpdateEffect from './hooks/useUpdateEffect';
-import usePromiseFrame from './hooks/usePromiseFrame';
+import useFrame from './hooks/useFrame';
 
 /**
  * We support `stringMode` which need handle correct type when user call in onChange
@@ -324,7 +324,7 @@ const InputNumber = React.forwardRef(
     };
 
     // ========================== User Input ==========================
-    const onNextPromise = usePromiseFrame();
+    const onNextPromise = useFrame();
 
     // >>> Collect input value
     const collectInputValue = (inputStr: string) => {
