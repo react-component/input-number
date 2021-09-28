@@ -498,6 +498,7 @@ describe('InputNumber.Github', () => {
     // Keyboard change
     wrapper.find('input').simulate('keyDown');
     wrapper.setProps({ value: 3 });
+    wrapper.update();
     expect(wrapper.find('input').prop('value')).toEqual('3');
   });
 });
