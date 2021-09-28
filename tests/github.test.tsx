@@ -475,4 +475,30 @@ describe('InputNumber.Github', () => {
 
     expect(wrapper.getInputValue()).toEqual('-0');
   });
+
+  // https://github.com/ant-design/ant-design/issues/32274
+  it('global modify when typing', () => {
+    const Demo = ({ value }: { value?: number }) => {
+      const [val, setVal] = React.useState<string | number>(7);
+
+      React.useEffect(() => {
+        if (value) {
+          setVal(value);
+        }
+      }, [value]);
+
+      return <InputNumber value={val} onChange={setVal} />;
+    };
+    const wrapper = mount(<Demo />);
+
+    // Click
+    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+    expect(wrapper.find('input').prop('value')).toEqual('8');
+
+    // Keyboard change
+    wrapper.find('input').simulate('keyDown');
+    wrapper.setProps({ value: 3 });
+    wrapper.update();
+    expect(wrapper.find('input').prop('value')).toEqual('3');
+  });
 });
