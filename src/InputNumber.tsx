@@ -481,8 +481,7 @@ const InputNumber = React.forwardRef(
 
       // When user typing from `1.2` to `1.`, we should not convert to `1` immediately.
       // But let it go if user set `formatter`
-      if (newValue.isNaN() || !userTypingRef.current || formatter) {
-      // if (!newValue.equals(currentParsedValue) || !userTypingRef.current || formatter) {
+      if (!newValue.equals(currentParsedValue) || !userTypingRef.current || formatter) {
         // Update value as effect
         setInputValue(newValue, userTypingRef.current);
       }
