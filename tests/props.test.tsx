@@ -359,4 +359,12 @@ describe('InputNumber.Props', () => {
       );
     });
   });
+
+  it('changes value on dynamic formatter change', () => {
+    const wrapper = mount(<InputNumber value={7} formatter={(num) => `$ ${num}`} />);
+    expect(wrapper.getInputValue()).toEqual('$ 7');
+    wrapper.setProps({ formatter: (num) => `¥ ${num}` });
+    wrapper.update();
+    expect(wrapper.getInputValue()).toEqual('¥ 7');
+  });
 });
