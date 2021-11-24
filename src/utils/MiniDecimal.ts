@@ -282,7 +282,7 @@ export function toFixed(numStr: string, separatorStr: string, precision?: number
 
     if (advancedNum >= 5) {
       const advancedDecimal = getMiniDecimal(numStr).add(
-        `0.${'0'.repeat(precision)}${10 - advancedNum}`,
+        `${negativeStr}0.${'0'.repeat(precision)}${10 - advancedNum}`,
       );
       return toFixed(advancedDecimal.toString(), separatorStr, precision);
     }
