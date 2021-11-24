@@ -145,5 +145,10 @@ describe('InputNumber.Util', () => {
     it('should return "" when input is ""', () => {
       expect(toFixed('', '.')).toEqual('');
     });
+
+    it('negative', () => {
+      // expect(toFixed('77.88', '.', 1)).toEqual('77.9');
+      expect(toFixed('-77.88', '.', 1)).toEqual('-77.9');
+    });
   });
 });
