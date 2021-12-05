@@ -59,6 +59,27 @@ describe('InputNumber.Input', () => {
     expect(wrapper.getInputValue()).toEqual('-98');
   });
 
+  it('negative min with higher precision', () => {
+    const wrapper = prepareWrapper('-4', {min: -3.5, precision: 0});
+    expect(wrapper.getInputValue()).toEqual('-3');
+  });
+
+  it('positive min with higher precision', () => {
+    const wrapper = prepareWrapper('4', {min: 3.5, precision: 0});
+    expect(wrapper.getInputValue()).toEqual('4');
+  });
+
+  it('negative max with higher precision', () => {
+    const wrapper = prepareWrapper('-4', {max: -3.5, precision: 0});
+    expect(wrapper.getInputValue()).toEqual('-4');
+  });
+
+  it('positive max with higher precision', () => {
+    const wrapper = prepareWrapper('4', {max: 3.5, precision: 0});
+    expect(wrapper.getInputValue()).toEqual('3');
+  });
+
+
   // https://github.com/ant-design/ant-design/issues/9439
   it('input negative zero', () => {
     const wrapper = prepareWrapper('-0', {}, true);

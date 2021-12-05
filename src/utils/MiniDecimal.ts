@@ -265,6 +265,31 @@ export default function getMiniDecimal(value: ValueType): DecimalClass {
 }
 
 /**
+ * round up an unsigned number str, like: 1.4 -> 2, 1.5 -> 2
+ */
+export function roundUpUnsignedDecimal(numStr: string, precision: number) {
+  const {integerStr, decimalStr} = trimNumber(numStr);
+  const advancedDecimal = getMiniDecimal(integerStr + '.' + decimalStr).add(
+    `0.${'0'.repeat(precision)}${5}`,
+  );
+  return toFixed(advancedDecimal.toString(), '.', precision);
+}
+
+/**
+ * round up an unsigned number str, like: 1.4 -> 1, 1.5 -> 1
+ */
+export function roundDownUnsignedDecimal(numStr: string,  precision: number) {
+  const {negativeStr, integerStr, decimalStr} = trimNumber(numStr);
+  const numberWithoutDecimal = `${negativeStr}${integerStr}`;
+  if (precision === 0) {
+    return integerStr;
+  }
+  return `${numberWithoutDecimal}.${decimalStr
+    .padEnd(precision, '0')
+    .slice(0, precision)}`;
+}
+
+/**
  * Align the logic of toFixed to around like 1.5 => 2
  */
 export function toFixed(numStr: string, separatorStr: string, precision?: number) {
