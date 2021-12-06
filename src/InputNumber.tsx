@@ -2,15 +2,29 @@ import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
-import getMiniDecimal, { DecimalClass, toFixed, ValueType } from './utils/MiniDecimal';
+import getMiniDecimal, {
+  DecimalClass,
+  roundDownUnsignedDecimal,
+  roundUpUnsignedDecimal,
+  toFixed,
+  ValueType
+} from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
-import { getNumberPrecision, num2str, validateNumber } from './utils/numberUtil';
+import { getNumberPrecision, num2str, trimNumber, validateNumber } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
 import useUpdateEffect from './hooks/useUpdateEffect';
 import useFrame from './hooks/useFrame';
 
 /**
  * We support `stringMode` which need handle correct type when user call in onChange
+ * format max or min value
+ * 1. if isInvalid return null
+ * 2. if precision is undefined, return decimal
+ * 3. format with precision
+ *    I. if max > 0, round down with precision. Example: max= 3.5, precision=0  afterFormat: 3
+ *    II. if max < 0, round up with precision. Example: max= -3.5, precision=0  afterFormat: -4
+ *    III. if min > 0, round up with precision. Example: min= 3.5, precision=0  afterFormat: 4
+ *    IV. if min < 0, round down with precision. Example: max= -3.5, precision=0  afterFormat: -3
  */
 const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) => {
   if (stringMode || decimalValue.isEmpty()) {
@@ -20,9 +34,24 @@ const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) => {
   return decimalValue.toNumber();
 };
 
-const getDecimalIfValidate = (value: ValueType) => {
+const getDecimalIfValidate = (value: ValueType, precision: number | undefined, isMax?: boolean) => {
   const decimal = getMiniDecimal(value);
-  return decimal.isInvalidate() ? null : decimal;
+  if (decimal.isInvalidate()) {
+    return null;
+  }
+
+  if (precision === undefined) {
+    return decimal;
+  }
+
+  const {negative, integerStr, decimalStr, negativeStr} = trimNumber(decimal.toString());
+  const unSignedNumberStr = integerStr +'.' +  decimalStr;
+
+  if ((isMax && !negative) || (!isMax && negative)) {
+    return getMiniDecimal(negativeStr +  roundDownUnsignedDecimal(unSignedNumberStr, precision));
+  } else {
+    return getMiniDecimal(negativeStr +  roundUpUnsignedDecimal(unSignedNumberStr, precision));
+  }
 };
 
 export interface InputNumberProps<T extends ValueType = ValueType>
@@ -232,8 +261,8 @@ const InputNumber = React.forwardRef(
     }
 
     // >>> Max & Min limit
-    const maxDecimal = React.useMemo(() => getDecimalIfValidate(max), [max]);
-    const minDecimal = React.useMemo(() => getDecimalIfValidate(min), [min]);
+    const maxDecimal = React.useMemo(() => getDecimalIfValidate(max, precision, true), [max, precision]);
+    const minDecimal = React.useMemo(() => getDecimalIfValidate(min, precision, false), [min, precision]);
 
     const upDisabled = React.useMemo(() => {
       if (!maxDecimal || !decimalValue || decimalValue.isInvalidate()) {
