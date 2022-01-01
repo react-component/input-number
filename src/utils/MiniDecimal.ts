@@ -266,27 +266,20 @@ export default function getMiniDecimal(value: ValueType): DecimalClass {
 
 /**
  * round up an unsigned number str, like: 1.4 -> 2, 1.5 -> 2
+ * Or round down an unsigned number str, like: 1.4 -> 1, 1.5 -> 1
  */
-export function roundUpUnsignedDecimal(numStr: string, precision: number) {
+export function roundUnsignedDecimal(numStr: string, precision: number, roundUp: boolean) {
   const {integerStr, decimalStr} = trimNumber(numStr);
-  const advancedDecimal = getMiniDecimal(integerStr + '.' + decimalStr).add(
-    `0.${'0'.repeat(precision)}${5}`,
-  );
-  return toFixed(advancedDecimal.toString(), '.', precision);
-}
 
-/**
- * round up an unsigned number str, like: 1.4 -> 1, 1.5 -> 1
- */
-export function roundDownUnsignedDecimal(numStr: string,  precision: number) {
-  const {negativeStr, integerStr, decimalStr} = trimNumber(numStr);
-  const numberWithoutDecimal = `${negativeStr}${integerStr}`;
-  if (precision === 0) {
-    return integerStr;
-  }
-  return `${numberWithoutDecimal}.${decimalStr
-    .padEnd(precision, '0')
-    .slice(0, precision)}`;
+  // round up decimal part
+  const times = Math.pow(10, precision);
+
+  const roundFn = roundUp ? Math.ceil : Math.floor;
+  const decimalPart = roundFn(parseFloat(`0.${decimalStr}`) * times) / times;
+  // add decimal part and integer part 
+  const advancedDecimal = getMiniDecimal(integerStr).add(decimalPart);
+  
+  return toFixed(advancedDecimal.toString(), '.', precision);
 }
 
 /**

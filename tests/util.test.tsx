@@ -2,8 +2,7 @@ import getMiniDecimal, {
   BigIntDecimal,
   DecimalClass,
   NumberDecimal,
-  roundDownUnsignedDecimal,
-  roundUpUnsignedDecimal,
+  roundUnsignedDecimal,
   toFixed,
   ValueType,
 } from '../src/utils/MiniDecimal';
@@ -154,19 +153,36 @@ describe('InputNumber.Util', () => {
     });
 
     it('round down', () => {
-      expect(roundDownUnsignedDecimal('77.89',  1)).toEqual('77.8');
-      expect(roundDownUnsignedDecimal('77.1',  2)).toEqual('77.10');
-      expect(roundDownUnsignedDecimal('77.81', 1)).toEqual('77.8');
-      expect(roundDownUnsignedDecimal('77.50', 1)).toEqual('77.5');
-      expect(roundDownUnsignedDecimal('77.5999', 0)).toEqual('77');
-      expect(roundDownUnsignedDecimal('77.0001', 0)).toEqual('77');
+      expect(roundUnsignedDecimal('0',  0, false)).toEqual('0');
+      expect(roundUnsignedDecimal('77.89',  1, false)).toEqual('77.8');
+      expect(roundUnsignedDecimal('77.1',  2, false)).toEqual('77.10');
+      expect(roundUnsignedDecimal('77.81', 1, false)).toEqual('77.8');
+      expect(roundUnsignedDecimal('77.50', 1, false)).toEqual('77.5');
+      expect(roundUnsignedDecimal('77.5999', 0, false)).toEqual('77');
+      expect(roundUnsignedDecimal('77.0001', 0, false)).toEqual('77');
     })
+
     it('round up', () => {
-      expect(roundUpUnsignedDecimal('77.89', 1)).toEqual('77.9');
-      expect(roundUpUnsignedDecimal('77.81', 1)).toEqual('77.9');
-      expect(roundUpUnsignedDecimal('77.89', 0)).toEqual('78');
-      expect(roundUpUnsignedDecimal('77.599', 0)).toEqual('78');
-      expect(roundUpUnsignedDecimal('77.01', 0)).toEqual('78');
+      expect(roundUnsignedDecimal('0',  0, true)).toEqual('0');
+      expect(roundUnsignedDecimal('77.89', 1, true)).toEqual('77.9');
+      expect(roundUnsignedDecimal('77.81', 1,true)).toEqual('77.9');
+      expect(roundUnsignedDecimal('77.89', 0,true)).toEqual('78');
+      expect(roundUnsignedDecimal('77.599', 0,true)).toEqual('78');
+      expect(roundUnsignedDecimal('77.01', 0,true)).toEqual('78');
+    })
+
+    it('lessEquals', () => {
+      expect(new NumberDecimal(3).lessEquals(new NumberDecimal(3))).toBeTruthy();
+      expect(new NumberDecimal(2).lessEquals(new NumberDecimal(3))).toBeTruthy();
+      expect(new NumberDecimal(4).lessEquals(new NumberDecimal(3))).toBeFalsy();
+    })
+
+    it ('add operation on an invalid decimal', () => {
+      expect(new NumberDecimal('XXX').add(3).toNumber()).toEqual(3);
+    })
+
+    it ('add NaN', () => {
+      expect(new NumberDecimal(10).add(NaN).toNumber()).toEqual(10);
     })
   });
 });
