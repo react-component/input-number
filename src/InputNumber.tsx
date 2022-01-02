@@ -4,8 +4,7 @@ import KeyCode from 'rc-util/lib/KeyCode';
 import { composeRef } from 'rc-util/lib/ref';
 import getMiniDecimal, {
   DecimalClass,
-  roundDownUnsignedDecimal,
-  roundUpUnsignedDecimal,
+  roundUnsignedDecimal,
   toFixed,
   ValueType
 } from './utils/MiniDecimal';
@@ -46,11 +45,11 @@ const getDecimalIfValidate = (value: ValueType, precision: number | undefined, i
 
   const {negative, integerStr, decimalStr, negativeStr} = trimNumber(decimal.toString());
   const unSignedNumberStr = integerStr +'.' +  decimalStr;
-
+  
   if ((isMax && !negative) || (!isMax && negative)) {
-    return getMiniDecimal(negativeStr +  roundDownUnsignedDecimal(unSignedNumberStr, precision));
+    return getMiniDecimal(negativeStr +  roundUnsignedDecimal(unSignedNumberStr, precision, false));
   } else {
-    return getMiniDecimal(negativeStr +  roundUpUnsignedDecimal(unSignedNumberStr, precision));
+    return getMiniDecimal(negativeStr +  roundUnsignedDecimal(unSignedNumberStr, precision, true));
   }
 };
 

@@ -59,6 +59,11 @@ describe('InputNumber.Input', () => {
     expect(wrapper.getInputValue()).toEqual('-98');
   });
 
+  it('input zero and precision is 0', () => {
+    const wrapper = prepareWrapper('0', {min: 0, precision: 0});
+    expect(wrapper.getInputValue()).toEqual('0');
+  });
+
   it('negative min with higher precision', () => {
     const wrapper = prepareWrapper('-4', {min: -3.5, precision: 0});
     expect(wrapper.getInputValue()).toEqual('-3');
