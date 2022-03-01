@@ -141,6 +141,8 @@ const InputNumber = React.forwardRef(
 
     const userTypingRef = React.useRef(false);
     const compositionRef = React.useRef(false);
+    const keydownRef = React.useRef(false);
+    const onChangeRef = React.useRef<() => void>();
 
     // ============================ Value =============================
     // Real value control
@@ -401,6 +403,13 @@ const InputNumber = React.forwardRef(
 
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      if (!keydownRef.current) {
+        const v = e.target.value;
+        onChangeRef.current = () => {
+          collectInputValue(v);
+        };
+        return;
+      }
       collectInputValue(e.target.value);
     };
 
@@ -469,6 +478,12 @@ const InputNumber = React.forwardRef(
         onPressEnter?.(event);
       }
 
+      keydownRef.current = true;
+      if (onChangeRef.current) {
+        onChangeRef.current();
+        onChangeRef.current = undefined;
+      }
+
       if (keyboard === false) {
         return;
       }
@@ -482,6 +497,7 @@ const InputNumber = React.forwardRef(
 
     const onKeyUp = () => {
       userTypingRef.current = false;
+      keydownRef.current = false;
     };
 
     // >>> Focus & Blur
