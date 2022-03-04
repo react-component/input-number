@@ -35,7 +35,10 @@ describe('InputNumber.Keyboard', () => {
     const onChange = jest.fn();
     const wrapper = mount(<InputNumber precision={0} onChange={onChange} />);
 
-    wrapper.find('input').simulate('change', { target: { value: '2.3333' } });
+    wrapper
+      .find('input')
+      .simulate('keyDown')
+      .simulate('change', { target: { value: '2.3333' } });
     expect(onChange).toHaveBeenCalledWith(2.3333);
     onChange.mockReset();
 

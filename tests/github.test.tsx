@@ -458,10 +458,12 @@ describe('InputNumber.Github', () => {
     wrapper
       .find('input')
       .last()
+      .simulate('keyDown')
       .simulate('change', { target: { value: '1.23' } });
     wrapper
       .find('input')
       .first()
+      .simulate('keyDown')
       .simulate('change', { target: { value: '0' } });
 
     expect(wrapper.find('input').last().props().value).toEqual('1');
