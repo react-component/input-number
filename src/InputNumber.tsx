@@ -544,8 +544,7 @@ const InputNumber = React.forwardRef(
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-readonly`]: readOnly,
           [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
-          [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
-          [`${prefixCls}-illegal-data`]: illegalData,
+          [`${prefixCls}-out-of-range`]: (!decimalValue.isInvalidate() && !isInRange(decimalValue)) || illegalData,
         })}
         style={style}
         onFocus={() => {
