@@ -139,6 +139,8 @@ const InputNumber = React.forwardRef(
 
     const [focus, setFocus] = React.useState(false);
 
+    const [illegalData, setIllegalData] = React.useState(false);
+
     const userTypingRef = React.useRef(false);
     const compositionRef = React.useRef(false);
 
@@ -401,8 +403,17 @@ const InputNumber = React.forwardRef(
 
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      setIllegalData(judgeData(e.target.value))
       collectInputValue(e.target.value);
     };
+
+    const judgeData = (value: string) => {
+      if(isNaN(Number(value)) || (max && value > max) || (min && value < min)){
+        return true
+      }else{
+        return false
+      }
+    }
 
     // ============================= Step =============================
     const onInternalStep = (up: boolean) => {
@@ -487,6 +498,8 @@ const InputNumber = React.forwardRef(
     // >>> Focus & Blur
     const onBlur = () => {
       flushInputValue(false);
+      
+      setIllegalData(false)
 
       setFocus(false);
 
@@ -532,6 +545,7 @@ const InputNumber = React.forwardRef(
           [`${prefixCls}-readonly`]: readOnly,
           [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
           [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
+          [`${prefixCls}-illegal-data`]: illegalData,
         })}
         style={style}
         onFocus={() => {
