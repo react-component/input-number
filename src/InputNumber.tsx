@@ -401,19 +401,19 @@ const InputNumber = React.forwardRef(
       collectInputValue(inputRef.current.value);
     };
 
-    // >>> Input
-    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      setIllegalData(judgeData(e.target.value))
-      collectInputValue(e.target.value);
-    };
-
-    const judgeData = (value: string) => {
-      if(isNaN(Number(value)) || (max && value > max) || (min && value < min)){
+    const judgeData = (inputNumberValue: string) => {
+      if(isNaN(Number(inputNumberValue)) || (max && inputNumberValue > max) || (min && inputNumberValue < min)){
         return true
       }else{
         return false
       }
     }
+
+    // >>> Input
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      setIllegalData(judgeData(e.target.value))
+      collectInputValue(e.target.value);
+    };
 
     // ============================= Step =============================
     const onInternalStep = (up: boolean) => {
