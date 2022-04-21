@@ -402,7 +402,7 @@ const InputNumber = React.forwardRef(
     };
 
     const judgeData = (inputNumberValue: string) => {
-      if(isNaN(Number(inputNumberValue)) || (max && inputNumberValue > max) || (min && inputNumberValue < min)){
+      if((isNaN(Number(inputNumberValue)) && inputNumberValue !== '-') || (max && inputNumberValue > max) || (min && inputNumberValue < min)){
         return true
       }else{
         return false
