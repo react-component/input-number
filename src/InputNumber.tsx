@@ -352,6 +352,18 @@ const InputNumber = React.forwardRef(
       return decimalValue;
     };
 
+    const isTypingNumber = (val: string | number) => {
+      if (typeof val === 'number') {
+        return true
+      }
+
+      // . - will appear independently while typing a number
+      if(['.', '-'].includes(val)){
+        return true
+      }
+      return !isNaN(Number(val))
+    }
+
     // ========================== User Input ==========================
     const onNextPromise = useFrame();
 
@@ -530,8 +542,8 @@ const InputNumber = React.forwardRef(
           [`${prefixCls}-focused`]: focus,
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-readonly`]: readOnly,
-          [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
-          [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
+          [`${prefixCls}-not-a-number`]: !isTypingNumber(inputValue),
+          [`${prefixCls}-out-of-range`]: inputValue < min || inputValue > max,
         })}
         style={style}
         onFocus={() => {
