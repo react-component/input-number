@@ -11,11 +11,25 @@ describe('InputNumber.Keyboard', () => {
     expect(onChange).toHaveBeenCalledWith(1);
   });
 
+  it('up with pressing shift key', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber onChange={onChange} step={0.01} value={1.2} />);
+    wrapper.find('input').simulate('keyDown', { which: KeyCode.UP, shiftKey: true });
+    expect(onChange).toHaveBeenCalledWith(1.3);
+  });
+
   it('down', () => {
     const onChange = jest.fn();
     const wrapper = mount(<InputNumber onChange={onChange} />);
     wrapper.find('input').simulate('keyDown', { which: KeyCode.DOWN });
     expect(onChange).toHaveBeenCalledWith(-1);
+  });
+
+  it('down with pressing shift key', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<InputNumber onChange={onChange} step={0.01} value={1.2} />);
+    wrapper.find('input').simulate('keyDown', { which: KeyCode.DOWN, shiftKey: true });
+    expect(onChange).toHaveBeenCalledWith(1.1);
   });
 
   // shift + 10, ctrl + 0.1 test case removed
