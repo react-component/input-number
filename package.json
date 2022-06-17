@@ -54,7 +54,7 @@
     "enzyme": "^3.1.1",
     "enzyme-adapter-react-16": "^1.0.1",
     "enzyme-to-json": "^3.6.1",
-    "eslint": "^7.1.0",
+    "eslint": "^8.18.0",
     "expect.js": "~0.3.1",
     "father": "^2.22.0",
     "father-build": "^1.19.1",
