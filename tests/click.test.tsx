@@ -37,7 +37,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'up button',
       { defaultValue: 10 },
-      (wrapper) => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
+      wrapper => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
       11,
       'up',
     );
@@ -45,7 +45,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'down button',
       { value: 10 },
-      (wrapper) => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
+      wrapper => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
       9,
       'down',
     );
@@ -55,7 +55,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'up button',
       {},
-      (wrapper) => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
+      wrapper => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
       1,
       'up',
     );
@@ -63,7 +63,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'down button',
       {},
-      (wrapper) => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
+      wrapper => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
       -1,
       'down',
     );
@@ -73,7 +73,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'up button',
       { min: 6, max: 10 },
-      (wrapper) => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
+      wrapper => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
       6,
       'up',
     );
@@ -81,7 +81,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'down button',
       { min: 6, max: 10 },
-      (wrapper) => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
+      wrapper => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
       6,
       'down',
     );
@@ -91,7 +91,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'up button',
       { value: null, min: 6, max: 10 },
-      (wrapper) => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
+      wrapper => wrapper.find('.rc-input-number-handler-up').simulate('mouseDown'),
       6,
       'up',
     );
@@ -99,7 +99,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'down button',
       { value: null, min: 6, max: 10 },
-      (wrapper) => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
+      wrapper => wrapper.find('.rc-input-number-handler-down').simulate('mouseDown'),
       6,
       'down',
     );
@@ -181,5 +181,37 @@ describe('InputNumber.Click', () => {
     wrapper.blurInput();
     expect(onBlur).toHaveBeenCalled();
     expect(wrapper.exists('.rc-input-number-focused')).toBeFalsy();
+  });
+
+  it('click down button with pressing shift key', () => {
+    const onChange = jest.fn();
+    const onStep = jest.fn();
+    const wrapper = mount(
+      <InputNumber onChange={onChange} onStep={onStep} step={0.01} value={1.2} />,
+    );
+
+    wrapper
+      .find('.rc-input-number-handler-down')
+      .simulate('keyDown', { shiftKey: true })
+      .simulate('mouseDown');
+
+    expect(onChange).toHaveBeenCalledWith(1.1);
+    expect(onStep).toHaveBeenCalledWith(1.1, { offset: '0.1', type: 'down' });
+  });
+
+  it('click up button with pressing shift key', () => {
+    const onChange = jest.fn();
+    const onStep = jest.fn();
+    const wrapper = mount(
+      <InputNumber onChange={onChange} onStep={onStep} step={0.01} value={1.2} />,
+    );
+
+    wrapper
+      .find('.rc-input-number-handler-up')
+      .simulate('keyDown', { shiftKey: true })
+      .simulate('mouseDown');
+
+    expect(onChange).toHaveBeenCalledWith(1.3);
+    expect(onStep).toHaveBeenCalledWith(1.3, { offset: '0.1', type: 'up' });
   });
 });

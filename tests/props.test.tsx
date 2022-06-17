@@ -12,10 +12,12 @@ describe('InputNumber.Props', () => {
     }
 
     expect(onChange.mock.calls[onChange.mock.calls.length - 1][0]).toEqual(10);
-    expect(wrapper.find('input').props()).toEqual(expect.objectContaining({
-      'aria-valuemax': 10,
-      'aria-valuenow': '10',
-    }));
+    expect(wrapper.find('input').props()).toEqual(
+      expect.objectContaining({
+        'aria-valuemax': 10,
+        'aria-valuenow': '10',
+      }),
+    );
   });
 
   it('min', () => {
@@ -26,10 +28,12 @@ describe('InputNumber.Props', () => {
     }
 
     expect(onChange.mock.calls[onChange.mock.calls.length - 1][0]).toEqual(-10);
-    expect(wrapper.find('input').props()).toEqual(expect.objectContaining({
-      'aria-valuemin': -10,
-      'aria-valuenow': '-10',
-    }));
+    expect(wrapper.find('input').props()).toEqual(
+      expect.objectContaining({
+        'aria-valuemin': -10,
+        'aria-valuenow': '-10',
+      }),
+    );
   });
 
   it('disabled', () => {
@@ -70,6 +74,19 @@ describe('InputNumber.Props', () => {
       expect(wrapper.find('input').props().step).toEqual(5);
     });
 
+    it('basic with pressing shift key', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber onChange={onChange} step={5} />);
+
+      for (let i = 0; i < 3; i += 1) {
+        wrapper
+          .find('.rc-input-number-handler-down')
+          .simulate('keyDown', { shiftKey: true })
+          .simulate('mouseDown');
+        expect(onChange).toHaveBeenCalledWith(-5 * (i + 1) * 10);
+      }
+    });
+
     it('stringMode', () => {
       const onChange = jest.fn();
       const wrapper = mount(
@@ -88,6 +105,27 @@ describe('InputNumber.Props', () => {
       expect(onChange).toHaveBeenCalledWith('-0.00000001');
     });
 
+    it('stringMode with pressing shift key', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(
+        <InputNumber
+          stringMode
+          onChange={onChange}
+          step="0.0000000001" // 1e-10
+          defaultValue="0.000000001" // 1e-9
+        />,
+      );
+
+      for (let i = 0; i < 11; i += 1) {
+        wrapper
+          .find('.rc-input-number-handler-down')
+          .simulate('keyDown', { shiftKey: true })
+          .simulate('mouseDown');
+      }
+
+      expect(onChange).toHaveBeenCalledWith('-0.00000001'); // -1e-8
+    });
+
     it('decimal', () => {
       const onChange = jest.fn();
       const wrapper = mount(<InputNumber onChange={onChange} step={0.1} defaultValue={0.9} />);
@@ -95,6 +133,18 @@ describe('InputNumber.Props', () => {
         wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
       }
       expect(onChange).toHaveBeenCalledWith(1.2);
+    });
+
+    it('decimal with pressing shift key', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(<InputNumber onChange={onChange} step={0.1} defaultValue={0.9} />);
+      for (let i = 0; i < 3; i += 1) {
+        wrapper
+          .find('.rc-input-number-handler-up')
+          .simulate('keyDown', { shiftKey: true })
+          .simulate('mouseDown');
+      }
+      expect(onChange).toHaveBeenCalledWith(3.9);
     });
   });
 

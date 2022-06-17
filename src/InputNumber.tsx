@@ -7,10 +7,16 @@ import getMiniDecimal, {
   roundDownUnsignedDecimal,
   roundUpUnsignedDecimal,
   toFixed,
-  ValueType
+  ValueType,
 } from './utils/MiniDecimal';
 import StepHandler from './StepHandler';
-import { getNumberPrecision, num2str, trimNumber, validateNumber } from './utils/numberUtil';
+import {
+  getNumberPrecision,
+  num2str,
+  getDecupleSteps,
+  trimNumber,
+  validateNumber,
+} from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
 import useUpdateEffect from './hooks/useUpdateEffect';
 import useFrame from './hooks/useFrame';
@@ -44,13 +50,13 @@ const getDecimalIfValidate = (value: ValueType, precision: number | undefined, i
     return decimal;
   }
 
-  const {negative, integerStr, decimalStr, negativeStr} = trimNumber(decimal.toString());
-  const unSignedNumberStr = integerStr +'.' +  decimalStr;
+  const { negative, integerStr, decimalStr, negativeStr } = trimNumber(decimal.toString());
+  const unSignedNumberStr = integerStr + '.' + decimalStr;
 
   if ((isMax && !negative) || (!isMax && negative)) {
-    return getMiniDecimal(negativeStr +  roundDownUnsignedDecimal(unSignedNumberStr, precision));
+    return getMiniDecimal(negativeStr + roundDownUnsignedDecimal(unSignedNumberStr, precision));
   } else {
-    return getMiniDecimal(negativeStr +  roundUpUnsignedDecimal(unSignedNumberStr, precision));
+    return getMiniDecimal(negativeStr + roundUpUnsignedDecimal(unSignedNumberStr, precision));
   }
 };
 
@@ -141,6 +147,7 @@ const InputNumber = React.forwardRef(
 
     const userTypingRef = React.useRef(false);
     const compositionRef = React.useRef(false);
+    const shiftKeyRef = React.useRef(false);
 
     // ============================ Value =============================
     // Real value control
@@ -261,8 +268,14 @@ const InputNumber = React.forwardRef(
     }
 
     // >>> Max & Min limit
-    const maxDecimal = React.useMemo(() => getDecimalIfValidate(max, precision, true), [max, precision]);
-    const minDecimal = React.useMemo(() => getDecimalIfValidate(min, precision, false), [min, precision]);
+    const maxDecimal = React.useMemo(() => getDecimalIfValidate(max, precision, true), [
+      max,
+      precision,
+    ]);
+    const minDecimal = React.useMemo(() => getDecimalIfValidate(min, precision, false), [
+      min,
+      precision,
+    ]);
 
     const upDisabled = React.useMemo(() => {
       if (!maxDecimal || !decimalValue || decimalValue.isInvalidate()) {
@@ -400,7 +413,7 @@ const InputNumber = React.forwardRef(
     };
 
     // >>> Input
-    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = e => {
       collectInputValue(e.target.value);
     };
 
@@ -415,7 +428,7 @@ const InputNumber = React.forwardRef(
       // We should sync with input value.
       userTypingRef.current = false;
 
-      let stepDecimal = getMiniDecimal(step);
+      let stepDecimal = getMiniDecimal(shiftKeyRef.current ? getDecupleSteps(step) : step);
       if (!up) {
         stepDecimal = stepDecimal.negate();
       }
@@ -425,7 +438,7 @@ const InputNumber = React.forwardRef(
       const updatedValue = triggerValueUpdate(target, false);
 
       onStep?.(getDecimalValue(stringMode, updatedValue), {
-        offset: step,
+        offset: shiftKeyRef.current ? getDecupleSteps(step) : step,
         type: up ? 'up' : 'down',
       });
 
@@ -457,9 +470,15 @@ const InputNumber = React.forwardRef(
       }
     };
 
-    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
-      const { which } = event;
+    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = event => {
+      const { which, shiftKey } = event;
       userTypingRef.current = true;
+
+      if (shiftKey) {
+        shiftKeyRef.current = true;
+      } else {
+        shiftKeyRef.current = false;
+      }
 
       if (which === KeyCode.ENTER) {
         if (!compositionRef.current) {
@@ -482,6 +501,7 @@ const InputNumber = React.forwardRef(
 
     const onKeyUp = () => {
       userTypingRef.current = false;
+      shiftKeyRef.current = false;
     };
 
     // >>> Focus & Blur
