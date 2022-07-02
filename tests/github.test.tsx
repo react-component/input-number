@@ -1,6 +1,6 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { mount } from './util/wrapper';
+import { render, fireEvent, screen, waitFor } from './util/wrapper';
 import InputNumber from '../src';
 import KeyCode from 'rc-util/lib/KeyCode';
 
@@ -17,13 +17,14 @@ describe('InputNumber.Github', () => {
 
   // https://github.com/react-component/input-number/issues/32
   it('issue 32', () => {
-    const wrapper = mount(<InputNumber step={0.1} />);
-    wrapper.focusInput();
-    wrapper.changeValue('2');
-    expect(wrapper.getInputValue()).toEqual('2');
+    const { container } = render(<InputNumber step={0.1} />);
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '2' } });
+    expect(input.value).toEqual('2');
 
-    wrapper.blurInput();
-    expect(wrapper.getInputValue()).toEqual('2.0');
+    fireEvent.blur(input);
+    expect(input.value).toEqual('2.0');
   });
 
   // https://github.com/react-component/input-number/issues/197
@@ -35,15 +36,16 @@ describe('InputNumber.Github', () => {
         <InputNumber
           step={1}
           value={value}
-          onChange={(newValue) => {
+          onChange={newValue => {
             setValue(newValue);
           }}
         />
       );
     };
-    const wrapper = mount(<Demo />);
-    wrapper.focusInput();
-    wrapper.changeValue('foo');
+    const { container } = render(<Demo />);
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: 'foo' } });
   });
 
   // https://github.com/react-component/input-number/issues/222
@@ -56,51 +58,62 @@ describe('InputNumber.Github', () => {
           step={1}
           max={NaN}
           value={value}
-          onChange={(newValue) => {
+          onChange={newValue => {
             setValue(newValue);
           }}
         />
       );
     };
-    const wrapper = mount(<Demo />);
-    wrapper.focusInput();
-    wrapper.changeValue('foo');
+    const { container } = render(<Demo />);
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
 
-    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    expect(wrapper.getInputValue()).toEqual('2');
+    fireEvent.change(input, { target: { value: 'foo' } });
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+
+    expect(input.value).toEqual('2');
   });
 
   // https://github.com/react-component/input-number/issues/35
   it('issue 35', () => {
     let num: string | number;
 
-    const wrapper = mount(
+    const { container } = render(
       <InputNumber
         step={0.01}
         defaultValue={2}
-        onChange={(value) => {
+        onChange={value => {
           num = value;
         }}
       />,
     );
 
     for (let i = 1; i <= 400; i += 1) {
-      wrapper.find('input').simulate('keyDown', { which: KeyCode.DOWN });
-
+      fireEvent.keyDown(container.querySelector('input'), {
+        key: 'ArrowDown',
+        keyCode: KeyCode.DOWN,
+        which: KeyCode.DOWN,
+      });
+      const input = container.querySelector('input');
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((200 - i) / 100).toFixed(2));
-      expect(wrapper.getInputValue()).toEqual(String(expectedValue.toFixed(2)));
+      expect(input.value).toEqual(String(expectedValue.toFixed(2)));
       expect(num).toEqual(expectedValue);
     }
 
     for (let i = 1; i <= 300; i += 1) {
-      wrapper.find('input').simulate('keyDown', { which: KeyCode.UP });
-
+      fireEvent.keyDown(container.querySelector('input'), {
+        key: 'ArrowUp',
+        keyCode: KeyCode.UP,
+        which: KeyCode.UP,
+        code: 'ArrowUp',
+      });
+      const input = container.querySelector('input');
       // no number like 1.5499999999999999
       expect((num.toString().split('.')[1] || '').length < 3).toBeTruthy();
       const expectedValue = Number(((i - 200) / 100).toFixed(2));
-      expect(wrapper.getInputValue()).toEqual(String(expectedValue.toFixed(2)));
+      expect(input.value).toEqual(String(expectedValue.toFixed(2)));
       expect(num).toEqual(expectedValue);
     }
   });
@@ -108,9 +121,8 @@ describe('InputNumber.Github', () => {
   // https://github.com/ant-design/ant-design/issues/4229
   it('long press not trigger onChange in uncontrolled component', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber defaultValue={0} onChange={onChange} />);
-
-    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+    const { container } = render(<InputNumber defaultValue={0} onChange={onChange} />);
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
 
     act(() => {
       jest.advanceTimersByTime(500);
@@ -127,25 +139,27 @@ describe('InputNumber.Github', () => {
   it('should allow to input text like "1."', () => {
     const Demo = () => {
       const [value, setValue] = React.useState<string | number>(1.1);
-
       return (
         <InputNumber
           value={value}
-          onChange={(newValue) => {
+          onChange={newValue => {
             setValue(newValue);
           }}
         />
       );
     };
 
-    const wrapper = mount(<Demo />);
+    const { container } = render(<Demo />);
 
-    wrapper.focusInput();
-    wrapper.changeValue('1.');
-    expect(wrapper.getInputValue()).toEqual('1.');
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { which: KeyCode.ONE });
+    fireEvent.keyDown(input, { which: KeyCode.PERIOD });
+    fireEvent.change(input, { target: { value: '1.' } });
+    expect(input.value).toEqual('1.');
 
-    wrapper.blurInput();
-    expect(wrapper.getInputValue()).toEqual('1');
+    fireEvent.blur(input);
+    expect(input.value).toEqual('1');
   });
 
   // https://github.com/ant-design/ant-design/issues/5012
@@ -159,7 +173,7 @@ describe('InputNumber.Github', () => {
       return (
         <InputNumber
           value={value}
-          onChange={(newValue) => {
+          onChange={newValue => {
             num = newValue;
             setValue(newValue);
           }}
@@ -167,24 +181,34 @@ describe('InputNumber.Github', () => {
       );
     };
 
-    const wrapper = mount(<Demo />);
+    const { container, rerender } = render(<Demo />);
 
-    wrapper.focusInput();
-    wrapper.changeValue('6.0');
-    expect(wrapper.getInputValue()).toEqual('6.0');
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    // keydown => 6.0
+    fireEvent.keyDown(input, { keyCode: KeyCode.SIX });
+    fireEvent.keyDown(input, { which: KeyCode.PERIOD });
+    fireEvent.keyDown(input, { which: KeyCode.ZERO });
+    fireEvent.change(input, { target: { value: '6.0' } });
+    expect(input.value).toEqual('6.0');
     expect(num).toEqual(6);
 
-    wrapper.blurInput();
-    expect(wrapper.getInputValue()).toEqual('6');
+    fireEvent.blur(input);
+    expect(input.value).toEqual('6');
     expect(num).toEqual(6);
 
-    wrapper.focusInput();
-    wrapper.changeValue('6.10');
-    expect(wrapper.getInputValue()).toEqual('6.10');
+    rerender(<Demo />);
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { which: KeyCode.SIX });
+    fireEvent.keyDown(input, { which: KeyCode.PERIOD });
+    fireEvent.keyDown(input, { which: KeyCode.ONE });
+    fireEvent.keyDown(input, { which: KeyCode.ZERO });
+    fireEvent.change(input, { target: { value: '6.10' } });
+    expect(input.value).toEqual('6.10');
     expect(num).toEqual(6.1);
 
-    wrapper.blurInput();
-    expect(wrapper.getInputValue()).toEqual('6.1');
+    fireEvent.blur(input);
+    expect(input.value).toEqual('6.1');
     expect(num).toEqual(6.1);
   });
 
@@ -192,71 +216,76 @@ describe('InputNumber.Github', () => {
     const onChange = jest.fn();
     const onInput = jest.fn();
 
-    const wrapper = mount(<InputNumber onChange={onChange} onInput={onInput} />);
+    const { container } = render(<InputNumber onChange={onChange} onInput={onInput} />);
 
-    wrapper.focusInput();
-    wrapper.changeValue('1');
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '1' } });
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith(1);
     expect(onInput).toHaveBeenCalledTimes(1);
     expect(onInput).toHaveBeenCalledWith('1');
 
-    wrapper.blurInput();
+    fireEvent.blur(input);
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onInput).toHaveBeenCalledTimes(1);
 
-    wrapper.focusInput();
-    wrapper.changeValue('');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '' } });
     expect(onChange).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledWith('');
 
-    wrapper.blurInput();
+    fireEvent.blur(input);
     expect(onChange).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledTimes(2);
     expect(onChange).toHaveBeenLastCalledWith(null);
 
-    wrapper.focusInput();
-    wrapper.blurInput();
+    fireEvent.focus(input);
+    fireEvent.blur(input);
     expect(onChange).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledTimes(2);
   });
 
   // https://github.com/ant-design/ant-design/issues/5235
   it('input long number', () => {
-    const wrapper = mount(<InputNumber />);
-    wrapper.focusInput();
-    wrapper.changeValue('111111111111111111111');
-    expect(wrapper.getInputValue()).toEqual('111111111111111111111');
-    wrapper.changeValue('11111111111111111111111111111');
-    expect(wrapper.getInputValue()).toEqual('11111111111111111111111111111');
+    const { container } = render(<InputNumber />);
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '111111111111111111111' } });
+    expect(input.value).toEqual('111111111111111111111');
+    fireEvent.change(input, { target: { value: '11111111111111111111111111111' } });
+    expect(input.value).toEqual('11111111111111111111111111111');
   });
 
   // https://github.com/ant-design/ant-design/issues/7363
   it('uncontrolled input should trigger onChange always when blur it', () => {
     const onChange = jest.fn();
     const onInput = jest.fn();
-    const wrapper = mount(<InputNumber min={1} max={10} onChange={onChange} onInput={onInput} />);
+    const { container } = render(
+      <InputNumber min={1} max={10} onChange={onChange} onInput={onInput} />,
+    );
 
-    wrapper.focusInput();
-    wrapper.changeValue('123');
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '123' } });
     expect(onChange).toHaveBeenCalledTimes(0);
     expect(onInput).toHaveBeenCalledTimes(1);
     expect(onInput).toHaveBeenCalledWith('123');
 
-    wrapper.blurInput();
+    fireEvent.blur(input);
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith(10);
     expect(onInput).toHaveBeenCalledTimes(1);
 
     // repeat it, it should works in same way
-    wrapper.focusInput();
-    wrapper.changeValue('123');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '123' } });
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onInput).toHaveBeenCalledTimes(2);
     expect(onInput).toHaveBeenCalledWith('123');
 
-    wrapper.blurInput();
+    fireEvent.blur(input);
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onInput).toHaveBeenCalledTimes(2);
   });
@@ -264,27 +293,28 @@ describe('InputNumber.Github', () => {
   // https://github.com/ant-design/ant-design/issues/30465
   it('not block user input with min & max', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber min={1900} onChange={onChange} />);
+    const { container } = render(<InputNumber min={1900} onChange={onChange} />);
 
-    wrapper.focusInput();
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
 
-    wrapper.changeValue('2');
+    fireEvent.change(input, { target: { value: '2' } });
     expect(onChange).not.toHaveBeenCalled();
 
-    wrapper.changeValue('20');
+    fireEvent.change(input, { target: { value: '20' } });
     expect(onChange).not.toHaveBeenCalled();
 
-    wrapper.changeValue('200');
+    fireEvent.change(input, { target: { value: '200' } });
     expect(onChange).not.toHaveBeenCalled();
 
-    wrapper.changeValue('2000');
+    fireEvent.change(input, { target: { value: '2000' } });
     expect(onChange).toHaveBeenCalledWith(2000);
     onChange.mockRestore();
 
-    wrapper.changeValue('1');
+    fireEvent.change(input, { target: { value: '1' } });
     expect(onChange).not.toHaveBeenCalled();
 
-    wrapper.blurInput();
+    fireEvent.blur(input);
     expect(onChange).toHaveBeenCalledWith(1900);
   });
 
@@ -303,91 +333,94 @@ describe('InputNumber.Github', () => {
       );
     };
 
-    const wrapper = mount(<Demo />);
+    const { container } = render(<Demo />);
 
-    wrapper.focusInput();
-    wrapper.blurInput();
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.blur(input);
 
-    expect(wrapper.getInputValue()).toEqual('2.0');
+    expect(input.value).toEqual('2.0');
 
-    wrapper.focusInput();
-    expect(wrapper.getInputValue()).toEqual('2.0');
+    fireEvent.focus(input);
+    expect(input.value).toEqual('2.0');
   });
 
   // https://github.com/ant-design/ant-design/issues/7940
   it('should not format during input', () => {
+    let num;
     const Demo = () => {
       const [value, setValue] = React.useState<string | number>('');
       return (
         <InputNumber
           value={value}
           step={0.1}
-          onChange={(newValue) => {
+          onChange={newValue => {
             setValue(newValue);
+            num = newValue;
           }}
         />
       );
     };
 
-    const wrapper = mount(<Demo />);
+    const { container } = render(<Demo />);
 
-    wrapper.focusInput();
-    wrapper.changeValue('1');
-    expect(wrapper.getInputValue()).toEqual('1');
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '1' } });
+
+    fireEvent.blur(input);
+    expect(input.value).toEqual('1.0');
+    expect(num).toEqual(1);
   });
 
   // https://github.com/ant-design/ant-design/issues/8196
-  it('Allow input 。', () => {
+  it('Allow input 。', async () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber min={1} max={10} onChange={onChange} />);
-    wrapper.changeValue('8。1');
+    const { container } = render(<InputNumber min={1} onChange={onChange} />);
+    const input = container.querySelector('input');
+    fireEvent.change(input, { target: { value: '8。1' } });
+    fireEvent.blur(input);
 
-    act(() => {
-      jest.runAllTimers();
-      wrapper.update();
-    });
-
-    wrapper.update();
-
-    expect(wrapper.getInputValue()).toEqual('8.1');
-    expect(onChange).toHaveBeenCalledWith(8.1);
+    await waitFor(() => expect(input.value).toEqual('8.1'));
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(8.1));
   });
 
   // https://github.com/ant-design/ant-design/issues/25614
   it("focus value should be '' when clear the input", () => {
     let targetValue: string;
 
-    const wrapper = mount(
+    const { container } = render(
       <InputNumber
         min={1}
         max={10}
-        onBlur={(e) => {
+        onBlur={e => {
           targetValue = e.target.value;
         }}
         value={1}
       />,
     );
-    wrapper.focusInput();
-    wrapper.changeValue('');
-    wrapper.blurInput();
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.blur(input);
     expect(targetValue).toEqual('');
   });
 
   it('should set input value as formatted when blur', () => {
     let valueOnBlur: string;
 
-    const wrapper = mount(
+    const { container } = render(
       <InputNumber
-        onBlur={(e) => {
+        onBlur={e => {
           valueOnBlur = e.target.value;
         }}
-        formatter={(value) => `${Number(value) * 100}%`}
+        formatter={value => `${Number(value) * 100}%`}
         value={1}
       />,
     );
-
-    wrapper.blurInput();
-    expect(wrapper.getInputValue()).toEqual('100%');
+    const input = container.querySelector('input');
+    fireEvent.blur(input);
+    expect(input.value).toEqual('100%');
     expect(valueOnBlur).toEqual('100%');
   });
 
@@ -395,22 +428,21 @@ describe('InputNumber.Github', () => {
   // Origin: should trigger onChange when max or min change
   it('warning UI when max or min change', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber min={0} max={20} value={10} onChange={onChange} />);
-
-    expect(wrapper.exists('.rc-input-number-out-of-range')).toBeFalsy();
-
-    wrapper.setProps({ min: 11 });
-    wrapper.update();
-    expect(wrapper.getInputValue()).toEqual('10');
-    expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    const { container, rerender } = render(
+      <InputNumber min={0} max={20} value={10} onChange={onChange} />,
+    );
+    const input = container.querySelector('input');
+    expect(container.querySelector('.rc-input-number-out-of-range')).toBe(null);
+    rerender(<InputNumber min={11} max={20} value={10} onChange={onChange} />);
+    expect(input.value).toEqual('10');
+    expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
     expect(onChange).toHaveBeenCalledTimes(0);
 
-    wrapper.setProps({ value: 15 });
-    wrapper.setProps({ max: 14 });
-    wrapper.update();
+    rerender(<InputNumber min={11} max={14} value={15} onChange={onChange} />);
+    // wrapper.update();
 
-    expect(wrapper.getInputValue()).toEqual('15');
-    expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    expect(input.value).toEqual('15');
+    expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
     expect(onChange).toHaveBeenCalledTimes(0);
   });
 
@@ -429,12 +461,13 @@ describe('InputNumber.Github', () => {
       );
     };
 
-    const wrapper = mount(<Demo />);
-    wrapper.focusInput();
-    wrapper.changeValue('401');
+    const { container } = render(<Demo />);
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '401' } });
 
     // Demo re-render and the `value` prop is still 40, but the user input should be retained
-    expect(wrapper.getInputValue()).toEqual('401');
+    expect(input.value).toEqual('401');
   });
 
   // https://github.com/ant-design/ant-design/issues/16710
@@ -448,32 +481,27 @@ describe('InputNumber.Github', () => {
             onChange={(newPrecision: number) => {
               setPrecision(newPrecision);
             }}
+            data-testid="first"
           />
-          <InputNumber precision={precision} defaultValue={1.23} />
+          <InputNumber precision={precision} defaultValue={1.23} data-testid="last" />
         </div>
       );
     };
 
-    const wrapper = mount(<Demo />);
-    wrapper
-      .find('input')
-      .last()
-      .simulate('change', { target: { value: '1.23' } });
-    wrapper
-      .find('input')
-      .first()
-      .simulate('change', { target: { value: '0' } });
+    render(<Demo />);
+    fireEvent.change(screen.getByTestId('last'), { target: { value: '1.23' } });
+    fireEvent.change(screen.getByTestId('first'), { target: { value: '0' } });
 
-    expect(wrapper.find('input').last().props().value).toEqual('1');
+    expect(screen.getByTestId('last').value).toEqual('1');
   });
 
   // https://github.com/ant-design/ant-design/issues/30478
   it('-0 should input able', () => {
-    const wrapper = mount(<InputNumber />);
-    wrapper.changeValue('-');
-    wrapper.changeValue('-0');
-
-    expect(wrapper.getInputValue()).toEqual('-0');
+    const { container } = render(<InputNumber />);
+    const input = container.querySelector('input');
+    fireEvent.change(input, { target: { value: '-' } });
+    fireEvent.change(input, { target: { value: '-0' } });
+    expect(input.value).toEqual('-0');
   });
 
   // https://github.com/ant-design/ant-design/issues/32274
@@ -489,16 +517,14 @@ describe('InputNumber.Github', () => {
 
       return <InputNumber value={val} onChange={setVal} />;
     };
-    const wrapper = mount(<Demo />);
-
+    const { container, rerender } = render(<Demo />);
+    const input = container.querySelector('input');
     // Click
-    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    expect(wrapper.find('input').prop('value')).toEqual('8');
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    expect(input.value).toEqual('8');
 
     // Keyboard change
-    wrapper.find('input').simulate('keyDown');
-    wrapper.setProps({ value: 3 });
-    wrapper.update();
-    expect(wrapper.find('input').prop('value')).toEqual('3');
+    rerender(<Demo value={3} />);
+    expect(input.value).toEqual('3');
   });
 });

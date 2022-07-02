@@ -1,34 +1,34 @@
 import React from 'react';
 import KeyCode from 'rc-util/lib/KeyCode';
-import { mount } from './util/wrapper';
+import { render, fireEvent} from './util/wrapper';
 import InputNumber from '../src';
 
 describe('InputNumber.Keyboard', () => {
   it('up', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber onChange={onChange} />);
-    wrapper.find('input').simulate('keyDown', { which: KeyCode.UP });
+    const { container } = render(<InputNumber onChange={onChange} />);
+    fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.UP,key: "Up Arrow", keyCode: KeyCode.UP  });
     expect(onChange).toHaveBeenCalledWith(1);
   });
 
   it('up with pressing shift key', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber onChange={onChange} step={0.01} value={1.2} />);
-    wrapper.find('input').simulate('keyDown', { which: KeyCode.UP, shiftKey: true });
+    const { container } = render(<InputNumber onChange={onChange} step={0.01} value={1.2} />);
+    fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.UP,key: "Up Arrow",keyCode: KeyCode.UP , shiftKey: true });
     expect(onChange).toHaveBeenCalledWith(1.3);
   });
 
   it('down', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber onChange={onChange} />);
-    wrapper.find('input').simulate('keyDown', { which: KeyCode.DOWN });
+    const { container } = render(<InputNumber onChange={onChange} />);
+    fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.DOWN,key: "Dw Arrow",keyCode: KeyCode.DOWN  });
     expect(onChange).toHaveBeenCalledWith(-1);
   });
 
   it('down with pressing shift key', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber onChange={onChange} step={0.01} value={1.2} />);
-    wrapper.find('input').simulate('keyDown', { which: KeyCode.DOWN, shiftKey: true });
+    const { container } = render(<InputNumber onChange={onChange} step={0.01} value={1.2} />);
+    fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.DOWN, key: "Dw Arrow",keyCode: KeyCode.DOWN ,shiftKey: true });
     expect(onChange).toHaveBeenCalledWith(1.1);
   });
 
@@ -36,24 +36,24 @@ describe('InputNumber.Keyboard', () => {
 
   it('disabled keyboard', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber keyboard={false} onChange={onChange} />);
+    const { container } = render(<InputNumber keyboard={false} onChange={onChange} />);
 
-    wrapper.find('input').simulate('keyDown', { which: KeyCode.UP });
+    fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.UP,key: "Up Arrow" });
     expect(onChange).not.toHaveBeenCalled();
 
-    wrapper.find('input').simulate('keyDown', { which: KeyCode.DOWN });
+    fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.DOWN,key: "Dw Arrow"  });
     expect(onChange).not.toHaveBeenCalled();
   });
 
   it('enter to trigger onChange with precision', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber precision={0} onChange={onChange} />);
-
-    wrapper.find('input').simulate('change', { target: { value: '2.3333' } });
+    const { container } = render(<InputNumber precision={0} onChange={onChange} />);
+    const input = container.querySelector('input')
+    fireEvent.change(input,{ target: { value: '2.3333' } })
     expect(onChange).toHaveBeenCalledWith(2.3333);
     onChange.mockReset();
 
-    wrapper.find('input').simulate('keyDown', { which: KeyCode.ENTER });
+    fireEvent.keyDown(input, { which: KeyCode.ENTER,key: "Enter", keyCode: KeyCode.ENTER  });
     expect(onChange).toHaveBeenCalledWith(2);
   });
 });

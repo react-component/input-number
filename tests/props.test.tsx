@@ -1,105 +1,107 @@
 import React from 'react';
-import { mount } from './util/wrapper';
+import '@testing-library/jest-dom';
+import { render, fireEvent } from '@testing-library/react';
 import KeyCode from 'rc-util/lib/KeyCode';
 import InputNumber from '../src';
 
 describe('InputNumber.Props', () => {
+
   it('max', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber max={10} onChange={onChange} />);
+    const { container } = render(<InputNumber max={10} onChange={onChange} />);
     for (let i = 0; i < 100; i += 1) {
-      wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
     }
 
     expect(onChange.mock.calls[onChange.mock.calls.length - 1][0]).toEqual(10);
-    expect(wrapper.find('input').props()).toEqual(
-      expect.objectContaining({
-        'aria-valuemax': 10,
-        'aria-valuenow': '10',
-      }),
-    );
+
+    expect(container.querySelector('input')).toHaveAttribute('aria-valuemax', '10');
+    expect(container.querySelector('input')).toHaveAttribute('aria-valuenow', '10');
   });
 
   it('min', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber min={-10} onChange={onChange} />);
+    const { container } = render(<InputNumber min={-10} onChange={onChange} />);
     for (let i = 0; i < 100; i += 1) {
-      wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
     }
 
     expect(onChange.mock.calls[onChange.mock.calls.length - 1][0]).toEqual(-10);
-    expect(wrapper.find('input').props()).toEqual(
-      expect.objectContaining({
-        'aria-valuemin': -10,
-        'aria-valuenow': '-10',
-      }),
-    );
+
+    expect(container.querySelector('input')).toHaveAttribute('aria-valuemin', '-10');
+    expect(container.querySelector('input')).toHaveAttribute('aria-valuenow', '-10');
   });
 
   it('disabled', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber onChange={onChange} disabled />);
-    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-    expect(wrapper.exists('.rc-input-number-disabled')).toBeTruthy();
+    const { container } = render(<InputNumber onChange={onChange} disabled />);
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+    expect(container.querySelector('.rc-input-number-disabled')).toBeTruthy();
     expect(onChange).not.toHaveBeenCalled();
   });
 
   it('readOnly', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<InputNumber onChange={onChange} readOnly />);
-    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-    wrapper.findInput().simulate('keyDown', { which: KeyCode.UP });
-    wrapper.findInput().simulate('keyDown', { which: KeyCode.DOWN });
-    expect(wrapper.exists('.rc-input-number-readonly')).toBeTruthy();
+    const { container } = render(<InputNumber onChange={onChange} readOnly />);
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+    fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.UP });
+    fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.DOWN });
+    expect(container.querySelector('.rc-input-number-readonly')).toBeTruthy();
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('autofocus', () => {
-    const wrapper = mount(<InputNumber autoFocus />);
-    expect(wrapper.findInput().props().autoFocus).toBeTruthy();
+  it('autofocus', (done) => {
+    const onFocus = jest.fn();
+    const { container } = render(<InputNumber autoFocus onFocus={onFocus} />);
+    const input = container.querySelector('input');
+    setTimeout(() => {
+      expect(input).toHaveFocus();
+      done();
+    }, 500);
+
   });
 
   describe('step', () => {
     it('basic', () => {
       const onChange = jest.fn();
-      const wrapper = mount(<InputNumber onChange={onChange} step={5} />);
 
+      const { container } = render(<InputNumber onChange={onChange} step={5} />);
       for (let i = 0; i < 3; i += 1) {
-        wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
         expect(onChange).toHaveBeenCalledWith(-5 * (i + 1));
       }
-
-      expect(wrapper.find('input').props().step).toEqual(5);
+      expect(container.querySelector('input')).toHaveAttribute('step', '5');
     });
 
     it('basic with pressing shift key', () => {
       const onChange = jest.fn();
-      const wrapper = mount(<InputNumber onChange={onChange} step={5} />);
+      const { container } = render(<InputNumber onChange={onChange} step={5} />);
 
       for (let i = 0; i < 3; i += 1) {
-        wrapper
-          .find('.rc-input-number-handler-down')
-          .simulate('keyDown', { shiftKey: true })
-          .simulate('mouseDown');
+        fireEvent.keyDown(container.querySelector('.rc-input-number-handler-down'), {
+          shiftKey: true,
+        });
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+
         expect(onChange).toHaveBeenCalledWith(-5 * (i + 1) * 10);
       }
     });
 
     it('stringMode', () => {
       const onChange = jest.fn();
-      const wrapper = mount(
+      const { container } = render(
         <InputNumber
           stringMode
           onChange={onChange}
-          step="0.000000001"
-          defaultValue="0.000000001"
+          step='0.000000001'
+          defaultValue='0.000000001'
         />,
       );
 
       for (let i = 0; i < 11; i += 1) {
-        wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
       }
 
       expect(onChange).toHaveBeenCalledWith('-0.00000001');
@@ -107,20 +109,20 @@ describe('InputNumber.Props', () => {
 
     it('stringMode with pressing shift key', () => {
       const onChange = jest.fn();
-      const wrapper = mount(
+      const { container } = render(
         <InputNumber
           stringMode
           onChange={onChange}
-          step="0.0000000001" // 1e-10
-          defaultValue="0.000000001" // 1e-9
+          step='0.0000000001' // 1e-10
+          defaultValue='0.000000001' // 1e-9
         />,
       );
 
       for (let i = 0; i < 11; i += 1) {
-        wrapper
-          .find('.rc-input-number-handler-down')
-          .simulate('keyDown', { shiftKey: true })
-          .simulate('mouseDown');
+        fireEvent.keyDown(container.querySelector('.rc-input-number-handler-down'), {
+          shiftKey: true,
+        });
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
       }
 
       expect(onChange).toHaveBeenCalledWith('-0.00000001'); // -1e-8
@@ -128,21 +130,28 @@ describe('InputNumber.Props', () => {
 
     it('decimal', () => {
       const onChange = jest.fn();
-      const wrapper = mount(<InputNumber onChange={onChange} step={0.1} defaultValue={0.9} />);
+      const { container } = render(
+        <InputNumber onChange={onChange} step={0.1} defaultValue={0.9} />,
+      );
       for (let i = 0; i < 3; i += 1) {
-        wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
       }
       expect(onChange).toHaveBeenCalledWith(1.2);
     });
 
     it('decimal with pressing shift key', () => {
       const onChange = jest.fn();
-      const wrapper = mount(<InputNumber onChange={onChange} step={0.1} defaultValue={0.9} />);
+      const { container } = render(
+        <InputNumber onChange={onChange} step={0.1} defaultValue={0.9} />,
+      );
       for (let i = 0; i < 3; i += 1) {
-        wrapper
-          .find('.rc-input-number-handler-up')
-          .simulate('keyDown', { shiftKey: true })
-          .simulate('mouseDown');
+        fireEvent.keyDown(container.querySelector('input'), {
+          shiftKey: true,
+          which: KeyCode.UP,
+          key: 'ArrowUp',
+          code: 'ArrowUp',
+          keyCode: KeyCode.UP,
+        });
       }
       expect(onChange).toHaveBeenCalledWith(3.9);
     });
@@ -150,21 +159,21 @@ describe('InputNumber.Props', () => {
 
   describe('controlled', () => {
     it('restore when blur input', () => {
-      const wrapper = mount(<InputNumber value={9} />);
-      wrapper.focusInput();
+      const { container } = render(<InputNumber value={9} />);
+      const input = container.querySelector('input');
+      fireEvent.focus(input);
+      fireEvent.change(input, { target: { value: '3' } });
+      expect(input.value).toEqual('3');
 
-      wrapper.changeValue('3');
-      expect(wrapper.getInputValue()).toEqual('3');
-
-      wrapper.blurInput();
-      expect(wrapper.getInputValue()).toEqual('9');
+      fireEvent.blur(input);
+      expect(input.value).toEqual('9');
     });
 
     it('dynamic change value', () => {
-      const wrapper = mount(<InputNumber value={9} />);
-      wrapper.setProps({ value: '3' });
-      wrapper.update();
-      expect(wrapper.getInputValue()).toEqual('3');
+      const { container, rerender } = render(<InputNumber value={9} />);
+      const input = container.querySelector('input');
+      rerender(<InputNumber value={3} />);
+      expect(input.value).toEqual('3');
     });
 
     // Origin https://github.com/ant-design/ant-design/issues/7334
@@ -176,7 +185,7 @@ describe('InputNumber.Props', () => {
         return (
           <div>
             <button
-              type="button"
+              type='button'
               onClick={() => {
                 setValue('103aa');
               }}
@@ -188,12 +197,13 @@ describe('InputNumber.Props', () => {
         );
       };
 
-      const wrapper = mount(<Demo />);
-      expect(wrapper.getInputValue()).toEqual('2');
+      const { container } = render(<Demo />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('2');
 
-      wrapper.find('button').simulate('click');
-      expect(wrapper.getInputValue()).toEqual('103aa');
-      expect(wrapper.exists('.rc-input-number-not-a-number')).toBeTruthy();
+      fireEvent.click(container.querySelector('button'));
+      expect(input.value).toEqual('103aa');
+      expect(container.querySelector('.rc-input-number-not-a-number')).toBeTruthy();
     });
 
     // https://github.com/ant-design/ant-design/issues/7358
@@ -204,7 +214,7 @@ describe('InputNumber.Props', () => {
         return (
           <div>
             <button
-              type="button"
+              type='button'
               onClick={() => {
                 setValue(undefined);
               }}
@@ -216,197 +226,208 @@ describe('InputNumber.Props', () => {
         );
       };
 
-      const wrapper = mount(<Demo />);
-      expect(wrapper.getInputValue()).toEqual('2');
+      const { container } = render(<Demo />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('2');
 
-      wrapper.find('button').simulate('click');
-      expect(wrapper.getInputValue()).toEqual('');
+      fireEvent.click(container.querySelector('button'));
+      expect(input.value).toEqual('');
     });
   });
 
   describe('defaultValue', () => {
     it('default value should be empty', () => {
-      const wrapper = mount(<InputNumber />);
-      expect(wrapper.getInputValue()).toEqual('');
+      const { container } = render(<InputNumber />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('');
     });
 
     it('default value should be empty when step is decimal', () => {
-      const wrapper = mount(<InputNumber step={0.1} />);
-      expect(wrapper.getInputValue()).toEqual('');
+      const { container } = render(<InputNumber step={0.1} />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('');
     });
 
     it('default value should be 1', () => {
-      const wrapper = mount(<InputNumber defaultValue={1} />);
-      expect(wrapper.getInputValue()).toEqual('1');
+      const { container } = render(<InputNumber defaultValue={1} />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('1');
     });
 
     it('default value could be null', () => {
-      const wrapper = mount(<InputNumber defaultValue={null} />);
-      expect(wrapper.getInputValue()).toEqual('');
+      const { container } = render(<InputNumber defaultValue={null} />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('');
     });
 
     it('warning when defaultValue higher than max', () => {
-      const wrapper = mount(<InputNumber min={0} max={10} defaultValue={13} />);
-      expect(wrapper.getInputValue()).toEqual('13');
-      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+      const { container } = render(<InputNumber min={0} max={10} defaultValue={13} />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('13');
+      expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
     it('warning when defaultValue lower than min', () => {
-      const wrapper = mount(<InputNumber min={0} max={10} defaultValue={-1} />);
-      expect(wrapper.getInputValue()).toEqual('-1');
-      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+      const { container } = render(<InputNumber min={0} max={10} defaultValue={-1} />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('-1');
+      expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
     it('default value can be a string greater than 16 characters', () => {
-      const wrapper = mount(<InputNumber max={10} defaultValue="-3.637978807091713e-12" />);
-      expect(wrapper.getInputValue()).toEqual('-0.000000000003637978807091713');
+      const { container } = render(<InputNumber max={10} defaultValue='-3.637978807091713e-12' />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('-0.000000000003637978807091713');
     });
 
     it('invalidate defaultValue', () => {
-      const wrapper = mount(<InputNumber defaultValue="light" />);
-      expect(wrapper.getInputValue()).toEqual('light');
+      const { container } = render(<InputNumber defaultValue='light' />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('light');
     });
   });
 
   describe('value', () => {
-    it("value shouldn't higher than max", () => {
-      const wrapper = mount(<InputNumber min={0} max={10} value={13} />);
-      expect(wrapper.getInputValue()).toEqual('13');
-      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    it('value shouldn\'t higher than max', () => {
+      const { container } = render(<InputNumber min={0} max={10} value={13} />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('13');
+      expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
-    it("value shouldn't lower than min", () => {
-      const wrapper = mount(<InputNumber min={0} max={10} value={-1} />);
-      expect(wrapper.getInputValue()).toEqual('-1');
-      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+    it('value shouldn\'t lower than min', () => {
+      const { container } = render(<InputNumber min={0} max={10} value={-1} />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('-1');
+      expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
     it('value can be a string greater than 16 characters', () => {
-      const wrapper = mount(<InputNumber max={10} value="-3.637978807091713e-12" />);
-      expect(wrapper.getInputValue()).toEqual('-0.000000000003637978807091713');
+      const { container } = render(<InputNumber max={10} value='-3.637978807091713e-12' />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('-0.000000000003637978807091713');
     });
 
     it('value decimal over six decimal not be scientific notation', () => {
       const onChange = jest.fn();
-      const wrapper = mount(<InputNumber precision={7} step={0.0000001} onChange={onChange} />);
-
+      const { container } = render(
+        <InputNumber precision={7} step={0.0000001} onChange={onChange} />,
+      );
+      const input = container.querySelector('input');
       for (let i = 1; i <= 9; i += 1) {
-        wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-        expect(wrapper.getInputValue()).toEqual(`0.000000${i}`);
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+        expect(input.value).toEqual(`0.000000${i}`);
         expect(onChange).toHaveBeenCalledWith(0.0000001 * i);
       }
 
       for (let i = 8; i >= 1; i -= 1) {
-        wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-        expect(wrapper.getInputValue()).toEqual(`0.000000${i}`);
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+        expect(input.value).toEqual(`0.000000${i}`);
         expect(onChange).toHaveBeenCalledWith(0.0000001 * i);
       }
 
-      wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-      expect(wrapper.getInputValue()).toEqual(`0.0000000`);
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+      expect(input.value).toEqual(`0.0000000`);
       expect(onChange).toHaveBeenCalledWith(0);
     });
 
     it('value can be changed when dynamic setting max', () => {
-      const wrapper = mount(<InputNumber value={11} max={10} />);
+      const { container, rerender } = render(<InputNumber value={11} max={10} />);
+      const input = container.querySelector('input');
 
       // Origin logic shows `10` as `max`. But it breaks form logic.
-      expect(wrapper.getInputValue()).toEqual('11');
-      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+      expect(input.value).toEqual('11');
+      expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
 
-      wrapper.setProps({ max: 20 });
-      wrapper.update();
-      expect(wrapper.getInputValue()).toEqual('11');
-      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeFalsy();
+      rerender(<InputNumber value={11} max={20} />);
+      expect(input.value).toEqual('11');
+      expect(container.querySelector('.rc-input-number-out-of-range')).toBeFalsy();
     });
 
     it('value can be changed when dynamic setting min', () => {
-      const wrapper = mount(<InputNumber value={9} min={10} />);
+      const { container, rerender } = render(<InputNumber value={9} min={10} />);
+      const input = container.querySelector('input');
 
       // Origin logic shows `10` as `max`. But it breaks form logic.
-      expect(wrapper.getInputValue()).toEqual('9');
-      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeTruthy();
+      expect(input.value).toEqual('9');
+      expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
 
-      wrapper.setProps({ min: 0 });
-      wrapper.update();
-      expect(wrapper.getInputValue()).toEqual('9');
-      expect(wrapper.exists('.rc-input-number-out-of-range')).toBeFalsy();
+      rerender(<InputNumber value={9} min={0} />);
+      expect(input.value).toEqual('9');
+      expect(container.querySelector('.rc-input-number-out-of-range')).toBeFalsy();
     });
 
     it('value can override given defaultValue', () => {
-      const wrapper = mount(<InputNumber value={2} defaultValue={1} />);
-      expect(wrapper.getInputValue()).toEqual('2');
+      const { container } = render(<InputNumber value={2} defaultValue={1} />);
+      const input = container.querySelector('input');
+      expect(input.value).toEqual('2');
     });
   });
 
   describe(`required prop`, () => {
     it(`should add required attr to the input tag when get passed as true`, () => {
-      const wrapper = mount(<InputNumber required />);
-      expect(wrapper.findInput().props().required).toBeTruthy();
+      const { container } = render(<InputNumber required />);
+      expect(container.querySelector('input')).toHaveAttribute('required');
     });
 
     it(`should not add required attr to the input as default props when not being supplied`, () => {
-      const wrapper = mount(<InputNumber />);
-      expect(wrapper.findInput().props().required).toBeFalsy();
+      const { container } = render(<InputNumber />);
+      expect(container.querySelector('input')).not.toHaveAttribute('required');
     });
 
     it(`should not add required attr to the input tag when get passed as false`, () => {
-      const wrapper = mount(<InputNumber required={false} />);
-      expect(wrapper.findInput().props().required).toBeFalsy();
+      const { container } = render(<InputNumber required={false} />);
+      expect(container.querySelector('input')).not.toHaveAttribute('required');
     });
   });
 
   describe('Pattern prop', () => {
     it(`should render with a pattern attribute if the pattern prop is supplied`, () => {
-      const wrapper = mount(<InputNumber pattern="\d*" />);
-      expect(wrapper.findInput().props().pattern).toEqual('\\d*');
+      const { container } = render(<InputNumber pattern='\d*' />);
+      expect(container.querySelector('input')).toHaveAttribute('pattern', '\\d*');
     });
 
     it(`should render with no pattern attribute if the pattern prop is not supplied`, () => {
-      const wrapper = mount(<InputNumber />);
-      expect(wrapper.findInput().props().pattern).toBeFalsy();
+      const { container } = render(<InputNumber />);
+      expect(container.querySelector('input')).not.toHaveAttribute('pattern', '\\d*');
+
     });
   });
 
   describe('onPaste props', () => {
     it('passes onPaste event handler', () => {
       const onPaste = jest.fn();
-      const wrapper = mount(<InputNumber value={1} onPaste={onPaste} />);
-      wrapper.findInput().simulate('paste');
+      const { container } = render(<InputNumber value={1} onPaste={onPaste} />);
+      const input = container.querySelector('input');
+      fireEvent.paste(input);
+      // wrapper.findInput().simulate('paste');
       expect(onPaste).toHaveBeenCalled();
     });
   });
 
   describe('aria and data props', () => {
     it('passes data-* attributes', () => {
-      const wrapper = mount(<InputNumber value={1} data-test="test-id" data-id="12345" />);
-      expect(wrapper.findInput().props()).toEqual(
-        expect.objectContaining({
-          'data-test': 'test-id',
-          'data-id': '12345',
-        }),
-      );
+      const { container } = render(<InputNumber value={1} data-test='test-id' data-id='12345' />);
+      const input = container.querySelector('input');
+
+      expect(input).toHaveAttribute('data-test', 'test-id');
+      expect(input).toHaveAttribute('data-id', '12345');
     });
 
     it('passes aria-* attributes', () => {
-      const wrapper = mount(
-        <InputNumber value={1} aria-labelledby="test-id" aria-label="some-label" />,
+      const { container } = render(
+        <InputNumber value={1} aria-labelledby='test-id' aria-label='some-label' />,
       );
-      expect(wrapper.findInput().props()).toEqual(
-        expect.objectContaining({
-          'aria-labelledby': 'test-id',
-          'aria-label': 'some-label',
-        }),
-      );
+      const input = container.querySelector('input');
+      expect(input).toHaveAttribute('aria-labelledby', 'test-id');
+      expect(input).toHaveAttribute('aria-label', 'some-label');
+
     });
 
     it('passes role attribute', () => {
-      const wrapper = mount(<InputNumber value={1} role="searchbox" />);
-      expect(wrapper.findInput().props()).toEqual(
-        expect.objectContaining({
-          role: 'searchbox',
-        }),
-      );
+      const { container } = render(<InputNumber value={1} role='searchbox' />);
+      expect(container.querySelector('input')).toHaveAttribute('role', 'searchbox');
+
     });
   });
 });
