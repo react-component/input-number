@@ -21,8 +21,7 @@ describe('InputNumber.Cursor', () => {
   ) {
     fireEvent.focus(input)
     fireEvent.keyDown(input,{which,keyCode:which,key})
-    fireEvent.change(input,{ target: { value: changeValue }})
-    cursorInput(input, cursorPos);
+    fireEvent.change(input,{ target: { value: changeValue, selectionStart: 1 }})
     fireEvent.keyUp(input,{which,keyCode:which,key})
   }
 
