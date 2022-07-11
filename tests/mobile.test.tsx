@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from './util/wrapper';
+import { render, fireEvent } from './util/wrapper';
 import InputNumber from '../src';
 
 jest.mock('rc-util/lib/isMobile', () => () => true);
@@ -9,8 +9,8 @@ jest.mock('rc-util/lib/isMobile', () => () => true);
 
 describe('InputNumber.Mobile', () => {
   it('not show steps when mobile', () => {
-    const wrapper = mount(<InputNumber />);
-    expect(wrapper.exists('.rc-input-number-handler-wrap')).toBeFalsy();
+    const {container} = render(<InputNumber />);
+    expect(container.querySelector('.rc-input-number-handler-wrap')).toBeFalsy();
   });
 });
 

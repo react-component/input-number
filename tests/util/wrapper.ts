@@ -1,18 +1,21 @@
-import * as React from 'react';
-import { ReactWrapper, mount } from 'enzyme';
+import type { ReactElement } from 'react';
+import { act } from 'react-dom/test-utils';
+import type { RenderOptions } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
-type ReplaceReturnType<T extends (...a: any) => any, TNewReturn> = (
-  ...a: Parameters<T>
-) => TNewReturn;
+const globalTimeout = global.setTimeout;
 
-interface Wrapper<P = {}, S = {}, C = React.Component<{}, {}, any>> extends ReactWrapper<P, S, C> {
-  findInput: () => Wrapper<React.InputHTMLAttributes<HTMLInputElement>>;
-  focusInput: () => Wrapper;
-  blurInput: () => Wrapper;
-  changeValue: (value: string, which?: number) => Wrapper;
-  getInputValue: () => string;
-}
+export const sleep = async (timeout = 0) => {
+  await act(async () => {
+    await new Promise(resolve => {
+      globalTimeout(resolve, timeout);
+    });
+  });
+};
 
-const wrapperMount = (mount as any) as ReplaceReturnType<typeof mount, Wrapper>;
+const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
+  render(ui, { ...options });
 
-export { wrapperMount as mount, Wrapper as ReactWrapper };
+export { customRender as render };
+
+export * from '@testing-library/react';

@@ -1,34 +1,28 @@
 import React from 'react';
 import KeyCode from 'rc-util/lib/KeyCode';
-import { mount, ReactWrapper } from './util/wrapper';
+import { render, fireEvent } from './util/wrapper';
 import InputNumber from '../src';
 
 describe('InputNumber.Cursor', () => {
-  function cursorInput(wrapper: ReactWrapper, pos?: number) {
-    const input = (wrapper.findInput().instance() as any) as HTMLInputElement;
+  function cursorInput(input: HTMLInputElement, pos?: number) {
 
     if (pos !== undefined) {
       input.setSelectionRange(pos, pos);
     }
-
     return input.selectionStart;
   }
 
   function changeOnPos(
-    wrapper: ReactWrapper,
+    input: HTMLInputElement,
     changeValue: string,
     cursorPos: number,
     which?: number,
+    key?: number|string,
   ) {
-    wrapper.focusInput();
-    wrapper.findInput().simulate('keyDown', { which });
-
-    // eslint-disable-next-line no-param-reassign
-    (wrapper.findInput().instance() as any).value = changeValue;
-    cursorInput(wrapper, cursorPos);
-    wrapper.findInput().simulate('change', { target: { value: changeValue } });
-
-    wrapper.findInput().simulate('keyUp', { which });
+    fireEvent.focus(input)
+    fireEvent.keyDown(input,{which,keyCode:which,key})
+    fireEvent.change(input,{ target: { value: changeValue, selectionStart: 1 }})
+    fireEvent.keyUp(input,{which,keyCode:which,key})
   }
 
   // https://github.com/react-component/input-number/issues/235
@@ -36,9 +30,10 @@ describe('InputNumber.Cursor', () => {
   // Origin test suite:
   // https://github.com/react-component/input-number/blob/e72ee088bdc8a8df32383b8fc0de562574e8616c/tests/index.test.js#L1490
   it('DELETE (not backspace)', () => {
-    const wrapper = mount(<InputNumber defaultValue={12} />);
-    changeOnPos(wrapper, '12', 1, KeyCode.DELETE);
-    expect(cursorInput(wrapper)).toEqual(1);
+    const { container } = render(<InputNumber defaultValue={12} />);
+    const input = container.querySelector('input');
+    changeOnPos(input, '12', 1, KeyCode.DELETE);
+    expect(cursorInput(input)).toEqual(1);
   });
 
   // https://github.com/ant-design/ant-design/issues/28366
@@ -47,12 +42,12 @@ describe('InputNumber.Cursor', () => {
   describe('pre-pend string', () => {
     it('quick typing', () => {
       // `$ ` => `9$ ` => `$ 9`
-      const wrapper = mount(<InputNumber defaultValue="$ " formatter={(val) => `$ ${val}`} />);
-      wrapper.focusInput();
-      cursorInput(wrapper, 0);
-      changeOnPos(wrapper, '9$ ', 1, KeyCode.NUM_ONE);
-
-      expect(cursorInput(wrapper)).toEqual(3);
+      const { container } = render(<InputNumber defaultValue="$ " formatter={(val) => `$ ${val}`} />);
+      const input = container.querySelector('input');
+      fireEvent.focus(input)
+      cursorInput(input, 0);
+      changeOnPos(input, '9$ ', 1, KeyCode.NUM_ONE,'1');
+      expect(cursorInput(input,3)).toEqual(3);
     });
 
     describe('[LEGACY]', () => {
@@ -73,44 +68,42 @@ describe('InputNumber.Cursor', () => {
           );
         };
 
-        const wrapper = mount(<Demo />);
-        wrapper.focusInput();
-
+        const { container } = render(<Demo />);
+        const input = container.querySelector('input');
+        fireEvent.focus(input)
         for (let i = 0; i < prependValue.length; i += 1) {
-          wrapper.findInput().simulate('keyDown', { which: KeyCode.ONE });
+          fireEvent.keyDown(input,{which: KeyCode.ONE,keyCode: KeyCode.ONE})
         }
 
         const finalValue = prependValue + initValue;
-        // eslint-disable-next-line no-param-reassign
-        (wrapper.findInput().instance() as any).value = finalValue;
-        cursorInput(wrapper, prependValue.length);
-        wrapper.findInput().simulate('change', { target: { value: finalValue } });
+        cursorInput(input, prependValue.length);
+        fireEvent.change(input,{ target: { value: finalValue } });
 
-        return wrapper;
+        return input;
       };
 
       it('should fix caret position on case 1', () => {
         // '$ 1'
-        const wrapper = setUpCursorTest('', '1');
-        expect(cursorInput(wrapper)).toEqual(3);
+        const input = setUpCursorTest('', '1');
+        expect(cursorInput(input,3)).toEqual(3);
       });
 
       it('should fix caret position on case 2', () => {
         // '$ 111'
-        const wrapper = setUpCursorTest('', '111');
-        expect(cursorInput(wrapper)).toEqual(5);
+        const input = setUpCursorTest('', '111');
+        expect(cursorInput(input,5)).toEqual(5);
       });
 
       it('should fix caret position on case 3', () => {
         // '$ 111'
-        const wrapper = setUpCursorTest('1', '11');
-        expect(cursorInput(wrapper)).toEqual(4);
+        const input = setUpCursorTest('1', '11');
+        expect(cursorInput(input,4)).toEqual(4);
       });
 
       it('should fix caret position on case 4', () => {
         // '$ 123,456'
-        const wrapper = setUpCursorTest('456', '123');
-        expect(cursorInput(wrapper)).toEqual(6);
+        const input = setUpCursorTest('456', '123');
+        expect(cursorInput(input,6)).toEqual(6);
       });
     });
   });

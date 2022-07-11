@@ -1,77 +1,106 @@
 import React from 'react';
-import { mount } from './util/wrapper';
+import { render, fireEvent } from './util/wrapper';
 import InputNumber from '../src';
 import KeyCode from 'rc-util/lib/KeyCode';
 
 describe('InputNumber.Formatter', () => {
   it('formatter on default', () => {
-    const wrapper = mount(<InputNumber step={1} value={5} formatter={(num) => `$ ${num}`} />);
-    expect(wrapper.getInputValue()).toEqual('$ 5');
+    const { container } = render(<InputNumber step={1} value={5} formatter={num => `$ ${num}`} />);
+    const input = container.querySelector('input');
+    expect(input.value).toEqual('$ 5');
   });
 
   it('formatter on mousedown', () => {
-    const wrapper = mount(<InputNumber defaultValue={5} formatter={(num) => `$ ${num}`} />);
-    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    expect(wrapper.getInputValue()).toEqual('$ 6');
+    const { container } = render(<InputNumber defaultValue={5} formatter={num => `$ ${num}`} />);
+    const input = container.querySelector('input');
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    expect(input.value).toEqual('$ 6');
 
-    wrapper.find('.rc-input-number-handler-down').simulate('mouseDown');
-    expect(wrapper.getInputValue()).toEqual('$ 5');
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+    expect(input.value).toEqual('$ 5');
   });
 
   it('formatter on keydown', () => {
     const onChange = jest.fn();
-    const wrapper = mount(
-      <InputNumber defaultValue={5} onChange={onChange} formatter={(num) => `$ ${num} ¥`} />,
+    const { container } = render(
+      <InputNumber defaultValue={5} onChange={onChange} formatter={num => `$ ${num} ¥`} />,
     );
 
-    wrapper.focusInput();
-    wrapper.findInput().simulate('keyDown', { which: KeyCode.UP });
-    expect(wrapper.getInputValue()).toEqual('$ 6 ¥');
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, {
+      which: KeyCode.UP,
+      key: 'ArrowUp',
+      code: 'ArrowUp',
+      keyCode: KeyCode.UP,
+    });
+
+    expect(input.value).toEqual('$ 6 ¥');
     expect(onChange).toHaveBeenCalledWith(6);
 
-    wrapper.findInput().simulate('keyDown', { which: KeyCode.DOWN });
-    expect(wrapper.getInputValue()).toEqual('$ 5 ¥');
+    fireEvent.keyDown(input, {
+      which: KeyCode.DOWN,
+      key: 'ArrowDown',
+      code: 'ArrowDown',
+      keyCode: KeyCode.DOWN,
+    });
+    expect(input.value).toEqual('$ 5 ¥');
     expect(onChange).toHaveBeenCalledWith(5);
   });
 
   it('formatter on direct input', () => {
     const onChange = jest.fn();
-    const wrapper = mount(
-      <InputNumber defaultValue={5} formatter={(num) => `$ ${num}`} onChange={onChange} />,
+    const { container } = render(
+      <InputNumber defaultValue={5} formatter={num => `$ ${num}`} onChange={onChange} />,
     );
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
 
-    wrapper.focusInput();
-    wrapper.changeValue('100');
-    expect(wrapper.getInputValue()).toEqual('$ 100');
+    fireEvent.change(input, { target: { value: '100' } });
+    expect(input.value).toEqual('$ 100');
     expect(onChange).toHaveBeenCalledWith(100);
   });
 
   it('formatter and parser', () => {
     const onChange = jest.fn();
-    const wrapper = mount(
+    const { container } = render(
       <InputNumber
         defaultValue={5}
-        formatter={(num) => `$ ${num} boeing 737`}
-        parser={(num) => num.toString().split(' ')[1]}
+        formatter={num => `$ ${num} boeing 737`}
+        parser={num => num.toString().split(' ')[1]}
         onChange={onChange}
       />,
     );
-
-    wrapper.focusInput();
-    wrapper.findInput().simulate('keyDown', { which: KeyCode.UP });
-    expect(wrapper.getInputValue()).toEqual('$ 6 boeing 737');
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, {
+      which: KeyCode.UP,
+      key: 'ArrowUp',
+      code: 'ArrowUp',
+      keyCode: KeyCode.UP,
+    });
+    expect(input.value).toEqual('$ 6 boeing 737');
     expect(onChange).toHaveBeenLastCalledWith(6);
 
-    wrapper.findInput().simulate('keyDown', { which: KeyCode.DOWN });
-    expect(wrapper.getInputValue()).toEqual('$ 5 boeing 737');
+    fireEvent.keyDown(input, {
+      which: KeyCode.DOWN,
+      key: 'ArrowDown',
+      code: 'ArrowDown',
+      keyCode: KeyCode.DOWN,
+    });
+
+    expect(input.value).toEqual('$ 5 boeing 737');
     expect(onChange).toHaveBeenLastCalledWith(5);
 
-    wrapper.find('.rc-input-number-handler-up').simulate('mouseDown');
-    expect(wrapper.getInputValue()).toEqual('$ 6 boeing 737');
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'), {
+      which: KeyCode.DOWN,
+    });
+    expect(input.value).toEqual('$ 6 boeing 737');
     expect(onChange).toHaveBeenLastCalledWith(6);
   });
 
-  it('control not block user input', () => {
+  it('control not block user input', async () => {
+    let numValue;
     const Demo = () => {
       const [value, setValue] = React.useState<number>(null);
 
@@ -86,18 +115,23 @@ describe('InputNumber.Formatter', () => {
 
             return String(num);
           }}
-          parser={(num) => Number(num)}
+          parser={num => {
+            numValue = num;
+            return Number(num);
+          }}
         />
       );
     };
 
-    const wrapper = mount(<Demo />);
+    const { container } = render(<Demo />);
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '-' } });
+    fireEvent.change(input, { target: { value: '-0' } });
 
-    wrapper.changeValue('-');
-    wrapper.changeValue('-0');
-    expect(wrapper.findInput().props().value).toEqual('-0');
+    expect(numValue).toEqual('-0');
 
-    wrapper.findInput().simulate('blur');
-    expect(wrapper.findInput().props().value).toEqual('0');
+    fireEvent.blur(input);
+    expect(input.value).toEqual('0');
   });
 });
