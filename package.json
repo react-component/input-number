@@ -39,12 +39,12 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.1",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "13.3.0",
     "classnames": "^2.2.5",
     "rc-util": "^5.9.8"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "13.3.0",
     "@types/classnames": "^2.2.9",
     "@types/enzyme": "^3.10.8",
     "@types/jest": "^26.0.0",
