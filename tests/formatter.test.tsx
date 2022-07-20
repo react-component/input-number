@@ -135,3 +135,21 @@ describe('InputNumber.Formatter', () => {
     expect(input.value).toEqual('0');
   });
 });
+
+it('in strictMode render correct defaultValue ', () => {
+  const Demo = () => {
+    return (
+      <React.StrictMode>
+        <div>
+          <InputNumber defaultValue={5}  formatter={num => `$ ${num}`} />
+        </div>
+      </React.StrictMode>
+    );
+  };
+  const { container } = render(<Demo />);
+  const input = container.querySelector('input');
+  expect(input.value).toEqual('$ 5');
+
+  fireEvent.change(input, { target: { value: 3 } });
+  expect(input.value).toEqual('$ 3')
+});
