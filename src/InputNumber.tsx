@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
+import { useLayoutUpdateEffect }  from "rc-util/lib/hooks/useLayoutEffect"
 import { composeRef } from 'rc-util/lib/ref';
 import getMiniDecimal, {
   DecimalClass,
@@ -18,7 +19,7 @@ import {
   validateNumber,
 } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
-import useUpdateEffect from './hooks/useUpdateEffect';
+
 import useFrame from './hooks/useFrame';
 
 /**
@@ -515,14 +516,14 @@ const InputNumber = React.forwardRef(
 
     // ========================== Controlled ==========================
     // Input by precision
-    useUpdateEffect(() => {
+    useLayoutUpdateEffect(() => {
       if (!decimalValue.isInvalidate()) {
         setInputValue(decimalValue, false);
       }
     }, [precision]);
 
     // Input by value
-    useUpdateEffect(() => {
+    useLayoutUpdateEffect(() => {
       const newValue = getMiniDecimal(value);
       setDecimalValue(newValue);
 
@@ -537,7 +538,7 @@ const InputNumber = React.forwardRef(
     }, [value]);
 
     // ============================ Cursor ============================
-    useUpdateEffect(() => {
+    useLayoutUpdateEffect(() => {
       if (formatter) {
         restoreCursor();
       }
