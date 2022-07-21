@@ -265,34 +265,10 @@ export default function getMiniDecimal(value: ValueType): DecimalClass {
 }
 
 /**
- * round up an unsigned number str, like: 1.4 -> 2, 1.5 -> 2
+ * Align the logic of toFixed to around like 1.5 => 2.
+ * If set `cutOnly`, will just remove the over decimal part.
  */
-export function roundUpUnsignedDecimal(numStr: string, precision: number) {
-  const {integerStr, decimalStr} = trimNumber(numStr);
-  const advancedDecimal = getMiniDecimal(integerStr + '.' + decimalStr).add(
-    `0.${'0'.repeat(precision)}${5}`,
-  );
-  return toFixed(advancedDecimal.toString(), '.', precision);
-}
-
-/**
- * round up an unsigned number str, like: 1.4 -> 1, 1.5 -> 1
- */
-export function roundDownUnsignedDecimal(numStr: string,  precision: number) {
-  const {negativeStr, integerStr, decimalStr} = trimNumber(numStr);
-  const numberWithoutDecimal = `${negativeStr}${integerStr}`;
-  if (precision === 0) {
-    return integerStr;
-  }
-  return `${numberWithoutDecimal}.${decimalStr
-    .padEnd(precision, '0')
-    .slice(0, precision)}`;
-}
-
-/**
- * Align the logic of toFixed to around like 1.5 => 2
- */
-export function toFixed(numStr: string, separatorStr: string, precision?: number) {
+export function toFixed(numStr: string, separatorStr: string, precision?: number, cutOnly = false) {
   if (numStr === '') {
     return '';
   }
@@ -305,11 +281,11 @@ export function toFixed(numStr: string, separatorStr: string, precision?: number
     // We will get last + 1 number to check if need advanced number
     const advancedNum = Number(decimalStr[precision]);
 
-    if (advancedNum >= 5) {
+    if (advancedNum >= 5 && !cutOnly) {
       const advancedDecimal = getMiniDecimal(numStr).add(
         `${negativeStr}0.${'0'.repeat(precision)}${10 - advancedNum}`,
       );
-      return toFixed(advancedDecimal.toString(), separatorStr, precision);
+      return toFixed(advancedDecimal.toString(), separatorStr, precision, cutOnly);
     }
 
     if (precision === 0) {

@@ -544,6 +544,6 @@ describe('InputNumber.Github', () => {
     });
     fireEvent.blur(container.querySelector('input'));
 
-    expect(onChange).toHaveBeenCalledWith(2333);
+    expect(onChange).toHaveBeenCalledWith(0);
   });
 });
