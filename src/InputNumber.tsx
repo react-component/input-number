@@ -1,12 +1,10 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
-import { useLayoutUpdateEffect }  from "rc-util/lib/hooks/useLayoutEffect"
+import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
 import getMiniDecimal, {
   DecimalClass,
-  roundDownUnsignedDecimal,
-  roundUpUnsignedDecimal,
   toFixed,
   ValueType,
 } from './utils/MiniDecimal';
@@ -15,7 +13,6 @@ import {
   getNumberPrecision,
   num2str,
   getDecupleSteps,
-  trimNumber,
   validateNumber,
 } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
@@ -41,24 +38,9 @@ const getDecimalValue = (stringMode: boolean, decimalValue: DecimalClass) => {
   return decimalValue.toNumber();
 };
 
-const getDecimalIfValidate = (value: ValueType, precision: number | undefined, isMax?: boolean) => {
+const getDecimalIfValidate = (value: ValueType) => {
   const decimal = getMiniDecimal(value);
-  if (decimal.isInvalidate()) {
-    return null;
-  }
-
-  if (precision === undefined) {
-    return decimal;
-  }
-
-  const { negative, integerStr, decimalStr, negativeStr } = trimNumber(decimal.toString());
-  const unSignedNumberStr = integerStr + '.' + decimalStr;
-
-  if ((isMax && !negative) || (!isMax && negative)) {
-    return getMiniDecimal(negativeStr + roundDownUnsignedDecimal(unSignedNumberStr, precision));
-  } else {
-    return getMiniDecimal(negativeStr + roundUpUnsignedDecimal(unSignedNumberStr, precision));
-  }
+  return decimal.isInvalidate() ? null : decimal;
 };
 
 export interface InputNumberProps<T extends ValueType = ValueType>
@@ -269,14 +251,8 @@ const InputNumber = React.forwardRef(
     }
 
     // >>> Max & Min limit
-    const maxDecimal = React.useMemo(() => getDecimalIfValidate(max, precision, true), [
-      max,
-      precision,
-    ]);
-    const minDecimal = React.useMemo(() => getDecimalIfValidate(min, precision, false), [
-      min,
-      precision,
-    ]);
+    const maxDecimal = React.useMemo(() => getDecimalIfValidate(max), [max, precision]);
+    const minDecimal = React.useMemo(() => getDecimalIfValidate(min), [min, precision]);
 
     const upDisabled = React.useMemo(() => {
       if (!maxDecimal || !decimalValue || decimalValue.isInvalidate()) {
@@ -347,6 +323,12 @@ const InputNumber = React.forwardRef(
         const mergedPrecision = getPrecision(numStr, userTyping);
         if (mergedPrecision >= 0) {
           updateValue = getMiniDecimal(toFixed(numStr, '.', mergedPrecision));
+
+          // When to fixed. The value may out of min & max range.
+          // 4 in [0, 3.8] => 3.8 => 4 (toFixed)
+          if (!isInRange(updateValue)) {
+            updateValue = getMiniDecimal(toFixed(numStr, '.', mergedPrecision, true));
+          }
         }
 
         // Trigger event
@@ -414,7 +396,7 @@ const InputNumber = React.forwardRef(
     };
 
     // >>> Input
-    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = e => {
+    const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       collectInputValue(e.target.value);
     };
 
@@ -471,7 +453,7 @@ const InputNumber = React.forwardRef(
       }
     };
 
-    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = event => {
+    const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
       const { which, shiftKey } = event;
       userTypingRef.current = true;
 

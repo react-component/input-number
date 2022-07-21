@@ -36,7 +36,7 @@ describe('InputNumber.Github', () => {
         <InputNumber
           step={1}
           value={value}
-          onChange={newValue => {
+          onChange={(newValue) => {
             setValue(newValue);
           }}
         />
@@ -58,7 +58,7 @@ describe('InputNumber.Github', () => {
           step={1}
           max={NaN}
           value={value}
-          onChange={newValue => {
+          onChange={(newValue) => {
             setValue(newValue);
           }}
         />
@@ -82,7 +82,7 @@ describe('InputNumber.Github', () => {
       <InputNumber
         step={0.01}
         defaultValue={2}
-        onChange={value => {
+        onChange={(value) => {
           num = value;
         }}
       />,
@@ -142,7 +142,7 @@ describe('InputNumber.Github', () => {
       return (
         <InputNumber
           value={value}
-          onChange={newValue => {
+          onChange={(newValue) => {
             setValue(newValue);
           }}
         />
@@ -173,7 +173,7 @@ describe('InputNumber.Github', () => {
       return (
         <InputNumber
           value={value}
-          onChange={newValue => {
+          onChange={(newValue) => {
             num = newValue;
             setValue(newValue);
           }}
@@ -354,7 +354,7 @@ describe('InputNumber.Github', () => {
         <InputNumber
           value={value}
           step={0.1}
-          onChange={newValue => {
+          onChange={(newValue) => {
             setValue(newValue);
             num = newValue;
           }}
@@ -393,7 +393,7 @@ describe('InputNumber.Github', () => {
       <InputNumber
         min={1}
         max={10}
-        onBlur={e => {
+        onBlur={(e) => {
           targetValue = e.target.value;
         }}
         value={1}
@@ -411,10 +411,10 @@ describe('InputNumber.Github', () => {
 
     const { container } = render(
       <InputNumber
-        onBlur={e => {
+        onBlur={(e) => {
           valueOnBlur = e.target.value;
         }}
-        formatter={value => `${Number(value) * 100}%`}
+        formatter={(value) => `${Number(value) * 100}%`}
         value={1}
       />,
     );
@@ -526,5 +526,24 @@ describe('InputNumber.Github', () => {
     // Keyboard change
     rerender(<Demo value={3} />);
     expect(input.value).toEqual('3');
+  });
+
+  // https://github.com/ant-design/ant-design/issues/36641
+  it('min value should be worked as expect', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <InputNumber precision={2} min={0} max={10} value={0.000000001} onChange={onChange} />,
+    );
+
+    expect(container.querySelector('input').value).toEqual('0.00');
+
+    fireEvent.change(container.querySelector('input'), {
+      target: {
+        value: '0',
+      },
+    });
+    fireEvent.blur(container.querySelector('input'));
+
+    expect(onChange).toHaveBeenCalledWith(0);
   });
 });

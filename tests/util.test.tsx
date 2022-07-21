@@ -2,8 +2,6 @@ import getMiniDecimal, {
   BigIntDecimal,
   DecimalClass,
   NumberDecimal,
-  roundDownUnsignedDecimal,
-  roundUpUnsignedDecimal,
   toFixed,
   ValueType,
 } from '../src/utils/MiniDecimal';
@@ -152,21 +150,5 @@ describe('InputNumber.Util', () => {
       // expect(toFixed('77.88', '.', 1)).toEqual('77.9');
       expect(toFixed('-77.88', '.', 1)).toEqual('-77.9');
     });
-
-    it('round down', () => {
-      expect(roundDownUnsignedDecimal('77.89',  1)).toEqual('77.8');
-      expect(roundDownUnsignedDecimal('77.1',  2)).toEqual('77.10');
-      expect(roundDownUnsignedDecimal('77.81', 1)).toEqual('77.8');
-      expect(roundDownUnsignedDecimal('77.50', 1)).toEqual('77.5');
-      expect(roundDownUnsignedDecimal('77.5999', 0)).toEqual('77');
-      expect(roundDownUnsignedDecimal('77.0001', 0)).toEqual('77');
-    })
-    it('round up', () => {
-      expect(roundUpUnsignedDecimal('77.89', 1)).toEqual('77.9');
-      expect(roundUpUnsignedDecimal('77.81', 1)).toEqual('77.9');
-      expect(roundUpUnsignedDecimal('77.89', 0)).toEqual('78');
-      expect(roundUpUnsignedDecimal('77.599', 0)).toEqual('78');
-      expect(roundUpUnsignedDecimal('77.01', 0)).toEqual('78');
-    })
   });
 });
