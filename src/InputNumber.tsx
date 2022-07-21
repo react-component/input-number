@@ -5,8 +5,6 @@ import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
 import getMiniDecimal, {
   DecimalClass,
-  roundDownUnsignedDecimal,
-  roundUpUnsignedDecimal,
   toFixed,
   ValueType,
 } from './utils/MiniDecimal';
@@ -15,7 +13,6 @@ import {
   getNumberPrecision,
   num2str,
   getDecupleSteps,
-  trimNumber,
   validateNumber,
 } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
