@@ -327,7 +327,6 @@ const InputNumber = React.forwardRef(
           // When to fixed. The value may out of min & max range.
           // 4 in [0, 3.8] => 3.8 => 4 (toFixed)
           if (!isInRange(updateValue)) {
-            updateValue = getRangeValue(updateValue);
             updateValue = getMiniDecimal(toFixed(numStr, '.', mergedPrecision, true));
           }
         }
