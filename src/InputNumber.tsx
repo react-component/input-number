@@ -68,6 +68,8 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   downHandler?: React.ReactNode;
   keyboard?: boolean;
 
+  suffix?: React.ReactNode;
+
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined) => T;
   /** Transform `value` to display value show in input */
@@ -105,6 +107,7 @@ const InputNumber = React.forwardRef(
       upHandler,
       downHandler,
       keyboard,
+      suffix,
       controls = true,
 
       stringMode,
@@ -556,6 +559,7 @@ const InputNumber = React.forwardRef(
             onStep={onInternalStep}
           />
         )}
+        {suffix && <div className={`${prefixCls}-suffix`}>{suffix}</div>}
         <div className={`${inputClassName}-wrap`}>
           <input
             autoComplete="off"
