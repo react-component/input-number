@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import * as React from 'react';
 import classNames from 'classnames';
 import isMobile from 'rc-util/lib/isMobile';
