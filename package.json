@@ -50,7 +50,7 @@
     "@types/jest": "^26.0.0",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.9",
-    "@types/responselike": "^3.0.0",
+    "@types/responselike": "^1.0.0",
     "@umijs/fabric": "^2.0.0",
     "cross-env": "^7.0.0",
     "dumi": "^1.1.0",
