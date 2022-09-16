@@ -3,7 +3,7 @@
 import { getNumberPrecision, isE, num2str, trimNumber, validateNumber } from './numberUtil';
 import { supportBigInt } from './supportUtil';
 
-export type ValueType = string | number | null;
+export type ValueType = string | number;
 
 export interface DecimalClass {
   add: (value: ValueType) => DecimalClass;
