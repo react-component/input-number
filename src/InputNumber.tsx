@@ -78,7 +78,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   decimalSeparator?: string;
 
   onInput?: (text: string) => void;
-  onChange?: (value: T) => void;
+  onChange?: (value: T | null) => void;
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
 
   onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down' }) => void;
