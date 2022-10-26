@@ -48,7 +48,7 @@
     "@types/classnames": "^2.2.9",
     "@types/enzyme": "^3.10.8",
     "@types/jest": "^26.0.0",
-    "@types/react": "^17.0.37",
+    "@types/react": "^18.0.23",
     "@types/react-dom": "^17.0.9",
     "@types/responselike": "^1.0.0",
     "@umijs/fabric": "^2.0.0",
