@@ -444,6 +444,11 @@ const InputNumber = React.forwardRef(
       }
     };
 
+    // Solve the issue of the event triggering sequence when entering numbers in chinese input (Safari)
+    const onBeforeInput = () => {
+      userTypingRef.current = true
+    }
+
     const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
       const { which, shiftKey } = event;
       userTypingRef.current = true;
@@ -532,6 +537,7 @@ const InputNumber = React.forwardRef(
           setFocus(true);
         }}
         onBlur={onBlur}
+        onBeforeInput={onBeforeInput}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
         onCompositionStart={onCompositionStart}
