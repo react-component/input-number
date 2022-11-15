@@ -1,5 +1,5 @@
 import InputNumber, { InputNumberProps } from './InputNumber';
 
-export { InputNumberProps };
+export type { InputNumberProps };
 
 export default InputNumber;
