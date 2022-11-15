@@ -49,7 +49,7 @@
     "@types/enzyme": "^3.10.8",
     "@types/jest": "^29.2.3",
     "@types/react": "^17.0.37",
-    "@types/react-dom": "^17.0.9",
+    "@types/react-dom": "^18.0.9",
     "@types/responselike": "^1.0.0",
     "@umijs/fabric": "^2.0.0",
     "cross-env": "^7.0.0",
