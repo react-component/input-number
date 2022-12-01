@@ -1,10 +1,12 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, act } from '@testing-library/react';
 import InputNumber, { InputNumberProps } from '../src';
 import KeyCode from 'rc-util/lib/KeyCode';
 
-jest.mock('../src/utils/supportUtil');
-const { supportBigInt } = require('../src/utils/supportUtil');
+jest.mock('@rc-component/mini-decimal/lib/supportUtil');
+const { supportBigInt } = require('@rc-component/mini-decimal/lib/supportUtil');
+// jest.mock('../src/utils/supportUtil');
+// const { supportBigInt } = require('../src/utils/supportUtil');
 
 describe('InputNumber.Click', () => {
   beforeEach(() => {
@@ -141,21 +143,29 @@ describe('InputNumber.Click', () => {
     });
   });
 
-  it('focus input when click up/down button', () => {
+  it('focus input when click up/down button', async () => {
+    jest.useFakeTimers();
+
     const onFocus = jest.fn();
     const onBlur = jest.fn();
     const { container } = render(<InputNumber onFocus={onFocus} onBlur={onBlur} />);
+
     fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
-    setTimeout(() => {
-      expect(input).toHaveFocus()
-      expect(onFocus).toHaveBeenCalled();
-      expect(container.querySelector('.rc-input-number-focused')).toBeTruthy();
-      done()
-    }, 500 /* however long my debounce is */)
+    act(() => {
+      jest.advanceTimersByTime(100);
+    });
+    expect(document.activeElement).toBe(container.querySelector('input'));
+
+    // jsdom not trigger onFocus with `.focus()`, let's trigger it manually
+    fireEvent.focus(document.querySelector('input'));
+    expect(container.querySelector('.rc-input-number-focused')).toBeTruthy();
+    expect(onFocus).toHaveBeenCalled();
 
     fireEvent.blur(container.querySelector('input'));
     expect(onBlur).toHaveBeenCalled();
-    expect(container.querySelector('.rc-input-number-focused')).toBe(null);
+    expect(container.querySelector('.rc-input-number-focused')).toBeFalsy();
+
+    jest.useRealTimers();
   });
 
   it('click down button with pressing shift key', () => {

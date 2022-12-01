@@ -3,9 +3,16 @@ import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
-import getMiniDecimal, { DecimalClass, toFixed, ValueType } from './utils/MiniDecimal';
+import getMiniDecimal, {
+  DecimalClass,
+  toFixed,
+  ValueType,
+  getNumberPrecision,
+  num2str,
+  validateNumber,
+} from '@rc-component/mini-decimal';
 import StepHandler from './StepHandler';
-import { getNumberPrecision, num2str, getDecupleSteps, validateNumber } from './utils/numberUtil';
+import { getDecupleSteps } from './utils/numberUtil';
 import useCursor from './hooks/useCursor';
 
 import useFrame from './hooks/useFrame';
