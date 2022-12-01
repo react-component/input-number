@@ -8,37 +8,38 @@
     "react-input-number",
     "input-number"
   ],
+  "homepage": "https://github.com/react-component/input-number",
+  "bugs": {
+    "url": "http://github.com/react-component/input-number/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:react-component/input-number.git"
+  },
+  "license": "MIT",
+  "author": "tsjxyz@gmail.com",
+  "main": "./lib/index",
+  "module": "./es/index",
   "files": [
     "lib",
     "es",
     "assets/*.css"
   ],
-  "main": "./lib/index",
-  "module": "./es/index",
-  "homepage": "https://github.com/react-component/input-number",
-  "author": "tsjxyz@gmail.com",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:react-component/input-number.git"
-  },
-  "bugs": {
-    "url": "http://github.com/react-component/input-number/issues"
-  },
-  "license": "MIT",
   "scripts": {
-    "start": "dumi dev",
+    "compile": "father-build && lessc assets/index.less assets/index.css",
+    "coverage": "father test --coverage",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
-    "compile": "father-build && lessc assets/index.less assets/index.css",
-    "prepublishOnly": "npm run compile && np --yolo --no-publish",
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
+    "now-build": "npm run docs:build",
+    "prepublishOnly": "npm run compile && np --yolo --no-publish",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "test": "father test",
-    "coverage": "father test --coverage",
-    "now-build": "npm run docs:build"
+    "start": "dumi dev",
+    "test": "father test"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.1",
+    "@rc-component/mini-decimal": "^1.0.1",
     "classnames": "^2.2.5",
     "rc-util": "^5.23.0"
   },
