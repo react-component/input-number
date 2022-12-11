@@ -55,7 +55,7 @@
     "@types/react-dom": "^18.0.9",
     "@types/responselike": "^1.0.0",
     "@umijs/test": "^4.0.36",
-    "@umijs/fabric": "^2.0.0",
+    "@umijs/fabric": "^3.0.0",
     "cross-env": "^7.0.3",
     "dumi": "^2.0.13",
     "jest": "^29.3.1",
