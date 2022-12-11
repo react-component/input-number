@@ -27,7 +27,7 @@
     "assets/*.css"
   ],
   "scripts": {
-    "compile": "father-build && lessc assets/index.less assets/index.css",
+    "compile": "father build && lessc assets/index.less assets/index.css",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
@@ -45,6 +45,7 @@
     "rc-util": "^5.23.0"
   },
   "devDependencies": {
+    "@rc-component/father-plugin": "^1.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@swc-node/jest": "^1.5.5",
@@ -61,7 +62,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "eslint": "^7.1.0",
     "expect.js": "~0.3.1",
-    "father-build": "^1.19.1",
+    "father": "^4.1.1",
     "glob": "^7.1.6",
     "less": "^3.12.2",
     "np": "^7.2.0",
