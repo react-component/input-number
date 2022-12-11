@@ -20,6 +20,7 @@
   "author": "tsjxyz@gmail.com",
   "main": "./lib/index",
   "module": "./es/index",
+  "types": "./es/index.d.ts",
   "files": [
     "lib",
     "es",
