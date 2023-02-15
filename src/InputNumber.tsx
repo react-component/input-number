@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import './index.css';
 import KeyCode from 'rc-util/lib/KeyCode';
 import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
@@ -562,6 +563,7 @@ const InputNumber = React.forwardRef(
         )}
         <div className={`${inputClassName}-wrap`}>
           <input
+            type="number"
             autoComplete="off"
             role="spinbutton"
             aria-valuemin={min as any}
