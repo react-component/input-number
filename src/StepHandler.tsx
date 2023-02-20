@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import * as React from 'react';
 import classNames from 'classnames';
-import isMobile from 'rc-util/lib/isMobile';
+import useMobile from 'rc-util/lib/hooks/useMobile';
 
 /**
  * When click and hold on a button - the speed of auto changing the value.
@@ -60,7 +60,8 @@ export default function StepHandler({
   React.useEffect(() => onStopStep, []);
 
   // ======================= Render =======================
-  if (isMobile()) {
+  const isMobile = useMobile();
+  if (isMobile) {
     return null;
   }
 
