@@ -1,19 +1,18 @@
-import * as React from 'react';
-import classNames from 'classnames';
-import KeyCode from 'rc-util/lib/KeyCode';
-import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
-import { composeRef } from 'rc-util/lib/ref';
 import getMiniDecimal, {
   DecimalClass,
-  toFixed,
-  ValueType,
   getNumberPrecision,
   num2str,
+  toFixed,
   validateNumber,
+  ValueType,
 } from '@rc-component/mini-decimal';
+import classNames from 'classnames';
+import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
+import { composeRef } from 'rc-util/lib/ref';
+import * as React from 'react';
+import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
-import useCursor from './hooks/useCursor';
 
 import useFrame from './hooks/useFrame';
 
@@ -220,7 +219,7 @@ const InputNumber = React.forwardRef(
     /**
      * Input text value control
      *
-     * User can not update input content directly. It update with follow rules by priority:
+     * User can not update input content directly. It updates with follow rules by priority:
      *  1. controlled `value` changed
      *    * [SPECIAL] Typing like `1.` should not immediately convert to `1`
      *  2. User typing with format (not precision)
@@ -353,7 +352,7 @@ const InputNumber = React.forwardRef(
     const collectInputValue = (inputStr: string) => {
       recordCursor();
 
-      // Update inputValue incase input can not parse as number
+      // Update inputValue in case input can not parse as number
       setInternalInputValue(inputStr);
 
       // Parse number
@@ -365,7 +364,7 @@ const InputNumber = React.forwardRef(
         }
       }
 
-      // Trigger onInput later to let user customize value if they want do handle something after onChange
+      // Trigger onInput later to let user customize value if they want to handle something after onChange
       onInput?.(inputStr);
 
       // optimize for chinese input experience
@@ -405,7 +404,7 @@ const InputNumber = React.forwardRef(
         return;
       }
 
-      // Clear typing status since it may caused by up & down key.
+      // Clear typing status since it may be caused by up & down key.
       // We should sync with input value.
       userTypingRef.current = false;
 
@@ -457,16 +456,12 @@ const InputNumber = React.forwardRef(
     };
 
     const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
-      const { which, shiftKey } = event;
+      const { key, shiftKey } = event;
       userTypingRef.current = true;
 
-      if (shiftKey) {
-        shiftKeyRef.current = true;
-      } else {
-        shiftKeyRef.current = false;
-      }
+      shiftKeyRef.current = shiftKey;
 
-      if (which === KeyCode.ENTER) {
+      if (key === 'Enter') {
         if (!compositionRef.current) {
           userTypingRef.current = false;
         }
@@ -479,8 +474,8 @@ const InputNumber = React.forwardRef(
       }
 
       // Do step
-      if (!compositionRef.current && [KeyCode.UP, KeyCode.DOWN].includes(which)) {
-        onInternalStep(KeyCode.UP === which);
+      if (!compositionRef.current && ['Up', 'ArrowUp', 'Down', 'ArrowDown'].includes(key)) {
+        onInternalStep(key === 'Up' || key === 'ArrowUp');
         event.preventDefault();
       }
     };
