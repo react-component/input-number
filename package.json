@@ -10,7 +10,7 @@
   ],
   "homepage": "https://github.com/react-component/input-number",
   "bugs": {
-    "url": "http://github.com/react-component/input-number/issues"
+    "url": "https://github.com/react-component/input-number/issues"
   },
   "repository": {
     "type": "git",
@@ -72,7 +72,7 @@
     "husky": "^8.0.3",
     "jest-environment-jsdom": "^29.3.1",
     "less": "^3.12.2",
-    "lint-staged": "^13.1.2",
+    "lint-staged": "^13.2.0",
     "np": "^7.2.0",
     "rc-test": "^7.0.14",
     "rc-tooltip": "^5.0.2",

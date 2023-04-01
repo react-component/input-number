@@ -1,8 +1,8 @@
+import KeyCode from 'rc-util/lib/KeyCode';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { render, fireEvent, screen, waitFor } from './util/wrapper';
 import InputNumber from '../src';
-import KeyCode from 'rc-util/lib/KeyCode';
+import { fireEvent, render, screen, waitFor } from './util/wrapper';
 
 // Github issues
 describe('InputNumber.Github', () => {
@@ -492,7 +492,7 @@ describe('InputNumber.Github', () => {
     fireEvent.change(screen.getByTestId('last'), { target: { value: '1.23' } });
     fireEvent.change(screen.getByTestId('first'), { target: { value: '0' } });
 
-    expect(screen.getByTestId('last').value).toEqual('1');
+    expect(screen.getByTestId<HTMLInputElement>('last').value).toEqual('1');
   });
 
   // https://github.com/ant-design/ant-design/issues/30478
