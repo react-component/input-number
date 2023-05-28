@@ -7,6 +7,7 @@ import getMiniDecimal, {
   ValueType,
 } from '@rc-component/mini-decimal';
 import classNames from 'classnames';
+import { BaseInput } from 'rc-input';
 import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
 import * as React from 'react';
@@ -43,7 +44,7 @@ const getDecimalIfValidate = (value: ValueType) => {
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
-    'value' | 'defaultValue' | 'onInput' | 'onChange'
+    'value' | 'defaultValue' | 'onInput' | 'onChange' | 'prefix'
   > {
   /** value will show as string */
   stringMode?: boolean;
@@ -59,6 +60,9 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   step?: ValueType;
   tabIndex?: number;
   controls?: boolean;
+  prefix?: React.ReactNode;
+  addonBefore?: React.ReactNode;
+  addonAfter?: React.ReactNode;
 
   // Customize handler node
   upHandler?: React.ReactNode;
@@ -86,7 +90,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   // size?: ISize;
 }
 
-const InputNumber = React.forwardRef(
+const InternalInputNumber = React.forwardRef(
   (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const {
       prefixCls = 'rc-input-number',
@@ -573,6 +577,26 @@ const InputNumber = React.forwardRef(
           />
         </div>
       </div>
+    );
+  },
+);
+
+const InputNumber = React.forwardRef(
+  (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
+    const { disabled, style, prefixCls, value, prefix, addonBefore, addonAfter, ...rest } = props;
+    return (
+      <BaseInput
+        inputElement={
+          <InternalInputNumber prefixCls={prefixCls} disabled={disabled} ref={ref} {...rest} />
+        }
+        prefixCls={prefixCls}
+        value={value}
+        disabled={disabled}
+        style={style}
+        prefix={prefix}
+        addonAfter={addonAfter}
+        addonBefore={addonBefore}
+      />
     );
   },
 ) as (<T extends ValueType = ValueType>(
