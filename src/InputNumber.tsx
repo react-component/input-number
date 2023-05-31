@@ -63,6 +63,11 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   prefix?: React.ReactNode;
   addonBefore?: React.ReactNode;
   addonAfter?: React.ReactNode;
+  classes?: {
+    affixWrapper?: string;
+    group?: string;
+    wrapper?: string;
+  };
 
   // Customize handler node
   upHandler?: React.ReactNode;
@@ -583,7 +588,8 @@ const InternalInputNumber = React.forwardRef(
 
 const InputNumber = React.forwardRef(
   (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
-    const { disabled, style, prefixCls, value, prefix, addonBefore, addonAfter, ...rest } = props;
+    const { disabled, style, prefixCls, value, prefix, addonBefore, addonAfter, classes, ...rest } =
+      props;
     return (
       <BaseInput
         inputElement={
@@ -596,6 +602,7 @@ const InputNumber = React.forwardRef(
         prefix={prefix}
         addonAfter={addonAfter}
         addonBefore={addonBefore}
+        classes={classes}
       />
     );
   },
