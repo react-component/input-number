@@ -44,7 +44,7 @@ const getDecimalIfValidate = (value: ValueType) => {
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
-    'value' | 'defaultValue' | 'onInput' | 'onChange' | 'prefix'
+    'value' | 'defaultValue' | 'onInput' | 'onChange' | 'prefix' | 'suffix'
   > {
   /** value will show as string */
   stringMode?: boolean;
@@ -61,6 +61,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   tabIndex?: number;
   controls?: boolean;
   prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   addonBefore?: React.ReactNode;
   addonAfter?: React.ReactNode;
   classes?: {
