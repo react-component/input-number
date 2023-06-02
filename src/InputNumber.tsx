@@ -603,6 +603,12 @@ const InputNumber = React.forwardRef(
         addonAfter={addonAfter}
         addonBefore={addonBefore}
         classes={classes}
+        components={{
+          affixWrapper: 'div',
+          groupWrapper: 'div',
+          wrapper: 'div',
+          groupAddon: 'div',
+        }}
       />
     );
   },
