@@ -15,6 +15,7 @@ import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
+import { InputFocusOptions, triggerFocus } from 'rc-input/lib/utils/commonUtils';
 import useFrame from './hooks/useFrame';
 
 /**
@@ -591,11 +592,26 @@ const InputNumber = React.forwardRef(
   (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const { disabled, style, prefixCls, value, prefix, addonBefore, addonAfter, classes, ...rest } =
       props;
+
+    const inputFocusRef = React.useRef<HTMLInputElement>(null);
+
+    const focus = (option?: InputFocusOptions) => {
+      if (inputFocusRef.current) {
+        triggerFocus(inputFocusRef.current, option);
+      }
+    };
+
     return (
       <BaseInput
         inputElement={
-          <InternalInputNumber prefixCls={prefixCls} disabled={disabled} ref={ref} {...rest} />
+          <InternalInputNumber
+            prefixCls={prefixCls}
+            disabled={disabled}
+            ref={composeRef(inputFocusRef, ref)}
+            {...rest}
+          />
         }
+        triggerFocus={focus}
         prefixCls={prefixCls}
         value={value}
         disabled={disabled}
