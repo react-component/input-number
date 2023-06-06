@@ -6,7 +6,7 @@ import getMiniDecimal, {
   validateNumber,
   ValueType,
 } from '@rc-component/mini-decimal';
-import classNames from 'classnames';
+import clsx from 'classnames';
 import { BaseInput } from 'rc-input';
 import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
@@ -45,7 +45,7 @@ const getDecimalIfValidate = (value: ValueType) => {
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
-    'value' | 'defaultValue' | 'onInput' | 'onChange' | 'prefix'
+    'value' | 'defaultValue' | 'onInput' | 'onChange' | 'prefix' | 'suffix'
   > {
   /** value will show as string */
   stringMode?: boolean;
@@ -62,12 +62,19 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   tabIndex?: number;
   controls?: boolean;
   prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   addonBefore?: React.ReactNode;
   addonAfter?: React.ReactNode;
   classes?: {
     affixWrapper?: string;
     group?: string;
     wrapper?: string;
+  };
+  classNames?: {
+    affixWrapper?: string;
+    group?: string;
+    wrapper?: string;
+    input?: string;
   };
 
   // Customize handler node
@@ -114,6 +121,7 @@ const InternalInputNumber = React.forwardRef(
       keyboard,
       controls = true,
 
+      classNames,
       stringMode,
 
       parser,
@@ -537,13 +545,18 @@ const InternalInputNumber = React.forwardRef(
     // ============================ Render ============================
     return (
       <div
-        className={classNames(prefixCls, className, {
-          [`${prefixCls}-focused`]: focus,
-          [`${prefixCls}-disabled`]: disabled,
-          [`${prefixCls}-readonly`]: readOnly,
-          [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
-          [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
-        })}
+        className={clsx(
+          prefixCls,
+          className,
+          {
+            [`${prefixCls}-focused`]: focus,
+            [`${prefixCls}-disabled`]: disabled,
+            [`${prefixCls}-readonly`]: readOnly,
+            [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
+            [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
+          },
+          classNames?.input,
+        )}
         style={style}
         onFocus={() => {
           setFocus(true);
@@ -589,8 +602,19 @@ const InternalInputNumber = React.forwardRef(
 
 const InputNumber = React.forwardRef(
   (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
-    const { disabled, style, prefixCls, value, prefix, addonBefore, addonAfter, classes, ...rest } =
-      props;
+    const {
+      disabled,
+      style,
+      prefixCls,
+      value,
+      prefix,
+      addonBefore,
+      addonAfter,
+      classes,
+      className,
+      classNames,
+      ...rest
+    } = props;
 
     const inputFocusRef = React.useRef<HTMLInputElement>(null);
 
@@ -606,10 +630,12 @@ const InputNumber = React.forwardRef(
           <InternalInputNumber
             prefixCls={prefixCls}
             disabled={disabled}
+            classNames={classNames}
             ref={composeRef(inputFocusRef, ref)}
             {...rest}
           />
         }
+        className={className}
         triggerFocus={focus}
         prefixCls={prefixCls}
         value={value}
@@ -619,6 +645,7 @@ const InputNumber = React.forwardRef(
         addonAfter={addonAfter}
         addonBefore={addonBefore}
         classes={classes}
+        classNames={classNames}
         components={{
           affixWrapper: 'div',
           groupWrapper: 'div',
