@@ -3,19 +3,19 @@
 exports[`baseInput addon should render properly 1`] = `
 <div>
   <div>
-    <span
+    <div
       class="rc-input-group-wrapper"
     >
-      <span
+      <div
         class="rc-input-wrapper rc-input-group"
       >
-        <span
+        <div
           class="rc-input-group-addon"
         >
           <span>
             Addon Before
           </span>
-        </span>
+        </div>
         <div
           class="rc-input"
         >
@@ -59,14 +59,14 @@ exports[`baseInput addon should render properly 1`] = `
             />
           </div>
         </div>
-      </span>
-    </span>
+      </div>
+    </div>
     <br />
     <br />
-    <span
+    <div
       class="rc-input-group-wrapper"
     >
-      <span
+      <div
         class="rc-input-wrapper rc-input-group"
       >
         <div
@@ -112,22 +112,22 @@ exports[`baseInput addon should render properly 1`] = `
             />
           </div>
         </div>
-        <span
+        <div
           class="rc-input-group-addon"
         >
           <span>
             Addon After
           </span>
-        </span>
-      </span>
-    </span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`baseInput prefix should render properly 1`] = `
 <div>
-  <span
+  <div
     class="rc-input-affix-wrapper"
   >
     <span
@@ -180,6 +180,6 @@ exports[`baseInput prefix should render properly 1`] = `
         />
       </div>
     </div>
-  </span>
+  </div>
 </div>
 `;
