@@ -6,7 +6,8 @@ import getMiniDecimal, {
   validateNumber,
   ValueType,
 } from '@rc-component/mini-decimal';
-import classNames from 'classnames';
+import clsx from 'classnames';
+import { BaseInput } from 'rc-input';
 import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
 import * as React from 'react';
@@ -14,6 +15,7 @@ import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
+import { InputFocusOptions, triggerFocus } from 'rc-input/lib/utils/commonUtils';
 import useFrame from './hooks/useFrame';
 
 /**
@@ -43,7 +45,7 @@ const getDecimalIfValidate = (value: ValueType) => {
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
-    'value' | 'defaultValue' | 'onInput' | 'onChange'
+    'value' | 'defaultValue' | 'onInput' | 'onChange' | 'prefix' | 'suffix'
   > {
   /** value will show as string */
   stringMode?: boolean;
@@ -59,6 +61,21 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   step?: ValueType;
   tabIndex?: number;
   controls?: boolean;
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
+  addonBefore?: React.ReactNode;
+  addonAfter?: React.ReactNode;
+  classes?: {
+    affixWrapper?: string;
+    group?: string;
+    wrapper?: string;
+  };
+  classNames?: {
+    affixWrapper?: string;
+    group?: string;
+    wrapper?: string;
+    input?: string;
+  };
 
   // Customize handler node
   upHandler?: React.ReactNode;
@@ -86,7 +103,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   // size?: ISize;
 }
 
-const InputNumber = React.forwardRef(
+const InternalInputNumber = React.forwardRef(
   (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const {
       prefixCls = 'rc-input-number',
@@ -104,6 +121,7 @@ const InputNumber = React.forwardRef(
       keyboard,
       controls = true,
 
+      classNames,
       stringMode,
 
       parser,
@@ -527,13 +545,18 @@ const InputNumber = React.forwardRef(
     // ============================ Render ============================
     return (
       <div
-        className={classNames(prefixCls, className, {
-          [`${prefixCls}-focused`]: focus,
-          [`${prefixCls}-disabled`]: disabled,
-          [`${prefixCls}-readonly`]: readOnly,
-          [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
-          [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
-        })}
+        className={clsx(
+          prefixCls,
+          className,
+          {
+            [`${prefixCls}-focused`]: focus,
+            [`${prefixCls}-disabled`]: disabled,
+            [`${prefixCls}-readonly`]: readOnly,
+            [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
+            [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
+          },
+          classNames?.input,
+        )}
         style={style}
         onFocus={() => {
           setFocus(true);
@@ -573,6 +596,63 @@ const InputNumber = React.forwardRef(
           />
         </div>
       </div>
+    );
+  },
+);
+
+const InputNumber = React.forwardRef(
+  (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
+    const {
+      disabled,
+      style,
+      prefixCls,
+      value,
+      prefix,
+      addonBefore,
+      addonAfter,
+      classes,
+      className,
+      classNames,
+      ...rest
+    } = props;
+
+    const inputFocusRef = React.useRef<HTMLInputElement>(null);
+
+    const focus = (option?: InputFocusOptions) => {
+      if (inputFocusRef.current) {
+        triggerFocus(inputFocusRef.current, option);
+      }
+    };
+
+    return (
+      <BaseInput
+        inputElement={
+          <InternalInputNumber
+            prefixCls={prefixCls}
+            disabled={disabled}
+            classNames={classNames}
+            ref={composeRef(inputFocusRef, ref)}
+            {...rest}
+          />
+        }
+        className={className}
+        triggerFocus={focus}
+        prefixCls={prefixCls}
+        value={value}
+        disabled={disabled}
+        style={style}
+        prefix={prefix}
+        addonAfter={addonAfter}
+        addonBefore={addonBefore}
+        classes={classes}
+        classNames={classNames}
+        components={{
+          affixWrapper: 'div',
+          groupWrapper: 'div',
+          wrapper: 'div',
+          groupAddon: 'div',
+        }}
+      />
     );
   },
 ) as (<T extends ValueType = ValueType>(

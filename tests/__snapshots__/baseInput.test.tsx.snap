@@ -1,0 +1,185 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`baseInput addon should render properly 1`] = `
+<div>
+  <div>
+    <div
+      class="rc-input-group-wrapper"
+    >
+      <div
+        class="rc-input-wrapper rc-input-group"
+      >
+        <div
+          class="rc-input-group-addon"
+        >
+          <span>
+            Addon Before
+          </span>
+        </div>
+        <div
+          class="rc-input"
+        >
+          <div
+            class="rc-input-handler-wrap"
+          >
+            <span
+              aria-disabled="false"
+              aria-label="Increase Value"
+              class="rc-input-handler rc-input-handler-up"
+              role="button"
+              unselectable="on"
+            >
+              <span
+                class="rc-input-handler-up-inner"
+                unselectable="on"
+              />
+            </span>
+            <span
+              aria-disabled="false"
+              aria-label="Decrease Value"
+              class="rc-input-handler rc-input-handler-down"
+              role="button"
+              unselectable="on"
+            >
+              <span
+                class="rc-input-handler-down-inner"
+                unselectable="on"
+              />
+            </span>
+          </div>
+          <div
+            class="rc-input-input-wrap"
+          >
+            <input
+              autocomplete="off"
+              class="rc-input-input"
+              role="spinbutton"
+              step="1"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div
+      class="rc-input-group-wrapper"
+    >
+      <div
+        class="rc-input-wrapper rc-input-group"
+      >
+        <div
+          class="rc-input"
+        >
+          <div
+            class="rc-input-handler-wrap"
+          >
+            <span
+              aria-disabled="false"
+              aria-label="Increase Value"
+              class="rc-input-handler rc-input-handler-up"
+              role="button"
+              unselectable="on"
+            >
+              <span
+                class="rc-input-handler-up-inner"
+                unselectable="on"
+              />
+            </span>
+            <span
+              aria-disabled="false"
+              aria-label="Decrease Value"
+              class="rc-input-handler rc-input-handler-down"
+              role="button"
+              unselectable="on"
+            >
+              <span
+                class="rc-input-handler-down-inner"
+                unselectable="on"
+              />
+            </span>
+          </div>
+          <div
+            class="rc-input-input-wrap"
+          >
+            <input
+              autocomplete="off"
+              class="rc-input-input"
+              role="spinbutton"
+              step="1"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          class="rc-input-group-addon"
+        >
+          <span>
+            Addon After
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`baseInput prefix should render properly 1`] = `
+<div>
+  <div
+    class="rc-input-affix-wrapper"
+  >
+    <span
+      class="rc-input-prefix"
+    >
+      <span>
+        Prefix
+      </span>
+    </span>
+    <div
+      class="rc-input"
+    >
+      <div
+        class="rc-input-handler-wrap"
+      >
+        <span
+          aria-disabled="false"
+          aria-label="Increase Value"
+          class="rc-input-handler rc-input-handler-up"
+          role="button"
+          unselectable="on"
+        >
+          <span
+            class="rc-input-handler-up-inner"
+            unselectable="on"
+          />
+        </span>
+        <span
+          aria-disabled="false"
+          aria-label="Decrease Value"
+          class="rc-input-handler rc-input-handler-down"
+          role="button"
+          unselectable="on"
+        >
+          <span
+            class="rc-input-handler-down-inner"
+            unselectable="on"
+          />
+        </span>
+      </div>
+      <div
+        class="rc-input-input-wrap"
+      >
+        <input
+          autocomplete="off"
+          class="rc-input-input"
+          role="spinbutton"
+          step="1"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
