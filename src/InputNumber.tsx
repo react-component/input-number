@@ -545,18 +545,13 @@ const InternalInputNumber = React.forwardRef(
     // ============================ Render ============================
     return (
       <div
-        className={clsx(
-          prefixCls,
-          className,
-          {
-            [`${prefixCls}-focused`]: focus,
-            [`${prefixCls}-disabled`]: disabled,
-            [`${prefixCls}-readonly`]: readOnly,
-            [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
-            [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
-          },
-          classNames?.input,
-        )}
+        className={clsx(prefixCls, classNames?.input, className, {
+          [`${prefixCls}-focused`]: focus,
+          [`${prefixCls}-disabled`]: disabled,
+          [`${prefixCls}-readonly`]: readOnly,
+          [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
+          [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
+        })}
         style={style}
         onFocus={() => {
           setFocus(true);
