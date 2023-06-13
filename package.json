@@ -1,6 +1,6 @@
 {
   "name": "rc-input-number",
-  "version": "8.0.0-alpha.1",
+  "version": "8.0.0",
   "description": "React input-number component",
   "keywords": [
     "react",
