@@ -603,6 +603,7 @@ const InputNumber = React.forwardRef(
       prefixCls,
       value,
       prefix,
+      suffix,
       addonBefore,
       addonAfter,
       classes,
@@ -637,6 +638,7 @@ const InputNumber = React.forwardRef(
         disabled={disabled}
         style={style}
         prefix={prefix}
+        suffix={suffix}
         addonAfter={addonAfter}
         addonBefore={addonBefore}
         classes={classes}
