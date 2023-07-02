@@ -32,13 +32,20 @@ export default function StepHandler({
 }: StepHandlerProps) {
   // ======================== Step ========================
   const stepTimeoutRef = React.useRef<any>();
+  const frameIds = React.useRef<number[]>([]);
 
   const onStepRef = React.useRef<StepHandlerProps['onStep']>();
   onStepRef.current = onStep;
 
+  const onStopStep = () => {
+    clearTimeout(stepTimeoutRef.current);
+  };
+
+
   // We will interval update step when hold mouse down
   const onStepMouseDown = (e: React.MouseEvent, up: boolean) => {
     e.preventDefault();
+    onStopStep();
 
     onStepRef.current(up);
 
@@ -53,11 +60,10 @@ export default function StepHandler({
     stepTimeoutRef.current = setTimeout(loopStep, STEP_DELAY);
   };
 
-  const onStopStep = () => {
-    clearTimeout(stepTimeoutRef.current);
-  };
-
-  React.useEffect(() => onStopStep, []);
+  React.useEffect(() => () => {
+    onStopStep();
+    frameIds.current.forEach(cancelAnimationFrame);
+  }, []);
 
   // ======================= Render =======================
   const isMobile = useMobile();
@@ -74,11 +80,18 @@ export default function StepHandler({
     [`${handlerClassName}-down-disabled`]: downDisabled,
   });
 
+  // fix: https://github.com/ant-design/ant-design/issues/43088
+  // In Safari, When we fire onmousedown and onmouseup events in quick succession, 
+  // there may be a problem that the onmouseup events are executed first, 
+  // resulting in a disordered program execution.
+  // So, we need to use requestAnimationFrame to ensure that the onmouseup event is executed after the onmousedown event.
+  const safeOnStopStep = () => frameIds.current.push(requestAnimationFrame(onStopStep));
+
   const sharedHandlerProps = {
     unselectable: 'on' as const,
     role: 'button',
-    onMouseUp: onStopStep,
-    onMouseLeave: onStopStep,
+    onMouseUp: safeOnStopStep,
+    onMouseLeave: safeOnStopStep,
   };
 
   return (
