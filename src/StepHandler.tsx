@@ -2,6 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import useMobile from 'rc-util/lib/hooks/useMobile';
+import raf from 'rc-util/lib/raf';
 
 /**
  * When click and hold on a button - the speed of auto changing the value.
@@ -62,7 +63,7 @@ export default function StepHandler({
 
   React.useEffect(() => () => {
     onStopStep();
-    frameIds.current.forEach(cancelAnimationFrame);
+    frameIds.current.forEach(id => raf.cancel(id));
   }, []);
 
   // ======================= Render =======================
@@ -85,7 +86,7 @@ export default function StepHandler({
   // there may be a problem that the onmouseup events are executed first, 
   // resulting in a disordered program execution.
   // So, we need to use requestAnimationFrame to ensure that the onmouseup event is executed after the onmousedown event.
-  const safeOnStopStep = () => frameIds.current.push(requestAnimationFrame(onStopStep));
+  const safeOnStopStep = () => frameIds.current.push(raf(onStopStep));
 
   const sharedHandlerProps = {
     unselectable: 'on' as const,
