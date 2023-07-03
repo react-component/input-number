@@ -35,4 +35,36 @@ describe('InputNumber.LongPress', () => {
     });
     await waitFor(() => expect(onChange).toHaveBeenCalledWith(14));
   });
+
+  it('Simulates event calls out of order in Safari', async () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber defaultValue={20} onChange={onChange} />);
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    act(() => {
+      jest.advanceTimersByTime(10);
+    });
+    fireEvent.mouseUp(container.querySelector('.rc-input-number-handler-up'));
+    act(() => {
+      jest.advanceTimersByTime(10);
+    });
+    fireEvent.mouseUp(container.querySelector('.rc-input-number-handler-up'));
+    act(() => {
+      jest.advanceTimersByTime(10);
+    });
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    act(() => {
+      jest.advanceTimersByTime(10);
+    });
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    act(() => {
+      jest.advanceTimersByTime(10);
+    });
+    fireEvent.mouseUp(container.querySelector('.rc-input-number-handler-up'));
+
+    act(() => {
+      jest.advanceTimersByTime(600 + 200 * 5 + 100);
+    });
+
+    await waitFor(() => expect(onChange).toBeCalledTimes(3));
+  });
 });
