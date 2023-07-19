@@ -373,6 +373,8 @@ const InternalInputNumber = React.forwardRef(
       recordCursor();
 
       // Update inputValue in case input can not parse as number
+      // Refresh ref value immediately since it may used by formatter
+      inputValueRef.current = inputStr;
       setInternalInputValue(inputStr);
 
       // Parse number

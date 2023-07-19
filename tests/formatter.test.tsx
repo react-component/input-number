@@ -1,17 +1,19 @@
-import React from 'react';
-import { render, fireEvent } from './util/wrapper';
-import InputNumber from '../src';
 import KeyCode from 'rc-util/lib/KeyCode';
+import React from 'react';
+import InputNumber from '../src';
+import { fireEvent, render } from './util/wrapper';
 
 describe('InputNumber.Formatter', () => {
   it('formatter on default', () => {
-    const { container } = render(<InputNumber step={1} value={5} formatter={num => `$ ${num}`} />);
+    const { container } = render(
+      <InputNumber step={1} value={5} formatter={(num) => `$ ${num}`} />,
+    );
     const input = container.querySelector('input');
     expect(input.value).toEqual('$ 5');
   });
 
   it('formatter on mousedown', () => {
-    const { container } = render(<InputNumber defaultValue={5} formatter={num => `$ ${num}`} />);
+    const { container } = render(<InputNumber defaultValue={5} formatter={(num) => `$ ${num}`} />);
     const input = container.querySelector('input');
     fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
     expect(input.value).toEqual('$ 6');
@@ -23,7 +25,7 @@ describe('InputNumber.Formatter', () => {
   it('formatter on keydown', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <InputNumber defaultValue={5} onChange={onChange} formatter={num => `$ ${num} ¥`} />,
+      <InputNumber defaultValue={5} onChange={onChange} formatter={(num) => `$ ${num} ¥`} />,
     );
 
     const input = container.querySelector('input');
@@ -51,7 +53,7 @@ describe('InputNumber.Formatter', () => {
   it('formatter on direct input', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <InputNumber defaultValue={5} formatter={num => `$ ${num}`} onChange={onChange} />,
+      <InputNumber defaultValue={5} formatter={(num) => `$ ${num}`} onChange={onChange} />,
     );
     const input = container.querySelector('input');
     fireEvent.focus(input);
@@ -66,8 +68,8 @@ describe('InputNumber.Formatter', () => {
     const { container } = render(
       <InputNumber
         defaultValue={5}
-        formatter={num => `$ ${num} boeing 737`}
-        parser={num => num.toString().split(' ')[1]}
+        formatter={(num) => `$ ${num} boeing 737`}
+        parser={(num) => num.toString().split(' ')[1]}
         onChange={onChange}
       />,
     );
@@ -115,7 +117,7 @@ describe('InputNumber.Formatter', () => {
 
             return String(num);
           }}
-          parser={num => {
+          parser={(num) => {
             numValue = num;
             return Number(num);
           }}
@@ -134,22 +136,33 @@ describe('InputNumber.Formatter', () => {
     fireEvent.blur(input);
     expect(input.value).toEqual('0');
   });
-});
 
-it('in strictMode render correct defaultValue ', () => {
-  const Demo = () => {
-    return (
-      <React.StrictMode>
-        <div>
-          <InputNumber defaultValue={5}  formatter={num => `$ ${num}`} />
-        </div>
-      </React.StrictMode>
-    );
-  };
-  const { container } = render(<Demo />);
-  const input = container.querySelector('input');
-  expect(input.value).toEqual('$ 5');
+  it('in strictMode render correct defaultValue ', () => {
+    const Demo = () => {
+      return (
+        <React.StrictMode>
+          <div>
+            <InputNumber defaultValue={5} formatter={(num) => `$ ${num}`} />
+          </div>
+        </React.StrictMode>
+      );
+    };
+    const { container } = render(<Demo />);
+    const input = container.querySelector('input');
+    expect(input.value).toEqual('$ 5');
 
-  fireEvent.change(input, { target: { value: 3 } });
-  expect(input.value).toEqual('$ 3')
+    fireEvent.change(input, { target: { value: 3 } });
+    expect(input.value).toEqual('$ 3');
+  });
+
+  it('formatter info should be correct', () => {
+    const formatter = jest.fn();
+    const { container } = render(<InputNumber formatter={formatter} />);
+
+    formatter.mockReset();
+
+    fireEvent.change(container.querySelector('input'), { target: { value: '1' } });
+    expect(formatter).toHaveBeenCalledTimes(1);
+    expect(formatter).toHaveBeenCalledWith('1', { userTyping: true, input: '1' });
+  });
 });
