@@ -18,6 +18,8 @@ import { getDecupleSteps } from './utils/numberUtil';
 import { InputFocusOptions, triggerFocus } from 'rc-input/lib/utils/commonUtils';
 import useFrame from './hooks/useFrame';
 
+export type { ValueType };
+
 /**
  * We support `stringMode` which need handle correct type when user call in onChange
  * format max or min value
