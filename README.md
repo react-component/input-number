@@ -29,6 +29,14 @@ Input number control.
 
 [![rc-input-number](https://nodei.co/npm/rc-input-number.png)](https://npmjs.org/package/rc-input-number)
 
+```
+npm install rc-input-number
+```
+or
+```
+yarn add rc-input-number
+```
+
 ## Usage
 
 ```js
