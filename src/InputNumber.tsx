@@ -105,8 +105,10 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   // size?: ISize;
 }
 
+type InternalInputNumberProps = Omit<InputNumberProps, 'prefix' | 'suffix'>;
+
 const InternalInputNumber = React.forwardRef(
-  (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
+  (props: InternalInputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const {
       prefixCls = 'rc-input-number',
       className,
@@ -449,7 +451,9 @@ const InternalInputNumber = React.forwardRef(
 
     // ============================ Flush =============================
     /**
-     * Flush current input content to trigger value change & re-formatter input if needed
+     * Flush current input content to trigger value change & re-formatter input if needed.
+     * This will always flush input value for update.
+     * If it's invalidate, will fallback to last validate value.
      */
     const flushInputValue = (userTyping: boolean) => {
       const parsedValue = getMiniDecimal(mergedParser(inputValue));
@@ -460,7 +464,7 @@ const InternalInputNumber = React.forwardRef(
         // Reassign the formatValue within ranged of trigger control
         formatValue = triggerValueUpdate(parsedValue, userTyping);
       } else {
-        formatValue = decimalValue;
+        formatValue = triggerValueUpdate(decimalValue, userTyping);
       }
 
       if (value !== undefined) {
