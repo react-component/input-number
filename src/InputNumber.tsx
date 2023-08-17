@@ -90,6 +90,8 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   formatter?: (value: T | undefined, info: { userTyping: boolean; input: string }) => string;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
+  /** Syntactic sugar of `formatter`. Config cutOnly of display. */
+  cutOnly?: boolean;
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
   decimalSeparator?: string;
 
@@ -131,6 +133,7 @@ const InternalInputNumber = React.forwardRef(
       parser,
       formatter,
       precision,
+      cutOnly = false,
       decimalSeparator,
 
       onChange,
@@ -341,7 +344,7 @@ const InternalInputNumber = React.forwardRef(
         const numStr = updateValue.toString();
         const mergedPrecision = getPrecision(numStr, userTyping);
         if (mergedPrecision >= 0) {
-          updateValue = getMiniDecimal(toFixed(numStr, '.', mergedPrecision));
+          updateValue = getMiniDecimal(toFixed(numStr, '.', mergedPrecision, cutOnly));
 
           // When to fixed. The value may out of min & max range.
           // 4 in [0, 3.8] => 3.8 => 4 (toFixed)

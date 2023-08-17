@@ -37,6 +37,10 @@ nav:
 
 <code src="./demo/precision.tsx"></code>
 
+## cutOnly
+
+<code src="./demo/cutOnly.tsx"></code>
+
 ## simple-use-touch
 
 <code src="./demo/simple-use-touch.tsx"></code>
