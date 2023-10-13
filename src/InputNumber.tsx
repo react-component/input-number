@@ -147,6 +147,8 @@ const InternalInputNumber = React.forwardRef(
 
     const [focus, setFocus] = React.useState(false);
 
+    const [illegalData, setIllegalData] = React.useState(false);
+
     const userTypingRef = React.useRef(false);
     const compositionRef = React.useRef(false);
     const shiftKeyRef = React.useRef(false);
@@ -416,8 +418,13 @@ const InternalInputNumber = React.forwardRef(
       collectInputValue(inputRef.current.value);
     };
 
+    const judgeData = (inputNumberValue: string) => {
+      return (isNaN(Number(inputNumberValue)) && inputNumberValue !== '-') || (max && inputNumberValue > max) || (min && inputNumberValue < min)
+    }
+
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      setIllegalData(judgeData(e.target.value))
       collectInputValue(e.target.value);
     };
 
@@ -514,6 +521,8 @@ const InternalInputNumber = React.forwardRef(
     // >>> Focus & Blur
     const onBlur = () => {
       flushInputValue(false);
+      
+      setIllegalData(false)
 
       setFocus(false);
 
@@ -558,7 +567,7 @@ const InternalInputNumber = React.forwardRef(
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-readonly`]: readOnly,
           [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
-          [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
+          [`${prefixCls}-out-of-range`]: (!decimalValue.isInvalidate() && !isInRange(decimalValue)) || illegalData,
         })}
         style={style}
         onFocus={() => {
