@@ -165,4 +165,36 @@ describe('InputNumber.Formatter', () => {
     expect(formatter).toHaveBeenCalledTimes(1);
     expect(formatter).toHaveBeenCalledWith('1', { userTyping: true, input: '1' });
   });
+
+  describe('dynamic formatter', () => {
+    it('uncontrolled', () => {
+      const { container, rerender } = render(
+        <InputNumber defaultValue={93} formatter={(val) => `$${val}`} />,
+      );
+
+      expect(container.querySelector<HTMLInputElement>('.rc-input-number-input').value).toEqual(
+        '$93',
+      );
+
+      rerender(<InputNumber defaultValue={93} formatter={(val) => `*${val}`} />);
+      expect(container.querySelector<HTMLInputElement>('.rc-input-number-input').value).toEqual(
+        '*93',
+      );
+    });
+
+    it('controlled', () => {
+      const { container, rerender } = render(
+        <InputNumber value={510} formatter={(val) => `$${val}`} />,
+      );
+
+      expect(container.querySelector<HTMLInputElement>('.rc-input-number-input').value).toEqual(
+        '$510',
+      );
+
+      rerender(<InputNumber value={510} formatter={(val) => `*${val}`} />);
+      expect(container.querySelector<HTMLInputElement>('.rc-input-number-input').value).toEqual(
+        '*510',
+      );
+    });
+  });
 });
