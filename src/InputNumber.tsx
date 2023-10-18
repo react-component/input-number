@@ -102,7 +102,11 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   // focusOnUpDown: boolean;
   // useTouch: boolean;
 
-  // size?: ISize;
+  /**
+   * Trigger change onBlur event.
+   * If disabled, user must press enter or click handler to confirm the value update
+   */
+  changeOnBlur?: boolean;
 }
 
 type InternalInputNumberProps = Omit<InputNumberProps, 'prefix' | 'suffix'>;
@@ -137,6 +141,8 @@ const InternalInputNumber = React.forwardRef(
       onInput,
       onPressEnter,
       onStep,
+
+      changeOnBlur = true,
 
       ...inputProps
     } = props;
@@ -513,7 +519,9 @@ const InternalInputNumber = React.forwardRef(
 
     // >>> Focus & Blur
     const onBlur = () => {
-      flushInputValue(false);
+      if (changeOnBlur) {
+        flushInputValue(false);
+      }
 
       setFocus(false);
 
