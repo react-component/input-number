@@ -212,4 +212,15 @@ describe('InputNumber.Input', () => {
       expect(onChange).toHaveBeenLastCalledWith(null);
     });
   });
+
+  it('!changeOnBlur', () => {
+    const onChange = jest.fn();
+
+    const { container } = render(
+      <InputNumber min={0} max={9} defaultValue={10} changeOnBlur={false} onChange={onChange} />,
+    );
+
+    fireEvent.blur(container.querySelector('input'));
+    expect(onChange).not.toHaveBeenCalled();
+  });
 });

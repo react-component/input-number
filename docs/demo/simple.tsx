@@ -1,6 +1,6 @@
 /* eslint no-console:0 */
-import React from 'react';
 import InputNumber from 'rc-input-number';
+import React from 'react';
 import '../../assets/index.less';
 
 export default () => {
@@ -53,6 +53,17 @@ export default () => {
         min={-99}
         max={99}
         defaultValue={33}
+      />
+
+      <hr />
+      <h3>!changeOnBlur</h3>
+      <InputNumber
+        style={{ width: 100 }}
+        min={-9}
+        max={9}
+        defaultValue={10}
+        onChange={onChange}
+        changeOnBlur={false}
       />
     </div>
   );
