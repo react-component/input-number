@@ -83,6 +83,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   upHandler?: React.ReactNode;
   downHandler?: React.ReactNode;
   keyboard?: boolean;
+  wheel?: boolean;
 
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined) => T;
@@ -127,6 +128,7 @@ const InternalInputNumber = React.forwardRef(
       upHandler,
       downHandler,
       keyboard,
+      wheel,
       controls = true,
 
       classNames,
@@ -517,6 +519,16 @@ const InternalInputNumber = React.forwardRef(
       shiftKeyRef.current = false;
     };
 
+    const onWheel = (event) => {
+      if (wheel === false) {
+        return;
+      };
+      // moving mouse wheel rises wheel event with deltaY < 0
+      // scroll value grows from top to bottom, as screen Y coordinate
+      onInternalStep(event.deltaY < 0);
+      event.preventDefault();
+    };
+
     // >>> Focus & Blur
     const onBlur = () => {
       if (changeOnBlur) {
@@ -575,6 +587,7 @@ const InternalInputNumber = React.forwardRef(
         onBlur={onBlur}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
+        onWheel={onWheel}
         onCompositionStart={onCompositionStart}
         onCompositionEnd={onCompositionEnd}
         onBeforeInput={onBeforeInput}

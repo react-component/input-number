@@ -238,6 +238,12 @@ online example: https://input-number.vercel.app/
           <td></td>
           <td>Specifies the inputmode of input</td>
         </tr>
+        <tr>
+          <td>wheel</td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Allows changing value with mouse wheel</td>
+        </tr>
     </tbody>
 </table>
 
@@ -245,6 +251,10 @@ online example: https://input-number.vercel.app/
 * When you hit the <kbd>⬆</kbd> or <kbd>⬇</kbd> key, the input value will be increased or decreased by `step`
 * With the <kbd>Shift</kbd> key (<kbd>Shift+⬆</kbd>, <kbd>Shift+⬇</kbd>), the input value will be changed by `10 * step`
 * With the <kbd>Ctrl</kbd> or <kbd>⌘</kbd> key (<kbd>Ctrl+⬆</kbd> or <kbd>⌘+⬆</kbd> or <kbd>Ctrl+⬇</kbd> or <kbd>⌘+⬇</kbd> ), the input value will be changed by `0.1 * step`
+
+## Mouse Wheel
+* When you scroll up or down, the input value will be increased or decreased by `step`
+* Scrolling with the <kbd>Shift</kbd> key, the input value will be changed by `10 * step`
 
 ## Test Case
 
