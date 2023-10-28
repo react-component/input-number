@@ -519,15 +519,25 @@ const InternalInputNumber = React.forwardRef(
       shiftKeyRef.current = false;
     };
 
-    const onWheel = (event) => {
-      if (wheel === false) {
-        return;
+    React.useEffect(() => {
+      const onWheel = (event) => {
+        if (wheel === false) {
+          return;
+        };
+        // moving mouse wheel rises wheel event with deltaY < 0
+        // scroll value grows from top to bottom, as screen Y coordinate
+        onInternalStep(event.deltaY < 0);
+        event.preventDefault();
       };
-      // moving mouse wheel rises wheel event with deltaY < 0
-      // scroll value grows from top to bottom, as screen Y coordinate
-      onInternalStep(event.deltaY < 0);
-      event.preventDefault();
-    };
+      const input = inputRef.current;
+      if (input) {
+        // React onWheel is passive and we can't preventDefault() in it.
+        // That's why we should subscribe with DOM listener
+        // https://stackoverflow.com/questions/63663025/react-onwheel-handler-cant-preventdefault-because-its-a-passive-event-listenev
+        input.addEventListener('wheel', onWheel);
+        return () => input.removeEventListener('wheel', onWheel);
+      };
+    }, [onInternalStep]);
 
     // >>> Focus & Blur
     const onBlur = () => {
@@ -587,7 +597,6 @@ const InternalInputNumber = React.forwardRef(
         onBlur={onBlur}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
-        onWheel={onWheel}
         onCompositionStart={onCompositionStart}
         onCompositionEnd={onCompositionEnd}
         onBeforeInput={onBeforeInput}
