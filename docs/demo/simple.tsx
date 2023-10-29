@@ -7,6 +7,7 @@ export default () => {
   const [disabled, setDisabled] = React.useState(false);
   const [readOnly, setReadOnly] = React.useState(false);
   const [keyboard, setKeyboard] = React.useState(true);
+  const [wheel, setWheel] = React.useState(true);
   const [stringMode, setStringMode] = React.useState(false);
   const [value, setValue] = React.useState<string | number>(93);
 
@@ -28,6 +29,7 @@ export default () => {
         readOnly={readOnly}
         disabled={disabled}
         keyboard={keyboard}
+        wheel={wheel}
         stringMode={stringMode}
       />
       <p>
@@ -42,6 +44,9 @@ export default () => {
         </button>
         <button type="button" onClick={() => setStringMode(!stringMode)}>
           toggle stringMode ({String(stringMode)})
+        </button>
+        <button type="button" onClick={() => setWheel(!wheel)}>
+          toggle wheel ({String(wheel)})
         </button>
       </p>
 
