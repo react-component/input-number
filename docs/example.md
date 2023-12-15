@@ -37,10 +37,6 @@ nav:
 
 <code src="./demo/precision.tsx"></code>
 
-## simple-use-touch
-
-<code src="./demo/simple-use-touch.tsx"></code>
-
 ## small-step
 
 <code src="./demo/small-step.tsx"></code>
