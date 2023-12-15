@@ -523,7 +523,7 @@ const InternalInputNumber = React.forwardRef(
       const onWheel = (event) => {
         if (wheel === false) {
           return;
-        };
+        }
         // moving mouse wheel rises wheel event with deltaY < 0
         // scroll value grows from top to bottom, as screen Y coordinate
         onInternalStep(event.deltaY < 0);
@@ -536,7 +536,7 @@ const InternalInputNumber = React.forwardRef(
         // https://stackoverflow.com/questions/63663025/react-onwheel-handler-cant-preventdefault-because-its-a-passive-event-listenev
         input.addEventListener('wheel', onWheel);
         return () => input.removeEventListener('wheel', onWheel);
-      };
+      }
     }, [onInternalStep]);
 
     // >>> Focus & Blur
@@ -660,15 +660,6 @@ const InputNumber = React.forwardRef(
 
     return (
       <BaseInput
-        inputElement={
-          <InternalInputNumber
-            prefixCls={prefixCls}
-            disabled={disabled}
-            classNames={classNames}
-            ref={composeRef(inputFocusRef, ref)}
-            {...rest}
-          />
-        }
         className={className}
         triggerFocus={focus}
         prefixCls={prefixCls}
@@ -687,7 +678,15 @@ const InputNumber = React.forwardRef(
           wrapper: 'div',
           groupAddon: 'div',
         }}
-      />
+      >
+        <InternalInputNumber
+          prefixCls={prefixCls}
+          disabled={disabled}
+          classNames={classNames}
+          ref={composeRef(inputFocusRef, ref)}
+          {...rest}
+        />
+      </BaseInput>
     );
   },
 ) as (<T extends ValueType = ValueType>(
