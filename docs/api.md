@@ -65,12 +65,6 @@ nav:
           <td>Specifies that an InputNumber should be disabled</td>
         </tr>
         <tr>
-          <td>focusOnUpDown</td>
-          <td>Boolean</td>
-          <td>true</td>
-          <td>whether focus input when click up or down button</td>
-        </tr>
-        <tr>
           <td>required</td>
           <td>Boolean</td>
           <td>false</td>

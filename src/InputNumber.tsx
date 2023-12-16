@@ -93,9 +93,6 @@ export interface InputNumberProps<T extends ValueType = ValueType>
 
   onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down' }) => void;
 
-  // focusOnUpDown: boolean;
-  // useTouch: boolean;
-
   /**
    * Trigger change onBlur event.
    * If disabled, user must press enter or click handler to confirm the value update
