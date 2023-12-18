@@ -44,6 +44,20 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
+const inputDiff=(str1: string, str2: string) =>{
+  const maxLength = Math.max(str1.length, str2.length);
+  let diff = '';
+
+  for (let i = 0; i < maxLength; i++) {
+      if (str1[i] !== str2[i]) {
+          if (str1[i]) diff += str1[i];
+          if (str2[i]) diff += str2[i];
+      }
+  }
+
+  return diff;
+}
+
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -382,10 +396,29 @@ const InternalInputNumber = React.forwardRef(
     const collectInputValue = (inputStr: string) => {
       recordCursor();
 
+      // checks what are the diffs between the current state and the input value
+      const diff = inputDiff(inputStr, String(inputValue));
+
+      // if only one change is present, check if it is a comma
+      if (diff.length === 1) {
+        // if it is a comma, do not update the input value
+        if (diff[0] === ',') {
+          return;
+        }
+      }
+
+      // Only allow input number characters and precision decimals if specified
+      const precisionRegex =  precision ? `{0,${precision}}` : '*';
+      const regex = RegExp(`^-?\\d{1,3}(?:,\\d{3})*\.?\\d${precisionRegex}$`,'g');
+      if (inputStr!== '' && !regex.test(inputStr)) {
+        return;
+      }
+
       // Update inputValue in case input can not parse as number
       // Refresh ref value immediately since it may used by formatter
       inputValueRef.current = inputStr;
       setInternalInputValue(inputStr);
+
 
       // Parse number
       if (!compositionRef.current) {
