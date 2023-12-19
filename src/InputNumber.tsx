@@ -88,7 +88,10 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined, info: { prevValue: string }) => T;
   /** Transform `value` to display value show in input */
-  formatter?: (value: T | undefined, info: { userTyping: boolean; input: string, prevValue: string }) => string;
+  formatter?: (
+    value: T | undefined,
+    info: { userTyping: boolean; input: string; prevValue: string },
+  ) => string;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
@@ -171,8 +174,8 @@ const InternalInputNumber = React.forwardRef(
       }
     }
 
-
     const prevValueRef = React.useRef<string | number>('');
+    const inputValueRef = React.useRef<string | number>('');
 
     // ====================== Formatter ======================
     /**
@@ -222,11 +225,14 @@ const InternalInputNumber = React.forwardRef(
     );
 
     // >>> Formatter
-    const inputValueRef = React.useRef<string | number>('');
     const mergedFormatter = React.useCallback(
       (number: string, userTyping: boolean) => {
         if (formatter) {
-          return formatter(number, { userTyping, input: String(inputValueRef.current), prevValue: String(prevValueRef.current) });
+          return formatter(number, {
+            userTyping,
+            input: String(inputValueRef.current),
+            prevValue: String(prevValueRef.current),
+          });
         }
 
         let str = typeof number === 'number' ? num2str(number) : number;
@@ -389,13 +395,11 @@ const InternalInputNumber = React.forwardRef(
     const collectInputValue = (inputStr: string) => {
       recordCursor();
 
-
       // Update inputValue in case input can not parse as number
       // Refresh ref value immediately since it may used by formatter
-      prevValueRef.current = inputValueRef.current
+      prevValueRef.current = inputValueRef.current;
       inputValueRef.current = inputStr;
       setInternalInputValue(inputStr);
-
 
       // Parse number
       if (!compositionRef.current) {
@@ -488,8 +492,8 @@ const InternalInputNumber = React.forwardRef(
       if (value !== undefined) {
         // Reset back with controlled value first
         setInputValue(decimalValue, false);
-      } else if (!formatValue.isNaN()) {
-        // Reset input back since no validate value
+      } else {
+        // Format value
         setInputValue(formatValue, false);
       }
     };
@@ -533,7 +537,7 @@ const InternalInputNumber = React.forwardRef(
       const onWheel = (event) => {
         if (wheel === false) {
           return;
-        };
+        }
         // moving mouse wheel rises wheel event with deltaY < 0
         // scroll value grows from top to bottom, as screen Y coordinate
         onInternalStep(event.deltaY < 0);
@@ -546,7 +550,7 @@ const InternalInputNumber = React.forwardRef(
         // https://stackoverflow.com/questions/63663025/react-onwheel-handler-cant-preventdefault-because-its-a-passive-event-listenev
         input.addEventListener('wheel', onWheel);
         return () => input.removeEventListener('wheel', onWheel);
-      };
+      }
     }, [onInternalStep]);
 
     // >>> Focus & Blur
