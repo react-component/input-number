@@ -44,20 +44,6 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
-const inputDiff=(str1: string, str2: string) =>{
-  const maxLength = Math.max(str1.length, str2.length);
-  let diff = '';
-
-  for (let i = 0; i < maxLength; i++) {
-      if (str1[i] !== str2[i]) {
-          if (str1[i]) diff += str1[i];
-          if (str2[i]) diff += str2[i];
-      }
-  }
-
-  return diff;
-}
-
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -100,9 +86,9 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   wheel?: boolean;
 
   /** Parse display value to validate number */
-  parser?: (displayValue: string | undefined) => T;
+  parser?: (displayValue: string | undefined, info: { prevValue: string }) => T;
   /** Transform `value` to display value show in input */
-  formatter?: (value: T | undefined, info: { userTyping: boolean; input: string }) => string;
+  formatter?: (value: T | undefined, info: { userTyping: boolean; input: string, prevValue: string }) => string;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
@@ -185,7 +171,10 @@ const InternalInputNumber = React.forwardRef(
       }
     }
 
-    // ====================== Parser & Formatter ======================
+
+    const prevValueRef = React.useRef<string | number>('');
+
+    // ====================== Formatter ======================
     /**
      * `precision` is used for formatter & onChange.
      * It will auto generate by `value` & `step`.
@@ -218,7 +207,7 @@ const InternalInputNumber = React.forwardRef(
         const numStr = String(num);
 
         if (parser) {
-          return parser(numStr);
+          return parser(numStr, { prevValue: String(prevValueRef.current) });
         }
 
         let parsedStr = numStr;
@@ -237,7 +226,7 @@ const InternalInputNumber = React.forwardRef(
     const mergedFormatter = React.useCallback(
       (number: string, userTyping: boolean) => {
         if (formatter) {
-          return formatter(number, { userTyping, input: String(inputValueRef.current) });
+          return formatter(number, { userTyping, input: String(inputValueRef.current), prevValue: String(prevValueRef.current) });
         }
 
         let str = typeof number === 'number' ? num2str(number) : number;
@@ -276,7 +265,11 @@ const InternalInputNumber = React.forwardRef(
       }
       return mergedFormatter(decimalValue.toString(), false);
     });
-    inputValueRef.current = inputValue;
+
+    React.useEffect(() => {
+      prevValueRef.current = inputValueRef.current;
+      inputValueRef.current = inputValue;
+    }, [inputValue]);
 
     // Should always be string
     function setInputValue(newValue: DecimalClass, userTyping: boolean) {
@@ -396,26 +389,10 @@ const InternalInputNumber = React.forwardRef(
     const collectInputValue = (inputStr: string) => {
       recordCursor();
 
-      // checks what are the diffs between the current state and the input value
-      const diff = inputDiff(inputStr, String(inputValue));
-
-      // if only one change is present, check if it is a comma
-      if (diff.length === 1) {
-        // if it is a comma, do not update the input value
-        if (diff[0] === ',') {
-          return;
-        }
-      }
-
-      // Only allow input number characters and precision decimals if specified
-      const precisionRegex =  precision ? `{0,${precision}}` : '*';
-      const regex = RegExp(`^-?\\d{1,3}(?:,\\d{3})*\.?\\d${precisionRegex}$`,'g');
-      if (inputStr!== '' && !regex.test(inputStr)) {
-        return;
-      }
 
       // Update inputValue in case input can not parse as number
       // Refresh ref value immediately since it may used by formatter
+      prevValueRef.current = inputValueRef.current
       inputValueRef.current = inputStr;
       setInternalInputValue(inputStr);
 
