@@ -92,6 +92,8 @@ export interface InputNumberProps<T extends ValueType = ValueType>
     value: T | undefined,
     info: { userTyping: boolean; input: string; prevValue: string },
   ) => string;
+  /** Validate an input string before processing */
+  validator?: (input: string) => boolean;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
@@ -137,6 +139,7 @@ const InternalInputNumber = React.forwardRef(
       classNames,
       stringMode,
 
+      validator,
       parser,
       formatter,
       precision,
@@ -393,6 +396,12 @@ const InternalInputNumber = React.forwardRef(
 
     // >>> Collect input value
     const collectInputValue = (inputStr: string) => {
+
+      // validate string
+      if(validator){
+        if(!validator(inputStr)) return;
+      }
+
       recordCursor();
 
       // Update inputValue in case input can not parse as number
@@ -492,8 +501,8 @@ const InternalInputNumber = React.forwardRef(
       if (value !== undefined) {
         // Reset back with controlled value first
         setInputValue(decimalValue, false);
-      } else {
-        // Format value
+      } else if (!formatValue.isNaN()) {
+        // Reset input back since no validate value
         setInputValue(formatValue, false);
       }
     };
