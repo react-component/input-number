@@ -12,7 +12,7 @@ import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
 import { composeRef } from 'rc-util/lib/ref';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
-import StepHandler from './StepHandler';
+import StepHandler, { StepHandlerProps } from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
 import { InputFocusOptions, triggerFocus } from 'rc-input/lib/utils/commonUtils';
@@ -68,9 +68,10 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   suffix?: React.ReactNode;
   addonBefore?: React.ReactNode;
   addonAfter?: React.ReactNode;
-  classNames?: BaseInputProps['classNames'] & {
-    input?: string;
-  };
+  classNames?: BaseInputProps['classNames'] &
+    StepHandlerProps['classNames'] & {
+      input?: string;
+    };
 
   // Customize handler node
   upHandler?: React.ReactNode;
@@ -594,6 +595,11 @@ const InternalInputNumber = React.forwardRef(
         {controls && (
           <StepHandler
             prefixCls={prefixCls}
+            classNames={{
+              handlerWrapper: classNames?.handlerWrapper,
+              upHandler: classNames?.upHandler,
+              downHandler: classNames?.downHandler,
+            }}
             upNode={upHandler}
             downNode={downHandler}
             upDisabled={upDisabled}
@@ -672,6 +678,7 @@ const InputNumber = React.forwardRef(
           disabled={disabled}
           ref={composeRef(inputFocusRef, ref)}
           className={classNames?.input}
+          classNames={classNames}
           {...rest}
         />
       </BaseInput>

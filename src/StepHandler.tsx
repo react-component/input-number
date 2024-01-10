@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import * as React from 'react';
-import classNames from 'classnames';
+import clsx from 'classnames';
 import useMobile from 'rc-util/lib/hooks/useMobile';
 import raf from 'rc-util/lib/raf';
 
@@ -16,6 +16,11 @@ const STEP_DELAY = 600;
 
 export interface StepHandlerProps {
   prefixCls: string;
+  classNames?: {
+    handlerWrapper?: string;
+    upHandler?: string;
+    downHandler?: string;
+  };
   upNode?: React.ReactNode;
   downNode?: React.ReactNode;
   upDisabled?: boolean;
@@ -25,6 +30,7 @@ export interface StepHandlerProps {
 
 export default function StepHandler({
   prefixCls,
+  classNames,
   upNode,
   downNode,
   upDisabled,
@@ -74,16 +80,26 @@ export default function StepHandler({
 
   const handlerClassName = `${prefixCls}-handler`;
 
-  const upClassName = classNames(handlerClassName, `${handlerClassName}-up`, {
-    [`${handlerClassName}-up-disabled`]: upDisabled,
-  });
-  const downClassName = classNames(handlerClassName, `${handlerClassName}-down`, {
-    [`${handlerClassName}-down-disabled`]: downDisabled,
-  });
+  const upClassName = clsx(
+    handlerClassName,
+    `${handlerClassName}-up`,
+    {
+      [`${handlerClassName}-up-disabled`]: upDisabled,
+    },
+    classNames?.upHandler,
+  );
+  const downClassName = clsx(
+    handlerClassName,
+    `${handlerClassName}-down`,
+    {
+      [`${handlerClassName}-down-disabled`]: downDisabled,
+    },
+    classNames?.downHandler,
+  );
 
   // fix: https://github.com/ant-design/ant-design/issues/43088
-  // In Safari, When we fire onmousedown and onmouseup events in quick succession, 
-  // there may be a problem that the onmouseup events are executed first, 
+  // In Safari, When we fire onmousedown and onmouseup events in quick succession,
+  // there may be a problem that the onmouseup events are executed first,
   // resulting in a disordered program execution.
   // So, we need to use requestAnimationFrame to ensure that the onmouseup event is executed after the onmousedown event.
   const safeOnStopStep = () => frameIds.current.push(raf(onStopStep));
@@ -96,7 +112,7 @@ export default function StepHandler({
   };
 
   return (
-    <div className={`${handlerClassName}-wrap`}>
+    <div className={clsx(`${handlerClassName}-wrap`, classNames?.handlerWrapper)}>
       <span
         {...sharedHandlerProps}
         onMouseDown={(e) => {

@@ -63,6 +63,38 @@ describe('InputNumber.Props', () => {
 
   });
 
+  describe('classNames', () => {
+    it('handlerWrapper', () => {
+      const { container } = render(
+        <InputNumber classNames={{ handlerWrapper: 'my-custom-class-handler-wrapper' }} />,
+      );
+
+      expect(container.querySelector('.rc-input-number-handler-wrap')).toHaveClass(
+        'my-custom-class-handler-wrapper',
+      );
+    });
+
+    it('upHandler', () => {
+      const { container } = render(
+        <InputNumber classNames={{ upHandler: 'my-custom-class-up-handler' }} />,
+      );
+
+      expect(container.querySelector('.rc-input-number-handler-up')).toHaveClass(
+        'my-custom-class-up-handler',
+      );
+    });
+
+    it('downHandler', () => {
+      const { container } = render(
+        <InputNumber classNames={{ downHandler: 'my-custom-class-down-handler' }} />,
+      );
+
+      expect(container.querySelector('.rc-input-number-handler-down')).toHaveClass(
+        'my-custom-class-down-handler',
+      );
+    });
+  });
+
   describe('step', () => {
     it('basic', () => {
       const onChange = jest.fn();
