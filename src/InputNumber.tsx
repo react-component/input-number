@@ -17,6 +17,7 @@ import { getDecupleSteps } from './utils/numberUtil';
 
 import { InputFocusOptions, triggerFocus } from 'rc-input/lib/utils/commonUtils';
 import useFrame from './hooks/useFrame';
+import { BaseInputProps } from 'rc-input/lib/interface';
 
 export type { ValueType };
 
@@ -67,15 +68,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   suffix?: React.ReactNode;
   addonBefore?: React.ReactNode;
   addonAfter?: React.ReactNode;
-  classes?: {
-    affixWrapper?: string;
-    group?: string;
-    wrapper?: string;
-  };
-  classNames?: {
-    affixWrapper?: string;
-    group?: string;
-    wrapper?: string;
+  classNames?: BaseInputProps['classNames'] & {
     input?: string;
   };
 
@@ -104,9 +97,6 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
 
   onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down' }) => void;
-
-  // focusOnUpDown: boolean;
-  // useTouch: boolean;
 
   /**
    * Trigger change onBlur event.
@@ -606,7 +596,7 @@ const InternalInputNumber = React.forwardRef(
     // ============================ Render ============================
     return (
       <div
-        className={clsx(prefixCls, classNames?.input, className, {
+        className={clsx(prefixCls, className, {
           [`${prefixCls}-focused`]: focus,
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-readonly`]: readOnly,
@@ -667,7 +657,6 @@ const InputNumber = React.forwardRef(
       suffix,
       addonBefore,
       addonAfter,
-      classes,
       className,
       classNames,
       ...rest
@@ -683,15 +672,6 @@ const InputNumber = React.forwardRef(
 
     return (
       <BaseInput
-        inputElement={
-          <InternalInputNumber
-            prefixCls={prefixCls}
-            disabled={disabled}
-            classNames={classNames}
-            ref={composeRef(inputFocusRef, ref)}
-            {...rest}
-          />
-        }
         className={className}
         triggerFocus={focus}
         prefixCls={prefixCls}
@@ -702,7 +682,6 @@ const InputNumber = React.forwardRef(
         suffix={suffix}
         addonAfter={addonAfter}
         addonBefore={addonBefore}
-        classes={classes}
         classNames={classNames}
         components={{
           affixWrapper: 'div',
@@ -710,7 +689,15 @@ const InputNumber = React.forwardRef(
           wrapper: 'div',
           groupAddon: 'div',
         }}
-      />
+      >
+        <InternalInputNumber
+          prefixCls={prefixCls}
+          disabled={disabled}
+          ref={composeRef(inputFocusRef, ref)}
+          className={classNames?.input}
+          {...rest}
+        />
+      </BaseInput>
     );
   },
 ) as (<T extends ValueType = ValueType>(
