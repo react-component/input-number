@@ -524,7 +524,7 @@ const InternalInputNumber = React.forwardRef(
         // React onWheel is passive and we can't preventDefault() in it.
         // That's why we should subscribe with DOM listener
         // https://stackoverflow.com/questions/63663025/react-onwheel-handler-cant-preventdefault-because-its-a-passive-event-listenev
-        input.addEventListener('wheel', onWheel);
+        input.addEventListener('wheel', onWheel, { passive: false });
         return () => input.removeEventListener('wheel', onWheel);
       }
     }, [onInternalStep]);
