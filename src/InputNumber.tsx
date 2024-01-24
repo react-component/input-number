@@ -510,11 +510,8 @@ const InternalInputNumber = React.forwardRef(
     };
 
     React.useEffect(() => {
-      if (changeOnWheel) {
+      if (changeOnWheel && focus) {
         const onWheel = (event) => {
-          if (!focus) {
-            return;
-          }
           // moving mouse wheel rises wheel event with deltaY < 0
           // scroll value grows from top to bottom, as screen Y coordinate
           onInternalStep(event.deltaY < 0);
