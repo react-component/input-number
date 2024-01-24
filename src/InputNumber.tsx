@@ -76,7 +76,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   upHandler?: React.ReactNode;
   downHandler?: React.ReactNode;
   keyboard?: boolean;
-  wheel?: boolean;
+  changeOnWheel?: boolean;
 
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined) => T;
@@ -118,7 +118,7 @@ const InternalInputNumber = React.forwardRef(
       upHandler,
       downHandler,
       keyboard,
-      wheel,
+      changeOnWheel = false,
       controls = true,
 
       classNames,
@@ -511,7 +511,7 @@ const InternalInputNumber = React.forwardRef(
 
     React.useEffect(() => {
       const onWheel = (event) => {
-        if (wheel === false) {
+        if (changeOnWheel === false || !focus) {
           return;
         }
         // moving mouse wheel rises wheel event with deltaY < 0
