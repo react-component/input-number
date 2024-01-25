@@ -76,7 +76,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   upHandler?: React.ReactNode;
   downHandler?: React.ReactNode;
   keyboard?: boolean;
-  wheel?: boolean;
+  changeOnWheel?: boolean;
 
   /** Parse display value to validate number */
   parser?: (displayValue: string | undefined) => T;
@@ -118,7 +118,7 @@ const InternalInputNumber = React.forwardRef(
       upHandler,
       downHandler,
       keyboard,
-      wheel,
+      changeOnWheel = false,
       controls = true,
 
       classNames,
@@ -510,24 +510,23 @@ const InternalInputNumber = React.forwardRef(
     };
 
     React.useEffect(() => {
-      const onWheel = (event) => {
-        if (wheel === false) {
-          return;
+      if (changeOnWheel && focus) {
+        const onWheel = (event) => {
+          // moving mouse wheel rises wheel event with deltaY < 0
+          // scroll value grows from top to bottom, as screen Y coordinate
+          onInternalStep(event.deltaY < 0);
+          event.preventDefault();
+        };
+        const input = inputRef.current;
+        if (input) {
+          // React onWheel is passive and we can't preventDefault() in it.
+          // That's why we should subscribe with DOM listener
+          // https://stackoverflow.com/questions/63663025/react-onwheel-handler-cant-preventdefault-because-its-a-passive-event-listenev
+          input.addEventListener('wheel', onWheel, { passive: false });
+          return () => input.removeEventListener('wheel', onWheel);
         }
-        // moving mouse wheel rises wheel event with deltaY < 0
-        // scroll value grows from top to bottom, as screen Y coordinate
-        onInternalStep(event.deltaY < 0);
-        event.preventDefault();
-      };
-      const input = inputRef.current;
-      if (input) {
-        // React onWheel is passive and we can't preventDefault() in it.
-        // That's why we should subscribe with DOM listener
-        // https://stackoverflow.com/questions/63663025/react-onwheel-handler-cant-preventdefault-because-its-a-passive-event-listenev
-        input.addEventListener('wheel', onWheel, { passive: false });
-        return () => input.removeEventListener('wheel', onWheel);
       }
-    }, [onInternalStep]);
+    });
 
     // >>> Focus & Blur
     const onBlur = () => {
