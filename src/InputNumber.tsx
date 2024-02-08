@@ -455,7 +455,7 @@ const InternalInputNumber = React.forwardRef(
      */
     const flushInputValue = (userTyping: boolean) => {
       const parsedValue = getMiniDecimal(mergedParser(inputValue));
-      let formatValue: DecimalClass = parsedValue;
+      let formatValue: DecimalClass;
 
       if (!parsedValue.isNaN()) {
         // Only validate value or empty value can be re-fill to inputValue
