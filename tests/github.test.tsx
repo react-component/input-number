@@ -1,8 +1,7 @@
 import KeyCode from 'rc-util/lib/KeyCode';
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import InputNumber from '../src';
-import { fireEvent, render, screen, waitFor } from './util/wrapper';
+import { act, fireEvent, render, screen, waitFor } from './util/wrapper';
 
 // Github issues
 describe('InputNumber.Github', () => {
