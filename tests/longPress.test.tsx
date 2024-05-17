@@ -1,7 +1,5 @@
-import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { render, fireEvent, waitFor } from './util/wrapper';
 import InputNumber from '../src';
+import { act, fireEvent, render, waitFor } from './util/wrapper';
 
 // Jest will mass of advanceTimersByTime if other test case not use fakeTimer.
 // Let's create a pure file here for test.

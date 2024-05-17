@@ -1,6 +1,6 @@
 import KeyCode from 'rc-util/lib/KeyCode';
 import React from 'react';
-import InputNumber, { InputNumberProps } from '../src';
+import InputNumber, { InputNumberProps, InputNumberRef } from '../src';
 import { fireEvent, render } from './util/wrapper';
 
 describe('InputNumber.Input', () => {
@@ -222,5 +222,21 @@ describe('InputNumber.Input', () => {
 
     fireEvent.blur(container.querySelector('input'));
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  describe('nativeElement', () => {
+    it('basic', () => {
+      const ref = React.createRef<InputNumberRef>();
+      const { container } = render(<InputNumber ref={ref} />);
+      expect(ref.current.nativeElement).toBe(container.querySelector('.rc-input-number'));
+    });
+
+    it('wrapper', () => {
+      const ref = React.createRef<InputNumberRef>();
+      const { container } = render(<InputNumber ref={ref} suffix="suffix" />);
+      expect(ref.current.nativeElement).toBe(
+        container.querySelector('.rc-input-number-affix-wrapper'),
+      );
+    });
   });
 });

@@ -9,17 +9,23 @@ import getMiniDecimal, {
 import clsx from 'classnames';
 import { BaseInput } from 'rc-input';
 import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
+import proxyObject from 'rc-util/lib/proxyObject';
 import { composeRef } from 'rc-util/lib/ref';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
+import type { HolderRef } from 'rc-input/lib/BaseInput';
+import { BaseInputProps } from 'rc-input/lib/interface';
 import { InputFocusOptions, triggerFocus } from 'rc-input/lib/utils/commonUtils';
 import useFrame from './hooks/useFrame';
-import { BaseInputProps } from 'rc-input/lib/interface';
 
 export type { ValueType };
+
+export interface InputNumberRef extends HTMLInputElement {
+  nativeElement: HTMLElement;
+}
 
 /**
  * We support `stringMode` which need handle correct type when user call in onChange
@@ -100,12 +106,14 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   changeOnBlur?: boolean;
 }
 
-type InternalInputNumberProps = Omit<InputNumberProps, 'prefix' | 'suffix'>;
+type InternalInputNumberProps = Omit<InputNumberProps, 'prefix' | 'suffix'> & {
+  domRef: React.Ref<HTMLDivElement>;
+};
 
 const InternalInputNumber = React.forwardRef(
   (props: InternalInputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const {
-      prefixCls = 'rc-input-number',
+      prefixCls,
       className,
       style,
       min,
@@ -135,6 +143,8 @@ const InternalInputNumber = React.forwardRef(
       onStep,
 
       changeOnBlur = true,
+
+      domRef,
 
       ...inputProps
     } = props;
@@ -572,6 +582,7 @@ const InternalInputNumber = React.forwardRef(
     // ============================ Render ============================
     return (
       <div
+        ref={domRef}
         className={clsx(prefixCls, className, {
           [`${prefixCls}-focused`]: focus,
           [`${prefixCls}-disabled`]: disabled,
@@ -622,66 +633,76 @@ const InternalInputNumber = React.forwardRef(
   },
 );
 
-const InputNumber = React.forwardRef(
-  (props: InputNumberProps, ref: React.Ref<HTMLInputElement>) => {
-    const {
-      disabled,
-      style,
-      prefixCls,
-      value,
-      prefix,
-      suffix,
-      addonBefore,
-      addonAfter,
-      className,
-      classNames,
-      ...rest
-    } = props;
+const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, ref) => {
+  const {
+    disabled,
+    style,
+    prefixCls = 'rc-input-number',
+    value,
+    prefix,
+    suffix,
+    addonBefore,
+    addonAfter,
+    className,
+    classNames,
+    ...rest
+  } = props;
 
-    const inputFocusRef = React.useRef<HTMLInputElement>(null);
+  const holderRef = React.useRef<HolderRef>(null);
+  const inputNumberDomRef = React.useRef<HTMLDivElement>(null);
+  const inputFocusRef = React.useRef<HTMLInputElement>(null);
 
-    const focus = (option?: InputFocusOptions) => {
-      if (inputFocusRef.current) {
-        triggerFocus(inputFocusRef.current, option);
-      }
-    };
+  const focus = (option?: InputFocusOptions) => {
+    if (inputFocusRef.current) {
+      triggerFocus(inputFocusRef.current, option);
+    }
+  };
 
-    return (
-      <BaseInput
-        className={className}
-        triggerFocus={focus}
+  React.useImperativeHandle(ref, () =>
+    proxyObject(inputFocusRef.current, {
+      nativeElement: holderRef.current.nativeElement || inputNumberDomRef.current,
+    }),
+  );
+
+  return (
+    <BaseInput
+      className={className}
+      triggerFocus={focus}
+      prefixCls={prefixCls}
+      value={value}
+      disabled={disabled}
+      style={style}
+      prefix={prefix}
+      suffix={suffix}
+      addonAfter={addonAfter}
+      addonBefore={addonBefore}
+      classNames={classNames}
+      components={{
+        affixWrapper: 'div',
+        groupWrapper: 'div',
+        wrapper: 'div',
+        groupAddon: 'div',
+      }}
+      ref={holderRef}
+    >
+      <InternalInputNumber
         prefixCls={prefixCls}
-        value={value}
         disabled={disabled}
-        style={style}
-        prefix={prefix}
-        suffix={suffix}
-        addonAfter={addonAfter}
-        addonBefore={addonBefore}
-        classNames={classNames}
-        components={{
-          affixWrapper: 'div',
-          groupWrapper: 'div',
-          wrapper: 'div',
-          groupAddon: 'div',
-        }}
-      >
-        <InternalInputNumber
-          prefixCls={prefixCls}
-          disabled={disabled}
-          ref={composeRef(inputFocusRef, ref)}
-          className={classNames?.input}
-          {...rest}
-        />
-      </BaseInput>
-    );
-  },
-) as (<T extends ValueType = ValueType>(
+        ref={inputFocusRef}
+        domRef={inputNumberDomRef}
+        className={classNames?.input}
+        {...rest}
+      />
+    </BaseInput>
+  );
+}) as (<T extends ValueType = ValueType>(
   props: React.PropsWithChildren<InputNumberProps<T>> & {
     ref?: React.Ref<HTMLInputElement>;
   },
 ) => React.ReactElement) & { displayName?: string };
 
-InputNumber.displayName = 'InputNumber';
+if (process.env.NODE_ENV !== 'production') {
+  InputNumber.displayName = 'InputNumber';
+}
 
 export default InputNumber;
