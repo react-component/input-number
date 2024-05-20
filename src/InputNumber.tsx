@@ -133,25 +133,18 @@ const InternalInputNumber = React.forwardRef(
       keyboard,
       changeOnWheel = false,
       controls = true,
-
-      classNames,
       stringMode,
-
       validator,
       parser,
       formatter,
       precision,
       decimalSeparator,
-
       onChange,
       onInput,
       onPressEnter,
       onStep,
-
       changeOnBlur = true,
-
       domRef,
-
       ...inputProps
     } = props;
 
