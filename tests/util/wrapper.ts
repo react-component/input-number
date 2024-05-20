@@ -1,13 +1,12 @@
-import type { ReactElement } from 'react';
-import { act } from 'react-dom/test-utils';
 import type { RenderOptions } from '@testing-library/react';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
+import type { ReactElement } from 'react';
 
 const globalTimeout = global.setTimeout;
 
 export const sleep = async (timeout = 0) => {
   await act(async () => {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       globalTimeout(resolve, timeout);
     });
   });
@@ -16,6 +15,5 @@ export const sleep = async (timeout = 0) => {
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
   render(ui, { ...options });
 
-export { customRender as render };
-
 export * from '@testing-library/react';
+export { customRender as render };

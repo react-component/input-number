@@ -2,24 +2,31 @@
 
 Input number control.
 
-[![NPM version][npm-image]][npm-url] [![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) [![build status][github-actions-image]][github-actions-url] [![Test coverage][coveralls-image]][coveralls-url] [![Dependencies][david-image]][david-url] [![DevDependencies][david-dev-image]][david-dev-url] [![npm download][download-image]][download-url] [![bundle size][bundlephobia-image]][bundlephobia-url]
+[![NPM version][npm-image]][npm-url]
+[![npm download][download-image]][download-url]
+[![build status][github-actions-image]][github-actions-url]
+[![Codecov][codecov-image]][codecov-url]
+[![bundle size][bundlephobia-image]][bundlephobia-url]
+[![dumi][dumi-image]][dumi-url]
 
 [npm-image]: http://img.shields.io/npm/v/rc-input-number.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-input-number
+[travis-image]: https://img.shields.io/travis/react-component/input-number/master?style=flat-square
+[travis-url]: https://travis-ci.com/react-component/input-number
 [github-actions-image]: https://github.com/react-component/input-number/workflows/CI/badge.svg
 [github-actions-url]: https://github.com/react-component/input-number/actions
-[circleci-image]: https://img.shields.io/circleci/react-component/input-number/master?style=flat-square
-[circleci-url]: https://circleci.com/gh/react-component/input-number
-[coveralls-image]: https://img.shields.io/coveralls/react-component/input-number.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/input-number?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/react-component/input-number/master.svg?style=flat-square
+[codecov-url]: https://app.codecov.io/gh/react-component/input-number
 [david-url]: https://david-dm.org/react-component/input-number
 [david-image]: https://david-dm.org/react-component/input-number/status.svg?style=flat-square
 [david-dev-url]: https://david-dm.org/react-component/input-number?type=dev
 [david-dev-image]: https://david-dm.org/react-component/input-number/dev-status.svg?style=flat-square
 [download-image]: https://img.shields.io/npm/dm/rc-input-number.svg?style=flat-square
 [download-url]: https://npmjs.org/package/rc-input-number
-[bundlephobia-url]: https://bundlephobia.com/result?p=rc-input-number
+[bundlephobia-url]: https://bundlephobia.com/package/rc-input-number
 [bundlephobia-image]: https://badgen.net/bundlephobia/minzip/rc-input-number
+[dumi-url]: https://github.com/umijs/dumi
+[dumi-image]: https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square
 
 ## Screenshots
 
