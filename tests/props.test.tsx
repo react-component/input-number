@@ -63,6 +63,12 @@ describe('InputNumber.Props', () => {
 
   });
 
+  it('suffix', () => {
+    const { container } = render(<InputNumber suffix='¥' />);
+    const suffixEl = container.querySelector('.rc-input-number-suffix');
+    expect(suffixEl).toBeTruthy();
+  });
+
   describe('step', () => {
     it('basic', () => {
       const onChange = jest.fn();
