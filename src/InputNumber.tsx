@@ -106,7 +106,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   changeOnBlur?: boolean;
 }
 
-type InternalInputNumberProps = Omit<InputNumberProps, 'prefix' | 'suffix'> & {
+type InternalInputNumberProps = Omit<InputNumberProps, 'prefix'> & {
   domRef: React.Ref<HTMLDivElement>;
 };
 
@@ -119,6 +119,7 @@ const InternalInputNumber = React.forwardRef(
       min,
       max,
       step = 1,
+      suffix,
       defaultValue,
       value,
       disabled,
@@ -601,16 +602,6 @@ const InternalInputNumber = React.forwardRef(
         onCompositionEnd={onCompositionEnd}
         onBeforeInput={onBeforeInput}
       >
-        {controls && (
-          <StepHandler
-            prefixCls={prefixCls}
-            upNode={upHandler}
-            downNode={downHandler}
-            upDisabled={upDisabled}
-            downDisabled={downDisabled}
-            onStep={onInternalStep}
-          />
-        )}
         <div className={`${inputClassName}-wrap`}>
           <input
             autoComplete="off"
@@ -628,6 +619,17 @@ const InternalInputNumber = React.forwardRef(
             readOnly={readOnly}
           />
         </div>
+        {suffix && <div className={`${prefixCls}-suffix`}>{suffix}</div>}
+        {controls && (
+          <StepHandler
+            prefixCls={prefixCls}
+            upNode={upHandler}
+            downNode={downHandler}
+            upDisabled={upDisabled}
+            downDisabled={downDisabled}
+            onStep={onInternalStep}
+          />
+        )}
       </div>
     );
   },
@@ -640,7 +642,6 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     prefixCls = 'rc-input-number',
     value,
     prefix,
-    suffix,
     addonBefore,
     addonAfter,
     className,
@@ -673,7 +674,6 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
       disabled={disabled}
       style={style}
       prefix={prefix}
-      suffix={suffix}
       addonAfter={addonAfter}
       addonBefore={addonBefore}
       classNames={classNames}
