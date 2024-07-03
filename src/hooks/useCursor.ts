@@ -50,10 +50,10 @@ export default function useCursor(
 
         let startPos = value.length;
 
-        if (value.startsWith(beforeTxt)) {
-          startPos = beforeTxt.length;
-        } else if (value.endsWith(afterTxt)) {
+        if (value.endsWith(afterTxt)) {
           startPos = value.length - selectionRef.current.afterTxt.length;
+        } else if (value.startsWith(beforeTxt)) {
+          startPos = beforeTxt.length;
         } else {
           const beforeLastChar = beforeTxt[start - 1];
           const newIndex = value.indexOf(beforeLastChar, start - 1);
