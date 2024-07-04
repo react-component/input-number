@@ -116,6 +116,5 @@ describe('InputNumber.Cursor', () => {
       fireEvent.change(input,{ target: { value: '5' } });
       expect(cursorInput(input)).toEqual(1);
     });
-  })
-
+  });
 });
