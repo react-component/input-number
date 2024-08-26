@@ -1,6 +1,6 @@
 /* eslint no-console:0 */
 import React from 'react';
-import InputNumber from 'rc-input-number';
+import InputNumber, { ValueType } from 'rc-input-number';
 import '../../assets/index.less';
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
 
   return (
     <div>
-      <InputNumber
+      <InputNumber<ValueType>
         value={value}
         max={999}
         onChange={(newValue) => {
