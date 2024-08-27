@@ -2,7 +2,8 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/react';
 import KeyCode from 'rc-util/lib/KeyCode';
-import InputNumber, { ValueType } from '../src';
+import type { ValueType } from '../src'
+import InputNumber from '../src';
 
 describe('InputNumber.Props', () => {
 
