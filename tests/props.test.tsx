@@ -2,6 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/react';
 import KeyCode from 'rc-util/lib/KeyCode';
+import type { ValueType } from '../src'
 import InputNumber from '../src';
 
 describe('InputNumber.Props', () => {
@@ -275,7 +276,7 @@ describe('InputNumber.Props', () => {
     });
 
     it('default value can be a string greater than 16 characters', () => {
-      const { container } = render(<InputNumber max={10} defaultValue='-3.637978807091713e-12' />);
+      const { container } = render(<InputNumber<ValueType> max={10} defaultValue='-3.637978807091713e-12' />);
       const input = container.querySelector('input');
       expect(input.value).toEqual('-0.000000000003637978807091713');
     });
@@ -303,7 +304,7 @@ describe('InputNumber.Props', () => {
     });
 
     it('value can be a string greater than 16 characters', () => {
-      const { container } = render(<InputNumber max={10} value='-3.637978807091713e-12' />);
+      const { container } = render(<InputNumber<ValueType> max={10} value='-3.637978807091713e-12' />);
       const input = container.querySelector('input');
       expect(input.value).toEqual('-0.000000000003637978807091713');
     });

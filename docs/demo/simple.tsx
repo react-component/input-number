@@ -29,7 +29,7 @@ export default () => {
         readOnly={readOnly}
         disabled={disabled}
         keyboard={keyboard}
-        wheel={wheel}
+        changeOnWheel={wheel}
         stringMode={stringMode}
       />
       <p>
