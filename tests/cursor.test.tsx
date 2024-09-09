@@ -107,4 +107,14 @@ describe('InputNumber.Cursor', () => {
       });
     });
   });
+
+  describe('append string', () => {
+    it('position caret before appended characters', () => {
+      const { container } = render(<InputNumber formatter={(value) => `${value}%`} parser={(value) => value.replace('%', '')} />);
+      const input = container.querySelector('input');
+      fireEvent.focus(input);
+      fireEvent.change(input,{ target: { value: '5' } });
+      expect(cursorInput(input)).toEqual(1);
+    });
+  });
 });
