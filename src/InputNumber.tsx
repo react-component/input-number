@@ -206,7 +206,7 @@ const InternalInputNumber = React.forwardRef(
         const numStr = String(num);
 
         if (parser) {
-          return parser(numStr, { prevValue: String(prevValueRef.current) });
+          return parser(numStr, { prevValue: String(prevValueRef.current ?? '') });
         }
 
         let parsedStr = numStr;
@@ -227,7 +227,7 @@ const InternalInputNumber = React.forwardRef(
           return formatter(number, {
             userTyping,
             input: String(inputValueRef.current),
-            prevValue: String(prevValueRef.current),
+            prevValue: String(prevValueRef.current ?? ''),
           });
         }
 
@@ -389,10 +389,9 @@ const InternalInputNumber = React.forwardRef(
 
     // >>> Collect input value
     const collectInputValue = (inputStr: string) => {
-
       // validate string
-      if(validator){
-        if(!validator(inputStr)) return;
+      if (validator) {
+        if (!validator(inputStr)) return;
       }
 
       recordCursor();
