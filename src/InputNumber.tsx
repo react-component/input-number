@@ -32,6 +32,7 @@ export interface InputNumberRef extends HTMLInputElement {
     direction?: 'forward' | 'backward' | 'none',
   ) => void;
   select: () => void;
+  input: HTMLInputElement | null;
   nativeElement: HTMLElement;
 }
 
