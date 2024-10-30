@@ -186,3 +186,25 @@ nav:
         </tr>
     </tbody>
 </table>
+
+## inputRef
+
+```tsx | pure
+import InputNumber, { InputNumberRef } from 'rc-input-number';
+
+const inputRef = useRef<InputNumberRef>(null);
+
+useEffect(() => {
+  inputRef.current.focus(); // the input will get focus
+  inputRef.current.blur(); // the input will lose focus
+  console.log(inputRef.current.input); // The origin input element
+}, []);
+// ....
+<InputNumber ref={inputRef} />;
+```
+
+| Property | Type                                    | Description                       |
+| -------- | --------------------------------------- | --------------------------------- |
+| focus    | `(options?: InputFocusOptions) => void` | The input get focus when called   |
+| blur     | `() => void`                            | The input loses focus when called |
+| input    | `HTMLInputElement \| null`              | The origin input element          |

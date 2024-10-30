@@ -24,6 +24,14 @@ import useFrame from './hooks/useFrame';
 export type { ValueType };
 
 export interface InputNumberRef extends HTMLInputElement {
+  focus: (options?: InputFocusOptions) => void;
+  blur: () => void;
+  setSelectionRange: (
+    start: number,
+    end: number,
+    direction?: 'forward' | 'backward' | 'none',
+  ) => void;
+  select: () => void;
   nativeElement: HTMLElement;
 }
 
@@ -660,6 +668,21 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
   React.useImperativeHandle(ref, () =>
     proxyObject(inputFocusRef.current, {
+      focus,
+      blur: () => {
+        inputFocusRef.current?.blur();
+      },
+      setSelectionRange: (
+        start: number,
+        end: number,
+        direction?: 'forward' | 'backward' | 'none',
+      ) => {
+        inputFocusRef.current?.setSelectionRange(start, end, direction);
+      },
+      select: () => {
+        inputFocusRef.current?.select();
+      },
+      input: inputFocusRef.current,
       nativeElement: holderRef.current.nativeElement || inputNumberDomRef.current,
     }),
   );
