@@ -224,16 +224,6 @@ describe('InputNumber.Input', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('input should work', () => {
-    const ref = React.createRef<InputNumberRef>();
-    const { container } = render(<InputNumber ref={ref} />);
-    const inputEl = container.querySelector('input')!;
-    const rootEl = container.querySelector('.rc-input-number')!;
-
-    expect(ref.current?.input).toBe(inputEl);
-    expect(ref.current?.nativeElement).toBe(rootEl);
-  });
-
   describe('nativeElement', () => {
     it('basic', () => {
       const ref = React.createRef<InputNumberRef>();

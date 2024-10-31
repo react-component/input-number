@@ -26,13 +26,6 @@ export type { ValueType };
 export interface InputNumberRef extends HTMLInputElement {
   focus: (options?: InputFocusOptions) => void;
   blur: () => void;
-  setSelectionRange: (
-    start: number,
-    end: number,
-    direction?: 'forward' | 'backward' | 'none',
-  ) => void;
-  select: () => void;
-  input: HTMLInputElement | null;
   nativeElement: HTMLElement;
 }
 
