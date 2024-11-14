@@ -45,4 +45,6 @@ nav:
 
 <code src="./demo/wheel.tsx"></code>
 
+## focus
 
+<code src="./demo/focus.tsx"></code>
