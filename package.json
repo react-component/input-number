@@ -53,7 +53,7 @@
     "rc-util": "^5.40.1"
   },
   "devDependencies": {
-    "@rc-component/father-plugin": "^1.0.1",
+    "@rc-component/father-plugin": "^2.0.1",
     "@swc-node/jest": "^1.5.5",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^16.0.0",
