@@ -1,6 +1,6 @@
 {
-  "name": "rc-input-number",
-  "version": "9.4.0",
+  "name": "@rc-component/input-number",
+  "version": "1.0.0",
   "description": "React input-number component",
   "keywords": [
     "react",
@@ -34,7 +34,7 @@
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
     "now-build": "npm run docs:build",
     "prepare": "husky install",
-    "prepublishOnly": "npm run compile && np --yolo --no-publish",
+    "prepublishOnly": "npm run compile && rc-np",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "start": "dumi dev",
     "test": "rc-test"
@@ -46,14 +46,14 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^7.10.1",
     "@rc-component/mini-decimal": "^1.0.1",
     "classnames": "^2.2.5",
-    "rc-input": "~1.7.1",
-    "rc-util": "^5.40.1"
+    "@rc-component/input": "~1.0.0",
+    "@rc-component/util": "^1.2.0"
   },
   "devDependencies": {
-    "@rc-component/father-plugin": "^1.0.1",
+    "@rc-component/father-plugin": "^2.0.2",
+    "@rc-component/np": "^1.0.3",
     "@swc-node/jest": "^1.5.5",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^16.0.0",

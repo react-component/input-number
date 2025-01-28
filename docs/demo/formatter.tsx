@@ -1,6 +1,6 @@
 /* eslint no-console:0 */
 import React from 'react';
-import InputNumber from 'rc-input-number';
+import InputNumber from '@rc-component/input-number';
 import '../../assets/index.less';
 
 function getSum(str) {

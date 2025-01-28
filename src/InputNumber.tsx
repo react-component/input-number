@@ -7,18 +7,18 @@ import getMiniDecimal, {
   ValueType,
 } from '@rc-component/mini-decimal';
 import clsx from 'classnames';
-import { BaseInput } from 'rc-input';
-import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
-import proxyObject from 'rc-util/lib/proxyObject';
-import { composeRef } from 'rc-util/lib/ref';
+import { BaseInput } from '@rc-component/input';
+import { useLayoutUpdateEffect } from '@rc-component/util/lib/hooks/useLayoutEffect';
+import proxyObject from '@rc-component/util/lib/proxyObject';
+import { composeRef } from '@rc-component/util/lib/ref';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
-import type { HolderRef } from 'rc-input/lib/BaseInput';
-import { BaseInputProps } from 'rc-input/lib/interface';
-import { InputFocusOptions, triggerFocus } from 'rc-input/lib/utils/commonUtils';
+import type { HolderRef } from '@rc-component/input/lib/BaseInput';
+import { BaseInputProps } from '@rc-component/input/lib/interface';
+import { InputFocusOptions, triggerFocus } from '@rc-component/input/lib/utils/commonUtils';
 import useFrame from './hooks/useFrame';
 
 export type { ValueType };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
 import InputNumber, { InputNumberProps } from '../src';
-import KeyCode from 'rc-util/lib/KeyCode';
+import KeyCode from '@rc-component/util/lib/KeyCode';
 
 jest.mock('@rc-component/mini-decimal/lib/supportUtil');
 const { supportBigInt } = require('@rc-component/mini-decimal/lib/supportUtil');
