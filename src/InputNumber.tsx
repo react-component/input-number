@@ -87,9 +87,14 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   changeOnWheel?: boolean;
 
   /** Parse display value to validate number */
-  parser?: (displayValue: string | undefined) => T;
+  parser?: (displayValue: string | undefined, info: { prevValue: string }) => T;
   /** Transform `value` to display value show in input */
-  formatter?: (value: T | undefined, info: { userTyping: boolean; input: string }) => string;
+  formatter?: (
+    value: T | undefined,
+    info: { userTyping: boolean; input: string; prevValue: string },
+  ) => string;
+  /** Validate an input string before processing */
+  validator?: (input: string) => boolean;
   /** Syntactic sugar of `formatter`. Config precision of display. */
   precision?: number;
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
@@ -130,24 +135,18 @@ const InternalInputNumber = React.forwardRef(
       keyboard,
       changeOnWheel = false,
       controls = true,
-
-      classNames,
       stringMode,
-
+      validator,
       parser,
       formatter,
       precision,
       decimalSeparator,
-
       onChange,
       onInput,
       onPressEnter,
       onStep,
-
       changeOnBlur = true,
-
       domRef,
-
       ...inputProps
     } = props;
 
@@ -173,7 +172,10 @@ const InternalInputNumber = React.forwardRef(
       }
     }
 
-    // ====================== Parser & Formatter ======================
+    const prevValueRef = React.useRef<string | number>('');
+    const inputValueRef = React.useRef<string | number>('');
+
+    // ====================== Formatter ======================
     /**
      * `precision` is used for formatter & onChange.
      * It will auto generate by `value` & `step`.
@@ -206,7 +208,7 @@ const InternalInputNumber = React.forwardRef(
         const numStr = String(num);
 
         if (parser) {
-          return parser(numStr);
+          return parser(numStr, { prevValue: String(prevValueRef.current ?? '') });
         }
 
         let parsedStr = numStr;
@@ -221,11 +223,14 @@ const InternalInputNumber = React.forwardRef(
     );
 
     // >>> Formatter
-    const inputValueRef = React.useRef<string | number>('');
     const mergedFormatter = React.useCallback(
       (number: string, userTyping: boolean) => {
         if (formatter) {
-          return formatter(number, { userTyping, input: String(inputValueRef.current) });
+          return formatter(number, {
+            userTyping,
+            input: String(inputValueRef.current),
+            prevValue: String(prevValueRef.current ?? ''),
+          });
         }
 
         let str = typeof number === 'number' ? num2str(number) : number;
@@ -264,7 +269,11 @@ const InternalInputNumber = React.forwardRef(
       }
       return mergedFormatter(decimalValue.toString(), false);
     });
-    inputValueRef.current = inputValue;
+
+    React.useEffect(() => {
+      prevValueRef.current = inputValueRef.current;
+      inputValueRef.current = inputValue;
+    }, [inputValue]);
 
     // Should always be string
     function setInputValue(newValue: DecimalClass, userTyping: boolean) {
@@ -382,10 +391,16 @@ const InternalInputNumber = React.forwardRef(
 
     // >>> Collect input value
     const collectInputValue = (inputStr: string) => {
+      // validate string
+      if (validator) {
+        if (!validator(inputStr)) return;
+      }
+
       recordCursor();
 
       // Update inputValue in case input can not parse as number
       // Refresh ref value immediately since it may used by formatter
+      prevValueRef.current = inputValueRef.current;
       inputValueRef.current = inputStr;
       setInternalInputValue(inputStr);
 
