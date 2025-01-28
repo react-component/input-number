@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unknown-property */
 import * as React from 'react';
 import classNames from 'classnames';
-import useMobile from 'rc-util/lib/hooks/useMobile';
-import raf from 'rc-util/lib/raf';
+import useMobile from '@rc-component/util/lib/hooks/useMobile';
+import raf from '@rc-component/util/lib/raf';
 
 /**
  * When click and hold on a button - the speed of auto changing the value.
