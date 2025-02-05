@@ -41,6 +41,10 @@ nav:
 
 <code src="./demo/small-step.tsx"></code>
 
+## on-step
+
+<code src="./demo/on-step.tsx"></code>
+
 ## wheel
 
 <code src="./demo/wheel.tsx"></code>

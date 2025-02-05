@@ -20,7 +20,7 @@ export interface StepHandlerProps {
   downNode?: React.ReactNode;
   upDisabled?: boolean;
   downDisabled?: boolean;
-  onStep: (up: boolean) => void;
+  onStep: (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => void;
 }
 
 export default function StepHandler({
@@ -48,11 +48,11 @@ export default function StepHandler({
     e.preventDefault();
     onStopStep();
 
-    onStepRef.current(up);
+    onStepRef.current(up, 'handler');
 
     // Loop step for interval
     function loopStep() {
-      onStepRef.current(up);
+      onStepRef.current(up, 'handler');
 
       stepTimeoutRef.current = setTimeout(loopStep, STEP_INTERVAL);
     }
