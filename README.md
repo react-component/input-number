@@ -13,8 +13,8 @@ Input number control.
 [npm-url]: http://npmjs.org/package/rc-input-number
 [travis-image]: https://img.shields.io/travis/react-component/input-number/master?style=flat-square
 [travis-url]: https://travis-ci.com/react-component/input-number
-[github-actions-image]: https://github.com/react-component/input-number/workflows/CI/badge.svg
-[github-actions-url]: https://github.com/react-component/input-number/actions
+[github-actions-image]: https://github.com/react-component/input-number/actions/workflows/react-component-ci.yml/badge.svg
+[github-actions-url]: https://github.com/react-component/input-number/actions/workflows/react-component-ci.yml
 [codecov-image]: https://img.shields.io/codecov/c/github/react-component/input-number/master.svg?style=flat-square
 [codecov-url]: https://app.codecov.io/gh/react-component/input-number
 [david-url]: https://david-dm.org/react-component/input-number
