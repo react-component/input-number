@@ -23,6 +23,7 @@ describe('InputNumber.Click', () => {
     selector: string,
     changedValue: string | number,
     stepType: 'up' | 'down',
+    emitter: 'handler' | 'keyboard' | 'wheel',
   ) {
     it(name, () => {
       const onChange = jest.fn();
@@ -36,27 +37,27 @@ describe('InputNumber.Click', () => {
       fireEvent.click(container.querySelector(selector));
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith(changedValue);
-      expect(onStep).toHaveBeenCalledWith(changedValue, { offset: 1, type: stepType });
+      expect(onStep).toHaveBeenCalledWith(changedValue, { offset: 1, type: stepType, emitter  });
       unmount();
     });
   }
 
   describe('basic work', () => {
-    testInputNumber('up button', { defaultValue: 10 }, '.rc-input-number-handler-up', 11, 'up');
+    testInputNumber('up button', { defaultValue: 10 }, '.rc-input-number-handler-up', 11, 'up', 'handler');
 
-    testInputNumber('down button', { value: 10 }, '.rc-input-number-handler-down', 9, 'down');
+    testInputNumber('down button', { value: 10 }, '.rc-input-number-handler-down', 9, 'down', 'handler');
   });
 
   describe('empty input', () => {
-    testInputNumber('up button', {}, '.rc-input-number-handler-up', 1, 'up');
+    testInputNumber('up button', {}, '.rc-input-number-handler-up', 1, 'up', 'handler');
 
-    testInputNumber('down button', {}, '.rc-input-number-handler-down', -1, 'down');
+    testInputNumber('down button', {}, '.rc-input-number-handler-down', -1, 'down', 'handler');
   });
 
   describe('empty with min & max', () => {
-    testInputNumber('up button', { min: 6, max: 10 }, '.rc-input-number-handler-up', 6, 'up');
+    testInputNumber('up button', { min: 6, max: 10 }, '.rc-input-number-handler-up', 6, 'up', 'handler');
 
-    testInputNumber('down button', { min: 6, max: 10 }, '.rc-input-number-handler-down', 6, 'down');
+    testInputNumber('down button', { min: 6, max: 10 }, '.rc-input-number-handler-down', 6, 'down', 'handler');
   });
 
   describe('null with min & max', () => {
@@ -66,6 +67,7 @@ describe('InputNumber.Click', () => {
       '.rc-input-number-handler-up',
       6,
       'up',
+      'handler',
     );
 
     testInputNumber(
@@ -74,6 +76,7 @@ describe('InputNumber.Click', () => {
       '.rc-input-number-handler-down',
       6,
       'down',
+      'handler',
     );
   });
 
@@ -183,7 +186,7 @@ describe('InputNumber.Click', () => {
     });
 
     expect(onChange).toHaveBeenCalledWith(1.1);
-    expect(onStep).toHaveBeenCalledWith(1.1, { offset: '0.1', type: 'down' });
+    expect(onStep).toHaveBeenCalledWith(1.1, { offset: '0.1', type: 'down', emitter: 'keyboard'  });
   });
 
   it('click up button with pressing shift key', () => {
@@ -201,6 +204,6 @@ describe('InputNumber.Click', () => {
       keyCode: KeyCode.UP,
     });
     expect(onChange).toHaveBeenCalledWith(1.3);
-    expect(onStep).toHaveBeenCalledWith(1.3, { offset: '0.1', type: 'up' });
+    expect(onStep).toHaveBeenCalledWith(1.3, { offset: '0.1', type: 'up', emitter: 'keyboard' });
   });
 });

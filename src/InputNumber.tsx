@@ -99,7 +99,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   onChange?: (value: T | null) => void;
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
 
-  onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down' }) => void;
+  onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down', emitter: 'handler' | 'keyboard' | 'wheel' }) => void;
 
   /**
    * Trigger change onBlur event.
@@ -432,7 +432,7 @@ const InternalInputNumber = React.forwardRef(
     };
 
     // ============================= Step =============================
-    const onInternalStep = (up: boolean) => {
+    const onInternalStep = (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => {
       // Ignore step since out of range
       if ((up && upDisabled) || (!up && downDisabled)) {
         return;
@@ -454,6 +454,7 @@ const InternalInputNumber = React.forwardRef(
       onStep?.(getDecimalValue(stringMode, updatedValue), {
         offset: shiftKeyRef.current ? getDecupleSteps(step) : step,
         type: up ? 'up' : 'down',
+        emitter,
       });
 
       inputRef.current?.focus();
@@ -511,7 +512,7 @@ const InternalInputNumber = React.forwardRef(
 
       // Do step
       if (!compositionRef.current && ['Up', 'ArrowUp', 'Down', 'ArrowDown'].includes(key)) {
-        onInternalStep(key === 'Up' || key === 'ArrowUp');
+        onInternalStep(key === 'Up' || key === 'ArrowUp', 'keyboard');
         event.preventDefault();
       }
     };
@@ -526,7 +527,7 @@ const InternalInputNumber = React.forwardRef(
         const onWheel = (event) => {
           // moving mouse wheel rises wheel event with deltaY < 0
           // scroll value grows from top to bottom, as screen Y coordinate
-          onInternalStep(event.deltaY < 0);
+          onInternalStep(event.deltaY < 0, 'wheel');
           event.preventDefault();
         };
         const input = inputRef.current;
