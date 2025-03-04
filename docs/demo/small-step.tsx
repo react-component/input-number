@@ -1,6 +1,6 @@
 /* eslint no-console:0 */
 import React from 'react';
-import InputNum from 'rc-input-number';
+import InputNum from '@rc-component/input-number';
 import '../../assets/index.less';
 
 export default () => {

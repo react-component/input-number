@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unknown-property */
 import * as React from 'react';
 import classNames from 'classnames';
-import useMobile from 'rc-util/lib/hooks/useMobile';
-import raf from 'rc-util/lib/raf';
+import useMobile from '@rc-component/util/lib/hooks/useMobile';
+import raf from '@rc-component/util/lib/raf';
 
 /**
  * When click and hold on a button - the speed of auto changing the value.
@@ -20,7 +20,7 @@ export interface StepHandlerProps {
   downNode?: React.ReactNode;
   upDisabled?: boolean;
   downDisabled?: boolean;
-  onStep: (up: boolean) => void;
+  onStep: (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => void;
 }
 
 export default function StepHandler({
@@ -48,11 +48,11 @@ export default function StepHandler({
     e.preventDefault();
     onStopStep();
 
-    onStepRef.current(up);
+    onStepRef.current(up, 'handler');
 
     // Loop step for interval
     function loopStep() {
-      onStepRef.current(up);
+      onStepRef.current(up, 'handler');
 
       stepTimeoutRef.current = setTimeout(loopStep, STEP_INTERVAL);
     }

@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
-import InputNumber, { InputNumberRef } from 'rc-input-number';
-import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import InputNumber, { InputNumberRef } from '../src';
+import { spyElementPrototypes } from '@rc-component/util/lib/test/domHook';
 import React from 'react';
 
 const getInputRef = () => {

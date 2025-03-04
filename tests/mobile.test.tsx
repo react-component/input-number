@@ -3,7 +3,7 @@ import { render } from './util/wrapper';
 import InputNumber from '../src';
 import { renderToString } from 'react-dom/server';
 
-jest.mock('rc-util/lib/isMobile', () => () => true);
+jest.mock('@rc-component/util/lib/isMobile', () => () => true);
 
 // Mobile touch experience is not user-friendly which not apply in antd.
 // Let's hide operator instead.

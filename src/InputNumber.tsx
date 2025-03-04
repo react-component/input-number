@@ -7,18 +7,18 @@ import getMiniDecimal, {
   ValueType,
 } from '@rc-component/mini-decimal';
 import clsx from 'classnames';
-import { BaseInput } from 'rc-input';
-import { useLayoutUpdateEffect } from 'rc-util/lib/hooks/useLayoutEffect';
-import proxyObject from 'rc-util/lib/proxyObject';
-import { composeRef } from 'rc-util/lib/ref';
+import { BaseInput } from '@rc-component/input';
+import { useLayoutUpdateEffect } from '@rc-component/util/lib/hooks/useLayoutEffect';
+import proxyObject from '@rc-component/util/lib/proxyObject';
+import { composeRef } from '@rc-component/util/lib/ref';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
-import type { HolderRef } from 'rc-input/lib/BaseInput';
-import { BaseInputProps } from 'rc-input/lib/interface';
-import { InputFocusOptions, triggerFocus } from 'rc-input/lib/utils/commonUtils';
+import type { HolderRef } from '@rc-component/input/lib/BaseInput';
+import { BaseInputProps } from '@rc-component/input/lib/interface';
+import { InputFocusOptions, triggerFocus } from '@rc-component/input/lib/utils/commonUtils';
 import useFrame from './hooks/useFrame';
 
 export type { ValueType };
@@ -104,7 +104,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   onChange?: (value: T | null) => void;
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
 
-  onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down' }) => void;
+  onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down', emitter: 'handler' | 'keyboard' | 'wheel' }) => void;
 
   /**
    * Trigger change onBlur event.
@@ -447,7 +447,7 @@ const InternalInputNumber = React.forwardRef(
     };
 
     // ============================= Step =============================
-    const onInternalStep = (up: boolean) => {
+    const onInternalStep = (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => {
       // Ignore step since out of range
       if ((up && upDisabled) || (!up && downDisabled)) {
         return;
@@ -469,6 +469,7 @@ const InternalInputNumber = React.forwardRef(
       onStep?.(getDecimalValue(stringMode, updatedValue), {
         offset: shiftKeyRef.current ? getDecupleSteps(step) : step,
         type: up ? 'up' : 'down',
+        emitter,
       });
 
       inputRef.current?.focus();
@@ -526,7 +527,7 @@ const InternalInputNumber = React.forwardRef(
 
       // Do step
       if (!compositionRef.current && ['Up', 'ArrowUp', 'Down', 'ArrowDown'].includes(key)) {
-        onInternalStep(key === 'Up' || key === 'ArrowUp');
+        onInternalStep(key === 'Up' || key === 'ArrowUp', 'keyboard');
         event.preventDefault();
       }
     };
@@ -541,7 +542,7 @@ const InternalInputNumber = React.forwardRef(
         const onWheel = (event) => {
           // moving mouse wheel rises wheel event with deltaY < 0
           // scroll value grows from top to bottom, as screen Y coordinate
-          onInternalStep(event.deltaY < 0);
+          onInternalStep(event.deltaY < 0, 'wheel');
           event.preventDefault();
         };
         const input = inputRef.current;
