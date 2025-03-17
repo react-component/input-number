@@ -63,6 +63,72 @@ describe('InputNumber.Formatter', () => {
     expect(onChange).toHaveBeenCalledWith(100);
   });
 
+  it('formatter on IME numeric keypad input', () => {
+    const { container } = render(
+      <InputNumber formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />
+    );
+    const input = container.querySelector('input');
+    fireEvent.focus(input);
+    fireEvent.compositionStart(input);
+    fireEvent.keyDown(input, {
+      which: 229,
+      key: 'Process',
+      code: 'Numpad1',
+      keyCode: 229,
+      composed: true,
+    });
+    fireEvent.change(input, { target: { value: '1' } });
+    fireEvent.keyDown(input, {
+      which: 229,
+      key: 'Process',
+      code: 'Numpad2',
+      keyCode: 229,
+      composed: true,
+    });
+    fireEvent.change(input, { target: { value: '12' } });
+    fireEvent.keyDown(input, {
+      which: 229,
+      key: 'Process',
+      code: 'Numpad3',
+      keyCode: 229,
+      composed: true,
+    });
+    fireEvent.change(input, { target: { value: '123' } });
+    fireEvent.keyDown(input, {
+      which: 229,
+      key: 'Process',
+      code: 'Numpad4',
+      keyCode: 229,
+      composed: true,
+    });
+    fireEvent.change(input, { target: { value: '1234' } });
+    fireEvent.keyDown(input, {
+      which: 229,
+      key: 'Process',
+      code: 'Enter',
+      keyCode: 229,
+      composed: true,
+    });
+    fireEvent.compositionEnd(input);
+    fireEvent.blur(input);
+    expect(input.value).toEqual('1,234');
+
+    fireEvent.focus(input);
+    fireEvent.compositionStart(input);
+    fireEvent.keyDown(input, {
+      which: 229,
+      key: 'Process',
+      code: 'Numpad5',
+      keyCode: 229,
+      composed: true,
+    });
+    fireEvent.change(input, { target: { value: '12345' } });
+    fireEvent.compositionEnd(input);
+    fireEvent.change(input, { target: { value: '1234' } });
+    fireEvent.blur(input);
+    expect(input.value).toEqual('12,345');
+  });
+
   it('formatter and parser', () => {
     const onChange = jest.fn();
     const { container } = render(

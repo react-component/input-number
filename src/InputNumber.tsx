@@ -160,6 +160,7 @@ const InternalInputNumber = React.forwardRef(
     const userTypingRef = React.useRef(false);
     const compositionRef = React.useRef(false);
     const shiftKeyRef = React.useRef(false);
+    const imeCompositionRef = React.useRef(false);
 
     // ============================ Value =============================
     // Real value control
@@ -428,6 +429,9 @@ const InternalInputNumber = React.forwardRef(
 
     // >>> Input
     const onInternalInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      if (imeCompositionRef.current && !compositionRef.current) {
+          return;
+      }
       collectInputValue(e.target.value);
     };
 
@@ -498,6 +502,12 @@ const InternalInputNumber = React.forwardRef(
 
       shiftKeyRef.current = shiftKey;
 
+      if (event.key === 'Process' || compositionRef.current) {
+        imeCompositionRef.current = true;
+      } else {
+        imeCompositionRef.current = false;
+      }
+
       if (key === 'Enter') {
         if (!compositionRef.current) {
           userTypingRef.current = false;
@@ -543,6 +553,8 @@ const InternalInputNumber = React.forwardRef(
 
     // >>> Focus & Blur
     const onBlur = () => {
+      imeCompositionRef.current = false;
+
       if (changeOnBlur) {
         flushInputValue(false);
       }
