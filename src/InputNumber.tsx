@@ -15,6 +15,7 @@ import * as React from 'react';
 import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
+import SemanticContext from './SemanticContext';
 
 import type { HolderRef } from '@rc-component/input/lib/BaseInput';
 import { BaseInputProps } from '@rc-component/input/lib/interface';
@@ -53,6 +54,7 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
+type SemanticName = 'handle' | 'input';
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -76,9 +78,8 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   suffix?: React.ReactNode;
   addonBefore?: React.ReactNode;
   addonAfter?: React.ReactNode;
-  classNames?: BaseInputProps['classNames'] & {
-    input?: string;
-  };
+  classNames?: BaseInputProps['classNames'] & Partial<Record<SemanticName, string>>;
+  styles?: BaseInputProps['styles'] & Partial<Record<SemanticName, React.CSSProperties>>;
 
   // Customize handler node
   upHandler?: React.ReactNode;
@@ -99,7 +100,10 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   onChange?: (value: T | null) => void;
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
 
-  onStep?: (value: T, info: { offset: ValueType; type: 'up' | 'down', emitter: 'handler' | 'keyboard' | 'wheel' }) => void;
+  onStep?: (
+    value: T,
+    info: { offset: ValueType; type: 'up' | 'down'; emitter: 'handler' | 'keyboard' | 'wheel' },
+  ) => void;
 
   /**
    * Trigger change onBlur event.
@@ -131,7 +135,6 @@ const InternalInputNumber = React.forwardRef(
       changeOnWheel = false,
       controls = true,
 
-      classNames,
       stringMode,
 
       parser,
@@ -150,6 +153,8 @@ const InternalInputNumber = React.forwardRef(
 
       ...inputProps
     } = props;
+
+    const { classNames, styles } = React.useContext(SemanticContext) || {};
 
     const inputClassName = `${prefixCls}-input`;
 
@@ -614,7 +619,7 @@ const InternalInputNumber = React.forwardRef(
             onStep={onInternalStep}
           />
         )}
-        <div className={`${inputClassName}-wrap`}>
+        <div className={clsx(`${inputClassName}-wrap`, classNames?.handle)} style={styles?.handle}>
           <input
             autoComplete="off"
             role="spinbutton"
@@ -648,6 +653,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     addonAfter,
     className,
     classNames,
+    styles,
     ...rest
   } = props;
 
@@ -669,35 +675,39 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   );
 
   return (
-    <BaseInput
-      className={className}
-      triggerFocus={focus}
-      prefixCls={prefixCls}
-      value={value}
-      disabled={disabled}
-      style={style}
-      prefix={prefix}
-      suffix={suffix}
-      addonAfter={addonAfter}
-      addonBefore={addonBefore}
-      classNames={classNames}
-      components={{
-        affixWrapper: 'div',
-        groupWrapper: 'div',
-        wrapper: 'div',
-        groupAddon: 'div',
-      }}
-      ref={holderRef}
-    >
-      <InternalInputNumber
+    <SemanticContext.Provider value={{ classNames, styles }}>
+      <BaseInput
+        className={className}
+        triggerFocus={focus}
         prefixCls={prefixCls}
+        value={value}
         disabled={disabled}
-        ref={inputFocusRef}
-        domRef={inputNumberDomRef}
-        className={classNames?.input}
-        {...rest}
-      />
-    </BaseInput>
+        style={style}
+        prefix={prefix}
+        suffix={suffix}
+        addonAfter={addonAfter}
+        addonBefore={addonBefore}
+        classNames={classNames}
+        styles={styles}
+        components={{
+          affixWrapper: 'div',
+          groupWrapper: 'div',
+          wrapper: 'div',
+          groupAddon: 'div',
+        }}
+        ref={holderRef}
+      >
+        <InternalInputNumber
+          prefixCls={prefixCls}
+          disabled={disabled}
+          ref={inputFocusRef}
+          domRef={inputNumberDomRef}
+          className={classNames?.input}
+          style={styles?.input}
+          {...rest}
+        />
+      </BaseInput>
+    </SemanticContext.Provider>
   );
 }) as (<T extends ValueType = ValueType>(
   props: React.PropsWithChildren<InputNumberProps<T>> & {

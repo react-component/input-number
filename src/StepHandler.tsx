@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unknown-property */
 import * as React from 'react';
-import classNames from 'classnames';
+import cls from 'classnames';
 import useMobile from '@rc-component/util/lib/hooks/useMobile';
 import raf from '@rc-component/util/lib/raf';
+import SemanticContext from './SemanticContext';
 
 /**
  * When click and hold on a button - the speed of auto changing the value.
@@ -22,7 +23,6 @@ export interface StepHandlerProps {
   downDisabled?: boolean;
   onStep: (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => void;
 }
-
 export default function StepHandler({
   prefixCls,
   upNode,
@@ -38,10 +38,11 @@ export default function StepHandler({
   const onStepRef = React.useRef<StepHandlerProps['onStep']>();
   onStepRef.current = onStep;
 
+  const { classNames, styles } = React.useContext(SemanticContext) || {};
+
   const onStopStep = () => {
     clearTimeout(stepTimeoutRef.current);
   };
-
 
   // We will interval update step when hold mouse down
   const onStepMouseDown = (e: React.MouseEvent, up: boolean) => {
@@ -61,10 +62,13 @@ export default function StepHandler({
     stepTimeoutRef.current = setTimeout(loopStep, STEP_DELAY);
   };
 
-  React.useEffect(() => () => {
-    onStopStep();
-    frameIds.current.forEach(id => raf.cancel(id));
-  }, []);
+  React.useEffect(
+    () => () => {
+      onStopStep();
+      frameIds.current.forEach((id) => raf.cancel(id));
+    },
+    [],
+  );
 
   // ======================= Render =======================
   const isMobile = useMobile();
@@ -74,16 +78,16 @@ export default function StepHandler({
 
   const handlerClassName = `${prefixCls}-handler`;
 
-  const upClassName = classNames(handlerClassName, `${handlerClassName}-up`, {
+  const upClassName = cls(handlerClassName, `${handlerClassName}-up`, {
     [`${handlerClassName}-up-disabled`]: upDisabled,
   });
-  const downClassName = classNames(handlerClassName, `${handlerClassName}-down`, {
+  const downClassName = cls(handlerClassName, `${handlerClassName}-down`, {
     [`${handlerClassName}-down-disabled`]: downDisabled,
   });
 
   // fix: https://github.com/ant-design/ant-design/issues/43088
-  // In Safari, When we fire onmousedown and onmouseup events in quick succession, 
-  // there may be a problem that the onmouseup events are executed first, 
+  // In Safari, When we fire onmousedown and onmouseup events in quick succession,
+  // there may be a problem that the onmouseup events are executed first,
   // resulting in a disordered program execution.
   // So, we need to use requestAnimationFrame to ensure that the onmouseup event is executed after the onmousedown event.
   const safeOnStopStep = () => frameIds.current.push(raf(onStopStep));
@@ -96,7 +100,7 @@ export default function StepHandler({
   };
 
   return (
-    <div className={`${handlerClassName}-wrap`}>
+    <div className={cls(`${handlerClassName}-wrap`, classNames?.handle)} style={styles?.handle}>
       <span
         {...sharedHandlerProps}
         onMouseDown={(e) => {
