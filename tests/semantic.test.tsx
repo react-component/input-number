@@ -33,9 +33,9 @@ describe('InputNumber.Semantic', () => {
     expect(prefix.className).toContain(testClassNames.prefix);
     expect(suffix.className).toContain(testClassNames.suffix);
     expect(actions.className).toContain(testClassNames.actions);
-    expect(prefix.style.color).toBe(testStyles.prefix.color);
-    expect(input.style.color).toBe(testStyles.input.color);
-    expect(suffix.style.color).toBe(testStyles.suffix.color);
-    expect(actions.style.color).toBe(testStyles.actions.color);
+    expect(prefix).toHaveStyle(testStyles.prefix);
+    expect(input).toHaveStyle(testStyles.input);
+    expect(suffix).toHaveStyle(testStyles.suffix);
+    expect(actions).toHaveStyle(testStyles.actions);
   });
 });
