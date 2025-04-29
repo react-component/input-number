@@ -100,7 +100,7 @@ export default function StepHandler({
   };
 
   return (
-    <div className={cls(`${handlerClassName}-wrap`, classNames?.handle)} style={styles?.handle}>
+    <div className={cls(`${handlerClassName}-wrap`, classNames?.actions)} style={styles?.actions}>
       <span
         {...sharedHandlerProps}
         onMouseDown={(e) => {

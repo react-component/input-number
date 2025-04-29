@@ -54,7 +54,7 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
-type SemanticName = 'handle' | 'input';
+type SemanticName = 'actions' | 'input';
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -619,7 +619,10 @@ const InternalInputNumber = React.forwardRef(
             onStep={onInternalStep}
           />
         )}
-        <div className={clsx(`${inputClassName}-wrap`, classNames?.handle)} style={styles?.handle}>
+        <div
+          className={clsx(`${inputClassName}-wrap`, classNames?.actions)}
+          style={styles?.actions}
+        >
           <input
             autoComplete="off"
             role="spinbutton"
@@ -673,9 +676,9 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
       nativeElement: holderRef.current.nativeElement || inputNumberDomRef.current,
     }),
   );
-
+  const memoizedValue = React.useMemo(() => ({ classNames, styles }), [classNames, styles]);
   return (
-    <SemanticContext.Provider value={{ classNames, styles }}>
+    <SemanticContext.Provider value={memoizedValue}>
       <BaseInput
         className={className}
         triggerFocus={focus}
