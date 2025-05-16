@@ -154,8 +154,6 @@ const InternalInputNumber = React.forwardRef(
       ...inputProps
     } = props;
 
-    const { classNames, styles } = React.useContext(SemanticContext) || {};
-
     const inputClassName = `${prefixCls}-input`;
 
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -619,10 +617,7 @@ const InternalInputNumber = React.forwardRef(
             onStep={onInternalStep}
           />
         )}
-        <div
-          className={clsx(`${inputClassName}-wrap`, classNames?.actions)}
-          style={styles?.actions}
-        >
+        <div className={`${inputClassName}-wrap`}>
           <input
             autoComplete="off"
             role="spinbutton"

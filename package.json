@@ -70,7 +70,7 @@
     "eslint-plugin-jest": "^28.10.0",
     "eslint-plugin-unicorn": "^56.0.0",
     "expect.js": "~0.3.1",
-    "father": "^4.1.1",
+    "father": "^4.5.5",
     "glob": "^11.0.0",
     "husky": "^9.1.7",
     "jest-environment-jsdom": "^29.3.1",
