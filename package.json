@@ -64,6 +64,7 @@
     "@types/responselike": "^1.0.0",
     "@umijs/fabric": "^4.0.1",
     "@umijs/test": "^4.0.36",
+    "ajv": "^8.17.1",
     "cross-env": "^7.0.3",
     "dumi": "^2.0.13",
     "eslint": "^8.54.0",
