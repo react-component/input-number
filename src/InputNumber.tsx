@@ -154,8 +154,6 @@ const InternalInputNumber = React.forwardRef(
       ...inputProps
     } = props;
 
-    const { classNames, styles } = React.useContext(SemanticContext) || {};
-
     const inputClassName = `${prefixCls}-input`;
 
     const inputRef = React.useRef<HTMLInputElement>(null);
