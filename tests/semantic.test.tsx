@@ -25,10 +25,11 @@ describe('InputNumber.Semantic', () => {
         classNames={testClassNames}
       />,
     );
+
     const input = container.querySelector('.rc-input-number')!;
     const prefix = container.querySelector('.rc-input-number-prefix')!;
     const suffix = container.querySelector('.rc-input-number-suffix')!;
-    const actions = container.querySelector('.rc-input-number-input-wrap')!;
+    const actions = container.querySelector('.rc-input-number-handler-wrap')!;
     expect(input.className).toContain(testClassNames.input);
     expect(prefix.className).toContain(testClassNames.prefix);
     expect(suffix.className).toContain(testClassNames.suffix);
