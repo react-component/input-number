@@ -80,7 +80,13 @@ nav:
           <td>readOnly</td>
           <td>Boolean</td>
           <td>false</td>
-          <td>Specifies that an InputNumber is read only </td>
+          <td>Specifies that an InputNumber is read only</td>
+        </tr>
+        <tr>
+          <td>changeOnWheel</td>
+          <td>Boolean</td>
+          <td>false</td>
+          <td>Specifies that the value is set using the mouse wheel</td>
         </tr>
         <tr>
           <td>controls</td>
@@ -135,6 +141,12 @@ nav:
           <td>Function</td>
           <td></td>
           <td>Called when an element gets focus</td>
+        </tr>
+        <tr>
+          <td>onStep</td>
+          <td>(value: T, info: { offset: ValueType; type: 'up' | 'down', emitter: 'handler' | 'keydown' | 'wheel' }) => void</td>
+          <td></td>
+          <td>Called when the user clicks the arrows on the keyboard or interface and when the mouse wheel is spun.</td>
         </tr>
         <tr>
           <td>style</td>

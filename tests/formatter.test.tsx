@@ -1,4 +1,4 @@
-import KeyCode from 'rc-util/lib/KeyCode';
+import KeyCode from '@rc-component/util/lib/KeyCode';
 import React from 'react';
 import InputNumber from '../src';
 import { fireEvent, render } from './util/wrapper';
@@ -163,7 +163,7 @@ describe('InputNumber.Formatter', () => {
 
     fireEvent.change(container.querySelector('input'), { target: { value: '1' } });
     expect(formatter).toHaveBeenCalledTimes(1);
-    expect(formatter).toHaveBeenCalledWith('1', { userTyping: true, input: '1' });
+    expect(formatter).toHaveBeenCalledWith('1', { userTyping: true, input: '1', prevValue: '' });
   });
 
   describe('dynamic formatter', () => {
