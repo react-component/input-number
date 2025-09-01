@@ -177,8 +177,6 @@ const InternalInputNumber = React.forwardRef(
       }
     }
 
-    // Mobile user experience is not ideal, so we choose to hide the step controls by default on mobile.
-    // However, developers can still display them by setting `controls=true`.
     const isMobile = useMobile();
     const mergedControls = controls ?? !isMobile;
 
