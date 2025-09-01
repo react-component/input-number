@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import * as React from 'react';
 import cls from 'classnames';
-import useMobile from '@rc-component/util/lib/hooks/useMobile';
 import raf from '@rc-component/util/lib/raf';
 import SemanticContext from './SemanticContext';
 
@@ -71,11 +70,6 @@ export default function StepHandler({
   );
 
   // ======================= Render =======================
-  const isMobile = useMobile();
-  if (isMobile) {
-    return null;
-  }
-
   const handlerClassName = `${prefixCls}-handler`;
 
   const upClassName = cls(handlerClassName, `${handlerClassName}-up`, {

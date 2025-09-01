@@ -21,6 +21,7 @@ import type { HolderRef } from '@rc-component/input/lib/BaseInput';
 import { BaseInputProps } from '@rc-component/input/lib/interface';
 import { InputFocusOptions, triggerFocus } from '@rc-component/input/lib/utils/commonUtils';
 import useFrame from './hooks/useFrame';
+import useMobile from '@rc-component/util/lib/hooks/useMobile';
 
 export type { ValueType };
 
@@ -133,7 +134,7 @@ const InternalInputNumber = React.forwardRef(
       downHandler,
       keyboard,
       changeOnWheel = false,
-      controls = true,
+      controls,
 
       stringMode,
 
@@ -175,6 +176,9 @@ const InternalInputNumber = React.forwardRef(
         setDecimalValue(newDecimal);
       }
     }
+
+    const isMobile = useMobile();
+    const mergedControls = controls ?? !isMobile;
 
     // ====================== Parser & Formatter ======================
     /**
@@ -607,7 +611,7 @@ const InternalInputNumber = React.forwardRef(
         onCompositionEnd={onCompositionEnd}
         onBeforeInput={onBeforeInput}
       >
-        {controls && (
+        {mergedControls && (
           <StepHandler
             prefixCls={prefixCls}
             upNode={upHandler}
