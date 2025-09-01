@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { render } from './util/wrapper';
-import InputNumber from '../src';
 import { renderToString } from 'react-dom/server';
+import InputNumber from '../src';
+import { render } from './util/wrapper';
 
 jest.mock('@rc-component/util/lib/isMobile', () => () => true);
 
@@ -10,12 +9,17 @@ jest.mock('@rc-component/util/lib/isMobile', () => () => true);
 
 describe('InputNumber.Mobile', () => {
   it('not show steps when mobile', () => {
-    const {container} = render(<InputNumber />);
+    const { container } = render(<InputNumber />);
     expect(container.querySelector('.rc-input-number-handler-wrap')).toBeFalsy();
   });
 
   it('should render in server side', () => {
     const serverHTML = renderToString(<InputNumber />);
     expect(serverHTML).toContain('rc-input-number-handler-wrap');
-  })
+  });
+
+  it('can show steps when set controls to true', () => {
+    const { container } = render(<InputNumber controls />);
+    expect(container.querySelector('.rc-input-number-handler-wrap')).toBeTruthy();
+  });
 });
