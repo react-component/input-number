@@ -6,7 +6,7 @@ import getMiniDecimal, {
   validateNumber,
   ValueType,
 } from '@rc-component/mini-decimal';
-import clsx from 'classnames';
+import { clsx } from 'clsx';
 import { BaseInput } from '@rc-component/input';
 import { useLayoutUpdateEffect } from '@rc-component/util/lib/hooks/useLayoutEffect';
 import proxyObject from '@rc-component/util/lib/proxyObject';

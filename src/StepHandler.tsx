@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import * as React from 'react';
-import cls from 'classnames';
+import { clsx } from 'clsx';
 import raf from '@rc-component/util/lib/raf';
 import SemanticContext from './SemanticContext';
 
@@ -22,6 +22,7 @@ export interface StepHandlerProps {
   downDisabled?: boolean;
   onStep: (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => void;
 }
+
 export default function StepHandler({
   prefixCls,
   upNode,
@@ -64,7 +65,9 @@ export default function StepHandler({
   React.useEffect(
     () => () => {
       onStopStep();
-      frameIds.current.forEach((id) => raf.cancel(id));
+      frameIds.current.forEach((id) => {
+        raf.cancel(id);
+      });
     },
     [],
   );
@@ -72,10 +75,10 @@ export default function StepHandler({
   // ======================= Render =======================
   const handlerClassName = `${prefixCls}-handler`;
 
-  const upClassName = cls(handlerClassName, `${handlerClassName}-up`, {
+  const upClassName = clsx(handlerClassName, `${handlerClassName}-up`, {
     [`${handlerClassName}-up-disabled`]: upDisabled,
   });
-  const downClassName = cls(handlerClassName, `${handlerClassName}-down`, {
+  const downClassName = clsx(handlerClassName, `${handlerClassName}-down`, {
     [`${handlerClassName}-down-disabled`]: downDisabled,
   });
 
@@ -94,7 +97,7 @@ export default function StepHandler({
   };
 
   return (
-    <div className={cls(`${handlerClassName}-wrap`, classNames?.actions)} style={styles?.actions}>
+    <div className={clsx(`${handlerClassName}-wrap`, classNames?.actions)} style={styles?.actions}>
       <span
         {...sharedHandlerProps}
         onMouseDown={(e) => {
