@@ -19,7 +19,9 @@ export interface StepHandlerProps {
   upNode?: React.ReactNode;
   downNode?: React.ReactNode;
   upDisabled?: boolean;
+  upHidden?: boolean;
   downDisabled?: boolean;
+  downHidden?: boolean;
   onStep: (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => void;
 }
 
@@ -29,6 +31,8 @@ export default function StepHandler({
   downNode,
   upDisabled,
   downDisabled,
+  upHidden,
+  downHidden,
   onStep,
 }: StepHandlerProps) {
   // ======================== Step ========================
@@ -98,28 +102,33 @@ export default function StepHandler({
 
   return (
     <div className={clsx(`${handlerClassName}-wrap`, classNames?.actions)} style={styles?.actions}>
-      <span
-        {...sharedHandlerProps}
-        onMouseDown={(e) => {
-          onStepMouseDown(e, true);
-        }}
-        aria-label="Increase Value"
-        aria-disabled={upDisabled}
-        className={upClassName}
-      >
-        {upNode || <span unselectable="on" className={`${prefixCls}-handler-up-inner`} />}
-      </span>
-      <span
-        {...sharedHandlerProps}
-        onMouseDown={(e) => {
-          onStepMouseDown(e, false);
-        }}
-        aria-label="Decrease Value"
-        aria-disabled={downDisabled}
-        className={downClassName}
-      >
-        {downNode || <span unselectable="on" className={`${prefixCls}-handler-down-inner`} />}
-      </span>
+      {!upHidden && (
+        <span
+          {...sharedHandlerProps}
+          onMouseDown={(e) => {
+            onStepMouseDown(e, true);
+          }}
+          aria-label="Increase Value"
+          aria-disabled={upDisabled}
+          className={upClassName}
+        >
+          {upNode || <span unselectable="on" className={`${prefixCls}-handler-up-inner`} />}
+        </span>
+      )}
+
+      {!downHidden && (
+        <span
+          {...sharedHandlerProps}
+          onMouseDown={(e) => {
+            onStepMouseDown(e, false);
+          }}
+          aria-label="Decrease Value"
+          aria-disabled={downDisabled}
+          className={downClassName}
+        >
+          {downNode || <span unselectable="on" className={`${prefixCls}-handler-down-inner`} />}
+        </span>
+      )}
     </div>
   );
 }

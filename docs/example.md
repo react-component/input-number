@@ -52,3 +52,7 @@ nav:
 ## focus
 
 <code src="./demo/focus.tsx"></code>
+
+## spinner
+
+<code src="./demo/spinner.tsx"></code>
