@@ -2,11 +2,10 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/react';
 import KeyCode from '@rc-component/util/lib/KeyCode';
-import type { ValueType } from '../src'
+import type { ValueType } from '../src';
 import InputNumber from '../src';
 
 describe('InputNumber.Props', () => {
-
   it('max', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber max={10} onChange={onChange} />);
@@ -61,7 +60,6 @@ describe('InputNumber.Props', () => {
       expect(input).toHaveFocus();
       done();
     }, 500);
-
   });
 
   describe('step', () => {
@@ -96,8 +94,8 @@ describe('InputNumber.Props', () => {
         <InputNumber
           stringMode
           onChange={onChange}
-          step='0.000000001'
-          defaultValue='0.000000001'
+          step="0.000000001"
+          defaultValue="0.000000001"
         />,
       );
 
@@ -114,8 +112,8 @@ describe('InputNumber.Props', () => {
         <InputNumber
           stringMode
           onChange={onChange}
-          step='0.0000000001' // 1e-10
-          defaultValue='0.000000001' // 1e-9
+          step="0.0000000001" // 1e-10
+          defaultValue="0.000000001" // 1e-9
         />,
       );
 
@@ -186,7 +184,7 @@ describe('InputNumber.Props', () => {
         return (
           <div>
             <button
-              type='button'
+              type="button"
               onClick={() => {
                 setValue('103aa');
               }}
@@ -215,7 +213,7 @@ describe('InputNumber.Props', () => {
         return (
           <div>
             <button
-              type='button'
+              type="button"
               onClick={() => {
                 setValue(undefined);
               }}
@@ -276,27 +274,29 @@ describe('InputNumber.Props', () => {
     });
 
     it('default value can be a string greater than 16 characters', () => {
-      const { container } = render(<InputNumber<ValueType> max={10} defaultValue='-3.637978807091713e-12' />);
+      const { container } = render(
+        <InputNumber<ValueType> max={10} defaultValue="-3.637978807091713e-12" />,
+      );
       const input = container.querySelector('input');
       expect(input.value).toEqual('-0.000000000003637978807091713');
     });
 
     it('invalidate defaultValue', () => {
-      const { container } = render(<InputNumber defaultValue='light' />);
+      const { container } = render(<InputNumber defaultValue="light" />);
       const input = container.querySelector('input');
       expect(input.value).toEqual('light');
     });
   });
 
   describe('value', () => {
-    it('value shouldn\'t higher than max', () => {
+    it("value shouldn't higher than max", () => {
       const { container } = render(<InputNumber min={0} max={10} value={13} />);
       const input = container.querySelector('input');
       expect(input.value).toEqual('13');
       expect(container.querySelector('.rc-input-number-out-of-range')).toBeTruthy();
     });
 
-    it('value shouldn\'t lower than min', () => {
+    it("value shouldn't lower than min", () => {
       const { container } = render(<InputNumber min={0} max={10} value={-1} />);
       const input = container.querySelector('input');
       expect(input.value).toEqual('-1');
@@ -304,7 +304,9 @@ describe('InputNumber.Props', () => {
     });
 
     it('value can be a string greater than 16 characters', () => {
-      const { container } = render(<InputNumber<ValueType> max={10} value='-3.637978807091713e-12' />);
+      const { container } = render(
+        <InputNumber<ValueType> max={10} value="-3.637978807091713e-12" />,
+      );
       const input = container.querySelector('input');
       expect(input.value).toEqual('-0.000000000003637978807091713');
     });
@@ -384,14 +386,13 @@ describe('InputNumber.Props', () => {
 
   describe('Pattern prop', () => {
     it(`should render with a pattern attribute if the pattern prop is supplied`, () => {
-      const { container } = render(<InputNumber pattern='\d*' />);
+      const { container } = render(<InputNumber pattern="\d*" />);
       expect(container.querySelector('input')).toHaveAttribute('pattern', '\\d*');
     });
 
     it(`should render with no pattern attribute if the pattern prop is not supplied`, () => {
       const { container } = render(<InputNumber />);
       expect(container.querySelector('input')).not.toHaveAttribute('pattern', '\\d*');
-
     });
   });
 
@@ -406,9 +407,16 @@ describe('InputNumber.Props', () => {
     });
   });
 
+  describe('type props', () => {
+    it('render spinner type', () => {
+      const { container } = render(<InputNumber value={1} type="spinner" />);
+      expect(container.querySelector('.rc-input-number')).toHaveClass('rc-input-number-type-spinner');
+    });
+  });
+
   describe('aria and data props', () => {
     it('passes data-* attributes', () => {
-      const { container } = render(<InputNumber value={1} data-test='test-id' data-id='12345' />);
+      const { container } = render(<InputNumber value={1} data-test="test-id" data-id="12345" />);
       const input = container.querySelector('input');
 
       expect(input).toHaveAttribute('data-test', 'test-id');
@@ -417,18 +425,16 @@ describe('InputNumber.Props', () => {
 
     it('passes aria-* attributes', () => {
       const { container } = render(
-        <InputNumber value={1} aria-labelledby='test-id' aria-label='some-label' />,
+        <InputNumber value={1} aria-labelledby="test-id" aria-label="some-label" />,
       );
       const input = container.querySelector('input');
       expect(input).toHaveAttribute('aria-labelledby', 'test-id');
       expect(input).toHaveAttribute('aria-label', 'some-label');
-
     });
 
     it('passes role attribute', () => {
-      const { container } = render(<InputNumber value={1} role='searchbox' />);
+      const { container } = render(<InputNumber value={1} role="searchbox" />);
       expect(container.querySelector('input')).toHaveAttribute('role', 'searchbox');
-
     });
   });
 });

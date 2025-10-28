@@ -100,35 +100,47 @@ export default function StepHandler({
     onMouseLeave: safeOnStopStep,
   };
 
+  const upHandle = (
+    <span
+      {...sharedHandlerProps}
+      onMouseDown={(e) => {
+        onStepMouseDown(e, true);
+      }}
+      aria-label="Increase Value"
+      aria-disabled={upDisabled}
+      className={upClassName}
+    >
+      {upNode || <span unselectable="on" className={`${prefixCls}-handler-up-inner`} />}
+    </span>
+  );
+
+  const downHandle = (
+    <span
+      {...sharedHandlerProps}
+      onMouseDown={(e) => {
+        onStepMouseDown(e, false);
+      }}
+      aria-label="Decrease Value"
+      aria-disabled={downDisabled}
+      className={downClassName}
+    >
+      {downNode || <span unselectable="on" className={`${prefixCls}-handler-down-inner`} />}
+    </span>
+  );
+
+  if (upHidden) {
+    return downHandle;
+  }
+
+  if (downHidden) {
+    return upHandle;
+  }
+
   return (
     <div className={clsx(`${handlerClassName}-wrap`, classNames?.actions)} style={styles?.actions}>
-      {!upHidden && (
-        <span
-          {...sharedHandlerProps}
-          onMouseDown={(e) => {
-            onStepMouseDown(e, true);
-          }}
-          aria-label="Increase Value"
-          aria-disabled={upDisabled}
-          className={upClassName}
-        >
-          {upNode || <span unselectable="on" className={`${prefixCls}-handler-up-inner`} />}
-        </span>
-      )}
+      {upHandle}
 
-      {!downHidden && (
-        <span
-          {...sharedHandlerProps}
-          onMouseDown={(e) => {
-            onStepMouseDown(e, false);
-          }}
-          aria-label="Decrease Value"
-          aria-disabled={downDisabled}
-          className={downClassName}
-        >
-          {downNode || <span unselectable="on" className={`${prefixCls}-handler-down-inner`} />}
-        </span>
-      )}
+      {downHandle}
     </div>
   );
 }
