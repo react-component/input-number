@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { clsx } from 'clsx';
 import raf from '@rc-component/util/lib/raf';
-import SemanticContext from './SemanticContext';
 
 /**
  * When click and hold on a button - the speed of auto changing the value.
@@ -35,8 +34,6 @@ export default function StepHandler({
 
   const onStepRef = React.useRef<StepHandlerProps['onStep']>();
   onStepRef.current = onStep;
-
-  const { classNames, styles } = React.useContext(SemanticContext) || {};
 
   const onStopStep = () => {
     clearTimeout(stepTimeoutRef.current);
@@ -73,7 +70,7 @@ export default function StepHandler({
   // ======================= Render =======================
   const handlerClassName = `${prefixCls}-handler`;
 
-  const className = clsx(handlerClassName, `${handlerClassName}-up`, {
+  const className = clsx(handlerClassName, `${handlerClassName}-${action}`, {
     [`${handlerClassName}-${action}-disabled`]: disabled,
   });
 
@@ -103,11 +100,5 @@ export default function StepHandler({
     >
       {children || <span unselectable="on" className={`${prefixCls}-handler-${action}-inner`} />}
     </span>
-  );
-
-  return (
-    <div className={clsx(`${handlerClassName}-wrap`, classNames?.actions)} style={styles?.actions}>
-      //
-    </div>
   );
 }

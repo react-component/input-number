@@ -157,6 +157,8 @@ const InternalInputNumber = React.forwardRef(
       ...inputProps
     } = props;
 
+    const { classNames, styles } = React.useContext(SemanticContext) || {};
+
     const inputClassName = `${prefixCls}-input`;
 
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -629,8 +631,8 @@ const InternalInputNumber = React.forwardRef(
       >
         {type === 'input' && controls && (
           <div
-            className={clsx(`${prefixCls}-handler-wrap`, props.classNames?.actions)}
-            style={props.styles?.actions}
+            className={clsx(`${prefixCls}-handler-wrap`, classNames?.actions)}
+            style={styles?.actions}
           >
             {upNode}
             {downNode}
