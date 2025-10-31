@@ -16,23 +16,17 @@ const STEP_DELAY = 600;
 
 export interface StepHandlerProps {
   prefixCls: string;
-  upNode?: React.ReactNode;
-  downNode?: React.ReactNode;
-  upDisabled?: boolean;
-  upHidden?: boolean;
-  downDisabled?: boolean;
-  downHidden?: boolean;
+  action: 'up' | 'down';
+  children?: React.ReactNode;
+  disabled?: boolean;
   onStep: (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => void;
 }
 
 export default function StepHandler({
   prefixCls,
-  upNode,
-  downNode,
-  upDisabled,
-  downDisabled,
-  upHidden,
-  downHidden,
+  action,
+  children,
+  disabled,
   onStep,
 }: StepHandlerProps) {
   // ======================== Step ========================
@@ -49,15 +43,15 @@ export default function StepHandler({
   };
 
   // We will interval update step when hold mouse down
-  const onStepMouseDown = (e: React.MouseEvent, up: boolean) => {
+  const onStepMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     onStopStep();
 
-    onStepRef.current(up, 'handler');
+    onStepRef.current(action === 'up', 'handler');
 
     // Loop step for interval
     function loopStep() {
-      onStepRef.current(up, 'handler');
+      onStepRef.current(action === 'up', 'handler');
 
       stepTimeoutRef.current = setTimeout(loopStep, STEP_INTERVAL);
     }
@@ -79,11 +73,8 @@ export default function StepHandler({
   // ======================= Render =======================
   const handlerClassName = `${prefixCls}-handler`;
 
-  const upClassName = clsx(handlerClassName, `${handlerClassName}-up`, {
-    [`${handlerClassName}-up-disabled`]: upDisabled,
-  });
-  const downClassName = clsx(handlerClassName, `${handlerClassName}-down`, {
-    [`${handlerClassName}-down-disabled`]: downDisabled,
+  const className = clsx(handlerClassName, `${handlerClassName}-up`, {
+    [`${handlerClassName}-${action}-disabled`]: disabled,
   });
 
   // fix: https://github.com/ant-design/ant-design/issues/43088
@@ -100,47 +91,23 @@ export default function StepHandler({
     onMouseLeave: safeOnStopStep,
   };
 
-  const upHandle = (
+  return (
     <span
       {...sharedHandlerProps}
       onMouseDown={(e) => {
-        onStepMouseDown(e, true);
+        onStepMouseDown(e);
       }}
-      aria-label="Increase Value"
-      aria-disabled={upDisabled}
-      className={upClassName}
+      aria-label={action === 'up' ? 'Increase Value' : 'Decrease Value'}
+      aria-disabled={disabled}
+      className={className}
     >
-      {upNode || <span unselectable="on" className={`${prefixCls}-handler-up-inner`} />}
+      {children || <span unselectable="on" className={`${prefixCls}-handler-${action}-inner`} />}
     </span>
   );
-
-  const downHandle = (
-    <span
-      {...sharedHandlerProps}
-      onMouseDown={(e) => {
-        onStepMouseDown(e, false);
-      }}
-      aria-label="Decrease Value"
-      aria-disabled={downDisabled}
-      className={downClassName}
-    >
-      {downNode || <span unselectable="on" className={`${prefixCls}-handler-down-inner`} />}
-    </span>
-  );
-
-  if (upHidden) {
-    return downHandle;
-  }
-
-  if (downHidden) {
-    return upHandle;
-  }
 
   return (
     <div className={clsx(`${handlerClassName}-wrap`, classNames?.actions)} style={styles?.actions}>
-      {upHandle}
-
-      {downHandle}
+      //
     </div>
   );
 }

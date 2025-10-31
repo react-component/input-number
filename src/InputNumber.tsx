@@ -589,6 +589,23 @@ const InternalInputNumber = React.forwardRef(
     }, [inputValue]);
 
     // ============================ Render ============================
+    const upNode = (
+      <StepHandler action="up" prefixCls={prefixCls} disabled={upDisabled} onStep={onInternalStep}>
+        {upHandler}
+      </StepHandler>
+    );
+
+    const downNode = (
+      <StepHandler
+        action="down"
+        prefixCls={prefixCls}
+        disabled={downDisabled}
+        onStep={onInternalStep}
+      >
+        {downHandler}
+      </StepHandler>
+    );
+
     return (
       <div
         ref={domRef}
@@ -611,25 +628,16 @@ const InternalInputNumber = React.forwardRef(
         onBeforeInput={onBeforeInput}
       >
         {type === 'input' && controls && (
-          <StepHandler
-            prefixCls={prefixCls}
-            upNode={upHandler}
-            downNode={downHandler}
-            upDisabled={upDisabled}
-            downDisabled={downDisabled}
-            onStep={onInternalStep}
-          />
+          <div
+            className={clsx(`${prefixCls}-handler-wrap`, props.classNames?.actions)}
+            style={props.styles?.actions}
+          >
+            {upNode}
+            {downNode}
+          </div>
         )}
 
-        {type === 'spinner' && controls && (
-          <StepHandler
-            prefixCls={prefixCls}
-            downNode={downHandler}
-            downDisabled={downDisabled}
-            upHidden
-            onStep={onInternalStep}
-          />
-        )}
+        {type === 'spinner' && controls && downNode}
 
         <div className={`${inputClassName}-wrap`}>
           <input
@@ -649,15 +657,7 @@ const InternalInputNumber = React.forwardRef(
           />
         </div>
 
-        {type === 'spinner' && controls && (
-          <StepHandler
-            prefixCls={prefixCls}
-            upNode={upHandler}
-            upDisabled={upDisabled}
-            downHidden
-            onStep={onInternalStep}
-          />
-        )}
+        {type === 'spinner' && controls && upNode}
       </div>
     );
   },
