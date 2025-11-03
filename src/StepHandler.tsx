@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
-import * as React from 'react';
-import { clsx } from 'clsx';
 import raf from '@rc-component/util/lib/raf';
+import { clsx } from 'clsx';
+import * as React from 'react';
 
 /**
  * When click and hold on a button - the speed of auto changing the value.
@@ -28,12 +28,12 @@ export default function StepHandler({
   disabled,
   onStep,
 }: StepHandlerProps) {
+  // ======================== MISC ========================
+  const isUpAction = action === 'up';
+
   // ======================== Step ========================
   const stepTimeoutRef = React.useRef<any>();
   const frameIds = React.useRef<number[]>([]);
-
-  const onStepRef = React.useRef<StepHandlerProps['onStep']>();
-  onStepRef.current = onStep;
 
   const onStopStep = () => {
     clearTimeout(stepTimeoutRef.current);
@@ -44,11 +44,11 @@ export default function StepHandler({
     e.preventDefault();
     onStopStep();
 
-    onStepRef.current(action === 'up', 'handler');
+    onStep(isUpAction, 'handler');
 
     // Loop step for interval
     function loopStep() {
-      onStepRef.current(action === 'up', 'handler');
+      onStep(isUpAction, 'handler');
 
       stepTimeoutRef.current = setTimeout(loopStep, STEP_INTERVAL);
     }
@@ -94,7 +94,7 @@ export default function StepHandler({
       onMouseDown={(e) => {
         onStepMouseDown(e);
       }}
-      aria-label={action === 'up' ? 'Increase Value' : 'Decrease Value'}
+      aria-label={isUpAction ? 'Increase Value' : 'Decrease Value'}
       aria-disabled={disabled}
       className={className}
     >

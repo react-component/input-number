@@ -1,3 +1,4 @@
+import { BaseInput } from '@rc-component/input';
 import getMiniDecimal, {
   DecimalClass,
   getNumberPrecision,
@@ -6,20 +7,20 @@ import getMiniDecimal, {
   validateNumber,
   ValueType,
 } from '@rc-component/mini-decimal';
-import { clsx } from 'clsx';
-import { BaseInput } from '@rc-component/input';
 import { useLayoutUpdateEffect } from '@rc-component/util/lib/hooks/useLayoutEffect';
 import proxyObject from '@rc-component/util/lib/proxyObject';
 import { composeRef } from '@rc-component/util/lib/ref';
+import { clsx } from 'clsx';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
+import SemanticContext from './SemanticContext';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
-import SemanticContext from './SemanticContext';
 
 import type { HolderRef } from '@rc-component/input/lib/BaseInput';
 import { BaseInputProps } from '@rc-component/input/lib/interface';
 import { InputFocusOptions, triggerFocus } from '@rc-component/input/lib/utils/commonUtils';
+import { useEvent } from '@rc-component/util';
 import useFrame from './hooks/useFrame';
 
 export type { ValueType };
@@ -440,7 +441,7 @@ const InternalInputNumber = React.forwardRef(
     };
 
     // ============================= Step =============================
-    const onInternalStep = (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => {
+    const onInternalStep = useEvent((up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => {
       // Ignore step since out of range
       if ((up && upDisabled) || (!up && downDisabled)) {
         return;
@@ -466,7 +467,7 @@ const InternalInputNumber = React.forwardRef(
       });
 
       inputRef.current?.focus();
-    };
+    });
 
     // ============================ Flush =============================
     /**
@@ -591,6 +592,7 @@ const InternalInputNumber = React.forwardRef(
     }, [inputValue]);
 
     // ============================ Render ============================
+    // >>>>>> Handler
     const upNode = (
       <StepHandler action="up" prefixCls={prefixCls} disabled={upDisabled} onStep={onInternalStep}>
         {upHandler}
@@ -608,6 +610,7 @@ const InternalInputNumber = React.forwardRef(
       </StepHandler>
     );
 
+    // >>>>>> Render
     return (
       <div
         ref={domRef}
