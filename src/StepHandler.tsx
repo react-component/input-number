@@ -18,6 +18,8 @@ export interface StepHandlerProps {
   action: 'up' | 'down';
   children?: React.ReactNode;
   disabled?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
   onStep: (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => void;
 }
 
@@ -26,6 +28,8 @@ export default function StepHandler({
   action,
   children,
   disabled,
+  className,
+  style,
   onStep,
 }: StepHandlerProps) {
   // ======================== MISC ========================
@@ -70,9 +74,14 @@ export default function StepHandler({
   // ======================= Render =======================
   const handlerClassName = `${prefixCls}-handler`;
 
-  const className = clsx(handlerClassName, `${handlerClassName}-${action}`, {
-    [`${handlerClassName}-${action}-disabled`]: disabled,
-  });
+  const mergedClassName = clsx(
+    handlerClassName, 
+    `${handlerClassName}-${action}`, 
+    {
+      [`${handlerClassName}-${action}-disabled`]: disabled,
+    },
+    className
+  );
 
   // fix: https://github.com/ant-design/ant-design/issues/43088
   // In Safari, When we fire onmousedown and onmouseup events in quick succession,
@@ -96,7 +105,8 @@ export default function StepHandler({
       }}
       aria-label={isUpAction ? 'Increase Value' : 'Decrease Value'}
       aria-disabled={disabled}
-      className={className}
+      className={mergedClassName}
+      style={style}
     >
       {children || <span unselectable="on" className={`${prefixCls}-handler-${action}-inner`} />}
     </span>

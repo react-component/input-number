@@ -55,7 +55,7 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
-type SemanticName = 'actions' | 'input';
+type SemanticName = 'actions' | 'input' | 'action';
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -593,18 +593,28 @@ const InternalInputNumber = React.forwardRef(
 
     // ============================ Render ============================
     // >>>>>> Handler
+    const sharedHandlerProps = {
+      prefixCls,
+      onStep: onInternalStep,
+      className: classNames?.action,
+      style: styles?.action,
+    };
+
     const upNode = (
-      <StepHandler action="up" prefixCls={prefixCls} disabled={upDisabled} onStep={onInternalStep}>
+      <StepHandler 
+        {...sharedHandlerProps}
+        action="up" 
+        disabled={upDisabled}
+      >
         {upHandler}
       </StepHandler>
     );
 
     const downNode = (
       <StepHandler
+        {...sharedHandlerProps}
         action="down"
-        prefixCls={prefixCls}
         disabled={downDisabled}
-        onStep={onInternalStep}
       >
         {downHandler}
       </StepHandler>
