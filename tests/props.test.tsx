@@ -407,8 +407,8 @@ describe('InputNumber.Props', () => {
     });
   });
 
-  describe('type props', () => {
-    it('render spinner type', () => {
+  describe('mode props', () => {
+    it('render spinner mode', () => {
       const { container } = render(<InputNumber value={1} mode="spinner" />);
       expect(container.querySelector('.rc-input-number')).toHaveClass('rc-input-number-mode-spinner');
     });
