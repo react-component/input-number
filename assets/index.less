@@ -133,4 +133,24 @@
       .handler-disabled();
     }
   }
+
+  &-type-spinner {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &-type-spinner &-handler {
+    flex: 0 0 20px;
+    line-height: 26px;
+    height: 100%;
+  }
+
+  &-type-spinner &-handler-up {
+    border-bottom: 0;
+    border-left: 1px solid #d9d9d9;
+  }
+  &-type-spinner &-handler-down {
+    border-top: 0;
+    border-right: 1px solid #d9d9d9;
+  }
 }

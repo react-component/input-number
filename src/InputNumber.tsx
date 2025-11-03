@@ -1,3 +1,4 @@
+import { BaseInput } from '@rc-component/input';
 import getMiniDecimal, {
   DecimalClass,
   getNumberPrecision,
@@ -6,20 +7,20 @@ import getMiniDecimal, {
   validateNumber,
   ValueType,
 } from '@rc-component/mini-decimal';
-import { clsx } from 'clsx';
-import { BaseInput } from '@rc-component/input';
 import { useLayoutUpdateEffect } from '@rc-component/util/lib/hooks/useLayoutEffect';
 import proxyObject from '@rc-component/util/lib/proxyObject';
 import { composeRef } from '@rc-component/util/lib/ref';
+import { clsx } from 'clsx';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
+import SemanticContext from './SemanticContext';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
-import SemanticContext from './SemanticContext';
 
 import type { HolderRef } from '@rc-component/input/lib/BaseInput';
 import { BaseInputProps } from '@rc-component/input/lib/interface';
 import { InputFocusOptions, triggerFocus } from '@rc-component/input/lib/utils/commonUtils';
+import { useEvent } from '@rc-component/util';
 import useFrame from './hooks/useFrame';
 
 export type { ValueType };
@@ -54,7 +55,7 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
-type SemanticName = 'actions' | 'input';
+type SemanticName = 'actions' | 'input' | 'action';
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -62,6 +63,8 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   > {
   /** value will show as string */
   stringMode?: boolean;
+
+  type?: 'input' | 'spinner';
 
   defaultValue?: T;
   value?: T | null;
@@ -119,6 +122,7 @@ type InternalInputNumberProps = Omit<InputNumberProps, 'prefix' | 'suffix'> & {
 const InternalInputNumber = React.forwardRef(
   (props: InternalInputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const {
+      type,
       prefixCls,
       className,
       style,
@@ -153,6 +157,8 @@ const InternalInputNumber = React.forwardRef(
 
       ...inputProps
     } = props;
+
+    const { classNames, styles } = React.useContext(SemanticContext) || {};
 
     const inputClassName = `${prefixCls}-input`;
 
@@ -435,7 +441,7 @@ const InternalInputNumber = React.forwardRef(
     };
 
     // ============================= Step =============================
-    const onInternalStep = (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => {
+    const onInternalStep = useEvent((up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => {
       // Ignore step since out of range
       if ((up && upDisabled) || (!up && downDisabled)) {
         return;
@@ -461,7 +467,7 @@ const InternalInputNumber = React.forwardRef(
       });
 
       inputRef.current?.focus();
-    };
+    });
 
     // ============================ Flush =============================
     /**
@@ -586,6 +592,35 @@ const InternalInputNumber = React.forwardRef(
     }, [inputValue]);
 
     // ============================ Render ============================
+    // >>>>>> Handler
+    const sharedHandlerProps = {
+      prefixCls,
+      onStep: onInternalStep,
+      className: classNames?.action,
+      style: styles?.action,
+    };
+
+    const upNode = (
+      <StepHandler 
+        {...sharedHandlerProps}
+        action="up" 
+        disabled={upDisabled}
+      >
+        {upHandler}
+      </StepHandler>
+    );
+
+    const downNode = (
+      <StepHandler
+        {...sharedHandlerProps}
+        action="down"
+        disabled={downDisabled}
+      >
+        {downHandler}
+      </StepHandler>
+    );
+
+    // >>>>>> Render
     return (
       <div
         ref={domRef}
@@ -607,16 +642,18 @@ const InternalInputNumber = React.forwardRef(
         onCompositionEnd={onCompositionEnd}
         onBeforeInput={onBeforeInput}
       >
-        {controls && (
-          <StepHandler
-            prefixCls={prefixCls}
-            upNode={upHandler}
-            downNode={downHandler}
-            upDisabled={upDisabled}
-            downDisabled={downDisabled}
-            onStep={onInternalStep}
-          />
+        {type === 'input' && controls && (
+          <div
+            className={clsx(`${prefixCls}-handler-wrap`, classNames?.actions)}
+            style={styles?.actions}
+          >
+            {upNode}
+            {downNode}
+          </div>
         )}
+
+        {type === 'spinner' && controls && downNode}
+
         <div className={`${inputClassName}-wrap`}>
           <input
             autoComplete="off"
@@ -634,6 +671,8 @@ const InternalInputNumber = React.forwardRef(
             readOnly={readOnly}
           />
         </div>
+
+        {type === 'spinner' && controls && upNode}
       </div>
     );
   },
@@ -641,6 +680,7 @@ const InternalInputNumber = React.forwardRef(
 
 const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, ref) => {
   const {
+    type = 'input',
     disabled,
     style,
     prefixCls = 'rc-input-number',
@@ -675,7 +715,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   return (
     <SemanticContext.Provider value={memoizedValue}>
       <BaseInput
-        className={className}
+        className={clsx(`${prefixCls}-type-${type}`, className)}
         triggerFocus={focus}
         prefixCls={prefixCls}
         value={value}
@@ -696,6 +736,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         ref={holderRef}
       >
         <InternalInputNumber
+          type={type}
           prefixCls={prefixCls}
           disabled={disabled}
           ref={inputFocusRef}
