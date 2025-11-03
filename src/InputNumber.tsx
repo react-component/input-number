@@ -64,7 +64,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   /** value will show as string */
   stringMode?: boolean;
 
-  type?: 'input' | 'spinner';
+  mode?: 'input' | 'spinner';
 
   defaultValue?: T;
   value?: T | null;
@@ -122,7 +122,7 @@ type InternalInputNumberProps = Omit<InputNumberProps, 'prefix' | 'suffix'> & {
 const InternalInputNumber = React.forwardRef(
   (props: InternalInputNumberProps, ref: React.Ref<HTMLInputElement>) => {
     const {
-      type,
+      mode,
       prefixCls,
       className,
       style,
@@ -601,21 +601,13 @@ const InternalInputNumber = React.forwardRef(
     };
 
     const upNode = (
-      <StepHandler 
-        {...sharedHandlerProps}
-        action="up" 
-        disabled={upDisabled}
-      >
+      <StepHandler {...sharedHandlerProps} action="up" disabled={upDisabled}>
         {upHandler}
       </StepHandler>
     );
 
     const downNode = (
-      <StepHandler
-        {...sharedHandlerProps}
-        action="down"
-        disabled={downDisabled}
-      >
+      <StepHandler {...sharedHandlerProps} action="down" disabled={downDisabled}>
         {downHandler}
       </StepHandler>
     );
@@ -642,7 +634,7 @@ const InternalInputNumber = React.forwardRef(
         onCompositionEnd={onCompositionEnd}
         onBeforeInput={onBeforeInput}
       >
-        {type === 'input' && controls && (
+        {mode === 'input' && controls && (
           <div
             className={clsx(`${prefixCls}-handler-wrap`, classNames?.actions)}
             style={styles?.actions}
@@ -652,7 +644,7 @@ const InternalInputNumber = React.forwardRef(
           </div>
         )}
 
-        {type === 'spinner' && controls && downNode}
+        {mode === 'spinner' && controls && downNode}
 
         <div className={`${inputClassName}-wrap`}>
           <input
@@ -672,7 +664,7 @@ const InternalInputNumber = React.forwardRef(
           />
         </div>
 
-        {type === 'spinner' && controls && upNode}
+        {mode === 'spinner' && controls && upNode}
       </div>
     );
   },
@@ -680,7 +672,7 @@ const InternalInputNumber = React.forwardRef(
 
 const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, ref) => {
   const {
-    type = 'input',
+    mode = 'input',
     disabled,
     style,
     prefixCls = 'rc-input-number',
@@ -715,7 +707,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   return (
     <SemanticContext.Provider value={memoizedValue}>
       <BaseInput
-        className={clsx(`${prefixCls}-type-${type}`, className)}
+        className={clsx(`${prefixCls}-mode-${mode}`, className)}
         triggerFocus={focus}
         prefixCls={prefixCls}
         value={value}
@@ -736,7 +728,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         ref={holderRef}
       >
         <InternalInputNumber
-          type={type}
+          mode={mode}
           prefixCls={prefixCls}
           disabled={disabled}
           ref={inputFocusRef}
