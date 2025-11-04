@@ -20,7 +20,7 @@ export default () => {
     <div style={{ margin: 10 }}>
       <h3>Controlled</h3>
       <InputNumber
-        type="spinner"
+        mode="spinner"
         aria-label="Simple number input example"
         min={-8}
         max={10}
@@ -54,7 +54,7 @@ export default () => {
       <hr />
       <h3>Uncontrolled</h3>
       <InputNumber
-        type="spinner"
+        mode="spinner"
         style={{ width: 100 }}
         onChange={onChange}
         min={-99}
@@ -65,7 +65,7 @@ export default () => {
       <hr />
       <h3>!changeOnBlur</h3>
       <InputNumber
-        type="spinner"
+        mode="spinner"
         style={{ width: 100 }}
         min={-9}
         max={9}

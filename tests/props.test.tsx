@@ -407,10 +407,10 @@ describe('InputNumber.Props', () => {
     });
   });
 
-  describe('type props', () => {
-    it('render spinner type', () => {
-      const { container } = render(<InputNumber value={1} type="spinner" />);
-      expect(container.querySelector('.rc-input-number')).toHaveClass('rc-input-number-type-spinner');
+  describe('mode props', () => {
+    it('render spinner mode', () => {
+      const { container } = render(<InputNumber value={1} mode="spinner" />);
+      expect(container.querySelector('.rc-input-number')).toHaveClass('rc-input-number-mode-spinner');
     });
   });
 

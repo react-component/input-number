@@ -4,7 +4,7 @@ exports[`baseInput addon should render properly 1`] = `
 <div>
   <div>
     <div
-      class="rc-input-group-wrapper rc-input-type-input"
+      class="rc-input-group-wrapper rc-input-mode-input"
     >
       <div
         class="rc-input-wrapper rc-input-group"
@@ -64,7 +64,7 @@ exports[`baseInput addon should render properly 1`] = `
     <br />
     <br />
     <div
-      class="rc-input-group-wrapper rc-input-type-input"
+      class="rc-input-group-wrapper rc-input-mode-input"
     >
       <div
         class="rc-input-wrapper rc-input-group"
@@ -128,7 +128,7 @@ exports[`baseInput addon should render properly 1`] = `
 exports[`baseInput prefix should render properly 1`] = `
 <div>
   <div
-    class="rc-input-affix-wrapper rc-input-type-input"
+    class="rc-input-affix-wrapper rc-input-mode-input"
   >
     <span
       class="rc-input-prefix"
