@@ -202,7 +202,7 @@ nav:
 ## inputRef
 
 ```tsx | pure
-import InputNumber, { InputNumberRef } from 'rc-input-number';
+import InputNumber, { InputNumberRef } from '@rc-component/input-number';
 
 const inputRef = useRef<InputNumberRef>(null);
 

@@ -1,4 +1,4 @@
-# rc-input-number
+# @rc-component/input-number
 
 Input number control.
 
@@ -9,8 +9,8 @@ Input number control.
 [![bundle size][bundlephobia-image]][bundlephobia-url]
 [![dumi][dumi-image]][dumi-url]
 
-[npm-image]: http://img.shields.io/npm/v/rc-input-number.svg?style=flat-square
-[npm-url]: http://npmjs.org/package/rc-input-number
+[npm-image]: http://img.shields.io/npm/v/@rc-component/input-number.svg?style=flat-square
+[npm-url]: http://npmjs.org/package/@rc-component/input-number
 [travis-image]: https://img.shields.io/travis/react-component/input-number/master?style=flat-square
 [travis-url]: https://travis-ci.com/react-component/input-number
 [github-actions-image]: https://github.com/react-component/input-number/actions/workflows/react-component-ci.yml/badge.svg
@@ -21,10 +21,10 @@ Input number control.
 [david-image]: https://david-dm.org/react-component/input-number/status.svg?style=flat-square
 [david-dev-url]: https://david-dm.org/react-component/input-number?type=dev
 [david-dev-image]: https://david-dm.org/react-component/input-number/dev-status.svg?style=flat-square
-[download-image]: https://img.shields.io/npm/dm/rc-input-number.svg?style=flat-square
-[download-url]: https://npmjs.org/package/rc-input-number
-[bundlephobia-url]: https://bundlephobia.com/package/rc-input-number
-[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/rc-input-number
+[download-image]: https://img.shields.io/npm/dm/@rc-component/input-number.svg?style=flat-square
+[download-url]: https://npmjs.org/package/@rc-component/input-number
+[bundlephobia-url]: https://bundlephobia.com/package/@rc-component/input-number
+[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/@rc-component/input-number
 [dumi-url]: https://github.com/umijs/dumi
 [dumi-image]: https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square
 
@@ -34,12 +34,12 @@ Input number control.
 
 ## Install
 
-[![rc-input-number](https://nodei.co/npm/rc-input-number.png)](https://npmjs.org/package/rc-input-number)
+[![@rc-component/input-number](https://nodei.co/npm/@rc-component/input-number.png)](https://npmjs.org/package/@rc-component/input-number)
 
 ## Usage
 
 ```js
-import InputNumber from 'rc-input-number';
+import InputNumber from '@rc-component/input-number';
 
 export default () => <InputNumber defaultValue={10} />;
 ```
@@ -274,4 +274,4 @@ open coverage/ dir
 
 ## License
 
-rc-input-number is released under the MIT license.
+@rc-component/input-number is released under the MIT license.

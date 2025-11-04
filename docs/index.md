@@ -1,6 +1,6 @@
 ---
 hero:
-  title: rc-input-number
+  title: @rc-component/input-number
   description: React InputNumber Component
 ---
 
@@ -8,19 +8,19 @@ hero:
 
 ```sh
 # npm
-npm install --save rc-input-number
+npm install --save @rc-component/input-number
 
 # yarn
-yarn install rc-input-number
+yarn install @rc-component/input-number
 
 # pnpm
-pnpm i rc-input-number
+pnpm i @rc-component/input-number
 ```
 
 ## Usage
 
 ```ts
-import InputNumber from 'rc-input-number';
+import InputNumber from '@rc-component/input-number';
 
 export default () => <InputNumber defaultValue={10} />;
 ```
@@ -52,4 +52,4 @@ npm run coverage
 
 ## License
 
-rc-input-number is released under the MIT license.
+@rc-component/input-number is released under the MIT license.
