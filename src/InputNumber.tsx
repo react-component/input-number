@@ -14,7 +14,6 @@ import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
-import { BaseInputProps } from '@rc-component/input/lib/interface';
 import { useEvent } from '@rc-component/util';
 import { triggerFocus, type InputFocusOptions } from '@rc-component/util/lib/DOM/focus';
 import useFrame from './hooks/useFrame';
@@ -51,7 +50,7 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
-type SemanticName = 'actions' | 'input' | 'action';
+type SemanticName = 'root' | 'actions' | 'input' | 'action' | 'prefix' | 'suffix';
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -75,10 +74,8 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   controls?: boolean;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
-  addonBefore?: React.ReactNode;
-  addonAfter?: React.ReactNode;
-  classNames?: BaseInputProps['classNames'] & Partial<Record<SemanticName, string>>;
-  styles?: BaseInputProps['styles'] & Partial<Record<SemanticName, React.CSSProperties>>;
+  classNames?: Partial<Record<SemanticName, string>>;
+  styles?: Partial<Record<SemanticName, React.CSSProperties>>;
 
   // Customize handler node
   upHandler?: React.ReactNode;
@@ -619,14 +616,14 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   return (
     <div
       ref={rootRef}
-      className={clsx(prefixCls, `${prefixCls}-mode-${mode}`, className, {
+      className={clsx(prefixCls, `${prefixCls}-mode-${mode}`, className, classNames?.root, {
         [`${prefixCls}-focused`]: focus,
         [`${prefixCls}-disabled`]: disabled,
         [`${prefixCls}-readonly`]: readOnly,
         [`${prefixCls}-not-a-number`]: decimalValue.isNaN(),
         [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
       })}
-      style={style}
+      style={{ ...styles?.root, ...style }}
       onFocus={() => {
         setFocus(true);
       }}
