@@ -678,7 +678,11 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
       )}
     </div>
   );
-});
+}) as (<T extends ValueType = ValueType>(
+  props: React.PropsWithChildren<InputNumberProps<T>> & {
+    ref?: React.Ref<HTMLInputElement>;
+  },
+) => React.ReactElement) & { displayName?: string };
 
 // const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, ref) => {
 //   const {
