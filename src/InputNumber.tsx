@@ -19,7 +19,7 @@ import { getDecupleSteps } from './utils/numberUtil';
 
 import type { HolderRef } from '@rc-component/input/lib/BaseInput';
 import { BaseInputProps } from '@rc-component/input/lib/interface';
-import { InputFocusOptions, triggerFocus } from '@rc-component/input/lib/utils/commonUtils';
+import { type InputFocusOptions, triggerFocus } from '@rc-component/util/lib/Dom/focus';
 import { useEvent } from '@rc-component/util';
 import useFrame from './hooks/useFrame';
 
