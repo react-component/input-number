@@ -15,7 +15,7 @@ import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
 import { useEvent } from '@rc-component/util';
-import { triggerFocus, type InputFocusOptions } from '@rc-component/util/lib/DOM/focus';
+import { triggerFocus, type InputFocusOptions } from '@rc-component/util/lib/Dom/focus';
 import useFrame from './hooks/useFrame';
 
 export type { ValueType };
