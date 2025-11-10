@@ -45,7 +45,6 @@
     ]
   },
   "dependencies": {
-    "@rc-component/input": "~1.1.0",
     "@rc-component/mini-decimal": "^1.0.1",
     "@rc-component/util": "^1.4.0",
     "clsx": "^2.1.1"
