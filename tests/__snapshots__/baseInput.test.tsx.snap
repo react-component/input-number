@@ -94,6 +94,13 @@ exports[`baseInput prefix should render properly 1`] = `
   <div
     class="rc-input rc-input-mode-input"
   >
+    <div
+      class="rc-input-prefix"
+    >
+      <span>
+        Prefix
+      </span>
+    </div>
     <input
       autocomplete="off"
       class="rc-input-input"

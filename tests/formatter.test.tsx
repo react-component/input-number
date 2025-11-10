@@ -15,10 +15,10 @@ describe('InputNumber.Formatter', () => {
   it('formatter on mousedown', () => {
     const { container } = render(<InputNumber defaultValue={5} formatter={(num) => `$ ${num}`} />);
     const input = container.querySelector('input');
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     expect(input.value).toEqual('$ 6');
 
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
     expect(input.value).toEqual('$ 5');
   });
 
@@ -94,7 +94,7 @@ describe('InputNumber.Formatter', () => {
     expect(input.value).toEqual('$ 5 boeing 737');
     expect(onChange).toHaveBeenLastCalledWith(5);
 
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'), {
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'), {
       which: KeyCode.DOWN,
     });
     expect(input.value).toEqual('$ 6 boeing 737');

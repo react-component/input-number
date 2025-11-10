@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
 import InputNumber from '../src';
-import React from 'react';
 
 describe('InputNumber.Semantic', () => {
   it('support classNames and styles', () => {
@@ -8,13 +7,15 @@ describe('InputNumber.Semantic', () => {
       prefix: 'test-prefix',
       input: 'test-input',
       suffix: 'test-suffix',
-      actions: 'test-handle',
+      actions: 'test-actions',
+      action: 'test-action',
     };
     const testStyles = {
       prefix: { color: 'red' },
       input: { color: 'blue' },
       suffix: { color: 'green' },
       actions: { color: 'yellow' },
+      action: { color: 'pink' },
     };
     const { container } = render(
       <InputNumber
@@ -26,17 +27,20 @@ describe('InputNumber.Semantic', () => {
       />,
     );
 
-    const input = container.querySelector('.rc-input-number')!;
+    const input = container.querySelector('input')!;
     const prefix = container.querySelector('.rc-input-number-prefix')!;
     const suffix = container.querySelector('.rc-input-number-suffix')!;
-    const actions = container.querySelector('.rc-input-number-handler-wrap')!;
-    expect(input.className).toContain(testClassNames.input);
-    expect(prefix.className).toContain(testClassNames.prefix);
-    expect(suffix.className).toContain(testClassNames.suffix);
-    expect(actions.className).toContain(testClassNames.actions);
+    const actions = container.querySelector('.rc-input-number-actions')!;
+    const action = container.querySelector('.rc-input-number-action')!;
+    expect(input).toHaveClass(testClassNames.input);
+    expect(prefix).toHaveClass(testClassNames.prefix);
+    expect(suffix).toHaveClass(testClassNames.suffix);
+    expect(actions).toHaveClass(testClassNames.actions);
+    expect(action).toHaveClass(testClassNames.action);
     expect(prefix).toHaveStyle(testStyles.prefix);
     expect(input).toHaveStyle(testStyles.input);
     expect(suffix).toHaveStyle(testStyles.suffix);
     expect(actions).toHaveStyle(testStyles.actions);
+    expect(action).toHaveStyle(testStyles.action);
   });
 });

@@ -68,7 +68,7 @@ describe('InputNumber.Github', () => {
     fireEvent.focus(input);
 
     fireEvent.change(input, { target: { value: 'foo' } });
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
 
     expect(input.value).toEqual('2');
   });
@@ -121,7 +121,7 @@ describe('InputNumber.Github', () => {
   it('long press not trigger onChange in uncontrolled component', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber defaultValue={0} onChange={onChange} />);
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
 
     act(() => {
       jest.advanceTimersByTime(500);
@@ -519,7 +519,7 @@ describe('InputNumber.Github', () => {
     const { container, rerender } = render(<Demo />);
     const input = container.querySelector('input');
     // Click
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     expect(input.value).toEqual('8');
 
     // Keyboard change

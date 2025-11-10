@@ -234,9 +234,7 @@ describe('InputNumber.Input', () => {
     it('wrapper', () => {
       const ref = React.createRef<InputNumberRef>();
       const { container } = render(<InputNumber ref={ref} suffix="suffix" />);
-      expect(ref.current.nativeElement).toBe(
-        container.querySelector('.rc-input-number-affix-wrapper'),
-      );
+      expect(ref.current.nativeElement).toBe(container.querySelector('.rc-input-number'));
     });
   });
 });

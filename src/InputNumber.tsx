@@ -11,13 +11,12 @@ import proxyObject from '@rc-component/util/lib/proxyObject';
 import { clsx } from 'clsx';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
-import SemanticContext from './SemanticContext';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
 import { BaseInputProps } from '@rc-component/input/lib/interface';
-import { InputFocusOptions } from '@rc-component/input/lib/utils/commonUtils';
 import { useEvent } from '@rc-component/util';
+import { triggerFocus, type InputFocusOptions } from '@rc-component/util/lib/DOM/focus';
 import useFrame from './hooks/useFrame';
 
 export type { ValueType };
@@ -118,6 +117,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     prefixCls = 'rc-input-number',
     className,
     style,
+    classNames,
+    styles,
     min,
     max,
     step = 1,
@@ -150,10 +151,6 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     ...inputProps
   } = props;
 
-  const { classNames, styles } = React.useContext(SemanticContext) || {};
-
-  const inputClassName = `${prefixCls}-input`;
-
   const [focus, setFocus] = React.useState(false);
 
   const userTypingRef = React.useRef(false);
@@ -166,7 +163,12 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
   React.useImperativeHandle(ref, () =>
     proxyObject(inputRef.current, {
-      focus,
+      focus: (option?: InputFocusOptions) => {
+        triggerFocus(inputRef.current, option);
+      },
+      blur: () => {
+        inputRef.current?.blur();
+      },
       nativeElement: rootRef.current,
     }),
   );
@@ -637,9 +639,9 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     >
       {mode === 'spinner' && controls && downNode}
 
-      {suffix !== undefined && (
-        <div className={clsx(`${prefixCls}-suffix`, classNames?.suffix)} style={styles?.suffix}>
-          {suffix}
+      {prefix !== undefined && (
+        <div className={clsx(`${prefixCls}-prefix`, classNames?.prefix)} style={styles?.prefix}>
+          {prefix}
         </div>
       )}
 
@@ -652,7 +654,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         step={step}
         {...inputProps}
         ref={inputRef}
-        className={inputClassName}
+        className={clsx(`${prefixCls}-input`, classNames?.input)}
+        style={styles?.input}
         value={inputValue}
         onChange={onInternalInput}
         disabled={disabled}
@@ -661,7 +664,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
       {suffix !== undefined && (
         <div className={clsx(`${prefixCls}-suffix`, classNames?.suffix)} style={styles?.suffix}>
-          {prefix}
+          {suffix}
         </div>
       )}
 
