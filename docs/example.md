@@ -9,6 +9,10 @@ nav:
 
 <code src="./demo/simple.tsx"></code>
 
+## prefix-suffix
+
+<code src="./demo/prefix-suffix.tsx"></code>
+
 ## combination-key-format
 
 <code src="./demo/combination-key-format.tsx"></code>

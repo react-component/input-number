@@ -1,7 +1,8 @@
 @inputNumberPrefixCls: rc-input-number;
 
 .@{inputNumberPrefixCls} {
-  display: inline-block;
+  display: inline-flex;
+  flex-wrap: nowrap;
   height: 26px;
   margin: 0;
   padding: 0;
@@ -22,7 +23,7 @@
     }
   }
 
-  &-handler {
+  &-action {
     display: block;
     height: 12px;
     overflow: hidden;
@@ -35,8 +36,8 @@
     }
   }
 
-  &-handler-up-inner,
-  &-handler-down-inner {
+  &-action-up-inner,
+  &-action-down-inner {
     color: #666666;
     -webkit-user-select: none;
     user-select: none;
@@ -45,8 +46,8 @@
   &:hover {
     border-color: #1890ff;
 
-    .@{inputNumberPrefixCls}-handler-up,
-    .@{inputNumberPrefixCls}-handler-wrap {
+    .@{inputNumberPrefixCls}-action-up,
+    .@{inputNumberPrefixCls}-actions {
       border-color: #1890ff;
     }
   }
@@ -54,15 +55,10 @@
   &-disabled:hover {
     border-color: #d9d9d9;
 
-    .@{inputNumberPrefixCls}-handler-up,
-    .@{inputNumberPrefixCls}-handler-wrap {
+    .@{inputNumberPrefixCls}-action-up,
+    .@{inputNumberPrefixCls}-actions {
       border-color: #d9d9d9;
     }
-  }
-
-  &-input-wrap {
-    height: 100%;
-    overflow: hidden;
   }
 
   &-input {
@@ -80,15 +76,14 @@
     -moz-appearance: textfield;
   }
 
-  &-handler-wrap {
-    float: right;
+  &-actions {
     width: 20px;
     height: 100%;
     border-left: 1px solid #d9d9d9;
     transition: all 0.3s;
   }
 
-  &-handler-up {
+  &-action-up {
     padding-top: 1px;
     border-bottom: 1px solid #d9d9d9;
     transition: all 0.3s;
@@ -100,7 +95,7 @@
     }
   }
 
-  &-handler-down {
+  &-action-down {
     transition: all 0.3s;
 
     &-inner {
@@ -118,8 +113,8 @@
     }
   }
 
-  &-handler-down-disabled,
-  &-handler-up-disabled {
+  &-action-down-disabled,
+  &-action-up-disabled {
     .handler-disabled();
   }
 
@@ -129,7 +124,7 @@
       cursor: not-allowed;
       opacity: 0.72;
     }
-    .@{inputNumberPrefixCls}-handler {
+    .@{inputNumberPrefixCls}-action {
       .handler-disabled();
     }
   }
@@ -139,17 +134,17 @@
     align-items: center;
   }
 
-  &-mode-spinner &-handler {
+  &-mode-spinner &-action {
     flex: 0 0 20px;
-    line-height: 26px;
     height: 100%;
+    line-height: 26px;
   }
 
-  &-mode-spinner &-handler-up {
+  &-mode-spinner &-action-up {
     border-bottom: 0;
     border-left: 1px solid #d9d9d9;
   }
-  &-mode-spinner &-handler-down {
+  &-mode-spinner &-action-down {
     border-top: 0;
     border-right: 1px solid #d9d9d9;
   }
