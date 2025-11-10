@@ -72,15 +72,15 @@ export default function StepHandler({
   );
 
   // ======================= Render =======================
-  const handlerClassName = `${prefixCls}-handler`;
+  const actionClassName = `${prefixCls}-action`;
 
   const mergedClassName = clsx(
-    handlerClassName, 
-    `${handlerClassName}-${action}`, 
+    actionClassName,
+    `${actionClassName}-${action}`,
     {
-      [`${handlerClassName}-${action}-disabled`]: disabled,
+      [`${actionClassName}-${action}-disabled`]: disabled,
     },
-    className
+    className,
   );
 
   // fix: https://github.com/ant-design/ant-design/issues/43088
@@ -90,16 +90,12 @@ export default function StepHandler({
   // So, we need to use requestAnimationFrame to ensure that the onmouseup event is executed after the onmousedown event.
   const safeOnStopStep = () => frameIds.current.push(raf(onStopStep));
 
-  const sharedHandlerProps = {
-    unselectable: 'on' as const,
-    role: 'button',
-    onMouseUp: safeOnStopStep,
-    onMouseLeave: safeOnStopStep,
-  };
-
   return (
     <span
-      {...sharedHandlerProps}
+      unselectable="on"
+      role="button"
+      onMouseUp={safeOnStopStep}
+      onMouseLeave={safeOnStopStep}
       onMouseDown={(e) => {
         onStepMouseDown(e);
       }}
@@ -108,7 +104,7 @@ export default function StepHandler({
       className={mergedClassName}
       style={style}
     >
-      {children || <span unselectable="on" className={`${prefixCls}-handler-${action}-inner`} />}
+      {children || <span unselectable="on" className={`${prefixCls}-action-${action}-inner`} />}
     </span>
   );
 }

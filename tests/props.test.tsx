@@ -10,7 +10,7 @@ describe('InputNumber.Props', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber max={10} onChange={onChange} />);
     for (let i = 0; i < 100; i += 1) {
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     }
 
     expect(onChange.mock.calls[onChange.mock.calls.length - 1][0]).toEqual(10);
@@ -23,7 +23,7 @@ describe('InputNumber.Props', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber min={-10} onChange={onChange} />);
     for (let i = 0; i < 100; i += 1) {
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
     }
 
     expect(onChange.mock.calls[onChange.mock.calls.length - 1][0]).toEqual(-10);
@@ -35,8 +35,8 @@ describe('InputNumber.Props', () => {
   it('disabled', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber onChange={onChange} disabled />);
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
     expect(container.querySelector('.rc-input-number-disabled')).toBeTruthy();
     expect(onChange).not.toHaveBeenCalled();
   });
@@ -44,8 +44,8 @@ describe('InputNumber.Props', () => {
   it('readOnly', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber onChange={onChange} readOnly />);
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
     fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.UP });
     fireEvent.keyDown(container.querySelector('input'), { which: KeyCode.DOWN });
     expect(container.querySelector('.rc-input-number-readonly')).toBeTruthy();
@@ -68,7 +68,7 @@ describe('InputNumber.Props', () => {
 
       const { container } = render(<InputNumber onChange={onChange} step={5} />);
       for (let i = 0; i < 3; i += 1) {
-        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
         expect(onChange).toHaveBeenCalledWith(-5 * (i + 1));
       }
       expect(container.querySelector('input')).toHaveAttribute('step', '5');
@@ -79,10 +79,10 @@ describe('InputNumber.Props', () => {
       const { container } = render(<InputNumber onChange={onChange} step={5} />);
 
       for (let i = 0; i < 3; i += 1) {
-        fireEvent.keyDown(container.querySelector('.rc-input-number-handler-down'), {
+        fireEvent.keyDown(container.querySelector('.rc-input-number-action-down'), {
           shiftKey: true,
         });
-        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
 
         expect(onChange).toHaveBeenCalledWith(-5 * (i + 1) * 10);
       }
@@ -100,7 +100,7 @@ describe('InputNumber.Props', () => {
       );
 
       for (let i = 0; i < 11; i += 1) {
-        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
       }
 
       expect(onChange).toHaveBeenCalledWith('-0.00000001');
@@ -118,10 +118,10 @@ describe('InputNumber.Props', () => {
       );
 
       for (let i = 0; i < 11; i += 1) {
-        fireEvent.keyDown(container.querySelector('.rc-input-number-handler-down'), {
+        fireEvent.keyDown(container.querySelector('.rc-input-number-action-down'), {
           shiftKey: true,
         });
-        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
       }
 
       expect(onChange).toHaveBeenCalledWith('-0.00000001'); // -1e-8
@@ -133,7 +133,7 @@ describe('InputNumber.Props', () => {
         <InputNumber onChange={onChange} step={0.1} defaultValue={0.9} />,
       );
       for (let i = 0; i < 3; i += 1) {
-        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
       }
       expect(onChange).toHaveBeenCalledWith(1.2);
     });
@@ -318,18 +318,18 @@ describe('InputNumber.Props', () => {
       );
       const input = container.querySelector('input');
       for (let i = 1; i <= 9; i += 1) {
-        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
         expect(input.value).toEqual(`0.000000${i}`);
         expect(onChange).toHaveBeenCalledWith(0.0000001 * i);
       }
 
       for (let i = 8; i >= 1; i -= 1) {
-        fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+        fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
         expect(input.value).toEqual(`0.000000${i}`);
         expect(onChange).toHaveBeenCalledWith(0.0000001 * i);
       }
 
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
       expect(input.value).toEqual(`0.0000000`);
       expect(onChange).toHaveBeenCalledWith(0);
     });

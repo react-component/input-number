@@ -15,9 +15,9 @@ describe('InputNumber.Decimal', () => {
 
   it('increase and decrease decimal InputNumber by integer step', () => {
     const { container } = render(<InputNumber step={1} defaultValue={2.1} />);
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     expect(container.querySelector('input').value).toEqual('3.1');
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
     expect(container.querySelector('input').value).toEqual('2.1');
   });
 
@@ -44,7 +44,7 @@ describe('InputNumber.Decimal', () => {
 
     for (let i = 0; i < 10; i += 1) {
       // plus until change precision
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     }
 
     fireEvent.blur(input);
@@ -60,7 +60,7 @@ describe('InputNumber.Decimal', () => {
     const { container } = render(<InputNumber step={0.1} />);
     expect(container.querySelector('input').value).toEqual('');
 
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     expect(container.querySelector('input').value).toEqual('0.1');
   });
 

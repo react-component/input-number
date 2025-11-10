@@ -43,28 +43,28 @@ describe('InputNumber.Click', () => {
   }
 
   describe('basic work', () => {
-    testInputNumber('up button', { defaultValue: 10 }, '.rc-input-number-handler-up', 11, 'up', 'handler');
+    testInputNumber('up button', { defaultValue: 10 }, '.rc-input-number-action-up', 11, 'up', 'handler');
 
-    testInputNumber('down button', { value: 10 }, '.rc-input-number-handler-down', 9, 'down', 'handler');
+    testInputNumber('down button', { value: 10 }, '.rc-input-number-action-down', 9, 'down', 'handler');
   });
 
   describe('empty input', () => {
-    testInputNumber('up button', {}, '.rc-input-number-handler-up', 1, 'up', 'handler');
+    testInputNumber('up button', {}, '.rc-input-number-action-up', 1, 'up', 'handler');
 
-    testInputNumber('down button', {}, '.rc-input-number-handler-down', -1, 'down', 'handler');
+    testInputNumber('down button', {}, '.rc-input-number-action-down', -1, 'down', 'handler');
   });
 
   describe('empty with min & max', () => {
-    testInputNumber('up button', { min: 6, max: 10 }, '.rc-input-number-handler-up', 6, 'up', 'handler');
+    testInputNumber('up button', { min: 6, max: 10 }, '.rc-input-number-action-up', 6, 'up', 'handler');
 
-    testInputNumber('down button', { min: 6, max: 10 }, '.rc-input-number-handler-down', 6, 'down', 'handler');
+    testInputNumber('down button', { min: 6, max: 10 }, '.rc-input-number-action-down', 6, 'down', 'handler');
   });
 
   describe('null with min & max', () => {
     testInputNumber(
       'up button',
       { value: null, min: 6, max: 10 },
-      '.rc-input-number-handler-up',
+      '.rc-input-number-action-up',
       6,
       'up',
       'handler',
@@ -73,7 +73,7 @@ describe('InputNumber.Click', () => {
     testInputNumber(
       'down button',
       { value: null, min: 6, max: 10 },
-      '.rc-input-number-handler-down',
+      '.rc-input-number-action-down',
       6,
       'down',
       'handler',
@@ -83,18 +83,18 @@ describe('InputNumber.Click', () => {
   describe('disabled', () => {
     it('none', () => {
       const { container } = render(<InputNumber value={5} min={3} max={9} />);
-      expect(container.querySelector('.rc-input-number-handler-up-disabled')).toBeFalsy();
-      expect(container.querySelector('.rc-input-number-handler-down-disabled')).toBeFalsy();
+      expect(container.querySelector('.rc-input-number-action-up-disabled')).toBeFalsy();
+      expect(container.querySelector('.rc-input-number-action-down-disabled')).toBeFalsy();
     });
 
     it('min', () => {
       const { container } = render(<InputNumber value={3} min={3} max={9} />);
-      expect(container.querySelector('.rc-input-number-handler-down-disabled')).toBeTruthy();
+      expect(container.querySelector('.rc-input-number-action-down-disabled')).toBeTruthy();
     });
 
     it('max', () => {
       const { container } = render(<InputNumber value={9} min={3} max={9} />);
-      expect(container.querySelector('.rc-input-number-handler-up-disabled')).toBeTruthy();
+      expect(container.querySelector('.rc-input-number-action-up-disabled')).toBeTruthy();
     });
   });
 
@@ -104,10 +104,10 @@ describe('InputNumber.Click', () => {
 
       const onChange = jest.fn();
       const { container } = render(<InputNumber defaultValue={1e24} onChange={onChange} />);
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
       expect(onChange).toHaveBeenCalledWith(Number.MAX_SAFE_INTEGER);
 
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
       expect(onChange).toHaveBeenCalledWith(Number.MAX_SAFE_INTEGER - 1);
 
       supportBigInt.mockRestore();
@@ -118,10 +118,10 @@ describe('InputNumber.Click', () => {
 
       const onChange = jest.fn();
       const { container } = render(<InputNumber defaultValue={-1e25} onChange={onChange} />);
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
       expect(onChange).toHaveBeenCalledWith(Number.MIN_SAFE_INTEGER);
 
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
       expect(onChange).toHaveBeenCalledWith(Number.MIN_SAFE_INTEGER + 1);
 
       supportBigInt.mockRestore();
@@ -132,7 +132,7 @@ describe('InputNumber.Click', () => {
       const { container } = render(
         <InputNumber stringMode defaultValue={1e24} onChange={onChange} />,
       );
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
       expect(onChange).toHaveBeenCalledWith('999999999999999983222785');
     });
 
@@ -141,7 +141,7 @@ describe('InputNumber.Click', () => {
       const { container } = render(
         <InputNumber stringMode defaultValue={-1e25} onChange={onChange} />,
       );
-      fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+      fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
       expect(onChange).toHaveBeenCalledWith('-10000000000000000905969665');
     });
   });
@@ -153,7 +153,7 @@ describe('InputNumber.Click', () => {
     const onBlur = jest.fn();
     const { container } = render(<InputNumber onFocus={onFocus} onBlur={onBlur} />);
 
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     act(() => {
       jest.advanceTimersByTime(100);
     });

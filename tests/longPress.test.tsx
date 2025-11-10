@@ -16,7 +16,7 @@ describe('InputNumber.LongPress', () => {
   it('up button works', async () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber defaultValue={20} onChange={onChange} />);
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     act(() => {
       jest.advanceTimersByTime(600 + 200 * 5 + 100);
     });
@@ -26,7 +26,7 @@ describe('InputNumber.LongPress', () => {
   it('down button works', async () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber defaultValue={20} onChange={onChange} />);
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-down'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-down'));
 
     act(() => {
       jest.advanceTimersByTime(600 + 200 * 5 + 100);
@@ -37,27 +37,27 @@ describe('InputNumber.LongPress', () => {
   it('Simulates event calls out of order in Safari', async () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber defaultValue={20} onChange={onChange} />);
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     act(() => {
       jest.advanceTimersByTime(10);
     });
-    fireEvent.mouseUp(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseUp(container.querySelector('.rc-input-number-action-up'));
     act(() => {
       jest.advanceTimersByTime(10);
     });
-    fireEvent.mouseUp(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseUp(container.querySelector('.rc-input-number-action-up'));
     act(() => {
       jest.advanceTimersByTime(10);
     });
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     act(() => {
       jest.advanceTimersByTime(10);
     });
-    fireEvent.mouseDown(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseDown(container.querySelector('.rc-input-number-action-up'));
     act(() => {
       jest.advanceTimersByTime(10);
     });
-    fireEvent.mouseUp(container.querySelector('.rc-input-number-handler-up'));
+    fireEvent.mouseUp(container.querySelector('.rc-input-number-action-up'));
 
     act(() => {
       jest.advanceTimersByTime(600 + 200 * 5 + 100);
