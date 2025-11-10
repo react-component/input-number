@@ -7,7 +7,7 @@ export default () => {
   const [value, setValue] = React.useState<string | number>(100);
 
   const onChange = (val: number) => {
-    console.warn('onChange:', val, typeof val);
+    console.log('onChange:', val, typeof val);
     setValue(val);
   };
 
