@@ -53,9 +53,33 @@ const getDecimalIfValidate = (value: ValueType) => {
 type SemanticName = 'root' | 'actions' | 'input' | 'action' | 'prefix' | 'suffix';
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    'value' | 'defaultValue' | 'onInput' | 'onChange' | 'prefix' | 'suffix'
-  > {
+      React.InputHTMLAttributes<HTMLInputElement>,
+      | 'value'
+      | 'defaultValue'
+      | 'onInput'
+      | 'onChange'
+      | 'prefix'
+      | 'suffix'
+      | 'onMouseDown'
+      | 'onClick'
+      | 'onMouseUp'
+      | 'onMouseLeave'
+      | 'onMouseMove'
+      | 'onMouseEnter'
+      | 'onMouseOut'
+    >,
+    Pick<
+      React.HTMLAttributes<HTMLDivElement>,
+      | 'onMouseDown'
+      | 'onClick'
+      | 'onMouseUp'
+      | 'onMouseLeave'
+      | 'onMouseMove'
+      | 'onMouseEnter'
+      | 'onMouseOut'
+    > {
+  disabled?: boolean;
+  readOnly?: boolean;
   /** value will show as string */
   stringMode?: boolean;
 
@@ -143,9 +167,18 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     onPressEnter,
     onStep,
 
+    // Mouse Events
+    onMouseDown,
+    onClick,
+    onMouseUp,
+    onMouseLeave,
+    onMouseMove,
+    onMouseEnter,
+    onMouseOut,
+
     changeOnBlur = true,
 
-    ...inputProps
+    ...restProps
   } = props;
 
   const [focus, setFocus] = React.useState(false);
@@ -561,6 +594,15 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     userTypingRef.current = false;
   };
 
+  // >>> Mouse events
+  const onInternalMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    if (inputRef.current && event.target !== inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    onMouseDown?.(event);
+  };
+
   // ========================== Controlled ==========================
   // Input by precision & formatter
   useLayoutUpdateEffect(() => {
@@ -624,6 +666,13 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         [`${prefixCls}-out-of-range`]: !decimalValue.isInvalidate() && !isInRange(decimalValue),
       })}
       style={{ ...styles?.root, ...style }}
+      onMouseDown={onInternalMouseDown}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseLeave}
+      onMouseMove={onMouseMove}
+      onMouseEnter={onMouseEnter}
+      onMouseOut={onMouseOut}
+      onClick={onClick}
       onFocus={() => {
         setFocus(true);
       }}
@@ -649,7 +698,6 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         aria-valuemax={max as any}
         aria-valuenow={decimalValue.isInvalidate() ? null : (decimalValue.toString() as any)}
         step={step}
-        {...inputProps}
         ref={inputRef}
         className={clsx(`${prefixCls}-input`, classNames?.input)}
         style={styles?.input}
@@ -657,6 +705,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         onChange={onInternalInput}
         disabled={disabled}
         readOnly={readOnly}
+        {...restProps}
       />
 
       {suffix !== undefined && (
