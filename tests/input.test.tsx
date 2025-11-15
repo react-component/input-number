@@ -237,4 +237,14 @@ describe('InputNumber.Input', () => {
       expect(ref.current.nativeElement).toBe(container.querySelector('.rc-input-number'));
     });
   });
+
+  it('click prefix should focus input', () => {
+    const { container } = render(<InputNumber prefix="prefix" />);
+    const input = container.querySelector('input');
+    const prefix = container.querySelector('.rc-input-number-prefix');
+
+    expect(document.activeElement).not.toBe(input);
+    fireEvent.mouseDown(prefix);
+    expect(document.activeElement).toBe(input);
+  });
 });
