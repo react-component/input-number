@@ -598,6 +598,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   const onInternalMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
     if (inputRef.current && event.target !== inputRef.current) {
       inputRef.current.focus();
+      event.preventDefault();
     }
 
     onMouseDown?.(event);
