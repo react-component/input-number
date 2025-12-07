@@ -96,6 +96,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   step?: ValueType;
   tabIndex?: number;
   controls?: boolean;
+  allowClear?: boolean | { clearIcon?: React.ReactNode; clearValue: T };
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   classNames?: Partial<Record<SemanticName, string>>;
@@ -119,6 +120,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   onInput?: (text: string) => void;
   onChange?: (value: T | null) => void;
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
+  onClear?: () => void;
 
   onStep?: (
     value: T,
@@ -155,6 +157,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
     prefix,
     suffix,
+    allowClear,
     stringMode,
 
     parser,
@@ -165,6 +168,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     onChange,
     onInput,
     onPressEnter,
+    onClear,
     onStep,
 
     // Mouse Events
@@ -655,6 +659,38 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     </StepHandler>
   );
 
+  let clearButton: React.ReactNode = null;
+  if (allowClear) {
+    const needClear = !disabled && !readOnly && !decimalValue.isEmpty();
+    const clearIconCls = `${prefixCls}-clear-icon`;
+    const iconNode =
+      typeof allowClear === 'object' && allowClear.clearIcon ? allowClear.clearIcon : '✖';
+
+    const onInternalClear = () => {
+      const value = getMiniDecimal(typeof allowClear === 'object' && allowClear.clearValue);
+
+      triggerValueUpdate(value, false);
+    };
+
+    clearButton = (
+      <button
+        type="button"
+        tabIndex={-1}
+        onClick={() => {
+          onInternalClear();
+          onClear?.();
+        }}
+        onMouseDown={(e) => e.preventDefault()}
+        className={clsx(`${prefixCls}-clear-icon`, {
+          [`${clearIconCls}-hidden`]: !needClear,
+          [`${clearIconCls}-has-suffix`]: !!suffix,
+        })}
+      >
+        {iconNode}
+      </button>
+    );
+  }
+
   // >>>>>> Render
   return (
     <div
@@ -708,6 +744,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         readOnly={readOnly}
         {...restProps}
       />
+
+      {clearButton}
 
       {suffix !== undefined && (
         <div className={clsx(`${prefixCls}-suffix`, classNames?.suffix)} style={styles?.suffix}>
