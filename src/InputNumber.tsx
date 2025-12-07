@@ -663,30 +663,27 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   if (allowClear) {
     const needClear = !disabled && !readOnly && !decimalValue.isEmpty();
     const clearIconCls = `${prefixCls}-clear-icon`;
-    const iconNode =
-      typeof allowClear === 'object' && allowClear.clearIcon ? allowClear.clearIcon : '✖';
+    const clearOptions = typeof allowClear === 'object' ? allowClear : {};
+    const { clearIcon = '✖', clearValue } = clearOptions;
 
     const onInternalClear = () => {
-      const value = getMiniDecimal(typeof allowClear === 'object' && allowClear.clearValue);
-
+      const value = getMiniDecimal(clearValue);
       triggerValueUpdate(value, false);
+      onClear?.();
     };
 
     clearButton = (
       <button
         type="button"
         tabIndex={-1}
-        onClick={() => {
-          onInternalClear();
-          onClear?.();
-        }}
+        onClick={onInternalClear}
         onMouseDown={(e) => e.preventDefault()}
         className={clsx(`${prefixCls}-clear-icon`, {
           [`${clearIconCls}-hidden`]: !needClear,
           [`${clearIconCls}-has-suffix`]: !!suffix,
         })}
       >
-        {iconNode}
+        {clearIcon}
       </button>
     );
   }
