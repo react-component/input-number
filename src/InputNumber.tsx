@@ -96,7 +96,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   step?: ValueType;
   tabIndex?: number;
   controls?: boolean;
-  allowClear?: boolean | { clearIcon?: React.ReactNode; clearValue: T };
+  allowClear?: boolean | { clearIcon?: React.ReactNode; clearValue?: T };
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   classNames?: Partial<Record<SemanticName, string>>;
