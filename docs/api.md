@@ -120,7 +120,7 @@ nav:
         </tr>
          <tr>
           <td>allowClear</td>
-          <td>boolean | { clearIcon?: React.ReactNode; clearValue: T }</td>
+          <td>boolean | { clearIcon?: React.ReactNode; clearValue?: T }</td>
           <td>false</td>
           <td>If allow to remove input content with clear icon</td>
         </tr>
