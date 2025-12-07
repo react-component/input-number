@@ -118,6 +118,18 @@ nav:
           <td></td>
           <td>Specifies the defaultValue of an InputNumber</td>
         </tr>
+         <tr>
+          <td>allowClear</td>
+          <td>boolean | { clearIcon?: React.ReactNode; clearValue: T }</td>
+          <td>false</td>
+          <td>If allow to remove input content with clear icon</td>
+        </tr>
+        <tr>
+          <td>onClear</td>
+          <td>Function</td>
+          <td></td>
+          <td>Called when value of an InputNumber cleared</td>
+        </tr>
         <tr>
           <td>onChange</td>
           <td>Function</td>
