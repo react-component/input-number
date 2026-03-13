@@ -65,7 +65,12 @@ describe('InputNumber.Decimal', () => {
   });
 
   it('should not crash when scientific notation precision exceeds native toFixed limit', () => {
-    expect(() => render(<InputNumber defaultValue={1e-307} />)).not.toThrow();
+    const expectedValue = `0.${'0'.repeat(306)}1`;
+
+    expect(() => {
+      const { container } = render(<InputNumber defaultValue={1e-307} />);
+      expect(container.querySelector('input').value).toEqual(expectedValue);
+    }).not.toThrow();
   });
 
   it('custom decimal separator', () => {
