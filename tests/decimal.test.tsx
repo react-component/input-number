@@ -64,6 +64,10 @@ describe('InputNumber.Decimal', () => {
     expect(container.querySelector('input').value).toEqual('0.1');
   });
 
+  it('should not crash when scientific notation precision exceeds native toFixed limit', () => {
+    expect(() => render(<InputNumber defaultValue={1e-307} />)).not.toThrow();
+  });
+
   it('custom decimal separator', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber decimalSeparator="," onChange={onChange} />);
