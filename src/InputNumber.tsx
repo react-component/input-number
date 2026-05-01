@@ -540,10 +540,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
     shiftKeyRef.current = shiftKey;
 
-    if (key === 'Enter') {
-      if (!compositionRef.current) {
-        userTypingRef.current = false;
-      }
+    if (key === 'Enter' && !compositionRef.current) {
+      userTypingRef.current = false;
       flushInputValue(false);
       onPressEnter?.(event);
     }
