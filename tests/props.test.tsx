@@ -1,7 +1,7 @@
-import React from 'react';
+import { KeyCode } from '@rc-component/util';
 import '@testing-library/jest-dom';
-import { render, fireEvent } from '@testing-library/react';
-import KeyCode from '@rc-component/util/lib/KeyCode';
+import { fireEvent, render } from '@testing-library/react';
+import React from 'react';
 import type { ValueType } from '../src';
 import InputNumber from '../src';
 
@@ -410,7 +410,9 @@ describe('InputNumber.Props', () => {
   describe('mode props', () => {
     it('render spinner mode', () => {
       const { container } = render(<InputNumber value={1} mode="spinner" />);
-      expect(container.querySelector('.rc-input-number')).toHaveClass('rc-input-number-mode-spinner');
+      expect(container.querySelector('.rc-input-number')).toHaveClass(
+        'rc-input-number-mode-spinner',
+      );
     });
   });
 

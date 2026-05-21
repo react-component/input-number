@@ -1,7 +1,7 @@
+import { spyElementPrototypes } from '@rc-component/util';
 import { fireEvent, render } from '@testing-library/react';
-import InputNumber, { InputNumberRef } from '../src';
-import { spyElementPrototypes } from '@rc-component/util/lib/test/domHook';
 import React from 'react';
+import InputNumber, { InputNumberRef } from '../src';
 
 const getInputRef = () => {
   const ref = React.createRef<InputNumberRef>();

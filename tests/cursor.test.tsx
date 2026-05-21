@@ -1,11 +1,10 @@
+import { KeyCode } from '@rc-component/util';
 import React from 'react';
-import KeyCode from '@rc-component/util/lib/KeyCode';
-import { render, fireEvent } from './util/wrapper';
 import InputNumber from '../src';
+import { fireEvent, render } from './util/wrapper';
 
 describe('InputNumber.Cursor', () => {
   function cursorInput(input: HTMLInputElement, pos?: number) {
-
     if (pos !== undefined) {
       input.setSelectionRange(pos, pos);
     }
@@ -17,12 +16,12 @@ describe('InputNumber.Cursor', () => {
     changeValue: string,
     cursorPos: number,
     which?: number,
-    key?: number|string,
+    key?: number | string,
   ) {
-    fireEvent.focus(input)
-    fireEvent.keyDown(input,{which,keyCode:which,key})
-    fireEvent.change(input,{ target: { value: changeValue, selectionStart: 1 }})
-    fireEvent.keyUp(input,{which,keyCode:which,key})
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { which, keyCode: which, key });
+    fireEvent.change(input, { target: { value: changeValue, selectionStart: 1 } });
+    fireEvent.keyUp(input, { which, keyCode: which, key });
   }
 
   // https://github.com/react-component/input-number/issues/235
@@ -42,12 +41,14 @@ describe('InputNumber.Cursor', () => {
   describe('pre-pend string', () => {
     it('quick typing', () => {
       // `$ ` => `9$ ` => `$ 9`
-      const { container } = render(<InputNumber defaultValue="$ " formatter={(val) => `$ ${val}`} />);
+      const { container } = render(
+        <InputNumber defaultValue="$ " formatter={(val) => `$ ${val}`} />,
+      );
       const input = container.querySelector('input');
-      fireEvent.focus(input)
+      fireEvent.focus(input);
       cursorInput(input, 0);
-      changeOnPos(input, '9$ ', 1, KeyCode.NUM_ONE,'1');
-      expect(cursorInput(input,3)).toEqual(3);
+      changeOnPos(input, '9$ ', 1, KeyCode.NUM_ONE, '1');
+      expect(cursorInput(input, 3)).toEqual(3);
     });
 
     describe('[LEGACY]', () => {
@@ -70,14 +71,14 @@ describe('InputNumber.Cursor', () => {
 
         const { container } = render(<Demo />);
         const input = container.querySelector('input');
-        fireEvent.focus(input)
+        fireEvent.focus(input);
         for (let i = 0; i < prependValue.length; i += 1) {
-          fireEvent.keyDown(input,{which: KeyCode.ONE,keyCode: KeyCode.ONE})
+          fireEvent.keyDown(input, { which: KeyCode.ONE, keyCode: KeyCode.ONE });
         }
 
         const finalValue = prependValue + initValue;
         cursorInput(input, prependValue.length);
-        fireEvent.change(input,{ target: { value: finalValue } });
+        fireEvent.change(input, { target: { value: finalValue } });
 
         return input;
       };
@@ -85,35 +86,40 @@ describe('InputNumber.Cursor', () => {
       it('should fix caret position on case 1', () => {
         // '$ 1'
         const input = setUpCursorTest('', '1');
-        expect(cursorInput(input,3)).toEqual(3);
+        expect(cursorInput(input, 3)).toEqual(3);
       });
 
       it('should fix caret position on case 2', () => {
         // '$ 111'
         const input = setUpCursorTest('', '111');
-        expect(cursorInput(input,5)).toEqual(5);
+        expect(cursorInput(input, 5)).toEqual(5);
       });
 
       it('should fix caret position on case 3', () => {
         // '$ 111'
         const input = setUpCursorTest('1', '11');
-        expect(cursorInput(input,4)).toEqual(4);
+        expect(cursorInput(input, 4)).toEqual(4);
       });
 
       it('should fix caret position on case 4', () => {
         // '$ 123,456'
         const input = setUpCursorTest('456', '123');
-        expect(cursorInput(input,6)).toEqual(6);
+        expect(cursorInput(input, 6)).toEqual(6);
       });
     });
   });
 
   describe('append string', () => {
     it('position caret before appended characters', () => {
-      const { container } = render(<InputNumber formatter={(value) => `${value}%`} parser={(value) => value.replace('%', '')} />);
+      const { container } = render(
+        <InputNumber
+          formatter={(value) => `${value}%`}
+          parser={(value) => value.replace('%', '')}
+        />,
+      );
       const input = container.querySelector('input');
       fireEvent.focus(input);
-      fireEvent.change(input,{ target: { value: '5' } });
+      fireEvent.change(input, { target: { value: '5' } });
       expect(cursorInput(input)).toEqual(1);
     });
   });

@@ -6,16 +6,14 @@ import getMiniDecimal, {
   validateNumber,
   ValueType,
 } from '@rc-component/mini-decimal';
-import { useLayoutUpdateEffect } from '@rc-component/util/lib/hooks/useLayoutEffect';
-import proxyObject from '@rc-component/util/lib/proxyObject';
+import type { InputFocusOptions } from '@rc-component/util';
+import { proxyObject, triggerFocus, useEvent, useLayoutUpdateEffect } from '@rc-component/util';
 import { clsx } from 'clsx';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
 import StepHandler from './StepHandler';
 import { getDecupleSteps } from './utils/numberUtil';
 
-import { useEvent } from '@rc-component/util';
-import { triggerFocus, type InputFocusOptions } from '@rc-component/util/lib/Dom/focus';
 import useFrame from './hooks/useFrame';
 
 export type { ValueType };
