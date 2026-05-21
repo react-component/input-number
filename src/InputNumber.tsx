@@ -6,8 +6,13 @@ import getMiniDecimal, {
   validateNumber,
   ValueType,
 } from '@rc-component/mini-decimal';
-import type { InputFocusOptions } from '@rc-component/util';
-import { proxyObject, triggerFocus, useEvent, useLayoutUpdateEffect } from '@rc-component/util';
+import {
+  type InputFocusOptions,
+  proxyObject,
+  triggerFocus,
+  useEvent,
+  useLayoutUpdateEffect,
+} from '@rc-component/util';
 import { clsx } from 'clsx';
 import * as React from 'react';
 import useCursor from './hooks/useCursor';
