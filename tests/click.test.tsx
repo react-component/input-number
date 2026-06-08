@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
 import InputNumber, { InputNumberProps } from '../src';
-import KeyCode from '@rc-component/util/lib/KeyCode';
+import { KeyCode } from '@rc-component/util';
 
 jest.mock('@rc-component/mini-decimal/lib/supportUtil');
 const { supportBigInt } = require('@rc-component/mini-decimal/lib/supportUtil');
@@ -37,7 +37,7 @@ describe('InputNumber.Click', () => {
       fireEvent.click(container.querySelector(selector));
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith(changedValue);
-      expect(onStep).toHaveBeenCalledWith(changedValue, { offset: 1, type: stepType, emitter  });
+      expect(onStep).toHaveBeenCalledWith(changedValue, { offset: 1, type: stepType, emitter });
       unmount();
     });
   }
@@ -186,7 +186,7 @@ describe('InputNumber.Click', () => {
     });
 
     expect(onChange).toHaveBeenCalledWith(1.1);
-    expect(onStep).toHaveBeenCalledWith(1.1, { offset: '0.1', type: 'down', emitter: 'keyboard'  });
+    expect(onStep).toHaveBeenCalledWith(1.1, { offset: '0.1', type: 'down', emitter: 'keyboard' });
   });
 
   it('click up button with pressing shift key', () => {

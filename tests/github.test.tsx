@@ -1,4 +1,4 @@
-import KeyCode from '@rc-component/util/lib/KeyCode';
+import { KeyCode } from '@rc-component/util';
 import React from 'react';
 import InputNumber from '../src';
 import { act, fireEvent, render, screen, waitFor } from './util/wrapper';

@@ -1,7 +1,7 @@
-import React from 'react';
+import { KeyCode } from '@rc-component/util';
 import '@testing-library/jest-dom';
-import { render, fireEvent } from '@testing-library/react';
-import KeyCode from '@rc-component/util/lib/KeyCode';
+import { fireEvent, render } from '@testing-library/react';
+import React from 'react';
 import InputNumber from '../src';
 
 describe('InputNumber.Precision', () => {

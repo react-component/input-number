@@ -1,5 +1,5 @@
-import { useRef, useEffect } from 'react';
-import raf from '@rc-component/util/lib/raf';
+import { raf } from '@rc-component/util';
+import { useEffect, useRef } from 'react';
 
 /**
  * Always trigger latest once when call multiple time

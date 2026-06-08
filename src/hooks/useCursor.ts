@@ -1,5 +1,5 @@
+import { warning } from '@rc-component/util';
 import { useRef } from 'react';
-import warning from '@rc-component/util/lib/warning';
 /**
  * Keep input cursor in the correct position if possible.
  * Is this necessary since we have `formatter` which may mass the content?

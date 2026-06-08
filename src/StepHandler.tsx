@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import raf from '@rc-component/util/lib/raf';
+import { raf } from '@rc-component/util';
 import { clsx } from 'clsx';
 import * as React from 'react';
 
