@@ -113,4 +113,38 @@ describe('InputNumber.Wheel', () => {
 
     expect(onChange).toHaveBeenCalledWith(1);
   });
+
+  it('supports page mode wheel delta', () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
+
+    fireEvent.focus(container.firstChild);
+    fireEvent.wheel(container.querySelector('input'), { deltaMode: 2, deltaY: -1 });
+
+    expect(onChange).toHaveBeenCalledWith(1);
+  });
+
+  it('ignores empty wheel delta', () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
+
+    fireEvent.focus(container.firstChild);
+    fireEvent.wheel(container.querySelector('input'), { deltaY: 0 });
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('resets accumulated wheel delta when direction changes', () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
+    const input = container.querySelector('input');
+
+    fireEvent.focus(container.firstChild);
+    fireEvent.wheel(input, { deltaY: -50 });
+    fireEvent.wheel(input, { deltaY: 50 });
+    expect(onChange).not.toHaveBeenCalled();
+
+    fireEvent.wheel(input, { deltaY: 50 });
+    expect(onChange).toHaveBeenCalledWith(-1);
+  });
 });
