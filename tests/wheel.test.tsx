@@ -7,7 +7,7 @@ describe('InputNumber.Wheel', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
     fireEvent.focus(container.firstChild);
-    fireEvent.wheel(container.querySelector('input'), { deltaY: -1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: -100 });
     expect(onChange).toHaveBeenCalledWith(1);
   });
 
@@ -23,7 +23,7 @@ describe('InputNumber.Wheel', () => {
       keyCode: KeyCode.SHIFT,
       shiftKey: true,
     });
-    fireEvent.wheel(container.querySelector('input'), { deltaY: -1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: -100 });
     expect(onChange).toHaveBeenCalledWith(1.3);
   });
 
@@ -31,7 +31,7 @@ describe('InputNumber.Wheel', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
     fireEvent.focus(container.firstChild);
-    fireEvent.wheel(container.querySelector('input'), { deltaY: 1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: 100 });
     expect(onChange).toHaveBeenCalledWith(-1);
   });
 
@@ -47,7 +47,7 @@ describe('InputNumber.Wheel', () => {
       keyCode: KeyCode.SHIFT,
       shiftKey: true,
     });
-    fireEvent.wheel(container.querySelector('input'), { deltaY: 1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: 100 });
     expect(onChange).toHaveBeenCalledWith(1.1);
   });
 
@@ -56,16 +56,16 @@ describe('InputNumber.Wheel', () => {
     const { container, rerender } = render(<InputNumber onChange={onChange} />);
     fireEvent.focus(container.firstChild);
 
-    fireEvent.wheel(container.querySelector('input'), { deltaY: -1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: -100 });
     expect(onChange).not.toHaveBeenCalled();
 
-    fireEvent.wheel(container.querySelector('input'), { deltaY: 1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: 100 });
     expect(onChange).not.toHaveBeenCalled();
 
     rerender(<InputNumber onChange={onChange} changeOnWheel />);
     fireEvent.focus(container.firstChild);
 
-    fireEvent.wheel(container.querySelector('input'), { deltaY: 1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: 100 });
     expect(onChange).toHaveBeenCalledWith(-1);
   });
 
@@ -81,9 +81,36 @@ describe('InputNumber.Wheel', () => {
       keyCode: KeyCode.SHIFT,
       shiftKey: true,
     });
-    fireEvent.wheel(container.querySelector('input'), { deltaY: -1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: -100 });
     expect(onChange).toHaveBeenCalledWith(3);
-    fireEvent.wheel(container.querySelector('input'), { deltaY: 1 });
+    fireEvent.wheel(container.querySelector('input'), { deltaY: 100 });
     expect(onChange).toHaveBeenCalledWith(-3);
+  });
+
+  it('accumulates high precision wheel delta', () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
+    const input = container.querySelector('input');
+
+    fireEvent.focus(container.firstChild);
+
+    for (let i = 0; i < 19; i += 1) {
+      fireEvent.wheel(input, { deltaY: -5 });
+    }
+    expect(onChange).not.toHaveBeenCalled();
+
+    fireEvent.wheel(input, { deltaY: -5 });
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(1);
+  });
+
+  it('supports line mode wheel delta', () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
+
+    fireEvent.focus(container.firstChild);
+    fireEvent.wheel(container.querySelector('input'), { deltaMode: 1, deltaY: -3 });
+
+    expect(onChange).toHaveBeenCalledWith(1);
   });
 });
