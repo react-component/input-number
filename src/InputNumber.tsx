@@ -607,7 +607,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
       // moving mouse wheel rises wheel event with deltaY < 0
       // scroll value grows from top to bottom, as screen Y coordinate
       onInternalStep(wheelDeltaRef.current < 0, 'wheel');
-      wheelDeltaRef.current = 0;
+      wheelDeltaRef.current -= Math.sign(wheelDeltaRef.current) * WHEEL_STEP_DISTANCE;
     }
   });
 

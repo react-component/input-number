@@ -104,6 +104,24 @@ describe('InputNumber.Wheel', () => {
     expect(onChange).toHaveBeenCalledWith(1);
   });
 
+  it('preserves remaining wheel delta after stepping', () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
+    const input = container.querySelector('input');
+
+    fireEvent.focus(container.firstChild);
+    fireEvent.wheel(input, { deltaY: -130 });
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith(1);
+
+    fireEvent.wheel(input, { deltaY: -69 });
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    fireEvent.wheel(input, { deltaY: -1 });
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith(2);
+  });
+
   it('supports line mode wheel delta', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber onChange={onChange} changeOnWheel />);
