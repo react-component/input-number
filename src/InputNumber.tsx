@@ -53,6 +53,22 @@ const getDecimalIfValidate = (value: ValueType) => {
   return decimal.isInvalidate() ? null : decimal;
 };
 
+const WHEEL_STEP_DISTANCE = 100;
+const WHEEL_LINE_HEIGHT = 40;
+const WHEEL_PAGE_HEIGHT = 800;
+const WHEEL_DELTA_RESET_INTERVAL = 200;
+
+const getWheelDeltaY = (event: WheelEvent) => {
+  switch (event.deltaMode) {
+    case 1:
+      return event.deltaY * WHEEL_LINE_HEIGHT;
+    case 2:
+      return event.deltaY * WHEEL_PAGE_HEIGHT;
+    default:
+      return event.deltaY;
+  }
+};
+
 type SemanticName = 'root' | 'actions' | 'input' | 'action' | 'prefix' | 'suffix';
 export interface InputNumberProps<T extends ValueType = ValueType>
   extends Omit<
@@ -189,6 +205,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   const userTypingRef = React.useRef(false);
   const compositionRef = React.useRef(false);
   const shiftKeyRef = React.useRef(false);
+  const wheelDeltaRef = React.useRef(0);
+  const wheelTimestampRef = React.useRef(0);
 
   // ============================= Refs =============================
   const rootRef = React.useRef<HTMLDivElement>(null);
@@ -567,12 +585,36 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     shiftKeyRef.current = false;
   };
 
+  const onInternalWheel = useEvent((event: WheelEvent) => {
+    const wheelDelta = getWheelDeltaY(event);
+    if (!wheelDelta) {
+      return;
+    }
+
+    const eventTimestamp = event.timeStamp || Date.now();
+    if (eventTimestamp - wheelTimestampRef.current > WHEEL_DELTA_RESET_INTERVAL) {
+      wheelDeltaRef.current = 0;
+    }
+    wheelTimestampRef.current = eventTimestamp;
+
+    if (wheelDeltaRef.current && Math.sign(wheelDeltaRef.current) !== Math.sign(wheelDelta)) {
+      wheelDeltaRef.current = 0;
+    }
+
+    wheelDeltaRef.current += wheelDelta;
+
+    if (Math.abs(wheelDeltaRef.current) >= WHEEL_STEP_DISTANCE) {
+      // moving mouse wheel rises wheel event with deltaY < 0
+      // scroll value grows from top to bottom, as screen Y coordinate
+      onInternalStep(wheelDeltaRef.current < 0, 'wheel');
+      wheelDeltaRef.current -= Math.sign(wheelDeltaRef.current) * WHEEL_STEP_DISTANCE;
+    }
+  });
+
   React.useEffect(() => {
     if (changeOnWheel && focus) {
-      const onWheel = (event) => {
-        // moving mouse wheel rises wheel event with deltaY < 0
-        // scroll value grows from top to bottom, as screen Y coordinate
-        onInternalStep(event.deltaY < 0, 'wheel');
+      const onWheel = (event: WheelEvent) => {
+        onInternalWheel(event);
         event.preventDefault();
       };
       const input = inputRef.current;
@@ -581,10 +623,14 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         // That's why we should subscribe with DOM listener
         // https://stackoverflow.com/questions/63663025/react-onwheel-handler-cant-preventdefault-because-its-a-passive-event-listenev
         input.addEventListener('wheel', onWheel, { passive: false });
-        return () => input.removeEventListener('wheel', onWheel);
+        return () => {
+          input.removeEventListener('wheel', onWheel);
+          wheelDeltaRef.current = 0;
+          wheelTimestampRef.current = 0;
+        };
       }
     }
-  });
+  }, [changeOnWheel, focus, onInternalWheel]);
 
   // >>> Focus & Blur
   const onBlur = () => {
@@ -595,6 +641,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     setFocus(false);
 
     userTypingRef.current = false;
+    wheelDeltaRef.current = 0;
+    wheelTimestampRef.current = 0;
   };
 
   // >>> Mouse events
