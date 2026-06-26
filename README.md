@@ -102,7 +102,7 @@ Online preview: https://input-number.vercel.app/
 | onChange | `(value: T \| null) => void` | - | Triggered when the committed value changes. |
 | onInput | `(text: string) => void` | - | Triggered when the raw input text changes. |
 | onPressEnter | `React.KeyboardEventHandler<HTMLInputElement>` | - | Triggered when Enter is pressed. |
-| onStep | `(value: T, info: { offset: ValueType; type: 'up' \| 'down'; emitter: 'handler' \| 'keyboard' \| 'wheel' }) => void` | - | Triggered when the value changes by step. |
+| onStep | `(value: T, info: { offset: number \| string; type: 'up' \| 'down'; emitter: 'handler' \| 'keyboard' \| 'wheel' }) => void` | - | Triggered when the value changes by step. |
 
 Native input attributes such as `id`, `name`, `placeholder`, `required`, `readOnly`, and `tabIndex` are also supported unless explicitly overridden above.
 
