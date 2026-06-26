@@ -1,277 +1,169 @@
-# @rc-component/input-number
+<div align="center">
+  <h1>@rc-component/input-number</h1>
+  <p>🔢 Accessible React number input with precision, formatting, keyboard, and wheel support.</p>
+</div>
 
-Input number control.
+<div align="center">
 
-[![NPM version][npm-image]][npm-url]
-[![npm download][download-image]][download-url]
-[![build status][github-actions-image]][github-actions-url]
-[![Codecov][codecov-image]][codecov-url]
-[![bundle size][bundlephobia-image]][bundlephobia-url]
-[![dumi][dumi-image]][dumi-url]
+[![NPM version][npm-image]][npm-url] [![npm download][download-image]][download-url] [![build status][github-actions-image]][github-actions-url] [![Codecov][codecov-image]][codecov-url] [![bundle size][bundlephobia-image]][bundlephobia-url] [![dumi][dumi-image]][dumi-url]
 
-[npm-image]: http://img.shields.io/npm/v/@rc-component/input-number.svg?style=flat-square
-[npm-url]: http://npmjs.org/package/@rc-component/input-number
-[travis-image]: https://img.shields.io/travis/react-component/input-number/master?style=flat-square
-[travis-url]: https://travis-ci.com/react-component/input-number
-[github-actions-image]: https://github.com/react-component/input-number/actions/workflows/react-component-ci.yml/badge.svg
-[github-actions-url]: https://github.com/react-component/input-number/actions/workflows/react-component-ci.yml
-[codecov-image]: https://img.shields.io/codecov/c/github/react-component/input-number/master.svg?style=flat-square
-[codecov-url]: https://app.codecov.io/gh/react-component/input-number
-[david-url]: https://david-dm.org/react-component/input-number
-[david-image]: https://david-dm.org/react-component/input-number/status.svg?style=flat-square
-[david-dev-url]: https://david-dm.org/react-component/input-number?type=dev
-[david-dev-image]: https://david-dm.org/react-component/input-number/dev-status.svg?style=flat-square
-[download-image]: https://img.shields.io/npm/dm/@rc-component/input-number.svg?style=flat-square
-[download-url]: https://npmjs.org/package/@rc-component/input-number
-[bundlephobia-url]: https://bundlephobia.com/package/@rc-component/input-number
-[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/@rc-component/input-number
-[dumi-url]: https://github.com/umijs/dumi
-[dumi-image]: https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square
+</div>
 
-## Screenshots
+<div align="center">
+  <sub>
+    Part of the <a href="https://ant.design">Ant Design</a> ecosystem
+    <img
+      alt="Ant Design"
+      height="14"
+      src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
+    />
+  </sub>
+</div>
 
-<img src="https://user-images.githubusercontent.com/507615/83162463-61414a80-a13c-11ea-9420-971f8697d490.png" width="288"/>
+## Highlights
+
+- Controlled and uncontrolled numeric input modes.
+- Decimal precision, custom parser, formatter, and decimal separator support.
+- Keyboard stepping, mouse wheel stepping, and custom step handlers.
+- Prefix, suffix, spinner controls, and semantic `classNames` / `styles` slots.
+- TypeScript generic value typing for number and string based value flows.
 
 ## Install
 
-[![@rc-component/input-number](https://nodei.co/npm/@rc-component/input-number.png)](https://npmjs.org/package/@rc-component/input-number)
+```bash
+npm install @rc-component/input-number
+```
 
 ## Usage
 
-```js
+```tsx | pure
 import InputNumber from '@rc-component/input-number';
 
-export default () => <InputNumber defaultValue={10} />;
+export default () => <InputNumber min={0} max={100} defaultValue={10} />;
 ```
 
-## Development
+```tsx | pure
+import InputNumber from '@rc-component/input-number';
 
+export default () => (
+  <InputNumber
+    stringMode
+    formatter={(value) => `$ ${value}`}
+    parser={(displayValue) => displayValue?.replace(/\$\s?/g, '') || ''}
+  />
+);
 ```
+
+## Examples
+
+Run the examples locally:
+
+```bash
 npm install
 npm start
 ```
 
-## Example
-
-http://127.0.0.1:8000/examples/
-
-online example: https://input-number.vercel.app/
+Online preview: https://input-number.vercel.app/
 
 ## API
 
-### props
+### InputNumber
 
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-        <th style="width: 100px;">name</th>
-        <th style="width: 50px;">type</th>
-        <th style="width: 50px;">default</th>
-        <th>description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>prefixCls</td>
-          <td>string</td>
-          <td>rc-input-number</td>
-          <td>Specifies the class prefix</td>
-        </tr>
-        <tr>
-          <td>min</td>
-          <td>Number</td>
-          <td></td>
-          <td>Specifies the minimum value</td>
-        </tr>
-        <tr>
-          <td>onClick</td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>placeholder</td>
-          <td>string</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>max</td>
-          <td>Number</td>
-          <td></td>
-          <td>Specifies the maximum value</td>
-        </tr>
-        <tr>
-          <td>step</td>
-          <td>Number or String</td>
-          <td>1</td>
-          <td>Specifies the legal number intervals</td>
-        </tr>
-        <tr>
-          <td>precision</td>
-          <td>Number</td>
-          <td></td>
-          <td>Specifies the precision length of value</td>
-        </tr>
-        <tr>
-          <td>disabled</td>
-          <td>Boolean</td>
-          <td>false</td>
-          <td>Specifies that an InputNumber should be disabled</td>
-        </tr>
-        <tr>
-          <td>required</td>
-          <td>Boolean</td>
-          <td>false</td>
-          <td>Specifies that an InputNumber is required</td>
-        </tr>
-        <tr>
-          <td>autoFocus</td>
-          <td>Boolean</td>
-          <td>false</td>
-          <td>Specifies that an InputNumber should automatically get focus when the page loads</td>
-        </tr>
-        <tr>
-          <td>readOnly</td>
-          <td>Boolean</td>
-          <td>false</td>
-          <td>Specifies that an InputNumber is read only </td>
-        </tr>
-        <tr>
-          <td>controls</td>
-          <td>Boolean</td>
-          <td>true</td>
-          <td>Whether to enable the control buttons</td>
-        </tr>
-        <tr>
-          <td>name</td>
-          <td>String</td>
-          <td></td>
-          <td>Specifies the name of an InputNumber</td>
-        </tr>
-        <tr>
-          <td>id</td>
-          <td>String</td>
-          <td></td>
-          <td>Specifies the id of an InputNumber</td>
-        </tr>
-        <tr>
-          <td>value</td>
-          <td>Number</td>
-          <td></td>
-          <td>Specifies the value of an InputNumber</td>
-        </tr>
-        <tr>
-          <td>defaultValue</td>
-          <td>Number</td>
-          <td></td>
-          <td>Specifies the defaultValue of an InputNumber</td>
-        </tr>
-        <tr>
-          <td>onChange</td>
-          <td>Function</td>
-          <td></td>
-          <td>Called when value of an InputNumber changed</td>
-        </tr>
-        <tr>
-            <td>onBlur</td>
-            <td>Function</td>
-            <td></td>
-            <td>Called when user leaves an input field</td>
-        </tr>
-        <tr>
-          <td>onPressEnter</td>
-          <td>Function</td>
-          <td></td>
-          <td>The callback function that is triggered when Enter key is pressed.</td>
-        </tr>
-        <tr>
-          <td>onFocus</td>
-          <td>Function</td>
-          <td></td>
-          <td>Called when an element gets focus</td>
-        </tr>
-        <tr>
-          <td>style</td>
-          <td>Object</td>
-          <td></td>
-          <td>root style. such as {width:100}</td>
-        </tr>
-        <tr>
-          <td>upHandler</td>
-          <td>React.Node</td>
-          <td></td>
-          <td>custom the up step element</td>
-        </tr>
-        <tr>
-          <td>downHandler</td>
-          <td>React.Node</td>
-          <td></td>
-          <td>custom the down step element</td>
-        </tr>
-        <tr>
-          <td>formatter</td>
-          <td>(value: number|string): displayValue: string</td>
-          <td></td>
-          <td>Specifies the format of the value presented</td>
-        </tr>
-        <tr>
-          <td>parser</td>
-          <td>(displayValue: string) => value: number</td>
-          <td>`input => input.replace(/[^\w\.-]*/g, '')`</td>
-          <td>Specifies the value extracted from formatter</td>
-        </tr>
-        <tr>
-          <td>pattern</td>
-          <td>string</td>
-          <td></td>
-          <td>Specifies a regex pattern to be added to the input number element - useful for forcing iOS to open the number pad instead of the normal keyboard (supply a regex of "\d*" to do this) or form validation</td>
-        </tr>
-        <tr>
-          <td>decimalSeparator</td>
-          <td>string</td>
-          <td></td>
-          <td>Specifies the decimal separator</td>
-        </tr>
-        <tr>
-          <td>inputMode</td>
-          <td>string</td>
-          <td></td>
-          <td>Specifies the inputmode of input</td>
-        </tr>
-        <tr>
-          <td>wheel</td>
-          <td>Boolean</td>
-          <td>true</td>
-          <td>Allows changing value with mouse wheel</td>
-        </tr>
-    </tbody>
-</table>
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| autoFocus | `boolean` | `false` | Focus the input when mounted. |
+| changeOnBlur | `boolean` | `true` | Commit value changes on blur. |
+| changeOnWheel | `boolean` | `false` | Allow value changes from the mouse wheel. |
+| className | `string` | - | Class name for the root element. |
+| classNames | `Partial<Record<SemanticName, string>>` | - | Semantic class names for input-number slots. |
+| controls | `boolean` | `true` | Show increment and decrement controls. |
+| decimalSeparator | `string` | - | Decimal separator used by the display formatter. |
+| defaultValue | `T` | - | Initial value. |
+| disabled | `boolean` | `false` | Disable the input. |
+| downHandler | `ReactNode` | - | Custom decrement control. |
+| formatter | `(value: T \| undefined, info: { userTyping: boolean; input: string }) => string` | - | Format the displayed value. |
+| inputMode | `string` | - | Native input `inputMode` attribute. |
+| keyboard | `boolean` | `true` | Enable keyboard stepping. |
+| max | `T` | - | Maximum value. |
+| min | `T` | - | Minimum value. |
+| mode | `'input' \| 'spinner'` | `input` | Render mode. |
+| parser | `(displayValue: string \| undefined) => T` | - | Parse the displayed value back to a value. |
+| precision | `number` | - | Display precision. |
+| prefix | `ReactNode` | - | Prefix content. |
+| prefixCls | `string` | `rc-input-number` | Class name prefix. |
+| readOnly | `boolean` | `false` | Mark the input as read only. |
+| step | `number \| string` | `1` | Step size. |
+| stringMode | `boolean` | `false` | Keep values as strings for high precision decimals. |
+| style | `React.CSSProperties` | - | Inline styles for the root element. |
+| styles | `Partial<Record<SemanticName, React.CSSProperties>>` | - | Semantic styles for input-number slots. |
+| suffix | `ReactNode` | - | Suffix content. |
+| upHandler | `ReactNode` | - | Custom increment control. |
+| value | `T \| null` | - | Controlled value. |
+| onChange | `(value: T \| null) => void` | - | Triggered when the committed value changes. |
+| onInput | `(text: string) => void` | - | Triggered when the raw input text changes. |
+| onPressEnter | `React.KeyboardEventHandler<HTMLInputElement>` | - | Triggered when Enter is pressed. |
+| onStep | `(value: T, info: { offset: ValueType; type: 'up' \| 'down'; emitter: 'handler' \| 'keyboard' \| 'wheel' }) => void` | - | Triggered when the value changes by step. |
 
-## Keyboard Navigation
-* When you hit the <kbd>⬆</kbd> or <kbd>⬇</kbd> key, the input value will be increased or decreased by `step`
-* With the <kbd>Shift</kbd> key (<kbd>Shift+⬆</kbd>, <kbd>Shift+⬇</kbd>), the input value will be changed by `10 * step`
-* With the <kbd>Ctrl</kbd> or <kbd>⌘</kbd> key (<kbd>Ctrl+⬆</kbd> or <kbd>⌘+⬆</kbd> or <kbd>Ctrl+⬇</kbd> or <kbd>⌘+⬇</kbd> ), the input value will be changed by `0.1 * step`
+Native input attributes such as `id`, `name`, `placeholder`, `required`, `readOnly`, and `tabIndex` are also supported unless explicitly overridden above.
 
-## Mouse Wheel
-* When you scroll up or down, the input value will be increased or decreased by `step`
-* Scrolling with the <kbd>Shift</kbd> key, the input value will be changed by `10 * step`
+### Ref
 
-## Test Case
+```tsx | pure
+import InputNumber, { type InputNumberRef } from '@rc-component/input-number';
 
+const ref = React.useRef<InputNumberRef>(null);
+
+ref.current?.focus();
+ref.current?.blur();
 ```
+
+| Property      | Type                                    | Description          |
+| ------------- | --------------------------------------- | -------------------- |
+| focus         | `(options?: InputFocusOptions) => void` | Focus the input.     |
+| blur          | `() => void`                            | Blur the input.      |
+| nativeElement | `HTMLElement`                           | Root native element. |
+
+## Keyboard And Wheel
+
+- Arrow up and Arrow down change the value by `step`.
+- `Shift + Arrow` changes the value by `10 * step`.
+- `Ctrl` / `Command + Arrow` changes the value by `0.1 * step`.
+- Mouse wheel changes are opt-in through `changeOnWheel`.
+
+## Development
+
+```bash
+npm install
+npm start
 npm test
-npm run chrome-test
+npm run tsc
+npm run compile
+npm run build
 ```
 
-## Coverage
+## Release
 
-```
-npm run coverage
+The package is published with [`@rc-component/np`](https://github.com/react-component/np):
+
+```bash
+npm run prepublishOnly
 ```
 
-open coverage/ dir
+This runs the package build before the release helper.
 
 ## License
 
-@rc-component/input-number is released under the MIT license.
+`@rc-component/input-number` is released under the MIT license.
+
+[npm-image]: https://img.shields.io/npm/v/@rc-component/input-number.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/@rc-component/input-number
+[github-actions-image]: https://github.com/react-component/input-number/actions/workflows/react-component-ci.yml/badge.svg
+[github-actions-url]: https://github.com/react-component/input-number/actions/workflows/react-component-ci.yml
+[codecov-image]: https://img.shields.io/codecov/c/github/react-component/input-number/master.svg?style=flat-square
+[codecov-url]: https://app.codecov.io/gh/react-component/input-number
+[download-image]: https://img.shields.io/npm/dm/@rc-component/input-number.svg?style=flat-square
+[download-url]: https://npmjs.org/package/@rc-component/input-number
+[bundlephobia-url]: https://bundlephobia.com/package/@rc-component/input-number
+[bundlephobia-image]: https://img.shields.io/bundlephobia/minzip/@rc-component/input-number?style=flat-square
+[dumi-url]: https://github.com/umijs/dumi
+[dumi-image]: https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square

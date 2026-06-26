@@ -27,21 +27,23 @@
     "assets/*.css"
   ],
   "scripts": {
+    "build": "npm run docs:build",
     "compile": "father build && lessc assets/index.less assets/index.css",
     "coverage": "rc-test --coverage",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
+    "now-build": "npm run docs:build",
     "prepare": "husky install",
     "prepublishOnly": "npm run compile && rc-np",
-    "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "prettier": "prettier --write --ignore-unknown .",
     "start": "dumi dev",
-    "test": "rc-test"
+    "test": "rc-test",
+    "tsc": "tsc --noEmit"
   },
   "lint-staged": {
     "**/*.{js,jsx,tsx,ts,md,json}": [
-      "prettier --write",
-      "git add"
+      "prettier --write --ignore-unknown"
     ]
   },
   "dependencies": {
