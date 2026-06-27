@@ -1,7 +1,6 @@
 <div align="center">
   <h1>@rc-component/input-number</h1>
-  <p><sub>Ant Design 生态的一部分。</sub></p>
-  <img alt="Ant Design" height="32" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+  <p><sub><img alt="Ant Design" height="14" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" style="vertical-align: -0.125em;" /> Ant Design 生态的一部分。</sub></p>
   <p>🔢 React 数字输入组件，支持格式化、精度、步进和键盘交互。</p>
 </div>
 
@@ -17,11 +16,11 @@
 
 ## 特性
 
-- Controlled and uncontrolled numeric input modes.
-- Decimal precision, custom parser, formatter, and decimal separator support.
-- Keyboard stepping, mouse wheel stepping, and custom step handlers.
-- Prefix, suffix, spinner controls, and semantic `classNames` / `styles` slots.
-- TypeScript generic value typing for number and string based value flows.
+- 受控和非受控数字输入模式。
+- 小数精度、自定义解析器、格式化程序和小数分隔符支持。
+- 支持键盘步进、鼠标滚轮步进和自定义步进处理。
+- 支持前缀、后缀、步进控制器和语义化 `classNames` / `styles` 插槽。
+- TypeScript 通用值类型用于基于数字和字符串的值流。
 
 ## 安装
 
@@ -58,7 +57,7 @@ npm install
 npm start
 ```
 
-Online preview: https://input-number.vercel.app/
+在线预览：https://input-number.vercel.app/
 
 ## API
 
@@ -66,40 +65,40 @@ Online preview: https://input-number.vercel.app/
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| autoFocus | `boolean` | `false` | Focus the input when mounted. |
-| changeOnBlur | `boolean` | `true` | Commit value changes on blur. |
-| changeOnWheel | `boolean` | `false` | Allow value changes from the mouse wheel. |
-| className | `string` | - | Class name for the root element. |
-| classNames | `Partial<Record<SemanticName, string>>` | - | Semantic class names for input-number slots. |
-| controls | `boolean` | `true` | Show increment and decrement controls. |
-| decimalSeparator | `string` | - | Decimal separator used by the display formatter. |
-| defaultValue | `T` | - | Initial value. |
-| disabled | `boolean` | `false` | Disable the input. |
-| downHandler | `ReactNode` | - | Custom decrement control. |
-| formatter | `(value: T \| undefined, info: { userTyping: boolean; input: string }) => string` | - | Format the displayed value. |
-| inputMode | `string` | - | Native input `inputMode` attribute. |
-| keyboard | `boolean` | `true` | Enable keyboard stepping. |
-| max | `T` | - | Maximum value. |
-| min | `T` | - | Minimum value. |
-| mode | `'input' \| 'spinner'` | `input` | Render mode. |
-| parser | `(displayValue: string \| undefined) => T` | - | Parse the displayed value back to a value. |
+| autoFocus | `boolean` | `false` | 安装后聚焦输入。 |
+| changeOnBlur | `boolean` | `true` | 提交模糊值的变化。 |
+| changeOnWheel | `boolean` | `false` | 允许通过鼠标滚轮更改值。 |
+| className | `string` | - | 根元素的className。 |
+| classNames | `Partial<Record<SemanticName, string>>` | - | 输入数字槽的语义className称。 |
+| controls | `boolean` | `true` | 显示增量和减量控件。 |
+| decimalSeparator | `string` | - | 显示格式化程序使用的小数分隔符。 |
+| defaultValue | `T` | - | 初始值。 |
+| disabled | `boolean` | `false` | 禁用输入。 |
+| downHandler | `ReactNode` | - | 自定义减量控制。 |
+| formatter | `(value: T \| undefined, info: { userTyping: boolean; input: string }) => string` | - | 设置显示值的格式。 |
+| inputMode | `string` | - | 本机输入 `inputMode` 属性。 |
+| keyboard | `boolean` | `true` | 启用键盘步进。 |
+| max | `T` | - | 最大值。 |
+| min | `T` | - | 最小值。 |
+| mode | `'input' \| 'spinner'` | `input` | 渲染模式。 |
+| parser | `(displayValue: string \| undefined) => T` | - | 将显示的值解析回一个值。 |
 | precision | `number` | - | Display precision. |
-| prefix | `ReactNode` | - | Prefix content. |
-| prefixCls | `string` | `rc-input-number` | Class name prefix. |
-| readOnly | `boolean` | `false` | Mark the input as read only. |
+| 前缀 | `ReactNode` | - | 前缀内容。 |
+| prefixCls | `string` | `rc-input-number` | className前缀。 |
+| readOnly | `boolean` | `false` | 将输入标记为只读。 |
 | step | `number \| string` | `1` | Step size. |
-| stringMode | `boolean` | `false` | Keep values as strings for high precision decimals. |
-| style | `React.CSSProperties` | - | Inline styles for the root element. |
-| styles | `Partial<Record<SemanticName, React.CSSProperties>>` | - | Semantic styles for input-number slots. |
-| suffix | `ReactNode` | - | Suffix content. |
-| upHandler | `ReactNode` | - | Custom increment control. |
-| value | `T \| null` | - | Controlled value. |
-| onChange | `(value: T \| null) => void` | - | Triggered when the committed value changes. |
-| onInput | `(text: string) => void` | - | Triggered when the raw input text changes. |
-| onPressEnter | `React.KeyboardEventHandler<HTMLInputElement>` | - | Triggered when Enter is pressed. |
-| onStep | `(value: T, info: { offset: number \| string; type: 'up' \| 'down'; emitter: 'handler' \| 'keyboard' \| 'wheel' }) => void` | - | Triggered when the value changes by step. |
+| stringMode | `boolean` | `false` | 将值保留为字符串以获得高精度小数。 |
+| 风格 | `React.CSSProperties` | - | 根元素的内联样式。 |
+| styles | `Partial<Record<SemanticName, React.CSSProperties>>` | - | 输入数字槽的语义样式。 |
+| 后缀 | `ReactNode` | - | 后缀内容。 |
+| upHandler | `ReactNode` | - | 自定义增量控制。 |
+| 价值 | `T \| null` | - | 受控值。 |
+| onChange | `(value: T \| null) => void` | - | 当提交的值改变时触发。 |
+| onInput | `(text: string) => void` | - | 当原始输入文本更改时触发。 |
+| onPressEnter | `React.KeyboardEventHandler<HTMLInputElement>` | - | 当按下 Enter 时触发。 |
+| onStep | `(value: T, info: { offset: number \| string; type: 'up' \| 'down'; emitter: 'handler' \| 'keyboard' \| 'wheel' }) => void` | - | 当值逐步变化时触发。 |
 
-Native input attributes such as `id`, `name`, `placeholder`, `required`, `readOnly`, and `tabIndex` are also supported unless explicitly overridden above.
+除非上方明确覆盖，也支持 `id`, `name`, `placeholder`, `required`, `readOnly`, and `tabIndex` 等原生 input 属性。
 
 ### Ref
 
@@ -114,16 +113,16 @@ ref.current?.blur();
 
 | 参数      | 类型                                    | 说明          |
 | ------------- | --------------------------------------- | -------------------- |
-| focus         | `(options?: InputFocusOptions) => void` | Focus the input.     |
-| blur          | `() => void`                            | Blur the input.      |
-| nativeElement | `HTMLElement`                           | Root native element. |
+| 重点         | `(options?: InputFocusOptions) => void` | 集中输入。     |
+| 模糊          | `() => void`                            | 模糊输入。      |
+| nativeElement | `HTMLElement`                           | 根原生元素。 |
 
-## Keyboard And Wheel
+## 键盘与滚轮
 
-- Arrow up and Arrow down change the value by `step`.
-- `Shift + Arrow` changes the value by `10 * step`.
-- `Ctrl` / `Command + Arrow` changes the value by `0.1 * step`.
-- Mouse wheel changes are opt-in through `changeOnWheel`.
+- 上箭头和下箭头会按 `step` 改变数值。
+- `Shift + Arrow` 将值更改为 `10 * step`。
+- `Ctrl` / `Command + Arrow` 将值更改为`0.1 * step`。
+- 鼠标滚轮改值需要通过 `changeOnWheel` 显式开启。
 
 ## 本地开发
 
@@ -142,11 +141,11 @@ npm run build
 npm run prepublishOnly
 ```
 
-The release flow is handled by `@rc-component/np` through the `rc-np` command after the package build.
+包构建完成后，发布流程由 `@rc-component/np` 通过 `rc-np` 命令处理。
 
 ## 许可证
 
-@rc-component/input-number is released under the [MIT](./LICENSE.md) license.
+@rc-component/input-number 基于 [MIT](./LICENSE.md) 许可证发布。
 
 [npm-image]: https://img.shields.io/npm/v/@rc-component/input-number.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/@rc-component/input-number
