@@ -1,11 +1,11 @@
 <div align="center">
   <h1>@rc-component/input-number</h1>
-  <p><sub>Part of the Ant Design ecosystem.</sub></p>
+  <p><sub>Ant Design 生态的一部分。</sub></p>
   <img alt="Ant Design" height="32" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
-  <p>🔢 Accessible React number input with precision, formatting, keyboard, and wheel support.</p>
+  <p>🔢 React 数字输入组件，支持格式化、精度、步进和键盘交互。</p>
 </div>
 
-<p align="center">English | <a href="./README.zh-CN.md">简体中文</a></p>
+<p align="center"><a href="./README.md">English</a> | 简体中文</p>
 
 
 <div align="center">
@@ -15,7 +15,7 @@
 </div>
 
 
-## Highlights
+## 特性
 
 - Controlled and uncontrolled numeric input modes.
 - Decimal precision, custom parser, formatter, and decimal separator support.
@@ -23,13 +23,13 @@
 - Prefix, suffix, spinner controls, and semantic `classNames` / `styles` slots.
 - TypeScript generic value typing for number and string based value flows.
 
-## Install
+## 安装
 
 ```bash
 npm install @rc-component/input-number
 ```
 
-## Usage
+## 使用
 
 ```tsx | pure
 import InputNumber from '@rc-component/input-number';
@@ -49,9 +49,9 @@ export default () => (
 );
 ```
 
-## Examples
+## 示例
 
-Run the examples locally:
+本地运行示例：
 
 ```bash
 npm install
@@ -64,7 +64,7 @@ Online preview: https://input-number.vercel.app/
 
 ### InputNumber
 
-| Property | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | autoFocus | `boolean` | `false` | Focus the input when mounted. |
 | changeOnBlur | `boolean` | `true` | Commit value changes on blur. |
@@ -112,7 +112,7 @@ ref.current?.focus();
 ref.current?.blur();
 ```
 
-| Property      | Type                                    | Description          |
+| 参数      | 类型                                    | 说明          |
 | ------------- | --------------------------------------- | -------------------- |
 | focus         | `(options?: InputFocusOptions) => void` | Focus the input.     |
 | blur          | `() => void`                            | Blur the input.      |
@@ -125,7 +125,7 @@ ref.current?.blur();
 - `Ctrl` / `Command + Arrow` changes the value by `0.1 * step`.
 - Mouse wheel changes are opt-in through `changeOnWheel`.
 
-## Development
+## 本地开发
 
 ```bash
 npm install
@@ -136,7 +136,7 @@ npm run compile
 npm run build
 ```
 
-## Release
+## 发布
 
 ```bash
 npm run prepublishOnly
@@ -144,7 +144,7 @@ npm run prepublishOnly
 
 The release flow is handled by `@rc-component/np` through the `rc-np` command after the package build.
 
-## License
+## 许可证
 
 @rc-component/input-number is released under the [MIT](./LICENSE.md) license.
 
