@@ -86,7 +86,7 @@ npm start
 | prefix | `ReactNode` | - | 前缀内容。 |
 | prefixCls | `string` | `rc-input-number` | className前缀。 |
 | readOnly | `boolean` | `false` | 将输入标记为只读。 |
-| step | `number \| string` | `1` | Step size. |
+| step | `number \| string` | `1` | 步长。 |
 | stringMode | `boolean` | `false` | 将值保留为字符串以获得高精度小数。 |
 | style | `React.CSSProperties` | - | 根元素的内联样式。 |
 | styles | `Partial<Record<SemanticName, React.CSSProperties>>` | - | 输入数字槽的语义样式。 |
