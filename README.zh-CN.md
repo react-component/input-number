@@ -83,16 +83,16 @@ npm start
 | mode | `'input' \| 'spinner'` | `input` | 渲染模式。 |
 | parser | `(displayValue: string \| undefined) => T` | - | 将显示的值解析回一个值。 |
 | precision | `number` | - | Display precision. |
-| 前缀 | `ReactNode` | - | 前缀内容。 |
+| prefix | `ReactNode` | - | 前缀内容。 |
 | prefixCls | `string` | `rc-input-number` | className前缀。 |
 | readOnly | `boolean` | `false` | 将输入标记为只读。 |
 | step | `number \| string` | `1` | Step size. |
 | stringMode | `boolean` | `false` | 将值保留为字符串以获得高精度小数。 |
-| 风格 | `React.CSSProperties` | - | 根元素的内联样式。 |
+| style | `React.CSSProperties` | - | 根元素的内联样式。 |
 | styles | `Partial<Record<SemanticName, React.CSSProperties>>` | - | 输入数字槽的语义样式。 |
-| 后缀 | `ReactNode` | - | 后缀内容。 |
+| suffix | `ReactNode` | - | 后缀内容。 |
 | upHandler | `ReactNode` | - | 自定义增量控制。 |
-| 价值 | `T \| null` | - | 受控值。 |
+| value | `T \| null` | - | 受控值。 |
 | onChange | `(value: T \| null) => void` | - | 当提交的值改变时触发。 |
 | onInput | `(text: string) => void` | - | 当原始输入文本更改时触发。 |
 | onPressEnter | `React.KeyboardEventHandler<HTMLInputElement>` | - | 当按下 Enter 时触发。 |
@@ -113,8 +113,8 @@ ref.current?.blur();
 
 | 参数      | 类型                                    | 说明          |
 | ------------- | --------------------------------------- | -------------------- |
-| 重点         | `(options?: InputFocusOptions) => void` | 集中输入。     |
-| 模糊          | `() => void`                            | 模糊输入。      |
+| focus | `(options?: InputFocusOptions) => void` | 集中输入。 |
+| blur | `() => void` | 模糊输入。 |
 | nativeElement | `HTMLElement`                           | 根原生元素。 |
 
 ## 键盘与滚轮
