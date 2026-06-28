@@ -8,13 +8,13 @@
     "react-input-number",
     "input-number"
   ],
-  "homepage": "https://github.com/react-component/input-number",
+  "homepage": "https://react-component.github.io/input-number",
   "bugs": {
     "url": "https://github.com/react-component/input-number/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/input-number.git"
+    "url": "https://github.com/react-component/input-number.git"
   },
   "license": "MIT",
   "author": "tsjxyz@gmail.com",
@@ -82,5 +82,8 @@
   "peerDependencies": {
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
