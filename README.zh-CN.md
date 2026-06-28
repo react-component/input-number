@@ -77,7 +77,7 @@ npm start
 | disabled | `boolean` | `false` | 禁用输入。 |
 | downHandler | `ReactNode` | - | 自定义减量控制。 |
 | formatter | `(value: T \| undefined, info: { userTyping: boolean; input: string }) => string` | - | 设置显示值的格式。 |
-| inputMode | `string` | - | 本机输入 `inputMode` 属性。 |
+| inputMode | `string` | - | 原生 input `inputMode` 属性。 |
 | keyboard | `boolean` | `true` | 启用键盘步进。 |
 | max | `T` | - | 最大值。 |
 | min | `T` | - | 最小值。 |
