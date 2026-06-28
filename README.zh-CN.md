@@ -68,8 +68,8 @@ npm start
 | autoFocus | `boolean` | `false` | 安装后聚焦输入。 |
 | changeOnBlur | `boolean` | `true` | 提交模糊值的变化。 |
 | changeOnWheel | `boolean` | `false` | 允许通过鼠标滚轮更改值。 |
-| className | `string` | - | 根元素的className。 |
-| classNames | `Partial<Record<SemanticName, string>>` | - | 输入数字槽的语义className称。 |
+| className | `string` | - | 根元素的 className。 |
+| classNames | `Partial<Record<SemanticName, string>>` | - | 输入数字槽的语义 className。 |
 | controls | `boolean` | `true` | 显示增量和减量控件。 |
 | decimalSeparator | `string` | - | 显示格式化程序使用的小数分隔符。 |
 | defaultValue | `T` | - | 初始值。 |
@@ -84,7 +84,7 @@ npm start
 | parser | `(displayValue: string \| undefined) => T` | - | 将显示的值解析回一个值。 |
 | precision | `number` | - | Display precision. |
 | prefix | `ReactNode` | - | 前缀内容。 |
-| prefixCls | `string` | `rc-input-number` | className前缀。 |
+| prefixCls | `string` | `rc-input-number` | className 前缀。 |
 | readOnly | `boolean` | `false` | 将输入标记为只读。 |
 | step | `number \| string` | `1` | 步长。 |
 | stringMode | `boolean` | `false` | 将值保留为字符串以获得高精度小数。 |
