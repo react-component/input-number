@@ -82,7 +82,7 @@ npm start
 | min | `T` | - | 最小值。 |
 | mode | `'input' \| 'spinner'` | `input` | 渲染模式。 |
 | parser | `(displayValue: string \| undefined) => T` | - | 将显示的值解析回一个值。 |
-| precision | `number` | - | Display precision. |
+| precision | `number` | - | 显示精度。 |
 | prefix | `ReactNode` | - | 前缀内容。 |
 | prefixCls | `string` | `rc-input-number` | className 前缀。 |
 | readOnly | `boolean` | `false` | 将输入标记为只读。 |
