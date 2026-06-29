@@ -58,7 +58,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^26.0.1",
     "@types/react": "^18.3.31",
-    "@types/react-dom": "^18.3.7",
+    "@types/react-dom": "^19.2.3",
     "@types/responselike": "^1.0.0",
     "@umijs/fabric": "^4.0.1",
     "@umijs/test": "^4.6.68",
