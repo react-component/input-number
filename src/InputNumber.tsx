@@ -117,6 +117,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   controls?: boolean;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
+  allowClear?:  boolean | { clearValue?: string | number };
   classNames?: Partial<Record<SemanticName, string>>;
   styles?: Partial<Record<SemanticName, React.CSSProperties>>;
 
@@ -135,6 +136,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   /** Syntactic sugar of `formatter`. Config decimal separator of display. */
   decimalSeparator?: string;
 
+  onClear?: () => void;
   onInput?: (text: string) => void;
   onChange?: (value: T | null) => void;
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
@@ -175,6 +177,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     prefix,
     suffix,
     stringMode,
+    allowClear,
 
     parser,
     formatter,
@@ -185,6 +188,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     onInput,
     onPressEnter,
     onStep,
+    onClear,
 
     // Mouse Events
     onMouseDown,
@@ -759,6 +763,24 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         readOnly={readOnly}
         {...restProps}
       />
+      {allowClear && (
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-label="清除"
+          onClick={() => {
+            onClear?.();
+            const updatedValue = getMiniDecimal(typeof allowClear === 'object' ? allowClear.clearValue : undefined);
+            triggerValueUpdate(updatedValue, false);
+          }}
+          className={clsx(`${prefixCls}-clear-icon`, {
+            [`${prefixCls}-clear-icon-hidden`]: !(!disabled && !readOnly && !decimalValue.isEmpty()),
+            [`${prefixCls}-clear-icon-has-suffix`]: !!suffix,
+          })}
+        >
+          ✖
+        </button>
+      )}
 
       {suffix !== undefined && (
         <div className={clsx(`${prefixCls}-suffix`, classNames?.suffix)} style={styles?.suffix}>
