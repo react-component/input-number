@@ -60,3 +60,7 @@ nav:
 ## spinner
 
 <code src="./demo/spinner.tsx"></code>
+
+## allow-clear
+
+<code src="./demo/allow-clear.tsx"></code>
