@@ -8,30 +8,26 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "@@/*": [
-        "src/.umi/*"
-      ],
-      "@rc-component/input-number": [
-        "src/index.ts"
-      ]
+      "@/*": ["src/*"],
+      "@@/*": ["src/.umi/*"],
+      "@rc-component/input-number": ["src/index.ts"]
     },
-    "ignoreDeprecations": "5.0"
+    "ignoreDeprecations": "6.0",
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "strictFunctionTypes": false,
+    "strict": false,
+    "noImplicitThis": false,
+    "strictBindCallApply": false
   },
   "include": [
+    "react-compat.d.ts",
+    "global.d.ts",
     ".fatherrc.ts",
     ".dumirc.ts",
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": [
-    "node_modules",
-    "lib",
-    "es",
-    "dist",
-    "docs-dist",
-    ".dumi/tmp"
-  ]
+  "exclude": ["node_modules", "lib", "es", "dist", "docs-dist", ".dumi/tmp"]
 }
