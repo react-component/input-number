@@ -1,4 +1,4 @@
-import type { RenderOptions } from '@testing-library/react';
+import type { RenderOptions, RenderResult } from '@testing-library/react';
 import { act, render } from '@testing-library/react';
 import type { ReactElement } from 'react';
 
@@ -12,8 +12,10 @@ export const sleep = async (timeout = 0) => {
   });
 };
 
-const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
-  render(ui, { ...options });
+const customRender = (
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>,
+): RenderResult => render(ui, { ...options });
 
 export * from '@testing-library/react';
 export { customRender as render };

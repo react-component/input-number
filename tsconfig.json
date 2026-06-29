@@ -8,9 +8,30 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"],
-      "@@/*": ["src/.umi/*"],
-      "@rc-component/input-number": ["src/index.ts"]
-    }
-  }
+      "@/*": [
+        "src/*"
+      ],
+      "@@/*": [
+        "src/.umi/*"
+      ],
+      "@rc-component/input-number": [
+        "src/index.ts"
+      ]
+    },
+    "ignoreDeprecations": "5.0"
+  },
+  "include": [
+    ".fatherrc.ts",
+    ".dumirc.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "es",
+    "dist",
+    "docs-dist",
+    ".dumi/tmp"
+  ]
 }
