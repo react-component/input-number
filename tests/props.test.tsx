@@ -1,6 +1,7 @@
+import { fireEvent } from '@testing-library/dom';
 import { KeyCode } from '@rc-component/util';
 import '@testing-library/jest-dom';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 import type { ValueType } from '../src';
 import InputNumber from '../src';
