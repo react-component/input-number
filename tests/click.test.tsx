@@ -1,6 +1,5 @@
-import { fireEvent } from '@testing-library/dom';
 import * as React from 'react';
-import { render, act } from '@testing-library/react';
+import { render, fireEvent, act } from '@testing-library/react';
 import InputNumber, { InputNumberProps } from '../src';
 import { KeyCode } from '@rc-component/util';
 

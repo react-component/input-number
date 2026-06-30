@@ -1,7 +1,6 @@
-import { fireEvent } from '@testing-library/dom';
 import { KeyCode } from '@rc-component/util';
 import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import InputNumber from '../src';
 

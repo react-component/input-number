@@ -1,6 +1,5 @@
-import { fireEvent } from '@testing-library/dom';
 import { spyElementPrototypes } from '@rc-component/util';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import InputNumber, { InputNumberRef } from '../src';
 
