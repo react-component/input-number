@@ -54,7 +54,7 @@ export default () => (
 Run the local dumi site:
 
 ```bash
-ut install
+npm install
 npm start
 ```
 
@@ -128,7 +128,7 @@ ref.current?.blur();
 ## Development
 
 ```bash
-ut install
+npm install
 npm start
 npm test
 npm run tsc

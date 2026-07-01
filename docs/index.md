@@ -26,7 +26,7 @@ export default () => <InputNumber defaultValue={10} />;
 ## Development
 
 ```sh
-ut install
+npm install
 npm start
 ```
 
