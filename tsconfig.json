@@ -11,21 +11,9 @@
       "@@/*": ["./src/.umi/*"],
       "@rc-component/input-number": ["./src/index.ts"]
     },
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "strictPropertyInitialization": false,
-    "strictFunctionTypes": false,
     "strict": false,
-    "noImplicitThis": false,
-    "strictBindCallApply": false,
     "module": "ESNext"
   },
-  "include": [
-    "global.d.ts",
-    ".fatherrc.ts",
-    ".dumirc.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
+  "include": ["global.d.ts", ".fatherrc.ts", ".dumirc.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "lib", "es", "dist", "docs-dist", ".dumi/tmp"]
 }
