@@ -12,12 +12,12 @@ describe('InputNumber.Semantic', () => {
       action: 'test-action',
     };
     const testStyles = {
-      root: { color: 'orange' },
-      prefix: { color: 'red' },
-      input: { color: 'blue' },
-      suffix: { color: 'green' },
-      actions: { color: 'yellow' },
-      action: { color: 'pink' },
+      root: { color: 'rgb(255, 165, 0)' },
+      prefix: { color: 'rgb(255, 0, 0)' },
+      input: { color: 'rgb(0, 0, 255)' },
+      suffix: { color: 'rgb(0, 128, 0)' },
+      actions: { color: 'rgb(255, 255, 0)' },
+      action: { color: 'rgb(255, 192, 203)' },
     };
     const { container } = render(
       <InputNumber
