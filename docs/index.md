@@ -13,8 +13,6 @@ npm install --save @rc-component/input-number
 # yarn
 yarn install @rc-component/input-number
 
-# pnpm
-pnpm i @rc-component/input-number
 ```
 
 ## Usage
@@ -28,7 +26,7 @@ export default () => <InputNumber defaultValue={10} />;
 ## Development
 
 ```sh
-npm install
+ut install
 npm start
 ```
 
