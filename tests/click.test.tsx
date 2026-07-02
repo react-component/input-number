@@ -43,9 +43,23 @@ describe('InputNumber.Click', () => {
   }
 
   describe('basic work', () => {
-    testInputNumber('up button', { defaultValue: 10 }, '.rc-input-number-action-up', 11, 'up', 'handler');
+    testInputNumber(
+      'up button',
+      { defaultValue: 10 },
+      '.rc-input-number-action-up',
+      11,
+      'up',
+      'handler',
+    );
 
-    testInputNumber('down button', { value: 10 }, '.rc-input-number-action-down', 9, 'down', 'handler');
+    testInputNumber(
+      'down button',
+      { value: 10 },
+      '.rc-input-number-action-down',
+      9,
+      'down',
+      'handler',
+    );
   });
 
   describe('empty input', () => {
@@ -55,9 +69,23 @@ describe('InputNumber.Click', () => {
   });
 
   describe('empty with min & max', () => {
-    testInputNumber('up button', { min: 6, max: 10 }, '.rc-input-number-action-up', 6, 'up', 'handler');
+    testInputNumber(
+      'up button',
+      { min: 6, max: 10 },
+      '.rc-input-number-action-up',
+      6,
+      'up',
+      'handler',
+    );
 
-    testInputNumber('down button', { min: 6, max: 10 }, '.rc-input-number-action-down', 6, 'down', 'handler');
+    testInputNumber(
+      'down button',
+      { min: 6, max: 10 },
+      '.rc-input-number-action-down',
+      6,
+      'down',
+      'handler',
+    );
   });
 
   describe('null with min & max', () => {

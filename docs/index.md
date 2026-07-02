@@ -13,8 +13,6 @@ npm install --save @rc-component/input-number
 # yarn
 yarn install @rc-component/input-number
 
-# pnpm
-pnpm i @rc-component/input-number
 ```
 
 ## Usage

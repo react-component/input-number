@@ -36,7 +36,7 @@ export default function StepHandler({
   const isUpAction = action === 'up';
 
   // ======================== Step ========================
-  const stepTimeoutRef = React.useRef<any>();
+  const stepTimeoutRef = React.useRef<any>(undefined);
   const frameIds = React.useRef<number[]>([]);
 
   const onStopStep = () => {
