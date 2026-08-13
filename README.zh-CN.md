@@ -66,6 +66,7 @@ npm start
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| allowClear | `boolean \| { clearIcon?: ReactNode; disabled?: boolean }` | `false` | 显示清除按钮，可自定义图标或禁用清除操作。 |
 | autoFocus | `boolean` | `false` | 安装后聚焦输入。 |
 | changeOnBlur | `boolean` | `true` | 提交模糊值的变化。 |
 | changeOnWheel | `boolean` | `false` | 允许通过鼠标滚轮更改值。 |
@@ -95,6 +96,7 @@ npm start
 | upHandler | `ReactNode` | - | 自定义增量控制。 |
 | value | `T \| null` | - | 受控值。 |
 | onChange | `(value: T \| null) => void` | - | 当提交的值改变时触发。 |
+| onClear | `() => void` | - | 点击清除按钮时触发。 |
 | onInput | `(text: string) => void` | - | 当原始输入文本更改时触发。 |
 | onPressEnter | `React.KeyboardEventHandler<HTMLInputElement>` | - | 当按下 Enter 时触发。 |
 | onStep | `(value: T, info: { offset: number \| string; type: 'up' \| 'down'; emitter: 'handler' \| 'keyboard' \| 'wheel' }) => void` | - | 当值逐步变化时触发。 |

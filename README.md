@@ -66,6 +66,7 @@ Then open `http://localhost:8000`.
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
+| allowClear | `boolean \| { clearIcon?: ReactNode; disabled?: boolean }` | `false` | Show a clear button, optionally with a custom icon or disabled state. |
 | autoFocus | `boolean` | `false` | Focus the input when mounted. |
 | changeOnBlur | `boolean` | `true` | Commit value changes on blur. |
 | changeOnWheel | `boolean` | `false` | Allow value changes from the mouse wheel. |
@@ -95,6 +96,7 @@ Then open `http://localhost:8000`.
 | upHandler | `ReactNode` | - | Custom increment control. |
 | value | `T \| null` | - | Controlled value. |
 | onChange | `(value: T \| null) => void` | - | Triggered when the committed value changes. |
+| onClear | `() => void` | - | Triggered when the clear button is clicked. |
 | onInput | `(text: string) => void` | - | Triggered when the raw input text changes. |
 | onPressEnter | `React.KeyboardEventHandler<HTMLInputElement>` | - | Triggered when Enter is pressed. |
 | onStep | `(value: T, info: { offset: number \| string; type: 'up' \| 'down'; emitter: 'handler' \| 'keyboard' \| 'wheel' }) => void` | - | Triggered when the value changes by step. |
