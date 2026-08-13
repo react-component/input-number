@@ -93,4 +93,38 @@ describe('InputNumber.AllowClear', () => {
     fireEvent.click(clearButton);
     expect(onChange).toHaveBeenCalledWith(null);
   });
+
+  it('isolates clear button keyboard events from input handlers', () => {
+    const onChange = jest.fn();
+    const onPressEnter = jest.fn();
+    const onStep = jest.fn();
+    const { getByRole } = render(
+      <InputNumber
+        allowClear
+        value={1}
+        onChange={onChange}
+        onPressEnter={onPressEnter}
+        onStep={onStep}
+      />,
+    );
+    const input = getByRole('spinbutton');
+    const clearButton = getByRole('button', { name: 'Clear Value' });
+
+    fireEvent.change(input, { target: { value: '2' } });
+    onChange.mockClear();
+    act(() => clearButton.focus());
+
+    ['Enter', 'ArrowUp', 'ArrowDown'].forEach((key) => {
+      fireEvent.keyDown(clearButton, { key });
+    });
+
+    expect(onPressEnter).not.toHaveBeenCalled();
+    expect(onStep).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
+    expect(input).toHaveValue('2');
+
+    fireEvent.click(clearButton);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(null);
+  });
 });

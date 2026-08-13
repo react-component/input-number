@@ -734,6 +734,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
       )}
       style={styles?.clear}
       onMouseDown={(event) => event.preventDefault()}
+      onKeyDown={(event) => event.stopPropagation()}
       onClick={() => {
         triggerValueUpdate(getMiniDecimal(null), false);
         onClear?.();
