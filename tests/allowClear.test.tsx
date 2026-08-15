@@ -47,6 +47,27 @@ describe('InputNumber.AllowClear', () => {
     expect(onClear).toHaveBeenCalledTimes(1);
   });
 
+  it('keeps raw input clearable when focus moves to the clear button', () => {
+    const onClear = jest.fn();
+    const { container, getByRole } = render(<InputNumber allowClear onClear={onClear} />);
+    const input = getByRole('spinbutton');
+    const clearButton = container.querySelector<HTMLButtonElement>('.rc-input-number-clear-icon');
+
+    act(() => input.focus());
+    fireEvent.change(input, { target: { value: '-' } });
+    act(() => clearButton.focus());
+
+    expect(clearButton).toHaveFocus();
+    expect(clearButton).not.toBeDisabled();
+    expect(input).toHaveValue('-');
+
+    fireEvent.click(clearButton);
+
+    expect(input).toHaveValue('');
+    expect(input).toHaveFocus();
+    expect(onClear).toHaveBeenCalledTimes(1);
+  });
+
   it('does not restore pending input normalization after clearing', () => {
     jest.useFakeTimers();
 
@@ -133,6 +154,19 @@ describe('InputNumber.AllowClear', () => {
     fireEvent.click(clearButton);
 
     expect(container.querySelector('input')).toHaveValue('');
+    expect(onChange).toHaveBeenCalledWith(null);
+  });
+
+  it('clears to null when precision is configured', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <InputNumber allowClear defaultValue={1.23} precision={2} onChange={onChange} />,
+    );
+
+    fireEvent.click(container.querySelector('.rc-input-number-clear-icon'));
+
+    expect(container.querySelector('input')).toHaveValue('');
+    expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith(null);
   });
 

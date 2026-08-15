@@ -652,8 +652,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
   // >>> Focus & Blur
   const onBlur: React.FocusEventHandler<HTMLDivElement> = (event) => {
-    // Moving focus from an internal control back to the input does not blur InputNumber.
-    if (event.target !== inputRef.current && event.relatedTarget === inputRef.current) {
+    // Moving focus between internal controls does not blur InputNumber.
+    if (event.relatedTarget instanceof Node && rootRef.current?.contains(event.relatedTarget)) {
       return;
     }
 
