@@ -78,9 +78,9 @@ nav:
         </tr>
         <tr>
           <td>allowClear</td>
-          <td>boolean | { clearIcon?: ReactNode; disabled?: boolean }</td>
+          <td>boolean | { clearIcon?: ReactNode; disabled?: boolean; label?: string }</td>
           <td>false</td>
-          <td>Whether to show a clear button, optionally with a custom icon or disabled state</td>
+          <td>Whether to show a clear button, optionally with a custom icon, disabled state, or accessible label</td>
         </tr>
         <tr>
           <td>readOnly</td>
