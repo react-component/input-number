@@ -61,6 +61,13 @@ export default function StepHandler({
     stepTimeoutRef.current = setTimeout(loopStep, STEP_DELAY);
   };
 
+  const onStepKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (event) => {
+    if (!disabled && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      onStep(isUpAction, 'handler');
+    }
+  };
+
   React.useEffect(
     () => () => {
       onStopStep();
@@ -101,6 +108,8 @@ export default function StepHandler({
       }}
       aria-label={isUpAction ? 'Increase Value' : 'Decrease Value'}
       aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
+      onKeyDown={onStepKeyDown}
       className={mergedClassName}
       style={style}
     >
