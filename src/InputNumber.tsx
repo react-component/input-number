@@ -8,6 +8,7 @@ import getMiniDecimal, {
 } from '@rc-component/mini-decimal';
 import {
   type InputFocusOptions,
+  isReactRenderable,
   proxyObject,
   triggerFocus,
   useEvent,
@@ -737,7 +738,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     >
       {mode === 'spinner' && controls && downNode}
 
-      {prefix !== undefined && (
+      {isReactRenderable(prefix) && (
         <div className={clsx(`${prefixCls}-prefix`, classNames?.prefix)} style={styles?.prefix}>
           {prefix}
         </div>
@@ -760,7 +761,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         {...restProps}
       />
 
-      {suffix !== undefined && (
+      {isReactRenderable(suffix) && (
         <div className={clsx(`${prefixCls}-suffix`, classNames?.suffix)} style={styles?.suffix}>
           {suffix}
         </div>
