@@ -8,6 +8,7 @@ import getMiniDecimal, {
 } from '@rc-component/mini-decimal';
 import {
   type InputFocusOptions,
+  isReactRenderable,
   proxyObject,
   triggerFocus,
   useEvent,
@@ -732,6 +733,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   const clearConfig = allowClear && typeof allowClear === 'object' ? allowClear : {};
   const clearDisabled = !!(disabled || readOnly || clearConfig.disabled);
   const showClear = !!allowClear && !clearDisabled && String(inputValue).length > 0;
+  const hasSuffix = isReactRenderable(suffix);
   const clearIconCls = `${prefixCls}-clear-icon`;
 
   const onClearKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (event) => {
@@ -774,7 +776,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         clearIconCls,
         {
           [`${clearIconCls}-hidden`]: !showClear,
-          [`${clearIconCls}-has-suffix`]: suffix !== undefined,
+          [`${clearIconCls}-has-suffix`]: hasSuffix,
         },
         classNames?.clear,
       )}
@@ -818,7 +820,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     >
       {mode === 'spinner' && controls && downNode}
 
-      {prefix !== undefined && (
+      {isReactRenderable(prefix) && (
         <div className={clsx(`${prefixCls}-prefix`, classNames?.prefix)} style={styles?.prefix}>
           {prefix}
         </div>
@@ -841,7 +843,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         {...restProps}
       />
 
-      {(allowClear || suffix !== undefined) && (
+      {(allowClear || hasSuffix) && (
         <div className={clsx(`${prefixCls}-suffix`, classNames?.suffix)} style={styles?.suffix}>
           {clearNode}
           {suffix}
