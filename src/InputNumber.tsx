@@ -730,6 +730,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     </StepHandler>
   );
 
+  // >>> Clear
   const clearConfig =
     allowClear && typeof allowClear === 'object' ? allowClear : { disabled: allowClear !== true };
   const showClear =
