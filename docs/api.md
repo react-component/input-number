@@ -77,6 +77,12 @@ nav:
           <td>Specifies that an InputNumber should automatically get focus when the page loads</td>
         </tr>
         <tr>
+          <td>allowClear</td>
+          <td>boolean | { clearValue: number | string }  </td>
+          <td>false</td>
+          <td>If allow to remove InputNumber content with clear</td>
+        </tr>
+        <tr>
           <td>readOnly</td>
           <td>Boolean</td>
           <td>false</td>
@@ -147,6 +153,12 @@ nav:
           <td>(value: T, info: { offset: ValueType; type: 'up' | 'down', emitter: 'handler' | 'keydown' | 'wheel' }) => void</td>
           <td></td>
           <td>Called when the user clicks the arrows on the keyboard or interface and when the mouse wheel is spun.</td>
+        </tr>
+        <tr>
+          <td>onClear</td>
+          <td>() => void</td>
+          <td></td>
+          <td>This event will be triggered when the user clicks the "Clear" button.</td>
         </tr>
         <tr>
           <td>style</td>

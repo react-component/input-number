@@ -13,6 +13,10 @@ nav:
 
 <code src="./demo/prefix-suffix.tsx"></code>
 
+## allow-clear
+
+<code src="./demo/allow-clear.tsx"></code>
+
 ## combination-key-format
 
 <code src="./demo/combination-key-format.tsx"></code>
