@@ -66,7 +66,7 @@ Then open `http://localhost:8000`.
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| allowClear | `boolean \| { clearIcon?: ReactNode; disabled?: boolean; label?: string }` | `false` | Show a clear button, optionally with a custom icon, disabled state, or accessible label. |
+| allowClear | `{ clearIcon?: ReactNode; disabled?: boolean; label?: string }` | - | Show a clear button, optionally with a custom icon, disabled state, or accessible label. |
 | autoFocus | `boolean` | `false` | Focus the input when mounted. |
 | changeOnBlur | `boolean` | `true` | Commit value changes on blur. |
 | changeOnWheel | `boolean` | `false` | Allow value changes from the mouse wheel. |

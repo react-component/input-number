@@ -119,13 +119,11 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   controls?: boolean;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
-  allowClear?:
-    | boolean
-    | {
-        clearIcon?: React.ReactNode;
-        disabled?: boolean;
-        label?: string;
-      };
+  allowClear?: {
+    clearIcon?: React.ReactNode;
+    disabled?: boolean;
+    label?: string;
+  };
   classNames?: Partial<Record<SemanticName, string>>;
   styles?: Partial<Record<SemanticName, React.CSSProperties>>;
 
@@ -730,8 +728,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     </StepHandler>
   );
 
-  const clearConfig = allowClear && typeof allowClear === 'object' ? allowClear : {};
-  const clearDisabled = !!(disabled || readOnly || clearConfig.disabled);
+  const clearDisabled = !!(disabled || readOnly || allowClear?.disabled);
   const showClear = !!allowClear && !clearDisabled && String(inputValue).length > 0;
   const hasSuffix = isReactRenderable(suffix);
   const clearIconCls = `${prefixCls}-clear-icon`;
@@ -770,7 +767,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   const clearNode = allowClear && (
     <button
       type="button"
-      aria-label={clearConfig.label ?? 'Clear'}
+      aria-label={allowClear.label ?? 'Clear'}
       disabled={!showClear}
       className={clsx(
         clearIconCls,
@@ -785,7 +782,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
       onKeyDown={onClearKeyDown}
       onClick={onClearClick}
     >
-      {clearConfig.clearIcon ?? '✖'}
+      {allowClear.clearIcon ?? '✖'}
     </button>
   );
 

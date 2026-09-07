@@ -66,7 +66,7 @@ npm start
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| allowClear | `boolean \| { clearIcon?: ReactNode; disabled?: boolean; label?: string }` | `false` | 显示清除按钮，可自定义图标、禁用清除操作或设置无障碍标签。 |
+| allowClear | `{ clearIcon?: ReactNode; disabled?: boolean; label?: string }` | - | 显示清除按钮，可自定义图标、禁用清除操作或设置无障碍标签。 |
 | autoFocus | `boolean` | `false` | 安装后聚焦输入。 |
 | changeOnBlur | `boolean` | `true` | 提交模糊值的变化。 |
 | changeOnWheel | `boolean` | `false` | 允许通过鼠标滚轮更改值。 |
