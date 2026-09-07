@@ -3,8 +3,8 @@ import * as React from 'react';
 import InputNumber from '../src';
 
 describe('InputNumber.AllowClear', () => {
-  it('does not render a clear button by default', () => {
-    const { container } = render(<InputNumber defaultValue={1} />);
+  it('treats a null allowClear value as disabled', () => {
+    const { container } = render(<InputNumber allowClear={null} defaultValue={1} />);
 
     expect(container.querySelector('.rc-input-number-clear-icon')).not.toBeInTheDocument();
   });
@@ -14,7 +14,7 @@ describe('InputNumber.AllowClear', () => {
     const onChange = jest.fn(() => calls.push('change'));
     const onClear = jest.fn(() => calls.push('clear'));
     const { container } = render(
-      <InputNumber allowClear={{}} defaultValue={123} onChange={onChange} onClear={onClear} />,
+      <InputNumber allowClear defaultValue={123} onChange={onChange} onClear={onClear} />,
     );
 
     fireEvent.click(container.querySelector('.rc-input-number-clear-icon'));
@@ -30,7 +30,7 @@ describe('InputNumber.AllowClear', () => {
     const onChange = jest.fn();
     const onClear = jest.fn();
     const { container, getByRole } = render(
-      <InputNumber allowClear={{}} onChange={onChange} onClear={onClear} />,
+      <InputNumber allowClear onChange={onChange} onClear={onClear} />,
     );
     const input = getByRole('spinbutton');
     const clearButton = container.querySelector<HTMLButtonElement>('.rc-input-number-clear-icon');
@@ -49,7 +49,7 @@ describe('InputNumber.AllowClear', () => {
 
   it('keeps raw input clearable when focus moves to the clear button', () => {
     const onClear = jest.fn();
-    const { container, getByRole } = render(<InputNumber allowClear={{}} onClear={onClear} />);
+    const { container, getByRole } = render(<InputNumber allowClear onClear={onClear} />);
     const input = getByRole('spinbutton');
     const clearButton = container.querySelector<HTMLButtonElement>('.rc-input-number-clear-icon');
 
@@ -73,7 +73,7 @@ describe('InputNumber.AllowClear', () => {
 
     try {
       const onChange = jest.fn();
-      const { container, getByRole } = render(<InputNumber allowClear={{}} onChange={onChange} />);
+      const { container, getByRole } = render(<InputNumber allowClear onChange={onChange} />);
       const input = getByRole('spinbutton');
 
       fireEvent.change(input, { target: { value: '8。1' } });
@@ -101,7 +101,7 @@ describe('InputNumber.AllowClear', () => {
     const onChange = jest.fn();
     const { container } = render(
       <InputNumber
-        allowClear={{}}
+        allowClear
         defaultValue={1}
         parser={parser}
         formatter={formatter}
@@ -123,7 +123,7 @@ describe('InputNumber.AllowClear', () => {
     const onChange = jest.fn();
     const onClear = jest.fn();
     const { container } = render(
-      <InputNumber allowClear={{}} value={123} onChange={onChange} onClear={onClear} />,
+      <InputNumber allowClear value={123} onChange={onChange} onClear={onClear} />,
     );
 
     fireEvent.click(container.querySelector('.rc-input-number-clear-icon'));
@@ -136,9 +136,7 @@ describe('InputNumber.AllowClear', () => {
   it('clears when controlled state accepts null', () => {
     const ControlledInputNumber = () => {
       const [currentValue, setCurrentValue] = React.useState<number | null>(123);
-      return (
-        <InputNumber<number> allowClear={{}} value={currentValue} onChange={setCurrentValue} />
-      );
+      return <InputNumber<number> allowClear value={currentValue} onChange={setCurrentValue} />;
     };
     const { container } = render(<ControlledInputNumber />);
 
@@ -149,9 +147,7 @@ describe('InputNumber.AllowClear', () => {
 
   it('supports clearing zero', () => {
     const onChange = jest.fn();
-    const { container } = render(
-      <InputNumber allowClear={{}} defaultValue={0} onChange={onChange} />,
-    );
+    const { container } = render(<InputNumber allowClear defaultValue={0} onChange={onChange} />);
     const clearButton = container.querySelector('.rc-input-number-clear-icon');
 
     expect(clearButton).not.toHaveClass('rc-input-number-clear-icon-hidden');
@@ -164,7 +160,7 @@ describe('InputNumber.AllowClear', () => {
   it('clears to null when precision is configured', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <InputNumber allowClear={{}} defaultValue={1.23} precision={2} onChange={onChange} />,
+      <InputNumber allowClear defaultValue={1.23} precision={2} onChange={onChange} />,
     );
 
     fireEvent.click(container.querySelector('.rc-input-number-clear-icon'));
@@ -208,7 +204,7 @@ describe('InputNumber.AllowClear', () => {
     const onClear = jest.fn();
     const { container } = render(
       <InputNumber
-        allowClear={{}}
+        allowClear
         defaultValue={1}
         styles={{ clear: { visibility: 'visible' } }}
         onChange={onChange}
@@ -233,7 +229,7 @@ describe('InputNumber.AllowClear', () => {
     const onClear = jest.fn();
     const { container } = render(
       <InputNumber
-        allowClear={{}}
+        allowClear
         styles={{ clear: { visibility: 'visible' } }}
         onChange={onChange}
         onClear={onClear}
@@ -252,7 +248,7 @@ describe('InputNumber.AllowClear', () => {
 
   it('preserves input focus on pointer interaction', () => {
     const onBlur = jest.fn();
-    const { container } = render(<InputNumber allowClear={{}} defaultValue={1} onBlur={onBlur} />);
+    const { container } = render(<InputNumber allowClear defaultValue={1} onBlur={onBlur} />);
     const input = container.querySelector('input');
     const clearButton = container.querySelector<HTMLButtonElement>('.rc-input-number-clear-icon');
 
@@ -266,9 +262,7 @@ describe('InputNumber.AllowClear', () => {
 
   it('uses an accessible button and returns focus after keyboard activation', () => {
     const onChange = jest.fn();
-    const { getByRole } = render(
-      <InputNumber allowClear={{}} defaultValue={1} onChange={onChange} />,
-    );
+    const { getByRole } = render(<InputNumber allowClear defaultValue={1} onChange={onChange} />);
     const input = getByRole('spinbutton');
     const clearButton = getByRole('button', { name: 'Clear' });
 
@@ -291,7 +285,7 @@ describe('InputNumber.AllowClear', () => {
     const { getByRole } = render(
       <div onKeyDown={onParentKeyDown}>
         <InputNumber
-          allowClear={{}}
+          allowClear
           value={1}
           onChange={onChange}
           onPressEnter={onPressEnter}
@@ -333,7 +327,7 @@ describe('InputNumber.AllowClear', () => {
     const onStep = jest.fn();
     const { getByRole } = render(
       <div onKeyDown={onParentKeyDown}>
-        <InputNumber allowClear={{}} defaultValue={1} keyboard={false} onStep={onStep} />
+        <InputNumber allowClear defaultValue={1} keyboard={false} onStep={onStep} />
       </div>,
     );
     const clearButton = getByRole('button', { name: 'Clear' });

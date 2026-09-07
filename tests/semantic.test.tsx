@@ -26,7 +26,7 @@ describe('InputNumber.Semantic', () => {
         prefixCls="rc-input-number"
         prefix="prefix"
         suffix={<div>suffix</div>}
-        allowClear={{}}
+        allowClear
         defaultValue={1}
         styles={testStyles}
         classNames={testClassNames}
