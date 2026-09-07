@@ -745,10 +745,6 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   };
 
   const onClearClick = () => {
-    if (!showClear) {
-      return;
-    }
-
     userTypingRef.current = false;
     inputValueRef.current = '';
     inputValueUpdateRef.current += 1;

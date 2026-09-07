@@ -7,5 +7,6 @@ export default () => (
     <InputNumber allowClear defaultValue={100} />
     <InputNumber allowClear={{ clearIcon: '⌫', label: 'Clear amount' }} defaultValue={0} />
     <InputNumber allowClear={{ disabled: true }} defaultValue={100} />
+    <InputNumber suffix="RMB" allowClear defaultValue={100} />
   </div>
 );

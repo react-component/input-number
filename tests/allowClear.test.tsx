@@ -195,6 +195,22 @@ describe('InputNumber.AllowClear', () => {
     expect(getByRole('button', { name: 'Effacer' })).toHaveAttribute('aria-label', 'Effacer');
   });
 
+  it('renders the clear action without hiding the suffix', () => {
+    const { container } = render(<InputNumber allowClear defaultValue={1} suffix="suffix" />);
+    const suffixNode = container.querySelector<HTMLElement>('.rc-input-number-suffix');
+    const clearButton = container.querySelector<HTMLButtonElement>('.rc-input-number-clear-icon');
+
+    expect(suffixNode?.contains(clearButton)).toBe(true);
+    expect(suffixNode).not.toHaveClass('rc-input-number-suffix-hidden');
+    expect(clearButton).not.toHaveClass('rc-input-number-clear-icon-hidden');
+    expect(clearButton).toHaveClass('rc-input-number-clear-icon-has-suffix');
+
+    fireEvent.click(clearButton);
+
+    expect(clearButton).toHaveClass('rc-input-number-clear-icon-hidden');
+    expect(suffixNode).not.toHaveClass('rc-input-number-suffix-hidden');
+  });
+
   it.each([
     ['disabled', { disabled: true }],
     ['readOnly', { readOnly: true }],
