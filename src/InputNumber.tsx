@@ -730,9 +730,10 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     </StepHandler>
   );
 
-  const clearConfig = allowClear && typeof allowClear === 'object' ? allowClear : {};
-  const clearDisabled = !!(disabled || readOnly || clearConfig.disabled);
-  const showClear = !!allowClear && !clearDisabled && String(inputValue).length > 0;
+  const clearConfig =
+    allowClear && typeof allowClear === 'object' ? allowClear : { disabled: allowClear !== true };
+  const showClear =
+    !disabled && !readOnly && clearConfig.disabled !== true && String(inputValue).length > 0;
   const hasSuffix = isReactRenderable(suffix);
   const clearIconCls = `${prefixCls}-clear-icon`;
 
