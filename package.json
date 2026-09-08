@@ -1,6 +1,6 @@
 {
   "name": "@rc-component/input-number",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "React input-number component",
   "keywords": [
     "react",
