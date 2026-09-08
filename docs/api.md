@@ -77,6 +77,12 @@ nav:
           <td>Specifies that an InputNumber should automatically get focus when the page loads</td>
         </tr>
         <tr>
+          <td>allowClear</td>
+          <td>boolean | { clearIcon?: ReactNode; disabled?: boolean; label?: string }</td>
+          <td>false</td>
+          <td>Whether to show a clear button, optionally with a custom icon, disabled state, or accessible label</td>
+        </tr>
+        <tr>
           <td>readOnly</td>
           <td>Boolean</td>
           <td>false</td>
@@ -123,6 +129,12 @@ nav:
           <td>Function</td>
           <td></td>
           <td>Called when value of an InputNumber changed</td>
+        </tr>
+        <tr>
+          <td>onClear</td>
+          <td>Function</td>
+          <td></td>
+          <td>Called when the clear button is clicked</td>
         </tr>
         <tr>
             <td>onBlur</td>

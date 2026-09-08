@@ -70,9 +70,10 @@ const getWheelDeltaY = (event: WheelEvent) => {
   }
 };
 
-type SemanticName = 'root' | 'actions' | 'input' | 'action' | 'prefix' | 'suffix';
+type SemanticName = 'root' | 'actions' | 'input' | 'action' | 'prefix' | 'suffix' | 'clear';
 export interface InputNumberProps<T extends ValueType = ValueType>
-  extends Omit<
+  extends
+    Omit<
       React.InputHTMLAttributes<HTMLInputElement>,
       | 'value'
       | 'defaultValue'
@@ -118,6 +119,13 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   controls?: boolean;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
+  allowClear?:
+    | boolean
+    | {
+        clearIcon?: React.ReactNode;
+        disabled?: boolean;
+        label?: string;
+      };
   classNames?: Partial<Record<SemanticName, string>>;
   styles?: Partial<Record<SemanticName, React.CSSProperties>>;
 
@@ -138,6 +146,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
 
   onInput?: (text: string) => void;
   onChange?: (value: T | null) => void;
+  onClear?: () => void;
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
 
   onStep?: (
@@ -175,6 +184,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
     prefix,
     suffix,
+    allowClear,
     stringMode,
 
     parser,
@@ -183,6 +193,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     decimalSeparator,
 
     onChange,
+    onClear,
     onInput,
     onPressEnter,
     onStep,
@@ -286,6 +297,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
   // >>> Formatter
   const inputValueRef = React.useRef<string | number>('');
+  const inputValueUpdateRef = React.useRef(0);
   const mergedFormatter = React.useCallback(
     (number: string, userTyping: boolean) => {
       if (formatter) {
@@ -446,6 +458,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
 
   // >>> Collect input value
   const collectInputValue = (inputStr: string) => {
+    const inputValueUpdateId = (inputValueUpdateRef.current += 1);
+
     recordCursor();
 
     // Update inputValue in case input can not parse as number
@@ -468,6 +482,10 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     // optimize for chinese input experience
     // https://github.com/ant-design/ant-design/issues/8196
     onNextPromise(() => {
+      if (inputValueUpdateId !== inputValueUpdateRef.current) {
+        return;
+      }
+
       let nextInputStr = inputStr;
       if (!parser) {
         nextInputStr = inputStr.replace(/。/g, '.');
@@ -634,7 +652,12 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   }, [changeOnWheel, focus, onInternalWheel]);
 
   // >>> Focus & Blur
-  const onBlur = () => {
+  const onBlur: React.FocusEventHandler<HTMLDivElement> = (event) => {
+    // Moving focus between internal controls does not blur InputNumber.
+    if (event.relatedTarget instanceof Node && rootRef.current?.contains(event.relatedTarget)) {
+      return;
+    }
+
     if (changeOnBlur) {
       flushInputValue(false);
     }
@@ -707,6 +730,63 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     </StepHandler>
   );
 
+  // >>> Clear
+  const clearConfig =
+    allowClear && typeof allowClear === 'object' ? allowClear : { disabled: allowClear !== true };
+  const showClear =
+    !disabled && !readOnly && clearConfig.disabled !== true && String(inputValue).length > 0;
+  const hasSuffix = isReactRenderable(suffix);
+  const clearIconCls = `${prefixCls}-clear-icon`;
+
+  const onClearKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (event) => {
+    const isStepKey = ['Up', 'ArrowUp', 'Down', 'ArrowDown'].includes(event.key);
+    if (event.key === 'Enter' || (keyboard !== false && isStepKey)) {
+      event.stopPropagation();
+    }
+  };
+
+  const onClearClick = () => {
+    userTypingRef.current = false;
+    inputValueRef.current = '';
+    inputValueUpdateRef.current += 1;
+
+    const emptyValue = getMiniDecimal(null);
+
+    // `triggerValueUpdate` only refreshes the display when the decimal value changes.
+    // Clear raw input such as `-`, or restore the source value in controlled mode.
+    if (value !== undefined) {
+      setInputValue(decimalValue, false);
+    } else if (decimalValue.isEmpty()) {
+      setInputValue(emptyValue, false);
+    }
+
+    inputRef.current?.focus();
+    triggerValueUpdate(emptyValue, false);
+    onClear?.();
+  };
+
+  const clearNode = allowClear && (
+    <button
+      type="button"
+      aria-label={clearConfig.label ?? 'Clear'}
+      disabled={!showClear}
+      className={clsx(
+        clearIconCls,
+        {
+          [`${clearIconCls}-hidden`]: !showClear,
+          [`${clearIconCls}-has-suffix`]: hasSuffix,
+        },
+        classNames?.clear,
+      )}
+      style={styles?.clear}
+      onMouseDown={(event) => event.preventDefault()}
+      onKeyDown={onClearKeyDown}
+      onClick={onClearClick}
+    >
+      {clearConfig.clearIcon ?? '✖'}
+    </button>
+  );
+
   // >>>>>> Render
   return (
     <div
@@ -761,8 +841,9 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         {...restProps}
       />
 
-      {isReactRenderable(suffix) && (
+      {(allowClear || hasSuffix) && (
         <div className={clsx(`${prefixCls}-suffix`, classNames?.suffix)} style={styles?.suffix}>
+          {clearNode}
           {suffix}
         </div>
       )}

@@ -76,6 +76,30 @@
     -moz-appearance: textfield;
   }
 
+  &-suffix {
+    display: flex;
+    flex: none;
+    align-items: center;
+  }
+
+  &-clear-icon {
+    flex: none;
+    align-self: center;
+    padding: 0;
+    line-height: 1;
+    cursor: pointer;
+    background: none;
+    border: 0;
+
+    &-hidden {
+      visibility: hidden;
+    }
+
+    &-has-suffix {
+      margin-inline-end: 4px;
+    }
+  }
+
   &-actions {
     width: 20px;
     height: 100%;
