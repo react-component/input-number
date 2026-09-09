@@ -693,10 +693,16 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     setDecimalValue(newValue);
 
     const currentParsedValue = getMiniDecimal(mergedParser(inputValue));
+    const isValueChanged = !newValue.equals(currentParsedValue);
+
+    // Invalidate pending normalization unless the controlled value echoes the current input.
+    if (isValueChanged) {
+      inputValueUpdateRef.current += 1;
+    }
 
     // When user typing from `1.2` to `1.`, we should not convert to `1` immediately.
     // But let it go if user set `formatter`
-    if (!newValue.equals(currentParsedValue) || !userTypingRef.current || formatter) {
+    if (isValueChanged || !userTypingRef.current || formatter) {
       // Update value as effect
       setInputValue(newValue, userTypingRef.current);
     }
