@@ -60,6 +60,36 @@ describe('InputNumber.Click', () => {
       'down',
       'handler',
     );
+
+    it('supports keyboard activation on step handlers', () => {
+      const onChange = jest.fn();
+      const onStep = jest.fn();
+      const { getByRole } = render(
+        <InputNumber defaultValue={10} onChange={onChange} onStep={onStep} />,
+      );
+      const increase = getByRole('button', { name: 'Increase Value' });
+      const decrease = getByRole('button', { name: 'Decrease Value' });
+
+      expect(increase).toHaveAttribute('tabindex', '0');
+      expect(decrease).toHaveAttribute('tabindex', '0');
+
+      fireEvent.keyDown(increase, { key: 'Enter' });
+      expect(onChange).toHaveBeenLastCalledWith(11);
+      expect(onStep).toHaveBeenLastCalledWith(11, {
+        offset: 1,
+        type: 'up',
+        emitter: 'handler',
+      });
+
+      fireEvent.keyDown(decrease, { key: ' ' });
+      expect(onChange).toHaveBeenLastCalledWith(10);
+      expect(onStep).toHaveBeenLastCalledWith(10, {
+        offset: 1,
+        type: 'down',
+        emitter: 'handler',
+      });
+      expect(onChange).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe('empty input', () => {
@@ -123,6 +153,18 @@ describe('InputNumber.Click', () => {
     it('max', () => {
       const { container } = render(<InputNumber value={9} min={3} max={9} />);
       expect(container.querySelector('.rc-input-number-action-up-disabled')).toBeTruthy();
+    });
+
+    it('keeps disabled step handlers out of the tab order and inert', () => {
+      const onChange = jest.fn();
+      const { getByRole } = render(<InputNumber value={9} min={3} max={9} onChange={onChange} />);
+      const increase = getByRole('button', { name: 'Increase Value' });
+
+      expect(increase).toHaveAttribute('aria-disabled', 'true');
+      expect(increase).toHaveAttribute('tabindex', '-1');
+      fireEvent.keyDown(increase, { key: 'Enter' });
+      fireEvent.keyDown(increase, { key: ' ' });
+      expect(onChange).not.toHaveBeenCalled();
     });
   });
 
