@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { raf } from '@rc-component/util';
+import { isReactRenderable, raf } from '@rc-component/util';
 import { clsx } from 'clsx';
 import * as React from 'react';
 
@@ -104,7 +104,11 @@ export default function StepHandler({
       className={mergedClassName}
       style={style}
     >
-      {children || <span unselectable="on" className={`${prefixCls}-action-${action}-inner`} />}
+      {isReactRenderable(children) ? (
+        children
+      ) : (
+        <span unselectable="on" className={`${prefixCls}-action-${action}-inner`} />
+      )}
     </span>
   );
 }
