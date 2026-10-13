@@ -7,7 +7,9 @@ import getMiniDecimal, {
   ValueType,
 } from '@rc-component/mini-decimal';
 import {
+  type AllowClearConfig,
   type InputFocusOptions,
+  useAllowClear,
   isReactRenderable,
   proxyObject,
   triggerFocus,
@@ -119,13 +121,7 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   controls?: boolean;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
-  allowClear?:
-    | boolean
-    | {
-        clearIcon?: React.ReactNode;
-        disabled?: boolean;
-        label?: string;
-      };
+  allowClear?: boolean | AllowClearConfig;
   classNames?: Partial<Record<SemanticName, string>>;
   styles?: Partial<Record<SemanticName, React.CSSProperties>>;
 
@@ -731,8 +727,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   );
 
   // >>> Clear
-  const clearConfig =
-    allowClear && typeof allowClear === 'object' ? allowClear : { disabled: allowClear !== true };
+  const clearConfig = useAllowClear(allowClear);
   const showClear =
     !disabled && !readOnly && clearConfig.disabled !== true && String(inputValue).length > 0;
   const hasSuffix = isReactRenderable(suffix);
@@ -765,10 +760,11 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     onClear?.();
   };
 
-  const clearNode = allowClear && (
+  const clearNode = !clearConfig.disabled && (
     <button
       type="button"
       aria-label={clearConfig.label ?? 'Clear'}
+      tabIndex={clearConfig.tabIndex}
       disabled={!showClear}
       className={clsx(
         clearIconCls,
@@ -841,7 +837,7 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
         {...restProps}
       />
 
-      {(allowClear || hasSuffix) && (
+      {(!clearConfig.disabled || hasSuffix) && (
         <div className={clsx(`${prefixCls}-suffix`, classNames?.suffix)} style={styles?.suffix}>
           {clearNode}
           {suffix}
