@@ -73,4 +73,57 @@ describe('InputNumber.Keyboard', () => {
     fireEvent.keyDown(input, { which: KeyCode.ENTER, key: 'Enter', keyCode: KeyCode.ENTER });
     expect(onChange).toHaveBeenCalledWith(2);
   });
+
+  describe('IME composition + Enter', () => {
+    it('should not trigger onPressEnter during composition', () => {
+      const onPressEnter = jest.fn();
+      const { container } = render(<InputNumber onPressEnter={onPressEnter} />);
+      const input = container.querySelector('input');
+
+      fireEvent.compositionStart(input);
+      fireEvent.change(input, { target: { value: '123abc' } });
+      fireEvent.keyDown(input, {
+        which: KeyCode.ENTER,
+        key: 'Enter',
+        keyCode: KeyCode.ENTER,
+      });
+      expect(onPressEnter).not.toHaveBeenCalled();
+
+      fireEvent.compositionEnd(input, { data: '' });
+      fireEvent.change(input, { target: { value: '123' } });
+      fireEvent.keyDown(input, {
+        which: KeyCode.ENTER,
+        key: 'Enter',
+        keyCode: KeyCode.ENTER,
+      });
+      expect(onPressEnter).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not flush input value or fire onChange during composition', () => {
+      const onChange = jest.fn();
+      const { container } = render(<InputNumber precision={0} onChange={onChange} />);
+      const input = container.querySelector('input') as HTMLInputElement;
+
+      fireEvent.change(input, { target: { value: '12.34' } });
+      expect(onChange).toHaveBeenLastCalledWith(12.34);
+      onChange.mockClear();
+
+      fireEvent.compositionStart(input);
+      fireEvent.change(input, { target: { value: '12.34abc' } });
+      expect(input.value).toBe('12.34abc');
+      expect(onChange).not.toHaveBeenCalled();
+
+      fireEvent.keyDown(input, {
+        which: KeyCode.ENTER,
+        key: 'Enter',
+        keyCode: KeyCode.ENTER,
+      });
+      expect(input.value).toBe('12.34abc');
+      expect(onChange).not.toHaveBeenCalled();
+
+      fireEvent.compositionEnd(input, { data: '' });
+      expect(input.value).toBe('12.34abc');
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
 });
