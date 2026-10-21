@@ -21,6 +21,7 @@ export interface StepHandlerProps {
   className?: string;
   style?: React.CSSProperties;
   onStep: (up: boolean, emitter: 'handler' | 'keyboard' | 'wheel') => void;
+  'aria-label'?: string;
 }
 
 export default function StepHandler({
@@ -31,6 +32,7 @@ export default function StepHandler({
   className,
   style,
   onStep,
+  'aria-label': ariaLabel,
 }: StepHandlerProps) {
   // ======================== MISC ========================
   const isUpAction = action === 'up';
@@ -99,7 +101,7 @@ export default function StepHandler({
       onMouseDown={(e) => {
         onStepMouseDown(e);
       }}
-      aria-label={isUpAction ? 'Increase Value' : 'Decrease Value'}
+      aria-label={ariaLabel ?? (isUpAction ? 'Increase Value' : 'Decrease Value')}
       aria-disabled={disabled}
       className={mergedClassName}
       style={style}

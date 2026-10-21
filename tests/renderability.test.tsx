@@ -18,3 +18,14 @@ it('renders zero step handlers and keeps them interactive', () => {
   fireEvent.mouseUp(down);
   expect(onChange).toHaveBeenLastCalledWith(2);
 });
+
+it('supports custom accessible names for step handlers via upAriaLabel and downAriaLabel', () => {
+  const { getByRole } = render(
+    <InputNumber
+      upAriaLabel="Augmenter la valeur"
+      downAriaLabel="Diminuer la valeur"
+    />,
+  );
+  expect(getByRole('button', { name: 'Augmenter la valeur' })).toBeTruthy();
+  expect(getByRole('button', { name: 'Diminuer la valeur' })).toBeTruthy();
+});

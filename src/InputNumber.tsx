@@ -128,6 +128,8 @@ export interface InputNumberProps<T extends ValueType = ValueType>
   // Customize handler node
   upHandler?: React.ReactNode;
   downHandler?: React.ReactNode;
+  upAriaLabel?: string;
+  downAriaLabel?: string;
   keyboard?: boolean;
   changeOnWheel?: boolean;
 
@@ -174,6 +176,8 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
     readOnly,
     upHandler,
     downHandler,
+    upAriaLabel,
+    downAriaLabel,
     keyboard,
     changeOnWheel = false,
     controls = true,
@@ -715,13 +719,23 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   };
 
   const upNode = (
-    <StepHandler {...sharedHandlerProps} action="up" disabled={upDisabled}>
+    <StepHandler
+      {...sharedHandlerProps}
+      action="up"
+      disabled={upDisabled}
+      aria-label={upAriaLabel}
+    >
       {upHandler}
     </StepHandler>
   );
 
   const downNode = (
-    <StepHandler {...sharedHandlerProps} action="down" disabled={downDisabled}>
+    <StepHandler
+      {...sharedHandlerProps}
+      action="down"
+      disabled={downDisabled}
+      aria-label={downAriaLabel}
+    >
       {downHandler}
     </StepHandler>
   );
