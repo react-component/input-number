@@ -214,7 +214,6 @@ describe('InputNumber.AllowClear', () => {
   it.each([
     ['disabled', { disabled: true }],
     ['readOnly', { readOnly: true }],
-    ['allowClear.disabled', { allowClear: { disabled: true } }],
   ])('disables the clear action when %s', (_name, extraProps) => {
     const onChange = jest.fn();
     const onClear = jest.fn();
@@ -359,5 +358,47 @@ describe('InputNumber.AllowClear', () => {
       'ArrowDown',
       'ArrowDown',
     ]);
+  });
+});
+
+describe('unified clear configuration', () => {
+  it.each([undefined, 'suffix'])('removes only the clear entry with suffix %s', (suffix) => {
+    const onChange = jest.fn();
+    const onClear = jest.fn();
+    const config = Object.freeze({ clearIcon: 'custom', tabIndex: -1, label: 'Erase' });
+    const props = { defaultValue: 12, prefix: 'prefix', suffix, onChange, onClear };
+    const { container, getByRole, queryByRole, rerender } = render(
+      <InputNumber {...props} allowClear={false} />,
+    );
+    const disabledMarkup = container.innerHTML;
+    rerender(<InputNumber {...props} allowClear={{ ...config, disabled: true }} />);
+    expect(container.innerHTML).toBe(disabledMarkup);
+    expect(queryByRole('button', { name: 'Erase' })).toBeNull();
+    expect(getByRole('spinbutton')).toHaveValue('12');
+    expect(onChange).not.toHaveBeenCalled();
+    expect(onClear).not.toHaveBeenCalled();
+
+    rerender(<InputNumber {...props} allowClear={config} />);
+    const button = getByRole('button', { name: 'Erase' });
+    expect(button).toHaveTextContent('custom');
+    expect(button.tabIndex).toBe(-1);
+    fireEvent.click(button);
+    expect(getByRole('spinbutton')).toHaveValue('');
+    expect(onChange).toHaveBeenCalledWith(null);
+    expect(onClear).toHaveBeenCalledTimes(1);
+  });
+
+  it('updates tabIndex independently of the input and retains focus while toggling', () => {
+    const { getByRole, rerender } = render(
+      <InputNumber defaultValue={12} tabIndex={3} allowClear={{ tabIndex: -1 }} />,
+    );
+    const input = getByRole('spinbutton');
+    act(() => input.focus());
+    rerender(<InputNumber defaultValue={12} tabIndex={3} allowClear={{ disabled: true }} />);
+    expect(getByRole('spinbutton')).toBe(input);
+    expect(input).toHaveFocus();
+    rerender(<InputNumber defaultValue={12} tabIndex={3} allowClear={{ tabIndex: 0 }} />);
+    expect(getByRole('button', { name: 'Clear' }).tabIndex).toBe(0);
+    expect(input.tabIndex).toBe(3);
   });
 });

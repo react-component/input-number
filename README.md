@@ -66,7 +66,7 @@ Then open `http://localhost:8000`.
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| allowClear | `boolean \| { clearIcon?: ReactNode; disabled?: boolean; label?: string }` | `false` | Show a clear button, optionally with a custom icon, disabled state, or accessible label. |
+| allowClear | `boolean \| AllowClearConfig` | `false` | Show a clear button, optionally with a custom icon, disabled state, or accessible label. |
 | autoFocus | `boolean` | `false` | Focus the input when mounted. |
 | changeOnBlur | `boolean` | `true` | Commit value changes on blur. |
 | changeOnWheel | `boolean` | `false` | Allow value changes from the mouse wheel. |
@@ -151,3 +151,20 @@ The release flow is handled by `@rc-component/np` through the `rc-np` command af
 ## License
 
 @rc-component/input-number is released under the [MIT](./LICENSE) license.
+
+### Clear configuration
+
+`allowClear` accepts a boolean or an `AllowClearConfig` object from `@rc-component/util`:
+
+```ts
+interface AllowClearConfig {
+  clearIcon?: React.ReactNode;
+  disabled?: boolean;
+  tabIndex?: number;
+  label?: string;
+}
+```
+
+All fields are optional. `disabled: true` behaves like `allowClear={false}`: the clear button and space reserved solely for it are removed; the input remains editable. Existing suffixes and other content are preserved. This changes the previous hidden-button spacing behavior where applicable.
+
+`tabIndex` affects only the clear button; `-1` removes it from Tab navigation while retaining mouse activation. `label` supplies its accessible name through `aria-label`. Defaults, clear values, callbacks, and component state restrictions are unchanged.
