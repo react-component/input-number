@@ -220,16 +220,19 @@ const InputNumber = React.forwardRef<InputNumberRef, InputNumberProps>((props, r
   const rootRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  React.useImperativeHandle(ref, () =>
-    proxyObject(inputRef.current, {
-      focus: (option?: InputFocusOptions) => {
-        triggerFocus(inputRef.current, option);
-      },
-      blur: () => {
-        inputRef.current?.blur();
-      },
-      nativeElement: rootRef.current,
-    }),
+  React.useImperativeHandle(
+    ref,
+    () =>
+      proxyObject(inputRef.current, {
+        focus: (option?: InputFocusOptions) => {
+          triggerFocus(inputRef.current, option);
+        },
+        blur: () => {
+          inputRef.current?.blur();
+        },
+        nativeElement: rootRef.current,
+      }),
+    [],
   );
 
   // ============================ Value =============================
