@@ -26,6 +26,29 @@ describe('InputNumber.Keyboard', () => {
     expect(onChange).toHaveBeenCalledWith(1.3);
   });
 
+  it('up with pressing shift key and string step', () => {
+    const onChange = jest.fn();
+    const { container, rerender } = render(
+      <InputNumber onChange={onChange} step="1.00" value={5} />,
+    );
+    fireEvent.keyDown(container.querySelector('input'), {
+      which: KeyCode.UP,
+      key: 'ArrowUp',
+      keyCode: KeyCode.UP,
+      shiftKey: true,
+    });
+    expect(onChange).toHaveBeenLastCalledWith(15);
+
+    rerender(<InputNumber onChange={onChange} step="1e-7" value={0} />);
+    fireEvent.keyDown(container.querySelector('input'), {
+      which: KeyCode.UP,
+      key: 'ArrowUp',
+      keyCode: KeyCode.UP,
+      shiftKey: true,
+    });
+    expect(onChange).toHaveBeenLastCalledWith(0.000001);
+  });
+
   it('down', () => {
     const onChange = jest.fn();
     const { container } = render(<InputNumber onChange={onChange} />);
