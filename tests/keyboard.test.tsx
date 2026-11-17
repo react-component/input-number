@@ -49,6 +49,30 @@ describe('InputNumber.Keyboard', () => {
     expect(onChange).toHaveBeenCalledWith(1.1);
   });
 
+  it('shift key works with string step with trailing zeros', () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber onChange={onChange} step="1.00" value={1} />);
+    fireEvent.keyDown(container.querySelector('input'), {
+      which: KeyCode.UP,
+      key: 'ArrowUp',
+      keyCode: KeyCode.UP,
+      shiftKey: true,
+    });
+    expect(onChange).toHaveBeenCalledWith(11);
+  });
+
+  it('shift key works with string step in scientific notation', () => {
+    const onChange = jest.fn();
+    const { container } = render(<InputNumber onChange={onChange} step="1e-7" value={1} />);
+    fireEvent.keyDown(container.querySelector('input'), {
+      which: KeyCode.UP,
+      key: 'ArrowUp',
+      keyCode: KeyCode.UP,
+      shiftKey: true,
+    });
+    expect(onChange).toHaveBeenCalledWith(1.000001);
+  });
+
   // shift + 10, ctrl + 0.1 test case removed
 
   it('disabled keyboard', () => {
